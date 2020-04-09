@@ -1,0 +1,8 @@
+
+node_modules/
+package-lock.json
+pnpm-lock.yaml
+pnpm-debug.log
+dist/
+.cache/
+*.tgz

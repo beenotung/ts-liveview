@@ -1,0 +1,51 @@
+{
+  "name": "liveview",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": {
+    "name": "Beeno Tung",
+    "email": "aabbcc1241@yahoo.com.hk",
+    "url": "https://beeno-tung.surge.sh"
+  },
+  "license": "BSD-2-Clause",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "npm run rawtest",
+    "clean": "rimraf dist",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "postformat": "tslint -p . --fix",
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "pretest": "npm run format && npm run build",
+    "rawtest": "ts-node test/index.ts",
+    "prepublishOnly": "npm run rawtest && npm run build"
+  },
+  "husky": {
+    "hook": {
+      "pre-commit": "npm run format"
+    }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@beenotung/tslib": "^16.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "*",
+    "husky": "^4.2.3",
+    "prettier": "^2.0.4",
+    "rimraf": "^3.0.2",
+    "ts-node": "^8.8.2",
+    "tslint": "^6.1.1",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "tslint-etc": "^1.10.1",
+    "typescript": "^3.8.3"
+  }
+}
