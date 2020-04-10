@@ -1,17 +1,16 @@
 {
   "name": "liveview",
   "version": "1.0.0",
-  "description": "",
+  "description": "LiveView enables rich, real-time user experiences with server-rendered HTML.",
   "keywords": [],
-  "author": {
-    "name": "Beeno Tung",
-    "email": "aabbcc1241@yahoo.com.hk",
-    "url": "https://beeno-tung.surge.sh"
-  },
+  "author": "Beeno Tung <aabbcc1241@yahoo.com.hk> (https://beeno-tung.surge.sh)",
   "license": "BSD-2-Clause",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "watch:tsc": "tsc -w",
+    "watch:js": "nodemon --watch dist -x node dist/test/demo-server-with-sjs",
+    "dev": "run-p watch:*",
     "test": "npm run rawtest",
     "clean": "rimraf dist",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -34,11 +33,28 @@
     "dist"
   ],
   "dependencies": {
-    "@beenotung/tslib": "^16.16.0"
+    "@beenotung/s-json": "^0.1.0",
+    "@beenotung/tslib": "^16.16.0",
+    "browserify": "^16.5.0",
+    "express": "^4.17.1",
+    "morphdom": "^2.5.12",
+    "s-array": "^0.4.10",
+    "s-js": "^0.4.9",
+    "serve-static": "^1.14.1",
+    "tslib": "^1.11.1",
+    "ws": "^7.2.3"
   },
   "devDependencies": {
+    "@types/body-parser": "^1.19.0",
+    "@types/browserify": "^12.0.36",
+    "@types/express": "^4.17.3",
+    "@types/express-serve-static-core": "^4.17.2",
     "@types/node": "*",
+    "@types/serve-static": "^1.13.3",
+    "@types/ws": "^7.2.3",
     "husky": "^4.2.3",
+    "nodemon": "^2.0.3",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.0.4",
     "rimraf": "^3.0.2",
     "ts-node": "^8.8.2",
@@ -47,5 +63,13 @@
     "tslint-eslint-rules": "^5.4.0",
     "tslint-etc": "^1.10.1",
     "typescript": "^3.8.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beenotung/ts-liveview.git"
+  },
+  "bugs": {
+    "url": "https://github.com/beenotung/ts-liveview/issues"
+  },
+  "homepage": "https://github.com/beenotung/ts-liveview#readme"
 }

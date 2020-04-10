@@ -12,5 +12,6 @@
       }
     }
   ],
+  "semi": false,
   "trailingComma": "all"
 }
