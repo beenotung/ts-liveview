@@ -1,6 +1,6 @@
-import { ClientMessage, ServerMessage } from '../message'
 import morphdom from 'morphdom'
 import { Diff, Template, toHTML } from '../h'
+import { ClientMessage, ServerMessage } from '../message'
 
 function main() {
   let retryInterval = 1000
@@ -8,13 +8,14 @@ function main() {
   function startWebSocket() {
     let ws = new WebSocket(location.origin.replace('http', 'ws'))
     ws.onmessage = ev => {
-      let message = JSON.parse(ev.data) as ServerMessage
+      const message = JSON.parse(ev.data) as ServerMessage
       onMessage(message)
     }
     ws.onerror = ev => {
-      console.debug('ws err', ev)
+      console.error('ws err', ev)
     }
     ws.onclose = ev => {
+      // tslint:disable-next-line no-console
       console.debug('ws close', ev)
       setTimeout(() => {
         ws = startWebSocket()
@@ -24,8 +25,7 @@ function main() {
     return ws
   }
 
-  let ws = startWebSocket()
-
+  const ws = startWebSocket()
 
   function paint(e: Element, html: string) {
     morphdom(e, html, {
@@ -34,7 +34,6 @@ function main() {
           return false
         }
         if (document.activeElement === fromEl) {
-          debugger;
           switch (fromEl.tagName) {
             case 'INPUT':
             case 'SELECT':
@@ -46,10 +45,10 @@ function main() {
     })
   }
 
-  let lastTemplates = new Map<string, Template>()
+  const lastTemplates = new Map<string, Template>()
 
   function repaint(selector: string, e: Element, template: Template) {
-    let html = toHTML(template)
+    const html = toHTML(template)
     paint(e, html)
     lastTemplates.set(selector, template)
   }
@@ -60,15 +59,15 @@ function main() {
       console.error('missing template')
       return
     }
-    diff.forEach(([i, v]) => template.dynamics[i] = v)
+    diff.forEach(([i, v]) => (template.dynamics[i] = v))
     repaint(selector, e, template)
   }
 
   const messageQueue: ServerMessage[] = []
 
   function onMessage(message: ServerMessage) {
-    let selector = message.selector
-    let e = document.querySelector(selector)
+    const selector = message.selector
+    const e = document.querySelector(selector)
     if (!e) {
       // console.debug('waiting for', selector)
       messageQueue.push(message)
@@ -85,18 +84,18 @@ function main() {
         patch(selector, e, message.diff)
         break
       default: {
-        let x: never = message
+        const x: never = message
         console.error('unknown server message:', x)
       }
     }
-    let top = messageQueue.pop()
+    const top = messageQueue.pop()
     if (top) {
       onMessage(top)
     }
   }
 
   function send(...args: any[]) {
-    let message: ClientMessage = { type: 'event', args }
+    const message: ClientMessage = { type: 'event', args }
     ws.send(JSON.stringify(message))
   }
 

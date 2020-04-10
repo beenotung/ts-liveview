@@ -32,14 +32,17 @@ function valueToString(value: Value): string {
 }
 
 export type Template = {
-  statics: TemplateStringsArray,
+  statics: TemplateStringsArray
   dynamics: Value[]
 }
 
-export function toHTML({ dynamics, statics }: Template) {
+export function toHTML(template: Template) {
+  const dynamics = template.dynamics
+  const statics = template.statics
+  const D = dynamics.length
+  const S = statics.length
   let acc = ''
-  let D = dynamics.length
-  for (let i = 0; i < statics.length; i++) {
+  for (let i = 0; i < S; i++) {
     acc += statics[i]
     if (i < D) {
       acc += valueToString(dynamics[i])
@@ -48,7 +51,10 @@ export function toHTML({ dynamics, statics }: Template) {
   return acc
 }
 
-export function h(statics: TemplateStringsArray, ...dynamics: Value[]): Template {
+export function h(
+  statics: TemplateStringsArray,
+  ...dynamics: Value[]
+): Template {
   return {
     statics,
     dynamics,
@@ -56,22 +62,29 @@ export function h(statics: TemplateStringsArray, ...dynamics: Value[]): Template
 }
 
 function updateSignal(event: Event, name: string) {
-  let signal = (window as any).signals[name]
+  const signal = (window as any).signals[name]
   signal((event.target as HTMLInputElement).value)
 }
 
-export function render(host: Element, template: Template, signals?: Record<string, DataSignal<any>>) {
+export function render(
+  host: Element,
+  template: Template,
+  signals?: Record<string, DataSignal<any>>,
+) {
   if (signals) {
     Object.assign(window, {
       signals,
       updateSignal,
     })
   }
-  let target = toHTML(template)
+  const target = toHTML(template)
   morphdom(host, target)
 }
 
-export function isTemplateSame(a: TemplateStringsArray, b: TemplateStringsArray): boolean {
+export function isTemplateSame(
+  a: TemplateStringsArray,
+  b: TemplateStringsArray,
+): boolean {
   if (a.length !== b.length) {
     return false
   }
@@ -88,8 +101,8 @@ export type Diff = Array<[number, Value]>
 export function diff(source: Value[], target: Value[]): Diff {
   const diff: Diff = []
   for (let i = 0; i < target.length; i++) {
-    let s = source[i]
-    let t = target[i]
+    const s = source[i]
+    const t = target[i]
     if (s !== t) {
       diff.push([i, t])
     }

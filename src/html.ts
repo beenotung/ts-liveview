@@ -1,7 +1,11 @@
 import { toHTML } from './h'
-import { autoWrapMobileHTML } from './helpers/mobile-html'
-import { Options } from './server'
 import { clientScript } from './helpers/client-adaptor'
+import {
+  getIsHTMLDoc,
+  mobile_html_post,
+  mobile_html_pre,
+} from './helpers/mobile-html'
+import { Options } from './server'
 import { Request, Response } from './types'
 
 export function initialRender(o: {
@@ -9,13 +13,28 @@ export function initialRender(o: {
   req: Request
   res: Response
 }) {
-  const { req, res, options } = o
-  let html = o.options.initialRender(req, res)
+  const res = o.res
+  const options = o.options
+
+  let html = options.initialRender(o.req, res)
   html = typeof html === 'string' ? html : toHTML(html)
-  html = autoWrapMobileHTML(html)
+  const isHTMLDoc = getIsHTMLDoc(html)
+  if (!isHTMLDoc) {
+    res.write(mobile_html_pre)
+  }
+  res.write(html)
+  const defer = () => {
+    if (!isHTMLDoc) {
+      res.write(mobile_html_post)
+    }
+    res.end()
+  }
   if (!options.createSession) {
-    res.end(html)
+    defer()
     return
   }
-  clientScript.then(s => res.end(html + s))
+  clientScript.then(script => {
+    res.write(script)
+    defer()
+  })
 }

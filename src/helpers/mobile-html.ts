@@ -15,10 +15,12 @@ ${body}
 </html>`
 }
 
-export function autoWrapMobileHTML(html: string) {
+const separator_pattern = '__separator__'
+export const [mobile_html_pre, mobile_html_post] = wrapMobileHTML(
+  separator_pattern,
+).split(separator_pattern)
+
+export function getIsHTMLDoc(html: string): boolean {
   const s = html.trimLeft()
-  if (s.match(/^<!DOCTYPE html>/i) || s.match(/^<html/i)) {
-    return html
-  }
-  return wrapMobileHTML(html)
+  return !!(s.match(/^<!DOCTYPE html>/i) || s.match(/^<html/i))
 }

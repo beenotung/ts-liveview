@@ -1,4 +1,4 @@
-import { ClientMessage, ServerMessage } from '../message'
+import { ClientMessage } from '../message'
 
 export function useClientMessage(f: (message: ClientMessage) => void) {
   return (message: string) => {

@@ -12,11 +12,15 @@ export type Options = {
   initialRender: (req: Request, res: Response) => string | Template
 }
 
-export function startServer(options: Options): {
-  app: express.Express,
+export function startServer(
+  options: Options,
+): {
+  app: express.Express
   server: Server
 } {
-  const { port, createSession } = options
+  const createSession = options.createSession
+  const port = options.port
+
   const app = express()
   app.use('/', (req, res) => initialRender({ req, res, options }))
   const server = http.createServer(app)

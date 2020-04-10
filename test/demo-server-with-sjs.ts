@@ -1,7 +1,7 @@
 import S from 's-js'
+import { h } from '../src/h'
 import { useClientMessage } from '../src/helpers/server'
 import { startServer } from '../src/server'
-import { h } from '../src/h'
 import { Session } from '../src/session'
 import { Request, Response } from '../src/types'
 
@@ -20,17 +20,19 @@ function initialView(req: Request, res: Response) {
 }
 
 function createSession(session: Session): Session | void {
-
   S.root(() => {
-      const clock = S.data(Date.now())
-      setInterval(() => clock(Date.now()), 1000)
+    const clock = S.data(Date.now())
+    setInterval(() => clock(Date.now()), 1000)
 
-      const clockView = session.S('#clock', () =>
-        h`<p id="clock">Now is : ${new Date(clock()).toLocaleString()}</p>`,
-      )
+    const clockView = session.S(
+      '#clock',
+      () => h`<p id="clock">Now is : ${new Date(clock()).toLocaleString()}</p>`,
+    )
 
-      const name = S.data('')
-      const nameView = session.S('#name', () =>
+    const name = S.data('')
+    const nameView = session.S(
+      '#name',
+      () =>
         h`<div id="name">
 <label>Name: </label>
 <input onchange="send('name', event.target.value)">
@@ -38,27 +40,28 @@ function createSession(session: Session): Session | void {
 Hello, ${name() || 'Guest'}
 </p>
 </div>`,
-      )
+    )
 
-      const rootView = session.S('#app', () =>
+    const rootView = session.S(
+      '#app',
+      () =>
         h`<div id="app" class="live">
 ${clockView.sampleHTML()}
 ${nameView.sampleHTML()}
 </div>`,
-      )
+    )
 
-      rootView()
+    rootView()
 
-      session.onMessage = useClientMessage(message => {
-        const [k, v] = message.args
-        if (k !== 'name') {
-          console.warn('unknown client message:', message)
-          return
-        }
-        name(v)
-      })
-    },
-  )
+    session.onMessage = useClientMessage(message => {
+      const [k, v] = message.args
+      if (k !== 'name') {
+        console.warn('unknown client message:', message)
+        return
+      }
+      name(v)
+    })
+  })
 
   return session
 }

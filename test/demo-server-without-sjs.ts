@@ -1,11 +1,10 @@
-import S from 's-js'
+import { h } from '../src/h'
 import { useClientMessage } from '../src/helpers/server'
 import { startServer } from '../src/server'
-import { h } from '../src/h'
 import { Session } from '../src/session'
 
 type State = {
-  name: string,
+  name: string
   clock: number
 }
 

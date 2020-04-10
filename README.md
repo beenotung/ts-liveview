@@ -22,3 +22,7 @@ Just like [Phoenix LiveView](https://github.com/phoenixframework/phoenix_live_vi
 - [ ] Recover session when reconnect*
 
 *: maybe [Primus](https://github.com/primus/primus) can helps
+
+## LICENSE
+[BSD-2-Clause LICENSE](./LICENSE)
+(Free Open Source Software)

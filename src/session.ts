@@ -1,14 +1,12 @@
-import WebSocket from 'ws'
-import { ServerMessage } from './message'
-import { diff, isTemplateSame, Template, toHTML } from './h'
-import { IncomingMessage } from './types'
 import S, { DataSignal } from 's-js'
+import WebSocket from 'ws'
+import { diff, isTemplateSame, Template, toHTML } from './h'
+import { ServerMessage } from './message'
+import { IncomingMessage } from './types'
 
 export class Component {
-  constructor(public session: Session, public selector: string) {
-  }
-
   lastTemplate?: Template
+  constructor(public session: Session, public selector: string) {}
 
   render(target: Template, selector?: string) {
     if (selector) {
@@ -16,7 +14,10 @@ export class Component {
     } else {
       selector = this.selector
     }
-    if (!this.lastTemplate || !isTemplateSame(this.lastTemplate.statics, target.statics)) {
+    if (
+      !this.lastTemplate ||
+      !isTemplateSame(this.lastTemplate.statics, target.statics)
+    ) {
       this.lastTemplate = target
       this.session.sendMessage({
         type: 'repaint',
@@ -37,11 +38,7 @@ export class Component {
 export class Session {
   onMessage?: (message: string) => void
 
-  constructor(
-    public   ws: WebSocket,
-    public  request: IncomingMessage,
-  ) {
-  }
+  constructor(public ws: WebSocket, public request: IncomingMessage) {}
 
   sendMessage(message: ServerMessage) {
     this.ws.send(JSON.stringify(message))
@@ -53,17 +50,18 @@ export class Session {
 
   createSComponent(selector: string, templateSignal: DataSignal<Template>) {
     const component = this.createComponent(selector)
-    S(()=>component.render(templateSignal()))
+    S(() => component.render(templateSignal()))
     return { component, templateSignal }
   }
 
   S(selector: string, templateF: () => Template) {
-    const { component, templateSignal } = this.createSComponent(selector, S(() => templateF()))
-    return Object.assign(
-      templateSignal,
-      component,
-      {
-        sampleHTML: () => toHTML(S.sample(templateSignal)),
-      })
+    const res = this.createSComponent(
+      selector,
+      S(() => templateF()),
+    )
+    const templateSignal = res.templateSignal
+    return Object.assign(templateSignal, res.component, {
+      sampleHTML: () => toHTML(S.sample(templateSignal)),
+    })
   }
 }

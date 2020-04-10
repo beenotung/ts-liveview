@@ -1,17 +1,25 @@
 import browserify from 'browserify'
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
 
 function getClientFile() {
   // ts-node version
-  let tsNodeClientFile = path.join(__dirname, '..', '..', 'dist', 'src', 'helpers', 'client.js')
+  const tsNodeClientFile = path.join(
+    __dirname,
+    '..',
+    '..',
+    'dist',
+    'src',
+    'helpers',
+    'client.js',
+  )
   // node version
-  let nodeClientFile = path.join(__dirname, 'client.js')
+  const nodeClientFile = path.join(__dirname, 'client.js')
   return fs.existsSync(tsNodeClientFile) ? tsNodeClientFile : nodeClientFile
 }
 
 export function genClientCode() {
-  let b = browserify()
+  const b = browserify()
   b.add(getClientFile())
   return new Promise((resolve, reject) => {
     b.bundle((err, src) => {
@@ -24,4 +32,6 @@ export function genClientCode() {
   })
 }
 
-export let clientScript = genClientCode().then(code => `<script>${code}</script>`)
+export let clientScript = genClientCode().then(
+  code => `<script>${code}</script>`,
+)
