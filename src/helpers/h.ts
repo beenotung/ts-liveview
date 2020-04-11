@@ -27,7 +27,10 @@ export type InputOptions = {
 }
 
 export function inputs(inputs: InputOptions[]) {
-  const rows = inputs.map(x => [`<label>${x.label}:</label>`, x.input])
+  const rows = inputs.map(x => [
+    x.label ? `<label>${x.label}:</label>` : '',
+    x.input,
+  ])
   return table(rows)
 }
 
@@ -38,6 +41,7 @@ export type RadioOption = {
 export type RadioOptions = {
   options: RadioOption[]
   id: string
+  onchange?: string
 }
 
 export function radios(options: RadioOptions) {
@@ -46,7 +50,12 @@ export function radios(options: RadioOptions) {
       const id = options.id + '_' + o.value
       return `
 <div style="display: inline-block">
-  <input type="radio" value="${o.value}" id="${id}" name="${options.id}">
+  <input type="radio" ${attrs({
+    id,
+    value: o.value,
+    name: options.id,
+    onchange: options.onchange,
+  })}>
   <label for="${id}">${o.text}</label>
 </div>
   `

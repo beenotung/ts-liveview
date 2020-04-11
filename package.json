@@ -17,7 +17,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "watch:tsc": "tsc -w",
-    "watch:js": "nodemon --watch dist -x node dist/test/demo-server-with-sjs",
+    "watch:js": "tsc && nodemon --watch dist -x node dist/app/main",
     "dev": "run-p watch:*",
     "test": "npm run rawtest",
     "clean": "rimraf dist",
