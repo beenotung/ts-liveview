@@ -1,4 +1,4 @@
-import { h } from '../src/h'
+import { c, h } from '../src/h'
 import { useClientMessage } from '../src/helpers/server'
 import { startServer } from '../src/server'
 import { Session } from '../src/session'
@@ -15,10 +15,10 @@ function initialState(): State {
   }
 }
 
-const selector = '#app'
-
 function render(state: State = initialState()) {
-  return h`<div id="app">
+  return c(
+    '#app',
+    h`<div id="app">
   <p>
     Now is: ${new Date(state.clock).toLocaleString()}
   </p>
@@ -28,18 +28,16 @@ function render(state: State = initialState()) {
   <p>
     Hello, ${state.name || 'Guest'}
   </p>
-</div>`
+</div>`,
+  )
 }
 
 function createSession(session: Session): Session | void {
   const state = initialState()
 
   function update() {
-    session.sendMessage({
-      type: 'repaint',
-      selector,
-      template: render(state),
-    })
+    const template = render(state)
+    session.sendTemplate(template)
   }
 
   setInterval(() => {

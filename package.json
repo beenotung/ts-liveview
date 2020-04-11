@@ -21,7 +21,7 @@
     "dev": "run-p watch:*",
     "test": "npm run rawtest",
     "clean": "rimraf dist",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"app/**/*.ts\" ",
     "postformat": "tslint -p . --fix",
     "prebuild": "npm run clean && gen-index --single-quote --no-semi",
     "build": "tsc -p tsconfig.build.json",

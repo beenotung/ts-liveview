@@ -20,27 +20,28 @@ Just like [Phoenix LiveView](https://github.com/phoenixframework/phoenix_live_vi
 ## Example
 ### Simple Clock
 ```typescript
-import { startServer, Session, useClientMessage, h } from './dist'
+import { startServer, Session, c, h } from './dist'
 
-function render(state){
-  return h`<div id="clock">${new Date(state)}</div>`
+function render(state: number){
+  return c(
+    '#clock',
+    h`<div id="clock">${new Date(state)}</div>`,
+  )
 }
 
 function createSession(session: Session): Session | void {
   let state = Date.now()
 
   function update() {
-    session.sendMessage({
-      type: 'repaint',
-      selector: '#clock',
-      template: render(state),
-    })
+    const template = render(state)
+    session.sendTemplate(template)
   }
 
-  setInterval(()=>{
+  let timer = setInterval(()=>{
     state = Date.now()
     update()
   }, 1000)
+  session.once('close', () => clearInterval(timer))
 
   return session
 }
@@ -56,7 +57,7 @@ startServer({
 
 ### Using s-js to trigger updates
 ```typescript
-import { startServer, Session, useClientMessage, h } from './dist'
+import { sampleTemplate, startServer, Session, useClientMessage, c, h } from './dist'
 import S from 's-js'
 
 function initialView(req: Request, res: Response) {
@@ -74,19 +75,23 @@ function initialView(req: Request, res: Response) {
 }
 
 function createSession(session: Session): Session | void {
-  S.root(() => {
-    const clock = S.data(Date.now())
-    setInterval(() => clock(Date.now()), 1000)
+  S.root(dispose => {
+    session.once('close', dispose)
 
-    const clockView = session.S(
-      '#clock',
-      () => h`<p id="clock">Now is : ${new Date(clock()).toLocaleString()}</p>`,
-    )
+    const clock = S.data(Date.now())
+    let timer = setInterval(() => clock(Date.now()), 1000)
+    S.cleanup(() => clearInterval(timer))
+    function renderClock() {
+      return c(
+        '#clock',
+        h`<p id="clock">Now is: ${new Date(clock()).toLocaleString()}</p>`,
+      )
+    }
 
     const name = S.data('')
-    const nameView = session.S(
-      '#name',
-      () =>
+    function renderName() {
+      return c(
+        '#name',
         h`<div id="name">
 <label>Name: </label>
 <input onchange="send('name', event.target.value)">
@@ -94,18 +99,22 @@ function createSession(session: Session): Session | void {
 Hello, ${name() || 'Guest'}
 </p>
 </div>`,
-    )
+      )
+    }
 
-    const rootView = session.S(
-      '#app',
-      () =>
+    function renderRoot() {
+      return c(
+        '#app',
         h`<div id="app" class="live">
-${clockView.sampleHTML()}
-${nameView.sampleHTML()}
+${sampleTemplate(renderClock)}
+${sampleTemplate(renderName)}
 </div>`,
-    )
+      )
+    }
 
-    rootView()
+     session.sendTemplate(renderRoot())
+     session.live(renderClock, { skipInitialSend: true })
+     session.live(renderName, { skipInitialSend: true })
 
     session.onMessage = useClientMessage(message => {
       const [k, v] = message.args
@@ -132,6 +141,7 @@ startServer({
 ### More examples
 - [demo-server-with-sjs.ts](./test/demo-server-with-sjs.ts)
 - [demo-server-without-sjs.ts](./test/demo-server-without-sjs.ts)
+- component based application (Coming soon)
 
 ## Todo
 - [x] Auto reconnect the websocket

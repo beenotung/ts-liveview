@@ -1,9 +1,9 @@
 import S from 's-js'
-import { h } from '../src/h'
-import { useClientMessage } from '../src/helpers/server'
+import { c, h } from '../src/h'
+import { sampleTemplate, useClientMessage } from '../src/helpers/server'
 import { startServer } from '../src/server'
 import { Session } from '../src/session'
-import { Request, Response } from '../src/types'
+import { Request, Response } from '../src/types/server'
 
 function initialView(req: Request, res: Response) {
   return h`<div id="app" class="init">
@@ -20,19 +20,26 @@ function initialView(req: Request, res: Response) {
 }
 
 function createSession(session: Session): Session | void {
-  S.root(() => {
+  S.root(dispose => {
+    session.once('close', dispose)
+
     const clock = S.data(Date.now())
+    const timer = setInterval(() => clock(Date.now()), 1000)
+    S.cleanup(() => clearInterval(timer))
     setInterval(() => clock(Date.now()), 1000)
 
-    const clockView = session.S(
-      '#clock',
-      () => h`<p id="clock">Now is : ${new Date(clock()).toLocaleString()}</p>`,
-    )
+    function renderClock() {
+      return c(
+        '#clock',
+        h`<p id="clock">Now is: ${new Date(clock()).toLocaleString()}</p>`,
+      )
+    }
 
     const name = S.data('')
-    const nameView = session.S(
-      '#name',
-      () =>
+
+    function renderName() {
+      return c(
+        '#name',
         h`<div id="name">
 <label>Name: </label>
 <input onchange="send('name', event.target.value)">
@@ -40,18 +47,22 @@ function createSession(session: Session): Session | void {
 Hello, ${name() || 'Guest'}
 </p>
 </div>`,
-    )
+      )
+    }
 
-    const rootView = session.S(
-      '#app',
-      () =>
+    function renderRoot() {
+      return c(
+        '#app',
         h`<div id="app" class="live">
-${clockView.sampleHTML()}
-${nameView.sampleHTML()}
+${sampleTemplate(renderClock)}
+${sampleTemplate(renderName)}
 </div>`,
-    )
+      )
+    }
 
-    rootView()
+    session.sendTemplate(renderRoot())
+    session.live(renderClock, { skipInitialSend: true })
+    session.live(renderName, { skipInitialSend: true })
 
     session.onMessage = useClientMessage(message => {
       const [k, v] = message.args

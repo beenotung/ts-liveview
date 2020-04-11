@@ -1,22 +1,24 @@
 import S from 's-js'
-import { h, render } from '../src/h'
+import { h, syncDom, templateToHTML } from '../src/h'
 
 const app = document.createElement('div')
 app.id = 'app'
 document.body.appendChild(app)
 
 const user = S.data('')
+Object.assign(window, { user })
 S.root(() => {
   S(() => {
-    const result = h`
+    const template = h`
 <div id="app">
 <label>Your name:</label>
-<input id="user" value="${user()}" onchange="updateSignal(event,'user')">
+<input id="user" value="${user()}" onchange="user(event.target.value)">
 <p>
 Hello: ${user()}
 </p>
 </div>
 `
-    render(app, result, { user })
+    const html = templateToHTML(template)
+    syncDom(app, html)
   })
 })

@@ -1,42 +1,53 @@
+import { ComponentTemplate, Diff, TemplateData } from './types/view'
+
 import morphdom from 'morphdom'
-import { DataSignal } from 's-js'
 
-export type Value = string | number | boolean | undefined | null
-
-function valueToString(value: Value): string {
-  switch (typeof value) {
+function templateDataToHTML(data: TemplateData): string {
+  switch (typeof data) {
     case 'undefined':
       return ''
     case 'object':
-      if (value === null) {
+      if (data === null) {
         return ''
       }
-      return (value as object).toString()
+      return (data as object).toString()
     case 'boolean':
-      return value ? 'true' : 'false'
+      return data ? 'true' : 'false'
     case 'number':
-      return value.toString()
+      return data.toString()
     case 'string':
-      return value
+      return data
     case 'function':
-      return valueToString((value as () => Value)())
+      return templateDataToHTML((data as () => TemplateData)())
     case 'symbol':
-      return (value as symbol).toString()
+      return (data as symbol).toString()
     case 'bigint':
-      return (value as bigint).toString()
+      return (data as bigint).toString()
     default: {
-      console.warn('unexpected type:', typeof value)
-      return (value as any).toString()
+      console.warn('unexpected type:', typeof data)
+      return (data as any).toString()
     }
   }
 }
 
 export type Template = {
   statics: TemplateStringsArray
-  dynamics: Value[]
+  dynamics: TemplateData[]
 }
 
-export function toHTML(template: Template) {
+function isComponentTemplate(c: ComponentTemplate): true
+function isComponentTemplate(c: TemplateData): false
+function isComponentTemplate(o: TemplateData): boolean {
+  const c: ComponentTemplate = o as any
+  return (
+    !!c && typeof c === 'object' && !!c.selector && !!c.statics && !!c.dynamics
+  )
+}
+
+export function templateToHTML(
+  template: Template,
+  onComponentTemplate?: (c: ComponentTemplate) => void,
+): string {
   const dynamics = template.dynamics
   const statics = template.statics
   const D = dynamics.length
@@ -45,7 +56,16 @@ export function toHTML(template: Template) {
   for (let i = 0; i < S; i++) {
     acc += statics[i]
     if (i < D) {
-      acc += valueToString(dynamics[i])
+      const value = dynamics[i]
+      if (isComponentTemplate(value)) {
+        const view = value as ComponentTemplate
+        if (onComponentTemplate) {
+          onComponentTemplate(view)
+        }
+        acc += templateToHTML(view, onComponentTemplate)
+      } else {
+        acc += templateDataToHTML(value)
+      }
     }
   }
   return acc
@@ -53,7 +73,7 @@ export function toHTML(template: Template) {
 
 export function h(
   statics: TemplateStringsArray,
-  ...dynamics: Value[]
+  ...dynamics: TemplateData[]
 ): Template {
   return {
     statics,
@@ -61,24 +81,8 @@ export function h(
   }
 }
 
-function updateSignal(event: Event, name: string) {
-  const signal = (window as any).signals[name]
-  signal((event.target as HTMLInputElement).value)
-}
-
-export function render(
-  host: Element,
-  template: Template,
-  signals?: Record<string, DataSignal<any>>,
-) {
-  if (signals) {
-    Object.assign(window, {
-      signals,
-      updateSignal,
-    })
-  }
-  const target = toHTML(template)
-  morphdom(host, target)
+export function c(selector: string, template: Template): ComponentTemplate {
+  return Object.assign({ selector }, template)
 }
 
 export function isTemplateSame(
@@ -96,9 +100,7 @@ export function isTemplateSame(
   return true
 }
 
-export type Diff = Array<[number, Value]>
-
-export function diff(source: Value[], target: Value[]): Diff {
+export function calcDiff(source: TemplateData[], target: TemplateData[]): Diff {
   const diff: Diff = []
   for (let i = 0; i < target.length; i++) {
     const s = source[i]
@@ -108,4 +110,22 @@ export function diff(source: Value[], target: Value[]): Diff {
     }
   }
   return diff
+}
+
+export function syncDom(e: Element, html: string) {
+  morphdom(e, html, {
+    onBeforeElUpdated: (fromEl, toEl) => {
+      if (fromEl.isEqualNode(toEl)) {
+        return false
+      }
+      if (document.activeElement === fromEl) {
+        switch (fromEl.tagName) {
+          case 'INPUT':
+          case 'SELECT':
+            return false
+        }
+      }
+      return true
+    },
+  })
 }

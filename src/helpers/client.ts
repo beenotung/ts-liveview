@@ -1,12 +1,24 @@
-import morphdom from 'morphdom'
-import { Diff, Template, toHTML } from '../h'
-import { ClientMessage, ServerMessage } from '../message'
+import { syncDom, templateToHTML } from '../h'
+import { ClientMessage, ServerMessage } from '../types/message'
+import { ComponentTemplate, TemplateDiff } from '../types/view'
 
 function main() {
   let retryInterval = 1000
 
+  function getQueryUrl() {
+    const hash = 'hash=' + encodeURIComponent(location.hash)
+    const search = location.search
+    if (search) {
+      return search + '&' + hash
+    } else {
+      return '?' + hash
+    }
+  }
+
   function startWebSocket() {
-    let ws = new WebSocket(location.origin.replace('http', 'ws'))
+    let url = location.origin.replace('http', 'ws')
+    url += getQueryUrl()
+    let ws = new WebSocket(url)
     ws.onmessage = ev => {
       const message = JSON.parse(ev.data) as ServerMessage
       onMessage(message)
@@ -27,41 +39,27 @@ function main() {
 
   const ws = startWebSocket()
 
-  function paint(e: Element, html: string) {
-    morphdom(e, html, {
-      onBeforeElUpdated: (fromEl, toEl) => {
-        if (fromEl.isEqualNode(toEl)) {
-          return false
-        }
-        if (document.activeElement === fromEl) {
-          switch (fromEl.tagName) {
-            case 'INPUT':
-            case 'SELECT':
-              return false
-          }
-        }
-        return true
-      },
-    })
+  function render(e: Element, template: ComponentTemplate) {
+    templates.set(template.selector, template)
+    const html = templateToHTML(template, childTemplate =>
+      templates.set(childTemplate.selector, childTemplate),
+    )
+    syncDom(e, html)
   }
 
-  const lastTemplates = new Map<string, Template>()
-
-  function repaint(selector: string, e: Element, template: Template) {
-    const html = toHTML(template)
-    paint(e, html)
-    lastTemplates.set(selector, template)
-  }
-
-  function patch(selector: string, e: Element, diff: Diff) {
-    const template = lastTemplates.get(selector)
+  function patch(e: Element, patch: TemplateDiff) {
+    const selector = patch.selector
+    const template = templates.get(selector)
     if (!template) {
-      console.error('missing template')
+      // missing template, request a full render message
+      send('resendTemplate', selector)
       return
     }
-    diff.forEach(([i, v]) => (template.dynamics[i] = v))
-    repaint(selector, e, template)
+    patch.diff.forEach(([i, v]) => (template.dynamics[i] = v))
+    render(e, template)
   }
+
+  const templates = new Map<string, ComponentTemplate>()
 
   const messageQueue: ServerMessage[] = []
 
@@ -74,14 +72,11 @@ function main() {
       return
     }
     switch (message.type) {
-      case 'paint':
-        paint(e, message.html)
-        break
-      case 'repaint':
-        repaint(selector, e, message.template)
+      case 'render':
+        render(e, message)
         break
       case 'patch':
-        patch(selector, e, message.diff)
+        patch(e, message)
         break
       default: {
         const x: never = message

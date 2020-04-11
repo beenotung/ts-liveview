@@ -17,7 +17,11 @@
     "max-classes-per-file": false,
     "no-namespace": false,
     "align": [
-      true,
+      false,
+      "arguments",
+      "elements",
+      "members",
+      "parameters",
       "statements"
     ],
     "arrow-parens": [

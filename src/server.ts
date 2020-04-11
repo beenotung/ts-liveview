@@ -2,9 +2,9 @@ import express from 'express'
 import http from 'http'
 import WebSocket from 'ws'
 import { Template } from './h'
-import { initialRender } from './html'
+import { sendInitialRender } from './html'
 import { Session } from './session'
-import { Request, Response, Server } from './types'
+import { Request, Response, Server } from './types/server'
 
 export type Options = {
   port: number
@@ -22,7 +22,7 @@ export function startServer(
   const port = options.port
 
   const app = express()
-  app.use('/', (req, res) => initialRender({ req, res, options }))
+  app.use('/', (req, res) => sendInitialRender({ req, res, options }))
   const server = http.createServer(app)
   if (createSession) {
     const wss = new WebSocket.Server({ server })
