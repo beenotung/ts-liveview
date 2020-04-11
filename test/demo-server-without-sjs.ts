@@ -1,7 +1,4 @@
-import { c, h } from '../src/h'
-import { useClientMessage } from '../src/helpers/server'
-import { startServer } from '../src/server'
-import { Session } from '../src/session'
+import { c, h, Session, startServer, useClientMessage } from '../src'
 
 type State = {
   name: string

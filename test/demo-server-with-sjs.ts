@@ -1,9 +1,14 @@
 import S from 's-js'
-import { c, h } from '../src/h'
-import { sampleTemplate, useClientMessage } from '../src/helpers/server'
-import { startServer } from '../src/server'
-import { Session } from '../src/session'
-import { Request, Response } from '../src/types/server'
+import {
+  c,
+  h,
+  Request,
+  Response,
+  sampleTemplate,
+  Session,
+  startServer,
+  useClientMessage,
+} from '../src'
 
 function initialView(req: Request, res: Response) {
   return h`<div id="app" class="init">
