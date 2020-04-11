@@ -58,7 +58,7 @@ startServer({
 
 ### Using s-js to trigger updates
 ```typescript
-import { sampleTemplate, startServer, Session, useClientMessage, c, h } from './dist'
+import { startServer, Session, useClientMessage, c, h } from './dist'
 import S from 's-js'
 
 function initialView(req: Request, res: Response) {
@@ -104,13 +104,13 @@ Hello, ${name() || 'Guest'}
     }
 
     function renderRoot() {
-      return c(
+      return S.sample(() => c(
         '#app',
         h`<div id="app" class="live">
-${sampleTemplate(renderClock)}
-${sampleTemplate(renderName)}
+${renderClock()}
+${renderName()}
 </div>`,
-      )
+      ))
     }
 
      session.sendTemplate(renderRoot())
