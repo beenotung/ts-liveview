@@ -139,9 +139,9 @@ startServer({
 ```
 
 ### More examples
-- [demo-server-with-sjs.ts](./test/demo-server-with-sjs.ts)
-- [demo-server-without-sjs.ts](./test/demo-server-without-sjs.ts)
-- component based application (Coming soon)
+- [Single-file demo with s-js](./test/demo-server-with-sjs.ts)
+- [Single-file demo without s-js](./test/demo-server-without-sjs.ts)
+- [SSR SPA Example](./app) (server-rendered single-page webapp)
 
 ## Todo
 - [x] Auto reconnect the websocket
