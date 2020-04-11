@@ -7,25 +7,26 @@ import { sendInitialRender } from './html'
 import { Session } from './session'
 import { Request, Response, Server } from './types/server'
 
-export type ServerOptions = {
-  port: number
+export type AttachServerOptions = {
   createSession?: (session: Session) => Session | void
   initialRender: (req: Request, res: Response) => string | Template
-}
-export type Options = ServerOptions & HTMLOptions
+} & HTMLOptions
 
-export function startServer(
-  options: Options,
-): {
-  app: express.Express
-  server: Server
-} {
+export type StartServerOptions = {
+  port: number
+} & AttachServerOptions
+
+export function attachServer(
+  options: {
+    app: { use: express.Application['use'] }
+    server: Server
+  } & AttachServerOptions,
+) {
+  const app = options.app
   const createSession = options.createSession
-  const port = options.port
+  const server = options.server
 
-  const app = express()
   app.use('/', (req, res) => sendInitialRender({ req, res, options }))
-  const server = http.createServer(app)
   if (createSession) {
     const wss = new WebSocket.Server({ server })
     wss.on('connection', (ws, request) => {
@@ -35,6 +36,21 @@ export function startServer(
       }
     })
   }
+}
+
+export function startServer(
+  options: StartServerOptions,
+): {
+  app: express.Express
+  server: Server
+} {
+  const port = options.port
+
+  const app = express()
+  const server = http.createServer(app)
+
+  attachServer({ app, server, ...options })
+
   server.listen(port, () => {
     console.log('server started on port ' + port)
   })

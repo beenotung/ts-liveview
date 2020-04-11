@@ -4,6 +4,7 @@ import {
   h,
   Request,
   Response,
+  sampleTemplate,
   Session,
   startServer,
   useClientMessage,
@@ -55,14 +56,12 @@ Hello, ${name() || 'Guest'}
     }
 
     function renderRoot() {
-      return S.sample(() =>
-        c(
-          '#app',
-          h`<div id="app" class="live">
-${renderClock()}
-${renderName()}
+      return c(
+        '#app',
+        h`<div id="app" class="live">
+${sampleTemplate(renderClock)}
+${sampleTemplate(renderName)}
 </div>`,
-        ),
       )
     }
 

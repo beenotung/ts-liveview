@@ -1,11 +1,11 @@
 import { templateToHTML } from './h'
 import { clientScript } from './helpers/client-adaptor'
 import { genMobileHTMLWrapper, getIsHTMLDoc } from './helpers/mobile-html'
-import { Options } from './server'
+import { AttachServerOptions } from './server'
 import { Request, Response } from './types/server'
 
 export function sendInitialRender(o: {
-  options: Options
+  options: AttachServerOptions
   req: Request
   res: Response
 }) {
