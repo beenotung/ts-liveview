@@ -9,7 +9,7 @@ function renderPage(state: State) {
   switch (hash) {
     case '#/':
     case '#/home':
-      return renderHomePage()
+      return renderHomePage(state)
     case '#/booking':
       return renderBookingPage(state)
     default:

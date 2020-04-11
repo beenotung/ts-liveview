@@ -42,6 +42,7 @@ export type RadioOptions = {
   options: RadioOption[]
   id: string
   onchange?: string
+  value?: string
 }
 
 export function radios(options: RadioOptions) {
@@ -55,6 +56,7 @@ export function radios(options: RadioOptions) {
     value: o.value,
     name: options.id,
     onchange: options.onchange,
+    checked: o.value === options.value ? 'checked' : undefined,
   })}>
   <label for="${id}">${o.text}</label>
 </div>

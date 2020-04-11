@@ -4,6 +4,7 @@ import { renderApp } from './app'
 import { renderClock } from './components/clock'
 import { renderMenu } from './components/menu'
 import { renderNav } from './components/nav'
+import { renderHomePage } from './pages/home-page'
 import { State } from './state'
 
 export function createSession(session: Session): Session | void {
@@ -21,10 +22,19 @@ export function createSession(session: Session): Session | void {
       }
       console.log(message)
     })
+    // for client request
     state.events.on('resendTemplate', ([selector]: [string]) =>
       session.resendTemplate(selector),
     )
+
+    // for Nav
     state.events.on('hash', ([hash]: [string]) => state.hash(hash))
+
+    // for Home Page
+    state.events.on('width', ([width]: [string]) => state.width(+width))
+    state.events.on('bg', ([color]: [string]) => state.background(color))
+
+    // for Booking Page
     state.events.on('booking', ([name, value]: [string, string]) => {
       const booking = S.sample(state.booking)
       Object.assign(booking, { [name]: value })
@@ -36,6 +46,7 @@ export function createSession(session: Session): Session | void {
     session.live(renderClock, options)
     session.live(renderMenu, options)
     session.live(() => renderNav(state), options)
+    session.live(() => renderHomePage(state), options)
   })
   return session
 }

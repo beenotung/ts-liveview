@@ -6,11 +6,18 @@ import { Booking } from './pages/booking-page'
 export class State {
   events = new EventEmitter()
 
+  // for Clock
   clock = S.data(Date.now())
   timer = setInterval(() => this.clock(Date.now()), 1000)
 
+  // for Nav
   hash = S.data(getHash(this.init.url))
 
+  // for Home Page
+  width = S.data(150)
+  background = S.data('white')
+
+  // for Booking Page
   booking = S.data<Booking>({
     name: '',
     tel: '',
