@@ -42,6 +42,13 @@ function createSession(session: Session): Session | void {
 
 startServer({
   port: 3333,
+  title: 'TS LiveView Demo',
+  heads: [
+    `
+  <meta name="description" content="server-side rendered reactive single-page app">
+  <meta http-equiv="x-ua-compatible" content="IE=Edge">
+`,
+  ],
   createSession,
   initialRender,
 })
