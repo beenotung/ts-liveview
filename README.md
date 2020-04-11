@@ -16,6 +16,7 @@ Just like [Phoenix LiveView](https://github.com/phoenixframework/phoenix_live_vi
 - [x] Progressive enhancement for interactivity
 - [x] Realtime Server side 'rendering' for incremental update
 - [x] Bidirectional event push
+- [x] Auto reconnect websocket
 
 ## Example
 ### Simple Clock
