@@ -27,7 +27,7 @@ Just like [Phoenix LiveView](https://github.com/phoenixframework/phoenix_live_vi
 | React 16.6.3 + React DOM | 112K |
 | Ember 3.0.0.beta.2 | 468K |
 | React + Ionic * | 2.1M |
-| Stencil + Ionic * | 3M |
+| Stencil + Ionic * | 3.0M |
 | Angular + Ionic * | 4.2M |
 
 *: all Ionic build excluded the svg, assets, *.map and PWA json files
