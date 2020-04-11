@@ -24,6 +24,7 @@ export function genClientCode() {
   return new Promise((resolve, reject) => {
     b.bundle((err, src) => {
       if (err) {
+        console.error('failed to bundle client code:', err)
         reject(err)
         return
       }

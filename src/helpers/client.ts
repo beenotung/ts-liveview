@@ -15,10 +15,12 @@ function main() {
     }
   }
 
-  function startWebSocket() {
+  let ws: WebSocket
+
+  function startWebSocket(): WebSocket {
     let url = location.origin.replace('http', 'ws')
     url += getQueryUrl()
-    let ws = new WebSocket(url)
+    ws = new WebSocket(url)
     ws.onmessage = ev => {
       const message = JSON.parse(ev.data) as ServerMessage
       onMessage(message)
@@ -37,7 +39,7 @@ function main() {
     return ws
   }
 
-  const ws = startWebSocket()
+  ws = startWebSocket()
 
   function render(e: Element, template: ComponentTemplate) {
     templates.set(template.selector, template)
