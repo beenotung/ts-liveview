@@ -8,15 +8,33 @@ Just like [Phoenix LiveView](https://github.com/phoenixframework/phoenix_live_vi
 
 ## Why server-rendered?
 - To make the PWA deliver initial meaningful paint as soon as possible
-- To avoid over bloating the amount of javascript the client need to download
+- To avoid over bloating the amount of javascript the client need to download and execute
 - To allow 'over-the-air' update of application deployment
 
 ## Features
-- [x] Return rich layout on initial GET request in one-pass
+- [x] Return complete layout on initial GET request (in a single pass)
 - [x] Progressive enhancement for interactivity
 - [x] Realtime Server side 'rendering' for incremental update
 - [x] Bidirectional event push
 - [x] Auto reconnect websocket
+
+## Size Comparison
+| Tools | Runtime Code Size (minified) |
+|---|---|
+| **TS LiveView + morphdom** | **8K** |
+| (Phoenix) LiveView.js + morphdom | 29K |
+| Vue 2.5.20 | 88K |
+| React 16.6.3 + React DOM | 112K |
+| Ember 3.0.0.beta.2 | 468K |
+| React + Ionic * | 2.1M |
+| Stencil + Ionic * | 3M |
+| Angular + Ionic * | 4.2M |
+
+*: all Ionic build excluded the svg, assets, *.map and PWA json files
+
+Not only is LiveView + morphdom much lighter than the JS frameworks, the frameworks are just the baseline. You still need to ship application-specific JS and often add supporting JS libraries such as react-router, redux and friends to get feature parity. Those can easily boom the code size for runtime to be over 10MB, causing the latency of the first meaningful paint to be over 25 seconds on mobile device.
+
+reference: https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript
 
 ## Example
 ### Simple Clock
