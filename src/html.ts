@@ -1,10 +1,6 @@
 import { templateToHTML } from './h'
 import { clientScript } from './helpers/client-adaptor'
-import {
-  getIsHTMLDoc,
-  mobile_html_post,
-  mobile_html_pre,
-} from './helpers/mobile-html'
+import { genMobileHTMLWrapper, getIsHTMLDoc } from './helpers/mobile-html'
 import { Options } from './server'
 import { Request, Response } from './types/server'
 
@@ -18,14 +14,15 @@ export function sendInitialRender(o: {
 
   let html = options.initialRender(o.req, res)
   html = typeof html === 'string' ? html : templateToHTML(html)
+  const mobileHTML = genMobileHTMLWrapper(options)
   const isHTMLDoc = getIsHTMLDoc(html)
   if (!isHTMLDoc) {
-    res.write(mobile_html_pre)
+    res.write(mobileHTML.pre_body)
   }
   res.write(html)
   const defer = () => {
     if (!isHTMLDoc) {
-      res.write(mobile_html_post)
+      res.write(mobileHTML.post_body)
     }
     res.end()
   }

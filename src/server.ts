@@ -2,15 +2,17 @@ import express from 'express'
 import http from 'http'
 import WebSocket from 'ws'
 import { Template } from './h'
+import { HTMLOptions } from './helpers/mobile-html'
 import { sendInitialRender } from './html'
 import { Session } from './session'
 import { Request, Response, Server } from './types/server'
 
-export type Options = {
+export type ServerOptions = {
   port: number
   createSession?: (session: Session) => Session | void
   initialRender: (req: Request, res: Response) => string | Template
 }
+export type Options = ServerOptions & HTMLOptions
 
 export function startServer(
   options: Options,

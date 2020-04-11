@@ -1,4 +1,11 @@
-export function wrapMobileHTML(body: string, title?: string) {
+export type HTMLOptions = {
+  title?: string
+  heads?: string[]
+}
+
+export function wrapMobileHTML(body: string, options: HTMLOptions) {
+  const title = options.title
+  const heads = options.heads
   return `<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -8,6 +15,7 @@ export function wrapMobileHTML(body: string, title?: string) {
   <meta name="format-detection" content="telephone=no">
   <meta name="msapplication-tap-highlight" content="no">
   ${title ? `<title>${title}</title>` : ''}
+  ${heads ? heads.join('') : ''}
 </head>
 <body>
 ${body}
@@ -16,9 +24,16 @@ ${body}
 }
 
 const separator_pattern = '__separator__'
-export const [mobile_html_pre, mobile_html_post] = wrapMobileHTML(
-  separator_pattern,
-).split(separator_pattern)
+
+export function genMobileHTMLWrapper(options: HTMLOptions) {
+  const res = wrapMobileHTML(separator_pattern, options).split(
+    separator_pattern,
+  )
+  return {
+    pre_body: res[0],
+    post_body: res[1],
+  }
+}
 
 export function getIsHTMLDoc(html: string): boolean {
   const s = html.trimLeft()
