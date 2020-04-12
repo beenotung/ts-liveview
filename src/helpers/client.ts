@@ -3,7 +3,8 @@ import { ClientMessage, ServerMessage } from '../types/message'
 import { ComponentTemplate, TemplateDiff } from '../types/view'
 
 function main() {
-  let retryInterval = 1000
+  const initialRetryInterval = 1000
+  let retryInterval = initialRetryInterval
 
   function getQueryUrl() {
     const hash = 'hash=' + encodeURIComponent(location.hash)
@@ -21,6 +22,10 @@ function main() {
     let url = location.origin.replace('http', 'ws')
     url += getQueryUrl()
     ws = new WebSocket(url)
+    ws.onopen = () => {
+      console.log('ws connected')
+      retryInterval = initialRetryInterval
+    }
     ws.onmessage = ev => {
       const message = JSON.parse(ev.data) as ServerMessage
       onMessage(message)
@@ -30,7 +35,11 @@ function main() {
     }
     ws.onclose = ev => {
       // tslint:disable-next-line no-console
-      console.debug('ws close', ev)
+      if (ev.code !== 1006) {
+        console.log('ws closed')
+        return
+      }
+      console.log('ws closed abnormally, will retry after', retryInterval, 'ms')
       setTimeout(() => {
         ws = startWebSocket()
       }, retryInterval)
