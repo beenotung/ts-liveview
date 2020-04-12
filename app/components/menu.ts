@@ -19,7 +19,7 @@ ${table(
     const hash = route(name as AppFunction)
     return [
       `<input type="checkbox" ${attrs({ checked: done })}>`,
-      `<a href="${hash}" onclick="send('hash', '${hash}')">${name}</a>`,
+      `<a href="${hash}">${name}</a>`,
     ]
   }),
 )}
