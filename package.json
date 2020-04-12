@@ -68,7 +68,8 @@
     "tslint-config-prettier": "^1.18.0",
     "tslint-eslint-rules": "^5.4.0",
     "tslint-etc": "^1.10.1",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "url-pattern": "^1.0.3"
   },
   "repository": {
     "type": "git",
