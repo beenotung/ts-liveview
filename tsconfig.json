@@ -22,7 +22,7 @@
   },
   "include": [
     "src/**/*.ts",
-    "app/**/*.ts",
+    "demo-app/**/*.ts",
     "test/**/*.ts"
   ],
   "exclude": [

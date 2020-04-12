@@ -17,11 +17,11 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "watch:tsc": "tsc -w",
-    "watch:js": "tsc && nodemon --watch dist -x node dist/app/main",
+    "watch:js": "tsc && nodemon --watch dist -x node dist/demo-app/main",
     "dev": "run-p watch:*",
     "test": "npm run rawtest",
     "clean": "rimraf dist",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"app/**/*.ts\" ",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"demo-app/**/*.ts\" ",
     "postformat": "tslint -p . --fix",
     "prebuild": "npm run clean && gen-index --single-quote --no-semi",
     "build": "tsc -p tsconfig.build.json",
