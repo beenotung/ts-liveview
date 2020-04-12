@@ -1,5 +1,4 @@
-import { matchUrlPattern, UrlPatternMatch } from '../../src/helpers/server'
-import { c, h } from '../lib'
+import { c, h, matchUrlPattern, UrlPatternMatch } from '../lib'
 import { render404Page } from '../pages/404-page'
 import { renderBookingPage } from '../pages/booking-page'
 import { renderHomePage } from '../pages/home-page'
