@@ -7,3 +7,10 @@ export { IncomingMessage } from 'http'
 
 export type Request = ExpressRequest & IncomingMessage
 export type Response = ExpressResponse & ServerResponse
+
+export type App = {
+  use: (
+    route: string,
+    f: (req: Request, res: Response, next: () => any) => any,
+  ) => any
+}

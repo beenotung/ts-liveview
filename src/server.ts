@@ -5,23 +5,23 @@ import { Template } from './h'
 import { HTMLOptions } from './helpers/mobile-html'
 import { sendInitialRender } from './html'
 import { Session } from './session'
-import { Request, Response, Server } from './types/server'
+import { App, Request, Response, Server } from './types/server'
 
-export type AttachServerOptions = {
+export type ServerOptions = {
   createSession?: (session: Session) => Session | void
   initialRender: (req: Request, res: Response) => string | Template
 } & HTMLOptions
 
+export type AttachServerOptions = {
+  app: App
+  server: Server
+} & ServerOptions
+
 export type StartServerOptions = {
   port: number
-} & AttachServerOptions
+} & ServerOptions
 
-export function attachServer(
-  options: {
-    app: { use: express.Application['use'] }
-    server: Server
-  } & AttachServerOptions,
-) {
+export function attachServer(options: AttachServerOptions) {
   const app = options.app
   const createSession = options.createSession
   const server = options.server
