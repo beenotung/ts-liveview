@@ -18,6 +18,23 @@ function main() {
 
   let ws: WebSocket
 
+  const units: Array<[string, number]> = [
+    ['ms', 1000],
+    ['s', 60],
+    ['m', 60],
+    ['h', 24],
+  ]
+
+  function formatDuration(duration: number) {
+    for (const unit of units) {
+      const d = unit[1]
+      if (duration < d) {
+        return Math.round(duration * 10) / 10 + unit[0]
+      }
+      duration /= d
+    }
+  }
+
   function startWebSocket(): WebSocket {
     let url = location.origin.replace('http', 'ws')
     url += getQueryUrl()
@@ -39,7 +56,10 @@ function main() {
         console.log('ws closed')
         return
       }
-      console.log('ws closed abnormally, will retry after', retryInterval, 'ms')
+      console.log(
+        'ws closed abnormally, will retry after',
+        formatDuration(retryInterval),
+      )
       setTimeout(() => {
         ws = startWebSocket()
       }, retryInterval)
