@@ -7,7 +7,7 @@ function main() {
   let retryInterval = initialRetryInterval
 
   function getQueryUrl() {
-    const hash = 'hash=' + encodeURIComponent(location.hash)
+    const hash = 'hash=' + encodeURIComponent(location.hash.replace('#', ''))
     const search = location.search
     if (search) {
       return search + '&' + hash

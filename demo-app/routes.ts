@@ -11,7 +11,7 @@ export type AppFunction = keyof typeof functions
 const urls: Partial<Record<AppFunction, string>> = {}
 
 export function route(name: AppFunction) {
-  return urls[name] || '#/' + name.toLowerCase()
+  return (urls[name] || '#/' + name.toLowerCase()).replace(/ /g, '-')
 }
 
 export const routes = {
