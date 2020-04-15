@@ -4,6 +4,7 @@ import { renderApp } from './app'
 import { renderClock } from './components/clock'
 import { renderMenu } from './components/menu'
 import { renderNav } from './components/nav'
+import { Calculator } from './pages/calculator-page'
 import { renderHomePage } from './pages/home-page'
 import { State } from './state'
 
@@ -40,6 +41,14 @@ export function createSession(session: Session): Session | void {
       Object.assign(booking, { [name]: value })
       state.booking(booking)
     })
+
+    // for Calculator Page
+    state.events.on(
+      'calculator',
+      ([name, value]: [keyof Calculator, number]) => {
+        state.calculator[name](value)
+      },
+    )
 
     session.sendTemplate(renderApp(state))
     const options = { skipInitialSend: true }

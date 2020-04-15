@@ -4,7 +4,8 @@ export const functions = {
   Home: false,
   Booking: true,
   ShopList: true,
-  Page3: false,
+  'Ultimate Answer': false,
+  'Investment Calculator': true,
 }
 export type AppFunction = keyof typeof functions
 
