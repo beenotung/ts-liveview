@@ -22,7 +22,10 @@ export function renderApp(state: State) {
       '#app',
       h`<div id="app" class="live">
 ${styles}
-<h1>TS LiveView Demo</h1>
+<h1>
+TS LiveView Demo
+<a href="https://github.com/beenotung/ts-liveview" style="font-size: 1rem">git</a>
+</h1>
 ${renderStats()}
 ${renderClock()}
 ${renderMenu()}
