@@ -5,7 +5,7 @@ import { createSession } from './session'
 // tslint:disable no-unused-declaration
 
 const options = {
-  port: 3333,
+  port: +process.env.PORT! || 3333,
   title: 'TS LiveView Demo',
   heads: [
     `
