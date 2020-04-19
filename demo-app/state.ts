@@ -3,11 +3,7 @@ import S from 's-js'
 import { getHash } from './helpers/location'
 import { initCalculator } from './pages/calculator-page'
 import { Booking } from './pages/form-page'
-import {
-  dec_counter,
-  inc_counter,
-  live_session_counter,
-} from './state/visitor'
+import { dec_counter, inc_counter, live_session_counter } from './state/visitor'
 
 export * from './state/visitor'
 
