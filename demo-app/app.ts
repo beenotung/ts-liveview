@@ -24,6 +24,7 @@ export function renderApp(state: State) {
 ${styles}
 <h1>
 TS LiveView Demo
+<a href="https://news.ycombinator.com/item?id=22917879" style="font-size: 1rem">HN</a>
 <a href="https://github.com/beenotung/ts-liveview" style="font-size: 1rem">git</a>
 </h1>
 ${renderStats()}
