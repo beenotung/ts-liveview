@@ -4,11 +4,13 @@ import { renderApp } from './app'
 import { renderClock } from './components/clock'
 import { renderMenu } from './components/menu'
 import { renderNav } from './components/nav'
+import { renderStats } from './components/stats'
 import { Calculator } from './pages/calculator-page'
 import { renderEditorPage } from './pages/editor-page'
-import { State } from './state'
+import { inc_counter, session_counter, State } from './state'
 
 export function createSession(session: Session): Session | void {
+  inc_counter(session_counter)
   S.root(dispose => {
     session.once('close', dispose)
 
@@ -52,6 +54,7 @@ export function createSession(session: Session): Session | void {
 
     session.sendTemplate(renderApp(state))
     const options = { skipInitialSend: true }
+    session.live(renderStats, options)
     session.live(renderClock, options)
     session.live(renderMenu, options)
     session.live(() => renderNav(state), options)

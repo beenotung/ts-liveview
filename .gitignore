@@ -6,3 +6,5 @@ pnpm-debug.log
 dist/
 .cache/
 *.tgz
+
+data/
