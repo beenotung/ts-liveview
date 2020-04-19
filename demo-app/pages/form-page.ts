@@ -1,6 +1,6 @@
 import { displayJSON } from '@beenotung/tslib/html'
 import { DAY } from '@beenotung/tslib/time'
-import { inputs, RadioOption, radios } from '../../src/helpers/h'
+import { inputs, RadioOption, radios } from '../lib'
 import { c, h } from '../lib'
 import { State } from '../state'
 
@@ -15,7 +15,7 @@ function getToday() {
   return new Date(new Date().toDateString()).getTime()
 }
 
-export function renderBookingPage(state: State) {
+export function renderFormPage(state: State) {
   const days: RadioOption[] = []
   const today = getToday()
   for (let i = 0; i < 9; i++) {
@@ -34,17 +34,18 @@ export function renderBookingPage(state: State) {
   return c(
     '#booking',
     h`<div id="booking">
-<h2>Booking Service</h2>
+<h2>Booking Service Demo</h2>
+<span>Form Data (not persisted)</span>
 <div style="border: 1px solid orangered">
 ${displayJSON(data)}
 </div>
 ${inputs([
   {
-    label: 'Contact Person',
-    input: `<input type="text" onchange="send('booking','name',event.target.value)">`,
+    label: 'Contact Person (oninput)',
+    input: `<input type="text" oninput="send('booking','name',event.target.value)">`,
   },
   {
-    label: 'Contact Tel',
+    label: 'Contact Tel (onchange)',
     input: `<input type="tel" onchange="send('booking','tel',event.target.value)">`,
   },
   {
@@ -63,11 +64,9 @@ ${inputs([
       onchange: `send('booking','date',event.target.value)`,
     }),
   },
-  {
-    label: '',
-    input: `<input type="button" value="Submit" onclick="send('submit')">`,
-  },
 ])}
+<input type="button" value="Reset" onclick="send('submit')">
+<input type="button" value="Submit" onclick="send('submit')">
 </div>`,
   )
 }

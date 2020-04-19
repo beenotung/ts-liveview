@@ -28,7 +28,7 @@ function renderInput(o: {
 <div class="box">
   ${space}
   ${o.prefix ? `<span>${o.prefix}</span>` + space : ''}
-  <input type="number" value="${value}" onchange="send('calculator', '${
+  <input type="number" value="${value}" oninput="send('calculator', '${
     o.name
   }', this.valueAsNumber)">
   ${o.suffix ? space + `<span>${o.suffix}</span>` : ''}
@@ -154,7 +154,7 @@ table.input-table tr {
   padding-bottom: 1em;
 }
 </style>
-<div class="header">Investment Calculator</div>
+<div class="header">Financial Freedom Calculator</div>
 <div class="content">
 ${renderInput({
   prefix: '$',

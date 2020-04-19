@@ -1,8 +1,8 @@
 import { EventEmitter } from 'events'
 import S from 's-js'
 import { getHash } from './helpers/location'
-import { Booking } from './pages/booking-page'
 import { initCalculator } from './pages/calculator-page'
+import { Booking } from './pages/form-page'
 
 export class State {
   events = new EventEmitter()

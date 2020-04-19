@@ -1,11 +1,12 @@
 import UrlPattern from 'url-pattern'
 
 export const functions = {
-  Home: false,
-  Booking: true,
-  ShopList: true,
+  About: true,
+  Editor: true,
+  Form: true,
+  'Nested Pages': true,
   'Ultimate Answer': false,
-  'Investment Calculator': true,
+  Calculator: true,
 }
 export type AppFunction = keyof typeof functions
 

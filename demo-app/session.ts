@@ -5,7 +5,7 @@ import { renderClock } from './components/clock'
 import { renderMenu } from './components/menu'
 import { renderNav } from './components/nav'
 import { Calculator } from './pages/calculator-page'
-import { renderHomePage } from './pages/home-page'
+import { renderEditorPage } from './pages/editor-page'
 import { State } from './state'
 
 export function createSession(session: Session): Session | void {
@@ -55,7 +55,7 @@ export function createSession(session: Session): Session | void {
     session.live(renderClock, options)
     session.live(renderMenu, options)
     session.live(() => renderNav(state), options)
-    session.live(() => renderHomePage(state), options)
+    session.live(() => renderEditorPage(state), options)
   })
   return session
 }

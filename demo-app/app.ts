@@ -21,7 +21,6 @@ export function renderApp(state: State) {
       h`<div id="app" class="live">
 ${styles}
 <h1>TS LiveView Demo</h1>
-<h3>SSR Reactive SPA</h3>
 ${renderClock()}
 ${renderMenu()}
 ${renderNav(state)}

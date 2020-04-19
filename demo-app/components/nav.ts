@@ -1,8 +1,9 @@
 import { c, h, matchUrlPattern, UrlPatternMatch } from '../lib'
 import { render404Page } from '../pages/404-page'
-import { renderBookingPage } from '../pages/booking-page'
+import { renderAboutPage } from '../pages/about-page'
 import { renderCalculator } from '../pages/calculator-page'
-import { renderHomePage } from '../pages/home-page'
+import { renderEditorPage } from '../pages/editor-page'
+import { renderFormPage } from '../pages/form-page'
 import { renderServicePage } from '../pages/service-page'
 import { renderShopListPage } from '../pages/shop-list-page'
 import { renderShopPage } from '../pages/shop-page'
@@ -17,15 +18,21 @@ const routeMatches: UrlPatternMatch[] = [
 function renderPage(state: State) {
   const hash = state.hash()
   switch (hash) {
+    // matching hard-coded urls
+    case '#':
     case '#/':
-    case '#/home':
-      return renderHomePage(state)
-    case '#/booking':
-      return renderBookingPage(state)
-    case '#/shoplist':
+    case '#/about':
+      return renderAboutPage()
+    case '#/editor':
+      return renderEditorPage(state)
+    case '#/form':
+      return renderFormPage(state)
+    // or calculated urls
+    case route('Nested Pages'):
       return renderShopListPage()
-    case route('Investment Calculator'):
+    case route('Calculator'):
       return renderCalculator(state)
+    // or express-style pattern matching, e.g. /shop/:shopId
     default: {
       const url = hash.replace('#', '')
       const page = matchUrlPattern(routeMatches, url)

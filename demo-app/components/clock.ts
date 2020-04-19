@@ -8,7 +8,11 @@ export function renderClock() {
   return c(
     '#clock',
     h`<div id="clock">
-Now is: ${new Date(now()).toLocaleString()}
+<h2>Realtime Clock</h2>
+The clock on server is:
+<div>
+${new Date(now()).toString()}
+</div>
 </div>`,
   )
 }
