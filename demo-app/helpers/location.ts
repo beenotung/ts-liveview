@@ -19,11 +19,12 @@ function decodeUrlSearch(url: string) {
 }
 
 function getHashFromSearch(search: any, defaultValue: string): string {
-  if (typeof search.hash === 'string') {
-    return search.hash
+  let hash = search.hash
+  if (Array.isArray(hash)) {
+    hash = hash[hash.length - 1]
   }
-  if (Array.isArray(search.hash)) {
-    return search.hash[search.hash.length - 1]
+  if (typeof hash === 'string' && hash) {
+    return hash
   }
   return defaultValue
 }
