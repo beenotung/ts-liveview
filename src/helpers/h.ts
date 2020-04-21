@@ -7,6 +7,14 @@ export function attrs(
     .join(' ')
 }
 
+export function hidden(hidden: boolean | any) {
+  return hidden ? 'hidden' : ''
+}
+
+export function readonly(readonly: boolean | any) {
+  return readonly ? 'readonly' : ''
+}
+
 export function table(rows: string[][]) {
   return `<table>
 <tbody>
