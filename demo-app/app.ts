@@ -9,10 +9,6 @@ import { c, h, Request, Response, Template } from './lib'
 import { inc_counter, State, visitor_counter } from './state'
 
 export function initialRender(req: Request, res: Response): string | Template {
-  if (req.url === '/favicon.ico') {
-    res.status(404)
-    return 'No favicon.ico'
-  }
   inc_counter(visitor_counter)
   const template = S.root(dispose =>
     S.sample(() => {

@@ -1,5 +1,7 @@
+import * as express from 'express'
+import path from 'path'
 import { initialRender } from './app'
-import { attachServer, startServer } from './lib'
+import { App, attachServer, Server, startServer } from './lib'
 import { createSession } from './session'
 
 // tslint:disable no-unused-declaration
@@ -17,16 +19,26 @@ const options = {
   initialRender,
 }
 
+function serveStatic(app: App) {
+  app.use('/', express.static(path.join('demo-app', 'public')))
+}
+
 // to run as standalone web server
 function standalone() {
-  startServer(options)
+  startServer({
+    ...options,
+    prehook: app => serveStatic(app),
+  })
 }
 
 // to be part of an express / nest.js application
-function attach({ expressApp, httpServer }: any) {
+function attach(o: {
+  app: App // e.g. express app / nest.js app
+  server: Server // http server
+}) {
+  serveStatic(o.app)
   attachServer({
-    app: expressApp,
-    server: httpServer,
+    ...o,
     ...options,
   })
 }

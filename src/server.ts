@@ -19,6 +19,7 @@ export type AttachServerOptions = {
 
 export type StartServerOptions = {
   port: number
+  prehook?: (app: App, sever: Server) => void
 } & ServerOptions
 
 export function attachServer(options: AttachServerOptions) {
@@ -48,6 +49,10 @@ export function startServer(
 
   const app = express()
   const server = http.createServer(app)
+
+  if (options.prehook) {
+    options.prehook(app, server)
+  }
 
   attachServer({ app, server, ...options })
 
