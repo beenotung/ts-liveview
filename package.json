@@ -1,7 +1,7 @@
 {
   "name": "ts-liveview",
   "version": "0.5.0",
-  "description": "LiveView enables rich, real-time user experiences with server-rendered HTML.",
+  "description": "LiveView enables rich, real-time user experiences with server-rendered HTML",
   "keywords": [
     "liveview",
     "SSR",

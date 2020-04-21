@@ -1,11 +1,12 @@
 # TS LiveView
 
+[![npm Package Version](https://img.shields.io/npm/v/ts-liveview.svg?maxAge=2592000)](https://www.npmjs.com/package/ts-liveview)
+
 LiveView enables rich, real-time user experiences with server-rendered HTML.
 
 Just like [Phoenix LiveView](https://github.com/phoenixframework/phoenix_live_view) but in Typescript!
 
 Live Demo: https://liveviews.xyz
-[![npm Package Version](https://img.shields.io/npm/v/ts-liveview.svg?maxAge=2592000)](https://www.npmjs.com/package/ts-liveview)
 
 ## Why server-rendered?
 - To make the PWA deliver initial meaningful paint as soon as possible
