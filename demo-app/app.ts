@@ -14,9 +14,15 @@ export function initialRender(req: Request, res: Response): string | Template {
     return 'No favicon.ico'
   }
   inc_counter(visitor_counter)
-  const state = new State({ url: req.url })
-  const template = renderApp(state)
-  state.dispose()
+  const template = S.root(dispose =>
+    S.sample(() => {
+      const state = new State({ url: req.url })
+      const template = renderApp(state)
+      state.dispose()
+      dispose()
+      return template
+    }),
+  )
   return template
 }
 
