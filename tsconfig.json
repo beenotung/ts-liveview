@@ -22,7 +22,7 @@
   },
   "include": [
     "src/**/*.ts",
-    "demo-app/**/*.ts",
+    "examples/spa-demo/**/*.ts",
     "test/**/*.ts"
   ],
   "exclude": [
