@@ -162,7 +162,7 @@ startServer({
 ### More examples
 - [Single-file demo with s-js](./test/demo-server-with-sjs.ts)
 - [Single-file demo without s-js](./test/demo-server-without-sjs.ts)
-- [SSR SPA Example](./app) (server-rendered single-page webapp)
+- [SSR SPA Example](./examples/spa-demo) (server-rendered single-page webapp)
 
 ## Todo
 - [x] Auto reconnect the websocket
