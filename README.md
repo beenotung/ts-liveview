@@ -165,10 +165,13 @@ startServer({
 - [SSR SPA Example](./examples/spa-demo) (server-rendered single-page webapp)
 
 ## Todo
-- [x] Auto reconnect the websocket
-- [ ] Recover session when reconnect*
+- [x] Auto reconnect the websocket*
+- [x] Recover session when reconnect*
+- [ ] make session simpler and put s-js component into core?
+- [ ] update spa example, tests, and readme to adopt the breaking change
+- [ ] abstract primus to allow custom transport and encoding
 
-*: maybe [Primus](https://github.com/primus/primus) can helps
+*: Solved by [Primus](https://github.com/primus/primus)
 
 ## LICENSE
 [BSD-2-Clause LICENSE](./LICENSE)

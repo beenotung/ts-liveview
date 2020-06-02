@@ -1,21 +1,46 @@
-export type TemplateData =
+/* complete model */
+
+export type PrimitiveView =
   | string
   | number
   | boolean
   | undefined
   | null
-  | ComponentTemplate
+export type View =
+  | PrimitiveView
+  | ComponentView
 
-export type ComponentTemplate = {
+export type ComponentView = {
   selector: string
-  statics: TemplateStringsArray
-  dynamics: TemplateData[]
+  template_id: string
+  dynamics: View[]
 }
 
-export type Diff = Array<[number, TemplateData]>
-export type TemplateDiff = {
-  selector: string
-  diff: Diff
+/* patch */
+
+export type Statics = ReadonlyArray<string>
+
+export type TemplatePatch = {
+  template_id: string
+  statics: Statics
 }
 
-export type Render = () => ComponentTemplate
+export type ComponentDiff = {
+  selector: string
+  template_id: string
+  diff: Diff[]
+}
+export type ViewDiff =
+  | PrimitiveView
+  | ComponentDiff
+
+// [index, newValue]
+export type Diff = [number, ViewDiff]
+
+// from server to client
+export type Patch = {
+  templates: TemplatePatch[]
+  components: ComponentDiff[]
+  selector: string
+}
+

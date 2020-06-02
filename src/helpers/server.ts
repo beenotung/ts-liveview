@@ -1,7 +1,8 @@
+import qs from 'querystring'
 import S from 's-js'
-import { Template, templateToHTML } from '../h'
+import { viewToHTML } from '../h-client'
 import { ClientMessage } from '../types/message'
-import { TemplateData } from '../types/view'
+import { View } from '../types/view'
 
 export function useClientMessage(f: (message: ClientMessage) => void) {
   return (message: string) => {
@@ -9,23 +10,34 @@ export function useClientMessage(f: (message: ClientMessage) => void) {
   }
 }
 
-export function sampleTemplate(render: () => Template) {
-  return S.sample(() => templateToHTML(render()))
+export function sampleView(render: () => View) {
+  return S.sample(() => {
+    let view = render()
+    let html = viewToHTML(view, new Map())
+    return html
+  })
 }
 
 type UrlPattern = {
   match: (url: string) => object | null
 }
-export type UrlPatternMatch = [UrlPattern, (p: any) => TemplateData]
+export type UrlPatternMatch = [UrlPattern, (p: any) => View]
 
 export function matchUrlPattern(
   matches: UrlPatternMatch[],
   url: string,
-): TemplateData | undefined {
+): View | undefined {
   for (const [pattern, render] of matches) {
     const p = pattern.match(url)
     if (p) {
       return render(p)
     }
   }
+}
+
+export function parseQuery(query: string | any): any {
+  if (typeof query === 'string') {
+    return qs.parse(query)
+  }
+  return query
 }

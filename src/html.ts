@@ -1,19 +1,21 @@
-import { templateToHTML } from './h'
+import { viewToHTML } from './h-client'
 import { clientScript } from './helpers/client-adaptor'
 import { genMobileHTMLWrapper, getIsHTMLDoc } from './helpers/mobile-html'
 import { AttachServerOptions } from './server'
 import { Request, Response } from './types/server'
+import debug from 'debug'
 
-export function sendInitialRender(o: {
-  options: AttachServerOptions
-  req: Request
-  res: Response
-}) {
-  const res = o.res
-  const options = o.options
+let log = debug('liveview:html')
 
-  let html = options.initialRender(o.req, res)
-  html = typeof html === 'string' ? html : templateToHTML(html)
+export function sendInitialRender(
+  req: Request,
+  res: Response,
+  options: AttachServerOptions,
+) {
+  let view = options.initialRender(req, res)
+  log('view:', view)
+  let html = viewToHTML(view, new Map())
+  log('html:', html)
   const mobileHTML = genMobileHTMLWrapper(options)
   const isHTMLDoc = getIsHTMLDoc(html)
   if (!isHTMLDoc) {

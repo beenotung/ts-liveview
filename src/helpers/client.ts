@@ -1,132 +1,115 @@
-import { syncDom, templateToHTML } from '../h'
-import { ClientMessage, ServerMessage } from '../types/message'
-import { ComponentTemplate, TemplateDiff } from '../types/view'
+import { Primus } from 'typestub-primus'
+import { morph, viewToHTML } from '../h-client'
+import { ServerMessage } from '../types/message'
+import { ComponentView, ComponentDiff, Patch, Statics, View } from '../types/view'
+
+function startPrimus(baseUrl: string): Primus {
+  return new (window as any).Primus(baseUrl)
+}
+
+function getQueryUrl() {
+  const hash = 'hash=' + encodeURIComponent(location.hash.replace('#', ''))
+  const search = location.search
+  if (search) {
+    return search + '&' + hash
+  } else {
+    return '?' + hash
+  }
+}
+
+function startWs() {
+  let url = location.origin.replace('http', 'ws')
+  url += getQueryUrl()
+  let primus = startPrimus(url)
+  primus.on('close', () => {
+    console.log('disconnected with server')
+  })
+  primus.on('open', () => {
+    console.log('connected with server')
+  })
+  return primus
+}
+
+let primus: Primus
+
+function send(...args: any[]) {
+  primus.write({ type: 'event', args })
+}
+
+// template_id -> statics
+let templates = new Map<string, Statics>()
+
+// selector -> dynamics
+let components = new Map<string, ComponentView>()
+
+function onPatch(patch: Patch) {
+  // update template
+  for (let template of patch.templates) {
+    templates.set(template.template_id, template.statics)
+  }
+  // update component
+  for (let component of patch.components) {
+    patchComponent(component)
+  }
+  // update dom
+  let elements = document.querySelectorAll(patch.selector)
+  if (elements.length === 0) {
+    console.error('elements not found:', patch.selector)
+    return
+  }
+  let component = components.get(patch.selector)
+  if (!component) {
+    console.error('patch component not found:', patch.selector)
+    return
+  }
+  let html = viewToHTML(component, templates)
+  elements.forEach(e => {
+    morph(e, html)
+  })
+}
+
+function patchComponent(patch: ComponentDiff) {
+  let component = components.get(patch.selector)
+  let dynamics: View[]
+  if (component) {
+    dynamics = component.dynamics
+    component.template_id = patch.template_id
+  } else {
+    dynamics = []
+    components.set(patch.selector, {
+      selector: patch.selector,
+      template_id: patch.template_id,
+      dynamics,
+    })
+  }
+  for (let diff of patch.diff) {
+    let idx = diff[0]
+    let view = diff[1]
+    if (typeof view === 'object' && view !== null) {
+      dynamics[idx] = patchComponent(view)
+    } else {
+      dynamics[idx] = view
+    }
+  }
+  return component
+}
 
 function main() {
-  const initialRetryInterval = 1000
-  let retryInterval = initialRetryInterval
-
-  function getQueryUrl() {
-    const hash = 'hash=' + encodeURIComponent(location.hash.replace('#', ''))
-    const search = location.search
-    if (search) {
-      return search + '&' + hash
-    } else {
-      return '?' + hash
-    }
+  Object.assign(window, { send })
+  if (primus) {
+    console.log('skip primus init when hot reload')
+    return // already started
   }
-
-  let ws: WebSocket
-
-  const units: Array<[string, number]> = [
-    ['ms', 1000],
-    ['s', 60],
-    ['m', 60],
-    ['h', 24],
-  ]
-
-  function formatDuration(duration: number) {
-    for (const unit of units) {
-      const d = unit[1]
-      if (duration < d) {
-        return Math.round(duration * 10) / 10 + unit[0]
-      }
-      duration /= d
-    }
-  }
-
-  function startWebSocket(): WebSocket {
-    let url = location.origin.replace('http', 'ws')
-    url += getQueryUrl()
-    ws = new WebSocket(url)
-    ws.onopen = () => {
-      console.log('ws connected')
-      retryInterval = initialRetryInterval
-    }
-    ws.onmessage = ev => {
-      const message = JSON.parse(ev.data) as ServerMessage
-      onMessage(message)
-    }
-    ws.onerror = ev => {
-      console.error('ws err', ev)
-    }
-    ws.onclose = ev => {
-      // tslint:disable-next-line no-console
-      if (ev.code !== 1006) {
-        console.log('ws closed')
-        return
-      }
-      console.log(
-        'ws closed abnormally, will retry after',
-        formatDuration(retryInterval),
-      )
-      setTimeout(() => {
-        ws = startWebSocket()
-      }, retryInterval)
-      retryInterval *= 1.1
-    }
-    return ws
-  }
-
-  ws = startWebSocket()
-
-  function render(e: Element, template: ComponentTemplate) {
-    templates.set(template.selector, template)
-    const html = templateToHTML(template, childTemplate =>
-      templates.set(childTemplate.selector, childTemplate),
-    )
-    syncDom(e, html)
-  }
-
-  function patch(e: Element, patch: TemplateDiff) {
-    const selector = patch.selector
-    const template = templates.get(selector)
-    if (!template) {
-      // missing template, request a full render message
-      send('resendTemplate', selector)
-      return
-    }
-    patch.diff.forEach(([i, v]) => (template.dynamics[i] = v))
-    render(e, template)
-  }
-
-  const templates = new Map<string, ComponentTemplate>()
-
-  const messageQueue: ServerMessage[] = []
-
-  function onMessage(message: ServerMessage) {
-    const selector = message.selector
-    const e = document.querySelector(selector)
-    if (!e) {
-      // console.debug('waiting for', selector)
-      messageQueue.push(message)
-      return
-    }
-    switch (message.type) {
-      case 'render':
-        render(e, message)
-        break
-      case 'patch':
-        patch(e, message)
-        break
-      default: {
-        const x: never = message
-        console.error('unknown server message:', x)
+  primus = startWs()
+  primus.on('data', (data: any) => {
+    console.log('data:', data)
+    if (typeof data === 'object' && data !== null) {
+      let message = data as ServerMessage
+      if (message.type === 'patch') {
+        return onPatch(message)
       }
     }
-    const top = messageQueue.pop()
-    if (top) {
-      onMessage(top)
-    }
-  }
-
-  function send(...args: any[]) {
-    const message: ClientMessage = { type: 'event', args }
-    ws.send(JSON.stringify(message))
-  }
-
-  Object.assign(window, {
-    send,
+    console.error('unknown data from server:', data)
   })
 }
 
