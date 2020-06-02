@@ -170,6 +170,7 @@ startServer({
 - [ ] make session simpler and put s-js component into core?
 - [ ] update spa example, tests, and readme to adopt the breaking change
 - [ ] abstract primus to allow custom transport and encoding
+- [ ] use history.pushState in demo instead of location hash, for easier sharing and initial rendering
 
 *: Solved by [Primus](https://github.com/primus/primus)
 
