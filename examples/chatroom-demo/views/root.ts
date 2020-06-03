@@ -4,15 +4,22 @@ import debug from 'debug'
 
 let log = debug('app:view:root')
 
-export function renderRoot(url: string, options: {
-  type: 'request',
-  request: CommonRequest
-} | {
-  type: 'session'
-  session: Session
-}): Component {
+export function renderRoot(
+  url: string,
+  options:
+    | {
+        type: 'request'
+        request: CommonRequest
+      }
+    | {
+        type: 'session'
+        session: Session
+      },
+): Component {
   log('render:', { url, type: options.type })
-  let component = c('.main', h`
+  let component = c(
+    '.main',
+    h`
 <div class="main">
   <h1>Chatroom Demo</h1>
   <dl>
@@ -23,7 +30,8 @@ export function renderRoot(url: string, options: {
     <dd>${options.type}</dd>
   </dl>
 </div>
-  `)
+  `,
+  )
   log('result:', component)
   return component
 }

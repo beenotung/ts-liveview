@@ -1,12 +1,12 @@
+import debug from 'debug'
 import S from 's-js'
+import { ISpark } from 'typestub-primus'
+import { Component, createDummyComponent, morphComponent } from './h'
 import { CommonRequest } from './request'
 import { ServerMessage } from './types/message'
 import { Patch, Statics } from './types/view'
-import { ISpark } from 'typestub-primus'
-import debug from 'debug'
-import { Component, createDummyComponent, morphComponent } from './h'
 
-let log = debug('liveview:session')
+const log = debug('liveview:session')
 
 export type LiveOptions = {
   skipInitialSend?: boolean
@@ -19,11 +19,7 @@ export class Session {
   // selector -> last version component
   components = new Map<string, Component>()
 
-  constructor(
-    public spark: ISpark,
-    public request: CommonRequest,
-  ) {
-  }
+  constructor(public spark: ISpark, public request: CommonRequest) {}
 
   sendMessage(message: ServerMessage) {
     this.spark.write(message)
@@ -58,7 +54,7 @@ export class Session {
   live(render: () => Component, options?: LiveOptions) {
     let initial = true
     return S(() => {
-      let component = render()
+      const component = render()
       if (options?.skipInitialSend && initial) {
         initial = false
         return
@@ -79,4 +75,3 @@ export class Session {
     })
   }
 }
-

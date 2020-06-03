@@ -38,17 +38,17 @@ function componentToHTML(
     }
     templates.set(component.template_id, statics)
   }
-  let acc: string[] = []
-  let S = statics.length
-  let dynamics = component.dynamics
-  let D = dynamics.length
+  const acc: string[] = []
+  const S = statics.length
+  const dynamics = component.dynamics
+  const D = dynamics.length
   for (let i = 0; i < S; i++) {
     acc.push(statics[i])
     if (i >= D) {
       continue
     }
-    let view: View = dynamics[i]
-    let html = viewToHTML(view, templates)
+    const view: View = dynamics[i]
+    const html = viewToHTML(view, templates)
     acc.push(html)
   }
   return acc.join('')

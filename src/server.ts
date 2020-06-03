@@ -1,17 +1,17 @@
-import S from 's-js'
 import debug from 'debug'
 import express from 'express'
 import http from 'http'
+import S from 's-js'
+import { IPrimusOptions, Primus } from 'typestub-primus'
 import { Component } from './h'
 import { HTMLOptions } from './helpers/mobile-html'
 import { parseQuery } from './helpers/server'
 import { sendInitialRender } from './html'
 import { Session } from './session'
 import { App, Request, Response, Server } from './types/server'
-import { PrimitiveView, View } from './types/view'
-import { Primus, IPrimusOptions } from 'typestub-primus'
+import { PrimitiveView } from './types/view'
 
-let log = debug('liveview:session')
+const log = debug('liveview:session')
 
 export type ServerOptions = {
   createSession?: (session: Session) => Session | void
@@ -21,7 +21,7 @@ export type ServerOptions = {
 export type AttachServerOptions = {
   app: App
   server?: Server
-  primus?: Primus,
+  primus?: Primus
 } & ServerOptions
 
 export type StartServerOptions = {
@@ -36,9 +36,7 @@ export function attachServer(options: AttachServerOptions) {
   const primus = options.primus
   const createSession = options.createSession
 
-  app.use('/', (req, res) =>
-    sendInitialRender(req, res, options),
-  )
+  app.use('/', (req, res) => sendInitialRender(req, res, options))
 
   if (createSession && primus) {
     primus.on('connection', spark => {
@@ -56,12 +54,12 @@ export function attachServer(options: AttachServerOptions) {
         },
       })
       S.root(dispose => {
-        let session = new Session(spark, {
+        const session = new Session(spark, {
           primus: spark.request,
           query: parseQuery(spark.query),
         })
         session.attachDispose(dispose)
-        let result = createSession(session)
+        const result = createSession(session)
         if (!result) {
           dispose() // the application has rejected this session
         }
@@ -85,7 +83,9 @@ export function startServer(
     options.prehook(app, server)
   }
 
-  let primus = options.createSession ? new Primus(server, options.primusOptions) : undefined
+  const primus = options.createSession
+    ? new Primus(server, options.primusOptions)
+    : undefined
 
   attachServer({ app, server, primus, ...options })
 

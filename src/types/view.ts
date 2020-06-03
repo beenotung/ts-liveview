@@ -1,14 +1,7 @@
 /* complete model */
 
-export type PrimitiveView =
-  | string
-  | number
-  | boolean
-  | undefined
-  | null
-export type View =
-  | PrimitiveView
-  | ComponentView
+export type PrimitiveView = string | number | boolean | undefined | null
+export type View = PrimitiveView | ComponentView
 
 export type ComponentView = {
   selector: string
@@ -30,9 +23,7 @@ export type ComponentDiff = {
   template_id: string
   diff: Diff[]
 }
-export type ViewDiff =
-  | PrimitiveView
-  | ComponentDiff
+export type ViewDiff = PrimitiveView | ComponentDiff
 
 // [index, newValue]
 export type Diff = [number, ViewDiff]
@@ -43,4 +34,3 @@ export type Patch = {
   components: ComponentDiff[]
   selector: string
 }
-

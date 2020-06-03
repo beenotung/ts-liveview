@@ -12,8 +12,8 @@ export function useClientMessage(f: (message: ClientMessage) => void) {
 
 export function sampleView(render: () => View) {
   return S.sample(() => {
-    let view = render()
-    let html = viewToHTML(view, new Map())
+    const view = render()
+    const html = viewToHTML(view, new Map())
     return html
   })
 }

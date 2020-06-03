@@ -1,12 +1,17 @@
-import { TemplatePatch, Patch, PrimitiveView, Diff, Statics, ComponentDiff } from './types/view'
-import hash from 'quick-hash'
 import debug from 'debug'
+import hash from 'quick-hash'
+import {
+  ComponentDiff,
+  Diff,
+  Patch,
+  PrimitiveView,
+  Statics,
+  TemplatePatch,
+} from './types/view'
 
-let log = debug('liveview:h')
+const log = debug('liveview:h')
 
-export type Dynamic =
-  | PrimitiveView
-  | Component
+export type Dynamic = PrimitiveView | Component
 
 export type Template = {
   template_id: string
@@ -14,16 +19,11 @@ export type Template = {
   dynamics: Dynamic[]
 }
 
-function hashTemplate(
-  statics: Statics,
-): string {
+function hashTemplate(statics: Statics): string {
   return hash(statics.join(','))
 }
 
-export function h(
-  statics: Statics,
-  ...dynamics: Dynamic[]
-): Template {
+export function h(statics: Statics, ...dynamics: Dynamic[]): Template {
   return {
     template_id: hashTemplate(statics),
     statics,
@@ -42,10 +42,7 @@ export function c(selector: string, template: Template): Component {
   }
 }
 
-function isStaticsSame(
-  a: Statics,
-  b: Statics,
-) {
+function isStaticsSame(a: Statics, b: Statics) {
   if (a.length !== b.length) {
     return false
   }
@@ -57,12 +54,8 @@ function isStaticsSame(
   return true
 }
 
-export function isTemplateSame(
-  a: Template,
-  b: Template,
-): boolean {
-  return a.template_id === b.template_id
-    && isStaticsSame(a.statics, b.statics) // in case hash collision
+export function isTemplateSame(a: Template, b: Template): boolean {
+  return a.template_id === b.template_id && isStaticsSame(a.statics, b.statics) // in case hash collision
 }
 
 export function createDummyComponent(): Component {
@@ -84,19 +77,16 @@ export function morphComponent(
 ): Patch {
   log('morphComponent')
   // template_id -> statics
-  let newTemplates = new Map<string, Statics>()
+  const newTemplates = new Map<string, Statics>()
   // selector -> component diff
-  let newComponents = new Map<string, ComponentDiff>()
+  const newComponents = new Map<string, ComponentDiff>()
 
-  function morphTemplate(
-    source: Template,
-    target: Template,
-  ) {
+  function morphTemplate(source: Template, target: Template) {
     log('morph template')
     if (isTemplateSame(source, target)) {
       return
     }
-    let oldStatics = templates.get(target.template_id)
+    const oldStatics = templates.get(target.template_id)
     if (!oldStatics || !isStaticsSame(oldStatics, target.statics)) {
       newTemplates.set(target.template_id, target.statics)
       source.statics = target.statics
@@ -114,19 +104,19 @@ export function morphComponent(
     log('target len:', target.dynamics.length)
     for (let i = 0; i < target.dynamics.length; i++) {
       log('i', i)
-      let s = source.dynamics[i]
-      let t = target.dynamics[i]
+      const s = source.dynamics[i]
+      const t = target.dynamics[i]
       if (s === t) {
         continue
       }
-      let sourceIsComponent = typeof s === 'object' && s !== null
-      let targetIsComponent = typeof t === 'object' && t !== null
+      const sourceIsComponent = typeof s === 'object' && s !== null
+      const targetIsComponent = typeof t === 'object' && t !== null
       if (sourceIsComponent && targetIsComponent) {
         log('both component')
-        let source = s as Component
-        let target = t as Component
+        const source = s as Component
+        const target = t as Component
         morphTemplate(source, target)
-        let componentDiff = morphComponent(source, target)
+        const componentDiff = morphComponent(source, target)
         if (componentDiff) {
           diff.push([i, componentDiff])
         }
@@ -134,10 +124,10 @@ export function morphComponent(
       }
       if (targetIsComponent) {
         log('target is component')
-        let source: Component = createDummyComponent()
-        let target = t as Component
+        const source: Component = createDummyComponent()
+        const target = t as Component
         components.set(target.selector, target)
-        let componentDiff = morphComponent(source, target)
+        const componentDiff = morphComponent(source, target)
         if (componentDiff) {
           diff.push([i, componentDiff])
         }
@@ -145,13 +135,14 @@ export function morphComponent(
       }
       diff.push([i, t as PrimitiveView])
     }
-    if (diff.length === 0
-      && source.selector === target.selector
-      && source.template_id === target.template_id
+    if (
+      diff.length === 0 &&
+      source.selector === target.selector &&
+      source.template_id === target.template_id
     ) {
       return false
     }
-    let componentDiff: ComponentDiff = {
+    const componentDiff: ComponentDiff = {
       selector: target.selector,
       template_id: target.template_id,
       diff,
@@ -164,8 +155,8 @@ export function morphComponent(
 
   morphComponent(source, target)
 
-  let templatePatches: TemplatePatch[] = []
-  for (let [template_id, statics] of newTemplates) {
+  const templatePatches: TemplatePatch[] = []
+  for (const [template_id, statics] of newTemplates) {
     templatePatches.push({ template_id, statics })
   }
   return {

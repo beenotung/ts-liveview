@@ -1,7 +1,13 @@
 import { Primus } from 'typestub-primus'
 import { morph, viewToHTML } from '../h-client'
 import { ServerMessage } from '../types/message'
-import { ComponentView, ComponentDiff, Patch, Statics, View } from '../types/view'
+import {
+  ComponentDiff,
+  ComponentView,
+  Patch,
+  Statics,
+  View,
+} from '../types/view'
 
 function startPrimus(baseUrl: string): Primus {
   return new (window as any).Primus(baseUrl)
@@ -20,7 +26,7 @@ function getQueryUrl() {
 function startWs() {
   let url = location.origin.replace('http', 'ws')
   url += getQueryUrl()
-  let primus = startPrimus(url)
+  const primus = startPrimus(url)
   primus.on('close', () => {
     console.log('disconnected with server')
   })
@@ -37,39 +43,39 @@ function send(...args: any[]) {
 }
 
 // template_id -> statics
-let templates = new Map<string, Statics>()
+const templates = new Map<string, Statics>()
 
 // selector -> dynamics
-let components = new Map<string, ComponentView>()
+const components = new Map<string, ComponentView>()
 
 function onPatch(patch: Patch) {
   // update template
-  for (let template of patch.templates) {
+  for (const template of patch.templates) {
     templates.set(template.template_id, template.statics)
   }
   // update component
-  for (let component of patch.components) {
+  for (const component of patch.components) {
     patchComponent(component)
   }
   // update dom
-  let elements = document.querySelectorAll(patch.selector)
+  const elements = document.querySelectorAll(patch.selector)
   if (elements.length === 0) {
     console.error('elements not found:', patch.selector)
     return
   }
-  let component = components.get(patch.selector)
+  const component = components.get(patch.selector)
   if (!component) {
     console.error('patch component not found:', patch.selector)
     return
   }
-  let html = viewToHTML(component, templates)
+  const html = viewToHTML(component, templates)
   elements.forEach(e => {
     morph(e, html)
   })
 }
 
 function patchComponent(patch: ComponentDiff) {
-  let component = components.get(patch.selector)
+  const component = components.get(patch.selector)
   let dynamics: View[]
   if (component) {
     dynamics = component.dynamics
@@ -82,9 +88,9 @@ function patchComponent(patch: ComponentDiff) {
       dynamics,
     })
   }
-  for (let diff of patch.diff) {
-    let idx = diff[0]
-    let view = diff[1]
+  for (const diff of patch.diff) {
+    const idx = diff[0]
+    const view = diff[1]
     if (typeof view === 'object' && view !== null) {
       dynamics[idx] = patchComponent(view)
     } else {
@@ -104,7 +110,7 @@ function main() {
   primus.on('data', (data: any) => {
     console.log('data:', data)
     if (typeof data === 'object' && data !== null) {
-      let message = data as ServerMessage
+      const message = data as ServerMessage
       if (message.type === 'patch') {
         return onPatch(message)
       }

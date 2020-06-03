@@ -9,7 +9,6 @@ let app = express()
 let server = http.createServer(app)
 let primus = new Primus(server)
 
-
 attachServer({
   app,
   server,
@@ -24,7 +23,8 @@ attachServer({
     return renderRoot(req.url, { type: 'request', request: req })
   },
   createSession: session => {
-    let render = () => renderRoot(session.spark.request.path, { type: 'session', session })
+    let render = () =>
+      renderRoot(session.spark.request.path, { type: 'session', session })
     session.live(render, { skipInitialSend: false })
     return session
   },
