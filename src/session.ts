@@ -65,7 +65,7 @@ export class Session {
   }
 
   attachDispose(dispose: () => void) {
-    this.spark.on('close', () => {
+    this.onClose(() => {
       log(`spark is closed, dispose S-js context now`)
       dispose()
     })
@@ -73,6 +73,10 @@ export class Session {
       log(`S-js context is disposed, close spark now`)
       this.spark.end()
     })
+  }
+
+  onClose(cb: () => void) {
+    this.spark.on('close', cb)
   }
 
   onMessage(cb: (args: ClientMessage) => void) {

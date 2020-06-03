@@ -5,7 +5,6 @@ import {
   h,
   Request,
   Response,
-  sampleView,
   Session,
   startServer,
 } from '../src'
@@ -59,12 +58,14 @@ Hello, ${name() || 'Guest'}
     }
 
     function renderRoot() {
-      return c(
-        '#app',
-        h`<div id="app" class="live">
-${sampleView(renderClock)}
-${sampleView(renderName)}
+      return S.sample(() =>
+        c(
+          '#app',
+          h`<div id="app" class="live">
+${renderClock()}
+${renderName()}
 </div>`,
+        ),
       )
     }
 
@@ -85,10 +86,8 @@ ${sampleView(renderName)}
   return session
 }
 
-const port = 3000
-
 startServer({
-  port,
+  port: 3000,
   heads: [genPrimusScript()],
   createSession,
   initialRender: (req, res) => {

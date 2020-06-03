@@ -63,10 +63,8 @@ function createSession(session: Session): Session | void {
   return session
 }
 
-const port = 3000
-
 startServer({
-  port,
+  port: 3000,
   heads: [genPrimusScript()],
   createSession,
   initialRender: (req, res) => {
