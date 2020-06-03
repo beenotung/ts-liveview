@@ -21,12 +21,12 @@ export function table(rows: string[][]) {
   return `<table>
 <tbody>
 ${rows
-    .map(
-      cols => `<tr>
+  .map(
+    cols => `<tr>
 ${cols.map(col => `<td>${col}</td>`).join('')}
 </tr>`,
-    )
-    .join('')}
+  )
+  .join('')}
 </tbody>
 </table>`
 }
@@ -62,12 +62,12 @@ export function radios(options: RadioOptions) {
       return `
 <div style="display: inline-block">
   <input type="radio" ${attrs({
-        id,
-        value: o.value,
-        name: options.id,
-        onchange: options.onchange,
-        checked: o.value === options.value ? 'checked' : undefined,
-      })}>
+    id,
+    value: o.value,
+    name: options.id,
+    onchange: options.onchange,
+    checked: o.value === options.value ? 'checked' : undefined,
+  })}>
   <label for="${id}">${o.text}</label>
 </div>
   `
