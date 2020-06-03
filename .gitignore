@@ -8,3 +8,8 @@ dist/
 *.tgz
 
 data/
+
+# minify test files
+primus.js
+primus.min.js
+res/minify.min.html
