@@ -171,8 +171,13 @@ startServer({
 - [ ] update spa example, tests, and readme to adopt the breaking change
 - [ ] abstract primus to allow custom transport and encoding
 - [ ] use history.pushState in demo instead of location hash, for easier sharing and initial rendering
+- [ ] support preventing XSS issue**
 
 *: Solved by [Primus](https://github.com/primus/primus)
+
+**: maybe use JSX/TSX?
+If so, will be hard to detect changes.
+Or just provide helper functions and require the developer to explicitly escape it?
 
 ## LICENSE
 [BSD-2-Clause LICENSE](./LICENSE)
