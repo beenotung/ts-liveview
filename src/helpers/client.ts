@@ -77,18 +77,19 @@ function onPatch(patch: Patch) {
 }
 
 function patchComponent(patch: ComponentDiff) {
-  const component = components.get(patch.selector)
+  let component = components.get(patch.selector)
   let dynamics: View[]
   if (component) {
     dynamics = component.dynamics
     component.template_id = patch.template_id
   } else {
     dynamics = []
-    components.set(patch.selector, {
+    component = {
       selector: patch.selector,
       template_id: patch.template_id,
       dynamics,
-    })
+    }
+    components.set(patch.selector, component)
   }
   for (const diff of patch.diff) {
     const idx = diff[0]
