@@ -9,6 +9,8 @@ import {
   View,
 } from '../types/view'
 
+// TODO remove debug logs
+
 function startPrimus(baseUrl: string): Primus {
   return new (window as any).Primus(baseUrl)
 }
@@ -28,10 +30,10 @@ function startWs() {
   url += getQueryUrl()
   const primus = startPrimus(url)
   primus.on('close', () => {
-    console.log('disconnected with server')
+    console.debug('disconnected with server')
   })
   primus.on('open', () => {
-    console.log('connected with server')
+    console.debug('connected with server')
   })
   return primus
 }
@@ -106,12 +108,12 @@ function patchComponent(patch: ComponentDiff) {
 function main() {
   Object.assign(window, { send })
   if (primus) {
-    console.log('skip primus init when hot reload')
+    console.debug('skip primus init when hot reload')
     return // already started
   }
   primus = startWs()
   primus.on('data', (data: any) => {
-    console.log('data:', data)
+    console.debug('data:', data)
     if (typeof data === 'object' && data !== null) {
       const message = data as ServerMessage
       if (message.type === 'patch') {
