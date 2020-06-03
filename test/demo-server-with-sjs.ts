@@ -1,17 +1,19 @@
 import S from 's-js'
 import {
   c,
+  genPrimusScript,
   h,
   Request,
   Response,
-  sampleTemplate,
+  sampleView,
   Session,
   startServer,
-  useClientMessage,
 } from '../src'
 
 function initialView(req: Request, res: Response) {
-  return h`<div id="app" class="init">
+  return c(
+    '#app',
+    h`<div id="app" class="init">
   <p>
     Now is: ${new Date().toLocaleString()}
   </p>
@@ -21,12 +23,13 @@ function initialView(req: Request, res: Response) {
   <p>
     Hello, Guest
   </p>
-</div>`
+</div>`,
+  )
 }
 
 function createSession(session: Session): Session | void {
   S.root(dispose => {
-    session.once('close', dispose)
+    session.attachDispose(dispose)
 
     const clock = S.data(Date.now())
     const timer = setInterval(() => clock(Date.now()), 1000)
@@ -59,18 +62,18 @@ Hello, ${name() || 'Guest'}
       return c(
         '#app',
         h`<div id="app" class="live">
-${sampleTemplate(renderClock)}
-${sampleTemplate(renderName)}
+${sampleView(renderClock)}
+${sampleView(renderName)}
 </div>`,
       )
     }
 
-    session.sendTemplate(renderRoot())
+    session.sendComponent(renderRoot())
     session.live(renderClock, { skipInitialSend: true })
     session.live(renderName, { skipInitialSend: true })
 
-    session.onMessage = useClientMessage(message => {
-      const [k, v] = message.args
+    session.onMessage(message => {
+      const [k, v] = message
       if (k !== 'name') {
         console.warn('unknown client message:', message)
         return
@@ -86,6 +89,7 @@ const port = 3000
 
 startServer({
   port,
+  heads: [genPrimusScript()],
   createSession,
   initialRender: (req, res) => {
     return initialView(req, res)

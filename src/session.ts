@@ -3,7 +3,7 @@ import S from 's-js'
 import { ISpark } from 'typestub-primus'
 import { Component, createDummyComponent, morphComponent } from './h'
 import { CommonRequest } from './request'
-import { ServerMessage } from './types/message'
+import { ClientMessage, ServerMessage } from './types/message'
 import { Patch, Statics } from './types/view'
 
 const log = debug('liveview:session')
@@ -73,5 +73,9 @@ export class Session {
       log(`S-js context is disposed, close spark now`)
       this.spark.end()
     })
+  }
+
+  onMessage(cb: (args: ClientMessage) => void) {
+    this.spark.on('data', cb)
   }
 }

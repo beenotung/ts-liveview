@@ -1,8 +1,8 @@
-import { genClientCode } from '../src'
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
+import { genClientCode } from '../src'
 
-let file = path.join('dist', 'client.js')
+const file = path.join('dist', 'client.js')
 genClientCode().then(code => {
   fs.writeFileSync(file, code)
   console.log('saved to', file)

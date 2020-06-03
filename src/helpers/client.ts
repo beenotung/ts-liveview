@@ -1,6 +1,6 @@
 import { Primus } from 'typestub-primus'
 import { morph, viewToHTML } from '../h-client'
-import { ServerMessage } from '../types/message'
+import { ClientMessage, ServerMessage } from '../types/message'
 import {
   ComponentDiff,
   ComponentView,
@@ -39,7 +39,9 @@ function startWs() {
 let primus: Primus
 
 function send(...args: any[]) {
-  primus.write({ type: 'event', args })
+  // primus.write({ type: 'event', args })
+  const msg: ClientMessage = args
+  primus.write(msg)
 }
 
 // template_id -> statics

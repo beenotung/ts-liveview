@@ -1,14 +1,10 @@
 import qs from 'querystring'
 import S from 's-js'
+import { IPrimusOptions } from 'typestub-primus'
+import { Component } from '../h'
 import { viewToHTML } from '../h-client'
-import { ClientMessage } from '../types/message'
-import { View } from '../types/view'
-
-export function useClientMessage(f: (message: ClientMessage) => void) {
-  return (message: string) => {
-    f(JSON.parse(message))
-  }
-}
+import { PrimitiveView, View } from '../types/view'
+import { minify } from './minify'
 
 export function sampleView(render: () => View) {
   return S.sample(() => {
@@ -40,4 +36,14 @@ export function parseQuery(query: string | any): any {
     return qs.parse(query)
   }
   return query
+}
+
+export function minifyView(view: PrimitiveView | Component) {
+  const html = viewToHTML(view, new Map())
+  return minify(html)
+}
+
+export function genPrimusScript(options?: IPrimusOptions) {
+  const primusPath = options?.primusOptions?.pathname || '/primus'
+  return `<script src="${primusPath}/primus.js"></script>`
 }
