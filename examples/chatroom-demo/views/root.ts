@@ -1,8 +1,10 @@
-import { CommonRequest } from '../../../src/request'
-import { c, Request, Session, View, h, Component } from '../lib'
 import debug from 'debug'
+import { c, CommonRequest, Component, h, Session } from '../lib'
+import { State } from '../state'
+import { renderChatroom } from './chatroom'
+import { renderClock } from './clock'
 
-let log = debug('app:view:root')
+const log = debug('app:view:root')
 
 export function renderRoot(
   url: string,
@@ -15,20 +17,29 @@ export function renderRoot(
         type: 'session'
         session: Session
       },
+  state?: State,
 ): Component {
   log('render:', { url, type: options.type })
-  let component = c(
-    '.main',
-    h`
-<div class="main">
-  <h1>Chatroom Demo</h1>
-  <dl>
+  let dev = ''
+  if (!'dev') {
+    dev = `
+   <dl>
     <dt>url</dt>
     <dd>${url}</dd>
 
     <dt>type</dt>
     <dd>${options.type}</dd>
   </dl>
+`
+  }
+  const component = c(
+    '.main',
+    h`
+<div class="main">
+  <h1>Chatroom Demo</h1>
+  ${renderClock()}
+  ${dev}
+  ${renderChatroom(state)}
 </div>
   `,
   )

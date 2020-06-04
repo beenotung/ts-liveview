@@ -71,6 +71,7 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.4",
     "rimraf": "^3.0.2",
+    "s-array": "^0.4.10",
     "ts-node": "^8.8.2",
     "tslint": "^6.1.1",
     "tslint-config-prettier": "^1.18.0",

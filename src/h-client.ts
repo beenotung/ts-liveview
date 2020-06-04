@@ -18,6 +18,9 @@ export function viewToHTML(
       if (view === null) {
         return ''
       }
+      if (Array.isArray(view)) {
+        return view.map(view => viewToHTML(view, templates)).join('')
+      }
       return componentToHTML(view, templates)
     default:
       console.error('unknown type of view:', view)
@@ -55,6 +58,7 @@ function componentToHTML(
 }
 
 export function morph(e: Element, html: string) {
+  // console.debug('morph', html)
   morphdom(e, html, {
     onBeforeElUpdated: (fromEl, toEl) => {
       if (fromEl.isEqualNode(toEl)) {
@@ -64,6 +68,7 @@ export function morph(e: Element, html: string) {
         switch (fromEl.tagName) {
           case 'INPUT':
           case 'SELECT':
+            // console.debug('skip morph on:', fromEl, toEl)
             return false
         }
       }

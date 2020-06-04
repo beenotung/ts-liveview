@@ -4,9 +4,11 @@ import { ClientMessage, ServerMessage } from '../types/message'
 import {
   ComponentDiff,
   ComponentView,
+  Diff,
   Patch,
   Statics,
   View,
+  ViewDiff,
 } from '../types/view'
 
 // TODO remove debug logs
@@ -53,6 +55,7 @@ const templates = new Map<string, Statics>()
 const components = new Map<string, ComponentView>()
 
 function onPatch(patch: Patch) {
+  console.log('patch', patch)
   // update template
   for (const template of patch.templates) {
     templates.set(template.template_id, template.statics)
@@ -78,7 +81,35 @@ function onPatch(patch: Patch) {
   })
 }
 
-function patchComponent(patch: ComponentDiff) {
+function patchDiff(dynamics: View[], idx: number, viewDiff: ViewDiff): void {
+  if (Array.isArray(viewDiff)) {
+    // Diff[]
+    patchDiffs(dynamics, idx, viewDiff)
+    return
+  }
+  if (typeof viewDiff === 'object' && viewDiff !== null) {
+    // ComponentDiff
+    const component = patchComponent(viewDiff)
+    dynamics[idx] = component
+    return
+  }
+  // PrimitiveView
+  dynamics[idx] = viewDiff
+}
+
+function patchDiffs(dynamics: View[], i: number, diffs: Diff[]): void {
+  let dynamic = dynamics[i]
+  if (!Array.isArray(dynamic)) {
+    dynamic = dynamics[i] = []
+  }
+  for (const diff of diffs) {
+    const idx = diff[0]
+    const viewDiff = diff[1]
+    patchDiff(dynamic, idx, viewDiff)
+  }
+}
+
+function patchComponent(patch: ComponentDiff): ComponentView {
   let component = components.get(patch.selector)
   let dynamics: View[]
   if (component) {
@@ -95,12 +126,8 @@ function patchComponent(patch: ComponentDiff) {
   }
   for (const diff of patch.diff) {
     const idx = diff[0]
-    const view = diff[1]
-    if (typeof view === 'object' && view !== null) {
-      dynamics[idx] = patchComponent(view)
-    } else {
-      dynamics[idx] = view
-    }
+    const viewDiff = diff[1]
+    patchDiff(dynamics, idx, viewDiff)
   }
   return component
 }
@@ -113,7 +140,7 @@ function main() {
   }
   primus = startWs()
   primus.on('data', (data: any) => {
-    console.debug('data:', data)
+    // console.debug('data:', data)
     if (typeof data === 'object' && data !== null) {
       const message = data as ServerMessage
       if (message.type === 'patch') {

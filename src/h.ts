@@ -11,7 +11,11 @@ import {
 
 const log = debug('liveview:h')
 
-export type Dynamic = PrimitiveView | Component
+export type Dynamic =
+  | PrimitiveView
+  | Component
+  // |SArray<Dynamic>
+  | Dynamic[]
 
 export type Template = {
   template_id: string
@@ -88,53 +92,144 @@ export function morphComponent(
     }
     const oldStatics = templates.get(target.template_id)
     if (!oldStatics || !isStaticsSame(oldStatics, target.statics)) {
+      templates.set(target.template_id, target.statics)
       newTemplates.set(target.template_id, target.statics)
       source.statics = target.statics
     }
     return
   }
 
+  function scanTemplate(target: Template) {
+    const oldStatics = templates.get(target.template_id)
+    if (oldStatics && isStaticsSame(oldStatics, target.statics)) {
+      return
+    }
+    templates.set(target.template_id, target.statics)
+    newTemplates.set(target.template_id, target.statics)
+  }
+
+  function dynamicToDiff(dynamic: Dynamic, i: number): Diff {
+    if (Array.isArray(dynamic)) {
+      // Dynamic[]
+      return [i, dynamicsToDiff(dynamic)]
+    } else if (typeof dynamic === 'object' && dynamic !== null) {
+      // Component
+      scanTemplate(dynamic)
+      return [
+        i,
+        {
+          selector: dynamic.selector,
+          template_id: dynamic.template_id,
+          diff: dynamic.dynamics.map((dynamic, i) => dynamicToDiff(dynamic, i)),
+        },
+      ]
+    } else {
+      // PrimitiveView
+      return [i, dynamic]
+    }
+  }
+
+  function dynamicsToDiff(dynamics: Dynamic[]): Diff[] {
+    return dynamics.map((dynamic, i) => {
+      return dynamicToDiff(dynamic, i)
+    })
+  }
+
+  function morphDynamic(
+    source: Dynamic,
+    target: Dynamic,
+    i: number,
+  ): Diff | false {
+    if (source === target) {
+      return false
+    }
+    if (source !== undefined) {
+      log({ i, source, target })
+    }
+
+    // check for array
+    const sourceIsArray = Array.isArray(source)
+    const targetIsArray = Array.isArray(target)
+    if (sourceIsArray && targetIsArray) {
+      source = source as Dynamic[]
+      target = target as Dynamic[]
+      const arrayDiff: Diff[] = []
+      for (let i = 0; i < target.length; i++) {
+        const diff = morphDynamic(source[i], target[i], i)
+        if (diff) {
+          source[i] = target[i]
+          arrayDiff.push(diff)
+        }
+      }
+      return arrayDiff.length === 0 ? false : [i, arrayDiff]
+    }
+    if (targetIsArray) {
+      target = target as Dynamic[]
+      const arrayDiff: Diff[] = dynamicsToDiff(target)
+      return arrayDiff.length === 0 ? false : [i, arrayDiff]
+    }
+
+    // check for component
+    const sourceIsComponent = typeof source === 'object' && source !== null
+    const targetIsComponent = typeof target === 'object' && target !== null
+    if (sourceIsComponent && targetIsComponent) {
+      log('both component')
+      const componentDiff = morphComponent(
+        source as Component,
+        target as Component,
+      )
+      if (componentDiff) {
+        return [i, componentDiff]
+      }
+      return false
+    }
+    if (targetIsComponent) {
+      log('target is component')
+      target = target as Component
+      components.set(target.selector, target)
+      const componentDiff = morphComponent(createDummyComponent(), target)
+      if (componentDiff) {
+        return [i, componentDiff]
+      }
+      return false
+    }
+
+    // only primitive view left
+    return [i, target as PrimitiveView]
+  }
+
+  function morphComponentDynamics(
+    source: Component,
+    target: Component,
+  ): Diff[] {
+    log('morph component dynamics, len:', target.dynamics.length)
+    const diff: Diff[] = []
+    for (let i = 0; i < target.dynamics.length; i++) {
+      const dynamicDiff = morphDynamic(
+        source.dynamics[i],
+        target.dynamics[i],
+        i,
+      )
+      if (dynamicDiff) {
+        source.dynamics[i] = target.dynamics[i]
+        diff.push(dynamicDiff)
+      }
+    }
+    return diff
+  }
+
   function morphComponent(
     source: Component,
     target: Component,
   ): ComponentDiff | false {
-    log('morph component')
+    log('morph component', {
+      source: source.selector,
+      target: target.selector,
+      d: { source, target },
+      t: JSON.stringify(target),
+    })
     morphTemplate(source, target)
-    const diff: Diff[] = []
-    log('target len:', target.dynamics.length)
-    for (let i = 0; i < target.dynamics.length; i++) {
-      log('i', i)
-      const s = source.dynamics[i]
-      const t = target.dynamics[i]
-      if (s === t) {
-        continue
-      }
-      const sourceIsComponent = typeof s === 'object' && s !== null
-      const targetIsComponent = typeof t === 'object' && t !== null
-      if (sourceIsComponent && targetIsComponent) {
-        log('both component')
-        const source = s as Component
-        const target = t as Component
-        morphTemplate(source, target)
-        const componentDiff = morphComponent(source, target)
-        if (componentDiff) {
-          diff.push([i, componentDiff])
-        }
-        continue
-      }
-      if (targetIsComponent) {
-        log('target is component')
-        const source: Component = createDummyComponent()
-        const target = t as Component
-        components.set(target.selector, target)
-        const componentDiff = morphComponent(source, target)
-        if (componentDiff) {
-          diff.push([i, componentDiff])
-        }
-        continue
-      }
-      diff.push([i, t as PrimitiveView])
-    }
+    const diff = morphComponentDynamics(source, target)
     if (
       diff.length === 0 &&
       source.selector === target.selector &&

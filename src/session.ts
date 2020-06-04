@@ -26,7 +26,7 @@ export class Session {
   }
 
   sendPatch(patch: Patch) {
-    log('send patch:', patch)
+    // log('send patch:', patch)
     this.sendMessage({
       type: 'patch',
       selector: patch.selector,
@@ -36,14 +36,14 @@ export class Session {
   }
 
   sendComponent(target: Component) {
-    log('send component:', target)
+    // log('send component:', target)
     let source = this.components.get(target.selector)
     let patch: Patch
     if (source) {
-      log('has source')
+      // log('has source')
       patch = morphComponent(source, target, this.templates, this.components)
     } else {
-      log('no source')
+      // log('no source')
       source = createDummyComponent()
       patch = morphComponent(source, target, this.templates, this.components)
       this.components.set(target.selector, target)
@@ -76,7 +76,7 @@ export class Session {
   }
 
   onClose(cb: () => void) {
-    this.spark.on('close', cb)
+    this.spark.on('end', cb)
   }
 
   onMessage(cb: (args: ClientMessage) => void) {
