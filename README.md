@@ -8,6 +8,8 @@ Just like [Phoenix LiveView](https://github.com/phoenixframework/phoenix_live_vi
 
 Live Demo: https://liveviews.xyz
 
+Remark: [next version (v1)](https://github.com/beenotung/ts-liveview/tree/v1) is under active development for more concise API and support repeated template
+
 ## Why server-rendered?
 - To make the PWA deliver initial meaningful paint as soon as possible
 - To avoid over bloating the amount of javascript the client need to download and execute
