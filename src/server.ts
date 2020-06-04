@@ -11,7 +11,7 @@ import { Session } from './session'
 import { App, Request, Response, Server } from './types/server'
 import { PrimitiveView } from './types/view'
 
-const log = debug('liveview:session')
+const log = debug('liveview:server')
 
 export type ServerOptions = {
   createSession?: (session: Session) => Session | void
