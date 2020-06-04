@@ -19,6 +19,7 @@ Live Demo: https://liveviews.xyz
 - [x] Realtime Server side 'rendering' for incremental update
 - [x] Bidirectional event push
 - [x] Auto reconnect websocket
+- [x] Attachable on custom express and primus instance
 
 ## Size Comparison
 | Tools | Runtime Code Size (minified) |
