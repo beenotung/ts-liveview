@@ -1,4 +1,4 @@
-import qs from 'querystring'
+
 import S from 's-js'
 import { IPrimusOptions } from 'typestub-primus'
 import { Component } from '../h'
@@ -31,13 +31,6 @@ export function matchUrlPattern(
   }
 }
 
-export function parseQuery(query: string | any): any {
-  if (typeof query === 'string') {
-    return qs.parse(query)
-  }
-  return query
-}
-
 export function minifyView(view: PrimitiveView | Component) {
   const html = viewToHTML(view, new Map())
   return minify(html)
@@ -46,4 +39,12 @@ export function minifyView(view: PrimitiveView | Component) {
 export function genPrimusScript(options?: IPrimusOptions) {
   const primusPath = options?.primusOptions?.pathname || '/primus'
   return `<script src="${primusPath}/primus.js"></script>`
+}
+
+export function sampleInSRoot<T>(f: () => T): T {
+  return S.root(dispose => {
+    const result = S.sample(() => f())
+    dispose()
+    return result
+  })
 }

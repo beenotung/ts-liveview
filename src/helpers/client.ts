@@ -13,23 +13,40 @@ import {
 
 // TODO remove debug logs
 
-function startPrimus(baseUrl: string): Primus {
-  return new (window as any).Primus(baseUrl)
+function startPrimus(url: string): Primus {
+  return new (window as any).Primus(url)
+}
+
+function addParam(query: string, name: string, value: string) {
+  if (query === '') {
+    query = '?'
+  }
+  if (query !== '?') {
+    query += '&'
+  }
+  query += name + '=' + encodeURIComponent(value)
+  return query
 }
 
 function getQueryUrl() {
-  const hash = 'hash=' + encodeURIComponent(location.hash.replace('#', ''))
-  const search = location.search
-  if (search) {
-    return search + '&' + hash
-  } else {
-    return '?' + hash
+  let query = location.search
+  const pathname = location.pathname.replace('/', '')
+  if (pathname) {
+    query = addParam(query, 'pathname', pathname)
   }
+  const hash = location.hash.replace('#', '')
+  if (hash) {
+    query = addParam(query, 'hash', hash)
+  }
+  return query
 }
 
 function startWs() {
-  let url = location.origin.replace('http', 'ws')
-  url += getQueryUrl()
+  let url = location.origin
+  const query = getQueryUrl()
+  if (query && query !== '?') {
+    url += '/' + query
+  }
   const primus = startPrimus(url)
   primus.on('close', () => {
     console.debug('disconnected with server')
@@ -55,7 +72,7 @@ const templates = new Map<string, Statics>()
 const components = new Map<string, ComponentView>()
 
 function onPatch(patch: Patch) {
-  console.log('patch', patch)
+  // console.debug('patch', patch)
   // update template
   for (const template of patch.templates) {
     templates.set(template.template_id, template.statics)

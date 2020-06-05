@@ -5,7 +5,6 @@ import S from 's-js'
 import { IPrimusOptions, Primus } from 'typestub-primus'
 import { Component } from './h'
 import { HTMLOptions } from './helpers/mobile-html'
-import { parseQuery } from './helpers/server'
 import { sendInitialRender } from './html'
 import { Session } from './session'
 import { App, Request, Response, Server } from './types/server'
@@ -54,10 +53,7 @@ export function attachServer(options: AttachServerOptions) {
         },
       })
       S.root(dispose => {
-        const session = new Session(spark, {
-          primus: spark.request,
-          query: parseQuery(spark.query),
-        })
+        const session = new Session(spark)
         session.attachDispose(dispose)
         const result = createSession(session)
         if (!result) {

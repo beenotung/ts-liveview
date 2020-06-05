@@ -2,7 +2,7 @@ import debug from 'debug'
 import S from 's-js'
 import { ISpark } from 'typestub-primus'
 import { Component, createDummyComponent, morphComponent } from './h'
-import { CommonRequest } from './request'
+import { ClientParams, parseQuery } from './helpers/client-adaptor'
 import { ClientMessage, ServerMessage } from './types/message'
 import { Patch, Statics } from './types/view'
 
@@ -19,7 +19,13 @@ export class Session {
   // selector -> last version component
   components = new Map<string, Component>()
 
-  constructor(public spark: ISpark, public request: CommonRequest) {}
+  // merge pathname and hash into search, then parsed into json
+  params: ClientParams
+
+  constructor(public spark: ISpark) {
+    this.params = parseQuery(spark.query)
+    log('params:', this.params)
+  }
 
   sendMessage(message: ServerMessage) {
     this.spark.write(message)

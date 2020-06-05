@@ -6,7 +6,7 @@ const clock = globalSRoot.spawn(() => S.data(Date.now()))
 
 function tick() {
   clock(Date.now())
-  // setTimeout(tick, 600)
+  setTimeout(tick, 600)
 }
 
 tick()

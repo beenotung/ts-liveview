@@ -1,17 +1,17 @@
 import debug from 'debug'
-import { c, CommonRequest, Component, h, Session } from '../lib'
+import { c, Component, h, Request, Session } from '../lib'
 import { State } from '../state'
 import { renderChatroom } from './chatroom'
 import { renderClock } from './clock'
 
-const log = debug('app:view:root')
+const log = debug('app:root')
 
 export function renderRoot(
   url: string,
   options:
     | {
         type: 'request'
-        request: CommonRequest
+        request: Request
       }
     | {
         type: 'session'
@@ -43,6 +43,6 @@ export function renderRoot(
 </div>
   `,
   )
-  log('result:', component)
+  // log('result:', component)
   return component
 }

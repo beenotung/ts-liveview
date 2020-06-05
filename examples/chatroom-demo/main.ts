@@ -1,13 +1,16 @@
+import debug from 'debug'
 import express from 'express'
 import http from 'http'
 import path from 'path'
 import S from 's-js'
 import { Primus } from 'typestub-primus'
-import { attachServer, genPrimusScript, Session } from './lib'
+import { attachServer, genPrimusScript, sampleInSRoot, Session } from './lib'
 import { State } from './state'
 import { renderChatroom } from './views/chatroom'
 import { renderClock } from './views/clock'
 import { renderRoot } from './views/root'
+
+const log = debug('app:main')
 
 const port = 3000
 const app = express()
@@ -20,14 +23,13 @@ function createSession(session: Session): Session | void {
   return S.root(dispose => {
     session.attachDispose(dispose)
     const state = new State(session)
-    const render = () =>
-      renderRoot(session.spark.request.path, { type: 'session', session })
-    session.sendComponent(S.sample(render))
+    session.sendComponent(
+      S.sample(() =>
+        renderRoot(session.params.url, { type: 'session', session }, state),
+      ),
+    )
     session.live(() => renderClock(), { skipInitialSend: false })
     session.live(() => renderChatroom(state), { skipInitialSend: false })
-    S.cleanup(final => {
-      console.log('clean up session S', { final })
-    })
     return session
   })
 }
@@ -42,11 +44,8 @@ attachServer({
     `<meta name="author" content="ts-liveview"">`,
     genPrimusScript(),
   ],
-  initialRender: (req, res) => {
-    return S.sample(() =>
-      renderRoot(req.url, { type: 'request', request: req }),
-    )
-  },
+  initialRender: (req, res) =>
+    sampleInSRoot(() => renderRoot(req.url, { type: 'request', request: req })),
   createSession,
   primus,
 })
