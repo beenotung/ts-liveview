@@ -30,7 +30,7 @@ function removeComment(html: string) {
  *
  * Also, it is not context-aware, hence may not handle well on strings in javascript/css
  * */
-export function minify(html: string): string {
+export function minifyHTML(html: string): string {
   // return html
   html = removeComment(html)
   for (;;) {
@@ -102,4 +102,10 @@ export function minify(html: string): string {
     }
     html = s
   }
+}
+
+export let minify = minifyHTML
+
+export function minifyJS(code: string): string {
+  return require('minify/lib/js')(code)
 }
