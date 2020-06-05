@@ -24,8 +24,9 @@ Live Demo: https://liveviews.xyz
 ## Size Comparison
 | Tools | Runtime Code Size (minified) |
 |---|---|
-| **TS LiveView + morphdom** | **8K** |
+| **TS LiveView v0 + morphdom** | **8K** |
 | (Phoenix) LiveView.js + morphdom | 29K |
+| TS LiveView v1 + morphdom + primus.js | 46K |
 | Vue 2.5.20 | 88K |
 | React 16.6.3 + React DOM | 112K |
 | Ember 3.0.0.beta.2 | 468K |

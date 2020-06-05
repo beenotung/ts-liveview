@@ -4,7 +4,13 @@ import http from 'http'
 import path from 'path'
 import S from 's-js'
 import { Primus } from 'typestub-primus'
-import { attachServer, genPrimusScript, sampleInSRoot, Session } from './lib'
+import { makeClientCode } from './client-code'
+import {
+  attachServer,
+  minifyView,
+  sampleInSRoot,
+  Session,
+} from './lib'
 import { State } from './state'
 import { renderChatroom } from './views/chatroom'
 import { renderClock } from './views/clock'
@@ -35,22 +41,33 @@ function createSession(session: Session): Session | void {
   return session
 }
 
-attachServer({
-  app,
-  server,
-  title: 'chatroom',
-  heads: [
-    `<meta name="description" content="A chatroom demo using ts-liveview, a SSR SPA library">`,
-    `<meta name="keywords" content="SSR, SPA, Typescript, Node.js, LiveView">`,
-    `<meta name="author" content="ts-liveview"">`,
-    genPrimusScript(),
-  ],
-  initialRender: (req, res) =>
-    sampleInSRoot(() => renderRoot(req.url, { type: 'request', request: req })),
-  createSession,
-  primus,
-})
+async function main() {
+  attachServer({
+    app,
+    server,
+    title: 'chatroom',
+    heads: [
+      `<meta name="description" content="A chatroom demo using ts-liveview, a SSR SPA library">`,
+      `<meta name="keywords" content="SSR, SPA, Typescript, Node.js, LiveView">`,
+      `<meta name="author" content="ts-liveview"">`,
+    ],
+    initialRender: (req, res) => {
+      const view = sampleInSRoot(() =>
+        renderRoot(req.url, { type: 'request', request: req }),
+      )
+      return minifyView(view)
+    },
+    createSession,
+    primus,
+    client_script: await makeClientCode(primus),
+  })
 
-server.listen(port, () => {
-  console.log('listening on http://localhost:' + port)
+  server.listen(port, () => {
+    console.log('listening on http://localhost:' + port)
+  })
+}
+
+main().catch(e => {
+  console.error(e)
+  process.exit(1)
 })

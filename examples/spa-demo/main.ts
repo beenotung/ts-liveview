@@ -1,7 +1,13 @@
 import * as express from 'express'
 import path from 'path'
 import { initialRender } from './app'
-import { App, attachServer, genPrimusScript, Server, startServer } from './lib'
+import {
+  App,
+  attachServer,
+  genPrimusScript,
+  Server,
+  startServer,
+} from './lib'
 import { createSession } from './session'
 
 // tslint:disable no-unused-declaration

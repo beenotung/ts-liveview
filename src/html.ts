@@ -7,6 +7,10 @@ import { Request, Response } from './types/server'
 
 const log = debug('liveview:html')
 
+function isScriptTag(s: string) {
+  return !!s.trim().match(/<script/i)
+}
+
 export function sendInitialRender(
   req: Request,
   res: Response,
@@ -32,8 +36,19 @@ export function sendInitialRender(
     defer()
     return
   }
-  clientScript.then(script => {
+
+  function sendScript(script: string) {
     res.write(script)
     defer()
-  })
+  }
+
+  if (options.client_script) {
+    sendScript(
+      isScriptTag(options.client_script)
+        ? options.client_script
+        : `<script>${options.client_script}</script>`,
+    )
+    return
+  }
+  clientScript.then(script => sendScript(script))
 }

@@ -22,6 +22,7 @@ export type AttachServerOptions = {
   app: App
   server?: Server
   primus?: Primus
+  client_script?: string
 } & ServerOptions
 
 export type StartServerOptions = {
@@ -70,6 +71,7 @@ export function startServer(
 ): {
   app: express.Express
   server: Server
+  primus: Primus | undefined
 } {
   const port = options.port
 
@@ -92,5 +94,6 @@ export function startServer(
   return {
     app,
     server,
+    primus,
   }
 }

@@ -1,5 +1,5 @@
 import S from 's-js'
-import { IPrimusOptions } from 'typestub-primus'
+import { IPrimusOptions, Primus } from 'typestub-primus'
 import { Component, Dynamic } from '../h'
 import { viewToHTML } from '../h-client'
 import { PrimitiveView, View } from '../types/view'
@@ -34,6 +34,10 @@ export function minifyView(view: PrimitiveView | Component) {
 export function genPrimusScript(options?: IPrimusOptions) {
   const primusPath = options?.primusOptions?.pathname || '/primus'
   return `<script src="${primusPath}/primus.js"></script>`
+}
+
+export function genInlinePrimusScript(primus: Primus): string {
+  return primus.library()
 }
 
 export function sampleInSRoot<T>(f: () => T): T {
