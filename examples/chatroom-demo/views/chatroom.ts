@@ -1,6 +1,6 @@
 import SArray from 's-array'
 import { DataSignal } from 's-js'
-import { c, h } from '../lib'
+import { c, h, s } from '../lib'
 import { online, State } from '../state'
 import { globalSRoot } from './global'
 
@@ -79,15 +79,21 @@ Number of messages: ${len}
 </p>
 <ol>
 ${messages()
-  .map(message =>
-    c(
+  .map(message => {
+    const code = s(message.text)
+    return c(
       '#msg-' + message.id,
       h`<li id="msg-${message.id}">
-<p>${message.name} : ${new Date(message.time).toLocaleString()}</p>
-<p>${message.text}</p>
-</li>`,
-    ),
-  )
+  <p>${message.name} : ${new Date(message.time).toLocaleString()}</p>
+  <span>${message.text}</span>
+  ${
+    code !== message.text
+      ? `<code>${code}</code>`
+      : '<span style="color: white" ">try to inject html ;)</span>'
+  }
+  </li>`,
+    )
+  })
   .reverse()}
 </ol>
 </div>`,

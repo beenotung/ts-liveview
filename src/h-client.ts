@@ -1,11 +1,8 @@
 import morphdom from 'morphdom'
 import { Component } from './h'
-import { ComponentView, Statics, View } from './types/view'
+import { ComponentView, PrimitiveView, Statics, View } from './types/view'
 
-export function viewToHTML(
-  view: View,
-  templates: Map<string, Statics>,
-): string {
+export function primitiveViewToHTML(view: PrimitiveView): string {
   switch (typeof view) {
     case 'string':
       return view
@@ -18,14 +15,26 @@ export function viewToHTML(
       if (view === null) {
         return ''
       }
-      if (Array.isArray(view)) {
-        return view.map(view => viewToHTML(view, templates)).join('')
-      }
-      return componentToHTML(view, templates)
+      console.error('unexpected type of primitive view:', view)
+      break
     default:
-      console.error('unknown type of view:', view)
-      return ''
+      console.error('unknown type of primitive view:', view)
+      break
   }
+  return JSON.stringify(view)
+}
+
+export function viewToHTML(
+  view: View,
+  templates: Map<string, Statics>,
+): string {
+  if (Array.isArray(view)) {
+    return view.map(view => viewToHTML(view, templates)).join('')
+  }
+  if (typeof view === 'object' && view !== null) {
+    return componentToHTML(view, templates)
+  }
+  return primitiveViewToHTML(view)
 }
 
 function componentToHTML(
