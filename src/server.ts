@@ -13,6 +13,7 @@ import { PrimitiveView } from './types/view'
 const log = debug('liveview:server')
 
 export type ServerOptions = {
+  /* will be called inside a s-root per client session */
   createSession?: (session: Session) => Session | void
   initialRender: (req: Request, res: Response) => PrimitiveView | Component
 } & HTMLOptions

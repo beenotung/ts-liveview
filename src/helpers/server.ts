@@ -1,28 +1,23 @@
-
 import S from 's-js'
 import { IPrimusOptions } from 'typestub-primus'
-import { Component } from '../h'
+import { Component, Dynamic } from '../h'
 import { viewToHTML } from '../h-client'
 import { PrimitiveView, View } from '../types/view'
 import { minify } from './minify'
 
 export function sampleView(render: () => View) {
-  return S.sample(() => {
-    const view = render()
-    const html = viewToHTML(view, new Map())
-    return html
-  })
+  return viewToHTML(sampleInSRoot(render), new Map())
 }
 
 type UrlPattern = {
   match: (url: string) => object | null
 }
-export type UrlPatternMatch = [UrlPattern, (p: any) => View]
+export type UrlPatternMatch = [UrlPattern, (p: any) => Dynamic]
 
 export function matchUrlPattern(
   matches: UrlPatternMatch[],
   url: string,
-): View | undefined {
+): Dynamic | undefined {
   for (const [pattern, render] of matches) {
     const p = pattern.match(url)
     if (p) {

@@ -1,4 +1,7 @@
+import debug from 'debug'
 import qs from 'querystring'
+
+const log = debug('app:location')
 
 function decodeUrlSearch(url: string) {
   const search = url.replace('/?', '')
@@ -32,6 +35,7 @@ function getHashFromSearch(search: any, defaultValue: string): string {
 export function getHash(url: string): string {
   const search = decodeUrlSearch(url)
   const hash = getHashFromSearch(search, '#/')
+  log('hash:', hash)
   if (hash.startsWith('#')) {
     return hash
   }
