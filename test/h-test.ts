@@ -1,5 +1,5 @@
 import S from 's-js'
-import { h, syncDom, templateToHTML } from '../src/h'
+import { c, h, morph, viewToHTML } from '../src'
 
 const app = document.createElement('div')
 app.id = 'app'
@@ -9,7 +9,9 @@ const user = S.data('')
 Object.assign(window, { user })
 S.root(() => {
   S(() => {
-    const template = h`
+    const template = c(
+      '#app',
+      h`
 <div id="app">
 <label>Your name:</label>
 <input id="user" value="${user()}" onchange="user(event.target.value)">
@@ -17,8 +19,9 @@ S.root(() => {
 Hello: ${user()}
 </p>
 </div>
-`
-    const html = templateToHTML(template)
-    syncDom(app, html)
+`,
+    )
+    const html = viewToHTML(template, new Map())
+    morph(app, html)
   })
 })

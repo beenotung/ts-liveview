@@ -6,7 +6,15 @@ LiveView enables rich, real-time user experiences with server-rendered HTML.
 
 Just like [Phoenix LiveView](https://github.com/phoenixframework/phoenix_live_view) but in Typescript!
 
-Live Demo: https://liveviews.xyz
+#### Examples
+
+SPA with url routing:
+[Demo](https://liveviews.xyz),
+[Source](./examples/spa-demo)
+
+Realtime chatroom:
+[Demo](https://chat.liveviews.xyz),
+[Source](./examples/chatroom-demo)
 
 Remark: [next version (v1)](https://github.com/beenotung/ts-liveview/tree/v1) is under active development for more concise API and support repeated template
 
@@ -21,12 +29,14 @@ Remark: [next version (v1)](https://github.com/beenotung/ts-liveview/tree/v1) is
 - [x] Realtime Server side 'rendering' for incremental update
 - [x] Bidirectional event push
 - [x] Auto reconnect websocket
+- [x] Attachable on custom express and primus instance
 
 ## Size Comparison
 | Tools | Runtime Code Size (minified) |
 |---|---|
-| **TS LiveView + morphdom** | **8K** |
+| **TS LiveView v0 + morphdom** | **8K** |
 | (Phoenix) LiveView.js + morphdom | 29K |
+| TS LiveView v1 + morphdom + primus.js | 46K |
 | Vue 2.5.20 | 88K |
 | React 16.6.3 + React DOM | 112K |
 | Ember 3.0.0.beta.2 | 468K |
@@ -40,15 +50,15 @@ Not only is LiveView + morphdom much lighter than the JS frameworks, the framewo
 
 reference: https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript
 
-## Example
+## The Gist (Example in Code)
 ### Simple Clock
 ```typescript
-import { startServer, Session, c, h } from './dist'
+import { c, h, Session, startServer } from '../src'
 
-function render(state: number){
+function render(state: number) {
   return c(
     '#clock',
-    h`<div id="clock">${new Date(state)}</div>`,
+    h`<div id="clock">${new Date(state).toLocaleString()}</div>`,
   )
 }
 
@@ -56,21 +66,26 @@ function createSession(session: Session): Session | void {
   let state = Date.now()
 
   function update() {
-    const template = render(state)
-    session.sendTemplate(template)
+    const view = render(state)
+    session.sendComponent(view)
   }
 
-  let timer = setInterval(()=>{
+  const timer = setInterval(() => {
     state = Date.now()
     update()
   }, 1000)
-  session.once('close', () => clearInterval(timer))
+
+  session.onClose(() => clearInterval(timer))
 
   return session
 }
 
 startServer({
   port: 3000,
+  heads: [
+    // default path for websocket lib
+    `<script src="/primus/primus.js"></script>`,
+  ],
   createSession,
   initialRender: (req, res) => {
     return render(Date.now())
@@ -80,11 +95,11 @@ startServer({
 
 ### Using s-js to trigger updates
 ```typescript
-import { startServer, Session, useClientMessage, c, h } from './dist'
 import S from 's-js'
+import { c, genPrimusScript, h, Request, Response, Session, startServer, } from '../src'
 
 function initialView(req: Request, res: Response) {
-  return h`<div id="app" class="init">
+  return c('#app', h`<div id="app" class="init">
   <p>
     Now is: ${new Date().toLocaleString()}
   </p>
@@ -94,59 +109,62 @@ function initialView(req: Request, res: Response) {
   <p>
     Hello, Guest
   </p>
-</div>`
+</div>`)
 }
 
+// this callback will be called from a S.root context
+// the context will be cleanup automatically when the client connection is closed
 function createSession(session: Session): Session | void {
-  S.root(dispose => {
-    session.once('close', dispose)
+  const clock = S.data(Date.now())
+  const timer = setInterval(() => clock(Date.now()), 1000)
+  S.cleanup(() => clearInterval(timer))
+  setInterval(() => clock(Date.now()), 1000)
 
-    const clock = S.data(Date.now())
-    let timer = setInterval(() => clock(Date.now()), 1000)
-    S.cleanup(() => clearInterval(timer))
-    function renderClock() {
-      return c(
-        '#clock',
-        h`<p id="clock">Now is: ${new Date(clock()).toLocaleString()}</p>`,
-      )
-    }
+  function renderClock() {
+    return c(
+      '#clock',
+      h`<p id="clock">Now is: ${new Date(clock()).toLocaleString()}</p>`,
+    )
+  }
 
-    const name = S.data('')
-    function renderName() {
-      return c(
-        '#name',
-        h`<div id="name">
+  const name = S.data('')
+
+  function renderName() {
+    return c(
+      '#name',
+      h`<div id="name">
 <label>Name: </label>
 <input onchange="send('name', event.target.value)">
 <p>
 Hello, ${name() || 'Guest'}
 </p>
 </div>`,
-      )
-    }
+    )
+  }
 
-    function renderRoot() {
-      return S.sample(() => c(
+  function renderRoot() {
+    return S.sample(() =>
+      c(
         '#app',
         h`<div id="app" class="live">
 ${renderClock()}
 ${renderName()}
 </div>`,
-      ))
+      ),
+    )
+  }
+
+  session.sendComponent(renderRoot())
+  session.live(renderClock, { skipInitialSend: true })
+  session.live(renderName, { skipInitialSend: true })
+
+  session.onMessage(message => {
+    const [k, v] = message
+    if (k !== 'name') {
+      console.warn('unknown client message:', message)
+      return
     }
-
-     session.sendTemplate(renderRoot())
-     session.live(renderClock, { skipInitialSend: true })
-     session.live(renderName, { skipInitialSend: true })
-
-    session.onMessage = useClientMessage(message => {
-      const [k, v] = message.args
-      if (k !== 'name') {
-        console.warn('unknown client message:', message)
-        return
-      }
-      name(v)
-    })
+    name(v)
   })
 
   return session
@@ -154,6 +172,7 @@ ${renderName()}
 
 startServer({
   port: 3000,
+  heads: [genPrimusScript()],
   createSession,
   initialRender: (req, res) => {
     return initialView(req, res)
@@ -164,13 +183,22 @@ startServer({
 ### More examples
 - [Single-file demo with s-js](./test/demo-server-with-sjs.ts)
 - [Single-file demo without s-js](./test/demo-server-without-sjs.ts)
-- [SSR SPA Example](./app) (server-rendered single-page webapp)
+- [SSR SPA Example](./examples/spa-demo) (server-rendered single-page webapp)
 
 ## Todo
-- [x] Auto reconnect the websocket
-- [ ] Recover session when reconnect*
+- [x] Auto reconnect the websocket*
+- [x] Recover session when reconnect*
+- [ ] make session simpler and put s-js component into core?
+- [ ] update spa example, tests, and readme to adopt the breaking change
+- [ ] abstract primus to allow custom transport and encoding
+- [ ] use history.pushState in demo instead of location hash, for easier sharing and initial rendering
+- [ ] support preventing XSS issue**
 
-*: maybe [Primus](https://github.com/primus/primus) can helps
+*: Solved by [Primus](https://github.com/primus/primus)
+
+**: maybe use JSX/TSX?
+If so, will be hard to detect changes.
+Or just provide helper functions and require the developer to explicitly escape it?
 
 ## LICENSE
 [BSD-2-Clause LICENSE](./LICENSE)

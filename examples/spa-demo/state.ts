@@ -1,9 +1,12 @@
+import debug from 'debug'
 import { EventEmitter } from 'events'
 import S from 's-js'
 import { getHash } from './helpers/location'
 import { initCalculator } from './pages/calculator-page'
 import { Booking } from './pages/form-page'
 import { dec_counter, inc_counter, live_session_counter } from './state/visitor'
+
+const log = debug('app:state')
 
 export * from './state/visitor'
 
@@ -34,9 +37,11 @@ export class State {
 
   constructor(public init: { url: string }) {
     inc_counter(live_session_counter)
+    S.cleanup(() => this.cleanup())
+    S.on(this.hash, () => log('hash:', this.hash()))
   }
 
-  dispose() {
+  private cleanup() {
     clearTimeout(this.timer)
     this.events.removeAllListeners()
     dec_counter(live_session_counter)

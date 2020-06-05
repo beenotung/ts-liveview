@@ -1,3 +1,5 @@
+import escapeHTML from 'escape-html'
+
 export function attrs(
   attrs: Record<string, string | boolean | undefined | null>,
 ): string {
@@ -71,4 +73,11 @@ export function radios(options: RadioOptions) {
   `
     })
     .join('')
+}
+
+export function escape<T>(o: T): T {
+  if (typeof o === 'string') {
+    return escapeHTML(o) as any
+  }
+  return o
 }

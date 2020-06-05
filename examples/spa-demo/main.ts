@@ -1,7 +1,7 @@
 import * as express from 'express'
 import path from 'path'
 import { initialRender } from './app'
-import { App, attachServer, Server, startServer } from './lib'
+import { App, attachServer, genPrimusScript, Server, startServer } from './lib'
 import { createSession } from './session'
 
 // tslint:disable no-unused-declaration
@@ -14,13 +14,14 @@ const options = {
   <meta name="description" content="server-side rendered reactive single-page app">
   <meta http-equiv="x-ua-compatible" content="IE=Edge">
 `,
+    genPrimusScript(),
   ],
   createSession,
   initialRender,
 }
 
 function serveStatic(app: App) {
-  app.use('/', express.static(path.join('demo-app', 'public')))
+  app.use('/', express.static(path.join('examples', 'spa-demo', 'public')))
 }
 
 // to run as standalone web server
