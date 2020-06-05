@@ -47,18 +47,25 @@ export function renderChatroom(state?: State) {
     oninput="send('name', this.value)"
     value=${JSON.stringify(name)}>
 </div>
+<script>
+function sendMessage(){
+  let e = document.querySelector('input[name=message]')
+  send('send', e.value)
+  e.value = ''
+  e.focus()
+}
+</script>
 <div>
   <label for="msg-${len}">text message:</label>
   <input
     type="text"
-    id="msg-${len}"
     name="message"
     placeholder="A message"
     oninput="send('message', this.value)"
-    onkeydown="event.keyCode == 13 ? send('send') : false"
+    onkeydown="event.keyCode == 13 ? sendMessage() : false"
     value=${JSON.stringify(message)}>
 </div>
-<button onclick="send('send')">Send</button>
+<button onclick="sendMessage()">Send</button>
 <p style="color: green">
 Online: ${online()
       .map(name => name())
