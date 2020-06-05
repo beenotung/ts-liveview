@@ -17,8 +17,10 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "watch:tsc": "tsc -w",
-    "watch:js": "tsc && nodemon --watch dist -x node dist/examples/chatroom-demo/main | nodemon --watch dist -x node dist/examples/spa-demo/main",
-    "dev": "run-p watch:*",
+    "watch:js": "tsc && run-p watch:demo:*",
+    "watch:demo:spa": "nodemon --watch dist -x node dist/examples/spa-demo/main",
+    "watch:demo:chatroom": "nodemon --watch dist -x node dist/examples/chatroom-demo/main",
+    "dev": "run-p watch:tsc watch:js",
     "test": "npm run rawtest",
     "clean": "rimraf dist",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"examples/**/*.ts\" ",
