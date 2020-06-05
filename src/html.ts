@@ -1,10 +1,7 @@
 import debug from 'debug'
 import { viewToHTML } from './h-client'
 import { clientScript } from './helpers/client-adaptor'
-import {
-  getIsHTMLDoc,
-  MobileHtmlWrapper,
-} from './helpers/mobile-html'
+import { getIsHTMLDoc, MobileHtmlWrapper } from './helpers/mobile-html'
 import { AttachServerOptions } from './server'
 import { Request, Response } from './types/server'
 
