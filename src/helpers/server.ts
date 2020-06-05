@@ -1,7 +1,8 @@
+import escapeHTML from 'escape-html'
 import S from 's-js'
 import { IPrimusOptions, Primus } from 'typestub-primus'
 import { Component, Dynamic } from '../h'
-import { viewToHTML } from '../h-client'
+import { primitiveViewToHTML, viewToHTML } from '../h-client'
 import { PrimitiveView, View } from '../types/view'
 import { minify } from './minify'
 
@@ -46,4 +47,15 @@ export function sampleInSRoot<T>(f: () => T): T {
     dispose()
     return result
   })
+}
+
+type TextView = PrimitiveView | TextView[]
+
+/** escape html */
+export function s(view: TextView): string {
+  if (Array.isArray(view)) {
+    return view.map(view => s(view)).join('')
+  }
+  const html = primitiveViewToHTML(view)
+  return escapeHTML(html)
 }

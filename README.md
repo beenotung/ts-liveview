@@ -186,8 +186,8 @@ startServer({
 ## Todo
 - [x] Auto reconnect the websocket*
 - [x] Recover session when reconnect*
-- [ ] make session simpler and put s-js component into core?
-- [ ] update spa example, tests, and readme to adopt the breaking change
+- [x] make session simpler and put s-js component into core?
+- [x] update spa example, tests, and readme to adopt the breaking change
 - [ ] abstract primus to allow custom transport and encoding
 - [ ] use history.pushState in demo instead of location hash, for easier sharing and initial rendering
 - [ ] support preventing XSS issue**
@@ -195,8 +195,8 @@ startServer({
 *: Solved by [Primus](https://github.com/primus/primus)
 
 **: maybe use JSX/TSX?
-If so, will be hard to detect changes.
-Or just provide helper functions and require the developer to explicitly escape it?
+If so, will be costly to detect changes.
+Currently requires the developer to explicitly escape it, with the help of `ts-liveivew/helpers/server#s()`
 
 ## Releases
 [v1](https://github.com/beenotung/ts-liveview/tree/v1)
