@@ -21,7 +21,7 @@ const options = {
 }
 
 function serveStatic(app: App) {
-  app.use('/', express.static(path.join('demo-app', 'public')))
+  app.use('/', express.static(path.join('examples', 'spa-demo', 'public')))
 }
 
 // to run as standalone web server
