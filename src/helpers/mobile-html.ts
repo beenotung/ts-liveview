@@ -35,6 +35,8 @@ export function genMobileHTMLWrapper(options: HTMLOptions) {
   }
 }
 
+export type MobileHtmlWrapper = ReturnType<typeof genMobileHTMLWrapper>
+
 export function getIsHTMLDoc(html: string): boolean {
   const s = html.trimLeft()
   return !!(s.match(/^<!DOCTYPE html>/i) || s.match(/^<html/i))
