@@ -1,7 +1,10 @@
 import debug from 'debug'
 import { viewToHTML } from './h-client'
 import { clientScript } from './helpers/client-adaptor'
-import { genMobileHTMLWrapper, getIsHTMLDoc } from './helpers/mobile-html'
+import {
+  getIsHTMLDoc,
+  MobileHtmlWrapper,
+} from './helpers/mobile-html'
 import { AttachServerOptions } from './server'
 import { Request, Response } from './types/server'
 
@@ -14,13 +17,13 @@ function isScriptTag(s: string) {
 export function sendInitialRender(
   req: Request,
   res: Response,
+  mobileHTML: MobileHtmlWrapper,
   options: AttachServerOptions,
 ) {
   const view = options.initialRender(req, res)
   log('view:', view)
   const html = viewToHTML(view, new Map())
   log('html:', html)
-  const mobileHTML = genMobileHTMLWrapper(options)
   const isHTMLDoc = getIsHTMLDoc(html)
   if (!isHTMLDoc) {
     res.write(mobileHTML.pre_body)

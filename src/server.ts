@@ -4,7 +4,7 @@ import http from 'http'
 import S from 's-js'
 import { IPrimusOptions, Primus } from 'typestub-primus'
 import { Component } from './h'
-import { HTMLOptions } from './helpers/mobile-html'
+import { genMobileHTMLWrapper, HTMLOptions } from './helpers/mobile-html'
 import { sendInitialRender } from './html'
 import { Session } from './session'
 import { App, Request, Response, Server } from './types/server'
@@ -37,7 +37,8 @@ export function attachServer(options: AttachServerOptions) {
   const primus = options.primus
   const createSession = options.createSession
 
-  app.use('/', (req, res) => sendInitialRender(req, res, options))
+  const mobileHTML = genMobileHTMLWrapper(options)
+  app.use('/', (req, res) => sendInitialRender(req, res, mobileHTML, options))
 
   if (createSession && primus) {
     primus.on('connection', spark => {
