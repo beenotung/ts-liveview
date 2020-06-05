@@ -5,12 +5,7 @@ import path from 'path'
 import S from 's-js'
 import { Primus } from 'typestub-primus'
 import { makeClientCode } from './client-code'
-import {
-  attachServer,
-  minifyView,
-  sampleInSRoot,
-  Session,
-} from './lib'
+import { attachServer, minifyView, sampleInSRoot, Session } from './lib'
 import { State } from './state'
 import { renderChatroom } from './views/chatroom'
 import { renderClock } from './views/clock'
