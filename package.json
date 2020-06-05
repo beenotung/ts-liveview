@@ -17,7 +17,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "watch:tsc": "tsc -w",
-    "watch:js": "tsc && nodemon --watch dist -x node dist/examples/chatroom-demo/main",
+    "watch:js": "tsc && nodemon --watch dist -x node dist/examples/chatroom-demo/main | nodemon --watch dist -x node dist/examples/spa-demo/main",
     "dev": "run-p watch:*",
     "test": "npm run rawtest",
     "clean": "rimraf dist",

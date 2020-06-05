@@ -12,7 +12,7 @@ import { renderRoot } from './views/root'
 
 const log = debug('app:main')
 
-const port = 3000
+const port = +process.env.PORT! || 3333
 const app = express()
 const server = http.createServer(app)
 const primus = new Primus(server)
