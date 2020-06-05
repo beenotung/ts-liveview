@@ -1,4 +1,11 @@
-import { c, h, Session, startServer, useClientMessage } from '../src'
+import {
+  c,
+  ClientMessage,
+  genPrimusScript,
+  h,
+  Session,
+  startServer,
+} from '../src'
 
 type State = {
   name: string
@@ -34,7 +41,7 @@ function createSession(session: Session): Session | void {
 
   function update() {
     const template = render(state)
-    session.sendTemplate(template)
+    session.sendComponent(template)
   }
 
   setInterval(() => {
@@ -42,9 +49,9 @@ function createSession(session: Session): Session | void {
     update()
   }, 1000)
 
-  session.onMessage = useClientMessage(message => {
+  session.onMessage((message: ClientMessage) => {
     console.log(message)
-    const [name, value] = message.args
+    const [name, value] = message
     if (name !== 'name') {
       console.warn('unknown client message:', message)
       return
@@ -56,10 +63,9 @@ function createSession(session: Session): Session | void {
   return session
 }
 
-const port = 3000
-
 startServer({
-  port,
+  port: 3000,
+  heads: [genPrimusScript()],
   createSession,
   initialRender: (req, res) => {
     return render()

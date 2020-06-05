@@ -1,4 +1,4 @@
-import { c, h, table } from '../../src'
+import { c, h, table } from '../lib'
 import {
   live_session_counter,
   session_counter,

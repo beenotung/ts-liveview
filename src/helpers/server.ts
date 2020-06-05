@@ -1,31 +1,49 @@
 import S from 's-js'
-import { Template, templateToHTML } from '../h'
-import { ClientMessage } from '../types/message'
-import { TemplateData } from '../types/view'
+import { IPrimusOptions, Primus } from 'typestub-primus'
+import { Component, Dynamic } from '../h'
+import { viewToHTML } from '../h-client'
+import { PrimitiveView, View } from '../types/view'
+import { minify } from './minify'
 
-export function useClientMessage(f: (message: ClientMessage) => void) {
-  return (message: string) => {
-    f(JSON.parse(message))
-  }
-}
-
-export function sampleTemplate(render: () => Template) {
-  return S.sample(() => templateToHTML(render()))
+export function sampleView(render: () => View) {
+  return viewToHTML(sampleInSRoot(render), new Map())
 }
 
 type UrlPattern = {
   match: (url: string) => object | null
 }
-export type UrlPatternMatch = [UrlPattern, (p: any) => TemplateData]
+export type UrlPatternMatch = [UrlPattern, (p: any) => Dynamic]
 
 export function matchUrlPattern(
   matches: UrlPatternMatch[],
   url: string,
-): TemplateData | undefined {
+): Dynamic | undefined {
   for (const [pattern, render] of matches) {
     const p = pattern.match(url)
     if (p) {
       return render(p)
     }
   }
+}
+
+export function minifyView(view: PrimitiveView | Component) {
+  const html = viewToHTML(view, new Map())
+  return minify(html)
+}
+
+export function genPrimusScript(options?: IPrimusOptions) {
+  const primusPath = options?.primusOptions?.pathname || '/primus'
+  return `<script src="${primusPath}/primus.js"></script>`
+}
+
+export function genInlinePrimusScript(primus: Primus): string {
+  return primus.library()
+}
+
+export function sampleInSRoot<T>(f: () => T): T {
+  return S.root(dispose => {
+    const result = S.sample(() => f())
+    dispose()
+    return result
+  })
 }

@@ -5,24 +5,18 @@ import { renderNav } from './components/nav'
 import { renderStats } from './components/stats'
 import { scripts } from './global/scripts'
 import { styles } from './global/styles'
-import { c, h, Request, Response, Template } from './lib'
+import { c, Component, h, Request, Response, sampleView } from './lib'
 import { inc_counter, State, visitor_counter } from './state'
 
-export function initialRender(req: Request, res: Response): string | Template {
+export function initialRender(req: Request, res: Response): string | Component {
   inc_counter(visitor_counter)
-  const template = S.root(dispose =>
-    S.sample(() => {
-      const state = new State({ url: req.url })
-      const template = renderApp(state)
-      state.dispose()
-      dispose()
-      return template
-    }),
-  )
-  return template
+  return sampleView(() => {
+    return renderApp(new State({ url: req.url }))
+  })
 }
 
 export function renderApp(state: State) {
+  const chatroom = 'https://chat.liveviews.xyz'
   return S.sample(() =>
     c(
       '#app',
@@ -35,6 +29,8 @@ TS LiveView Demo
 </h1>
 ${renderStats()}
 ${renderClock()}
+<h2>Chatroom</h2>
+<a href="${chatroom}">${chatroom}</a>
 ${renderMenu()}
 ${renderNav(state)}
 ${scripts}

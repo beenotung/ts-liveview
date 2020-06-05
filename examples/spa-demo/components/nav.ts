@@ -1,4 +1,4 @@
-import { c, h, matchUrlPattern, UrlPatternMatch } from '../lib'
+import { c, Dynamic, h, matchUrlPattern, UrlPatternMatch } from '../lib'
 import { render404Page } from '../pages/404-page'
 import { renderAboutPage } from '../pages/about-page'
 import { renderCalculator } from '../pages/calculator-page'
@@ -15,7 +15,7 @@ const routeMatches: UrlPatternMatch[] = [
   [routes.service, renderServicePage],
 ]
 
-function renderPage(state: State) {
+function renderPage(state: State): Dynamic {
   const hash = state.hash()
   switch (hash) {
     // matching hard-coded urls
