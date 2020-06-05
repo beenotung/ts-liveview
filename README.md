@@ -16,8 +16,6 @@ Realtime chatroom:
 [Demo](https://chat.liveviews.xyz),
 [Source](./examples/chatroom-demo)
 
-Remark: [next version (v1)](https://github.com/beenotung/ts-liveview/tree/v1) is under active development for more concise API and support repeated template
-
 ## Why server-rendered?
 - To make the PWA deliver initial meaningful paint as soon as possible
 - To avoid over bloating the amount of javascript the client need to download and execute
@@ -199,6 +197,15 @@ startServer({
 **: maybe use JSX/TSX?
 If so, will be hard to detect changes.
 Or just provide helper functions and require the developer to explicitly escape it?
+
+## Releases
+[v1](https://github.com/beenotung/ts-liveview/tree/v1)
+- Made API more concise (especially for usage with s-js)
+- Support repeat components (e.g. map on array with shared template)
+
+[v0](https://github.com/beenotung/ts-liveview/tree/v0)
+- Support pre-rendering
+- Support live-update with diff-based patching with morphdom
 
 ## LICENSE
 [BSD-2-Clause LICENSE](./LICENSE)
