@@ -16,6 +16,7 @@ export function initialRender(req: Request, res: Response): string | Component {
 }
 
 export function renderApp(state: State) {
+  const chatroom = 'https://chat.liveviews.xyz'
   return S.sample(() =>
     c(
       '#app',
@@ -28,6 +29,8 @@ TS LiveView Demo
 </h1>
 ${renderStats()}
 ${renderClock()}
+<h2>Chatroom</h2>
+<a href="${chatroom}">${chatroom}</a>
 ${renderMenu()}
 ${renderNav(state)}
 ${scripts}

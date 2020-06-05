@@ -6,7 +6,15 @@ LiveView enables rich, real-time user experiences with server-rendered HTML.
 
 Just like [Phoenix LiveView](https://github.com/phoenixframework/phoenix_live_view) but in Typescript!
 
-Live Demo: https://liveviews.xyz
+#### Examples
+
+SPA with url routing:
+[Demo](https://liveviews.xyz),
+[Source](./examples/spa-demo)
+
+Realtime chatroom:
+[Demo](https://chat.liveviews.xyz),
+[Source](./examples/chatroom-demo)
 
 ## Why server-rendered?
 - To make the PWA deliver initial meaningful paint as soon as possible

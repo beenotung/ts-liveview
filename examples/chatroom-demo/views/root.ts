@@ -32,12 +32,14 @@ export function renderRoot(
   </dl>
 `
   }
+  const spa = 'https://liveviews.xyz'
   const component = c(
     '.main',
     h`
 <div class="main">
   <h1>Chatroom Demo</h1>
   ${renderClock()}
+  <p>SPA Demo: <a href="${spa}">${spa}</a></p>
   ${dev}
   ${renderChatroom(state)}
 </div>
