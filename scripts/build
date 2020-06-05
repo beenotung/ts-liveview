@@ -3,3 +3,4 @@ set -e
 set -o pipefail
 npm run build
 ./scripts/mk-package
+cp README.md LICENSE dist/
