@@ -20,18 +20,19 @@ const primus = new Primus(server)
 app.use('/', express.static(path.join('examples', 'chatroom-demo', 'public')))
 
 function createSession(session: Session): Session | void {
-  return S.root(dispose => {
-    session.attachDispose(dispose)
-    const state = new State(session)
-    session.sendComponent(
-      S.sample(() =>
-        renderRoot(session.params.url, { type: 'session', session }, state),
-      ),
-    )
-    session.live(() => renderClock(), { skipInitialSend: false })
-    session.live(() => renderChatroom(state), { skipInitialSend: false })
-    return session
+  log('start a session')
+  S.cleanup(() => {
+    log('stop a session')
   })
+  const state = new State(session)
+  session.sendComponent(
+    S.sample(() =>
+      renderRoot(session.params.url, { type: 'session', session }, state),
+    ),
+  )
+  session.live(() => renderClock(), { skipInitialSend: false })
+  session.live(() => renderChatroom(state), { skipInitialSend: false })
+  return session
 }
 
 attachServer({
