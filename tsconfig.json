@@ -17,7 +17,7 @@
     ],
     "module": "commonjs",
     "moduleResolution": "node",
-    "target": "es2015",
+    "target": "es2017",
     "outDir": "dist"
   },
   "include": [
