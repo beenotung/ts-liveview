@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+let fs = require('fs')
+let path = require('path')
+let file = 'package.json'
+console.log('reading', file)
+let text = fs.readFileSync(file).toString()
+let p = JSON.parse(text)
+p.main = 'index.js'
+p.types = 'index.d.ts'
+delete p.scripts
+delete p.devDependencies
+delete p.files
+delete p.directories
+delete p.husky
+text = JSON.stringify(p, null, 2)
+file = path.join('dist', file)
+fs.writeFileSync(file, text)
+console.log('saved to', file)
