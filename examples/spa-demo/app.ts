@@ -27,6 +27,19 @@ TS LiveView Demo
 <a href="https://news.ycombinator.com/item?id=22917879" style="font-size: 1rem">HN</a>
 <a href="https://github.com/beenotung/ts-liveview" style="font-size: 1rem">git</a>
 </h1>
+<noscript>
+<style>
+.noscript {
+  border: 2px solid crimson;
+  display: inline-block;
+  margin: 1em;
+  padding: 1em;
+}
+</style>
+<div class="noscript">
+  You can enable Javascript for interactive functions
+</div>
+</noscript>
 ${renderStats()}
 ${renderClock()}
 <h2>Chatroom</h2>
