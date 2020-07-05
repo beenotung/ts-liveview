@@ -38,6 +38,19 @@ export function renderRoot(
     h`
 <div class="main">
   <h1>Chatroom Demo</h1>
+  <noscript>
+    <style>
+      .noscript {
+        border: 2px solid crimson;
+        display: inline-block;
+        margin: 1em;
+        padding: 1em;
+      }
+    </style>
+    <div class="noscript">
+      You can enable Javascript for interactive functions
+    </div>
+  </noscript>
   ${renderClock()}
   <p>SPA Demo: <a href="${spa}">${spa}</a></p>
   ${dev}
