@@ -42,17 +42,18 @@ export function attachServer(options: AttachServerOptions) {
 
   if (createSession && primus) {
     primus.on('connection', spark => {
+      const connection = (spark.request as http.IncomingMessage).connection
       log('spark connection:', {
         id: spark.id,
         address: spark.address,
         query: spark.query,
         remote: {
-          address: spark.request.connection.remoteAddress,
-          port: spark.request.connection.remotePort,
+          address: connection.remoteAddress,
+          port: connection.remotePort,
         },
         local: {
-          address: spark.request.connection.localAddress,
-          port: spark.request.connection.localPort,
+          address: connection.localAddress,
+          port: connection.localPort,
         },
       })
       S.root(dispose => {
