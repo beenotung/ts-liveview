@@ -8,9 +8,9 @@ export type View =
   | View[]
 
 export type ComponentView = {
-  selector: string
-  template_id: string
-  dynamics: View[]
+  s: string // selector
+  t: string // template_id
+  d: View[] // dynamics
 }
 
 /* patch */
@@ -18,14 +18,14 @@ export type ComponentView = {
 export type Statics = ReadonlyArray<string>
 
 export type TemplatePatch = {
-  template_id: string
-  statics: Statics
+  t: string // template_id
+  s: Statics // statics
 }
 
 export type ComponentDiff = {
-  selector: string
-  template_id: string
-  diff: Diff[]
+  s: string // selector
+  t: string // template_id
+  d: Diff[] // diff
 }
 export type ViewDiff = PrimitiveView | ComponentDiff | Diff[]
 
@@ -34,7 +34,7 @@ export type Diff = [number, ViewDiff]
 
 // from server to client
 export type Patch = {
-  templates: TemplatePatch[]
-  components: ComponentDiff[]
-  selector: string
+  t?: TemplatePatch[] // templates
+  c: ComponentDiff[] // components
+  s: string // selector
 }

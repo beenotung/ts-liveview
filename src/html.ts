@@ -1,7 +1,7 @@
 import debug from 'debug'
-import { viewToHTML } from './h-client'
 import { clientScript } from './helpers/client-adaptor'
 import { getIsHTMLDoc, MobileHtmlWrapper } from './helpers/mobile-html'
+import { toHTML } from './helpers/render'
 import { AttachServerOptions } from './server'
 import { Request, Response } from './types/server'
 
@@ -19,7 +19,7 @@ export function sendInitialRender(
 ) {
   const view = options.initialRender(req, res)
   log('view:', view)
-  const html = viewToHTML(view, new Map())
+  const html = toHTML(view)
   log('html:', html)
   const isHTMLDoc = getIsHTMLDoc(html)
   if (!isHTMLDoc) {

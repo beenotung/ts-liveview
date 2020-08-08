@@ -35,9 +35,9 @@ export class Session {
     // log('send patch:', patch)
     this.sendMessage({
       type: 'patch',
-      selector: patch.selector,
-      templates: patch.templates,
-      components: patch.components,
+      s: patch.s,
+      t: patch.t?.length! > 0 ? patch.t : undefined,
+      c: patch.c,
     })
   }
 
@@ -46,10 +46,8 @@ export class Session {
     let source = this.components.get(target.selector)
     let patch: Patch
     if (source) {
-      // log('has source')
       patch = morphComponent(source, target, this.templates, this.components)
     } else {
-      // log('no source')
       source = createDummyComponent()
       patch = morphComponent(source, target, this.templates, this.components)
       this.components.set(target.selector, target)

@@ -74,22 +74,24 @@ const components = new Map<string, ComponentView>()
 function onPatch(patch: Patch) {
   // console.debug('patch', patch)
   // update template
-  for (const template of patch.templates) {
-    templates.set(template.template_id, template.statics)
+  if (patch.t) {
+    for (const template of patch.t) {
+      templates.set(template.t, template.s)
+    }
   }
   // update component
-  for (const component of patch.components) {
+  for (const component of patch.c) {
     patchComponent(component)
   }
   // update dom
-  const elements = document.querySelectorAll(patch.selector)
+  const elements = document.querySelectorAll(patch.s)
   if (elements.length === 0) {
-    console.error('elements not found:', patch.selector)
+    console.error('elements not found:', patch.s)
     return
   }
-  const component = components.get(patch.selector)
+  const component = components.get(patch.s)
   if (!component) {
-    console.error('patch component not found:', patch.selector)
+    console.error('patch component not found:', patch.s)
     return
   }
   const html = viewToHTML(component, templates)
@@ -127,21 +129,21 @@ function patchDiffs(dynamics: View[], i: number, diffs: Diff[]): void {
 }
 
 function patchComponent(patch: ComponentDiff): ComponentView {
-  let component = components.get(patch.selector)
+  let component = components.get(patch.s)
   let dynamics: View[]
   if (component) {
-    dynamics = component.dynamics
-    component.template_id = patch.template_id
+    dynamics = component.d
+    component.t = patch.t
   } else {
     dynamics = []
     component = {
-      selector: patch.selector,
-      template_id: patch.template_id,
-      dynamics,
+      s: patch.s,
+      t: patch.t,
+      d: dynamics,
     }
-    components.set(patch.selector, component)
+    components.set(patch.s, component)
   }
-  for (const diff of patch.diff) {
+  for (const diff of patch.d) {
     const idx = diff[0]
     const viewDiff = diff[1]
     patchDiff(dynamics, idx, viewDiff)

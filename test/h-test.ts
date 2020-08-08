@@ -1,5 +1,7 @@
 import S from 's-js'
-import { c, h, morph, viewToHTML } from '../src'
+import { c, h } from '../src/h'
+import { morph } from '../src/h-client'
+import { toHTML } from '../src/helpers/render'
 
 const app = document.createElement('div')
 app.id = 'app'
@@ -14,14 +16,14 @@ S.root(() => {
       h`
 <div id="app">
 <label>Your name:</label>
-<input id="user" value="${user()}" onchange="user(event.target.value)">
+<input id="user" value="${user()}" onchange="user(this.value)">
 <p>
 Hello: ${user()}
 </p>
 </div>
 `,
     )
-    const html = viewToHTML(template, new Map())
+    const html = toHTML(template)
     morph(app, html)
   })
 })

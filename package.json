@@ -20,7 +20,8 @@
     "watch:js": "tsc && run-p watch:demo:*",
     "watch:demo:spa": "nodemon --watch dist -x node dist/examples/spa-demo/main",
     "watch:demo:chatroom": "nodemon --watch dist -x node dist/examples/chatroom-demo/main",
-    "dev": "run-p watch:tsc watch:js",
+    "dev": "npm run watch:tsc",
+    "dev:demo": "run-p watch:tsc watch:js",
     "test": "npm run rawtest",
     "clean": "rimraf dist",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"examples/**/*.ts\" ",
@@ -51,11 +52,11 @@
     "quick-hash": "^1.0.4",
     "s-js": "^0.4.9",
     "tslib": "^1.11.1",
-    "typestub-primus": "^1.2.1"
+    "typestub-primus": "^1.3.1"
   },
   "devDependencies": {
     "@beenotung/gen-index": "^1.1.0",
-    "@beenotung/tslib": "^16.16.0",
+    "@beenotung/tslib": "^16.30.0",
     "@stencil/core": "^1.12.7",
     "@types/body-parser": "^1.19.0",
     "@types/browserify": "^12.0.36",

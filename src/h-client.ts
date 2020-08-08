@@ -1,5 +1,4 @@
 import morphdom from 'morphdom'
-import { Component } from './h'
 import { ComponentView, PrimitiveView, Statics, View } from './types/view'
 
 export function primitiveViewToHTML(view: PrimitiveView): string {
@@ -32,27 +31,23 @@ export function viewToHTML(
     return view.map(view => viewToHTML(view, templates)).join('')
   }
   if (typeof view === 'object' && view !== null) {
-    return componentToHTML(view, templates)
+    return componentViewToHTML(view, templates)
   }
   return primitiveViewToHTML(view)
 }
 
-function componentToHTML(
+function componentViewToHTML(
   component: ComponentView,
   templates: Map<string, Statics>,
 ): string {
-  let statics = templates.get(component.template_id)
+  const statics = templates.get(component.t)
   if (!statics) {
-    statics = (component as Component).statics
-    if (!statics) {
-      console.error('missing template:', component.template_id)
-      return ''
-    }
-    templates.set(component.template_id, statics)
+    console.error('missing template:', component.t)
+    return ''
   }
   const acc: string[] = []
   const S = statics.length
-  const dynamics = component.dynamics
+  const dynamics = component.d
   const D = dynamics.length
   for (let i = 0; i < S; i++) {
     acc.push(statics[i])
