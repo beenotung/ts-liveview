@@ -9,6 +9,7 @@ import { renderShopListPage } from '../pages/shop-list-page'
 import { renderShopPage } from '../pages/shop-page'
 import { route, routes } from '../routes'
 import { State } from '../state'
+import { renderRainbow } from './rainbow'
 
 const routeMatches: UrlPatternMatch[] = [
   [routes.shop, renderShopPage],
@@ -27,6 +28,8 @@ function renderPage(state: State): Dynamic {
       return renderEditorPage(state)
     case '#/form':
       return renderFormPage(state)
+    case '#/rainbow':
+      return renderRainbow(state)
     // or calculated urls
     case route('Nested Pages'):
       return renderShopListPage()

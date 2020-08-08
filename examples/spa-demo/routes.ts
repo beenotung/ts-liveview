@@ -4,6 +4,7 @@ export const functions = {
   About: true,
   Editor: true,
   Form: true,
+  Rainbow: true,
   'Nested Pages': true,
   'Ultimate Answer': false,
   Calculator: true,

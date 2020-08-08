@@ -1,14 +1,10 @@
 import escapeHTML from 'escape-html'
-import S from 's-js'
 import { IPrimusOptions, Primus } from 'typestub-primus'
 import { Component, Dynamic } from '../h'
-import { primitiveViewToHTML, viewToHTML } from '../h-client'
-import { PrimitiveView, View } from '../types/view'
+import { primitiveViewToHTML } from '../h-client'
+import { PrimitiveView } from '../types/view'
 import { minify } from './minify'
-
-export function sampleView(render: () => View) {
-  return viewToHTML(sampleInSRoot(render), new Map())
-}
+import { toHTML } from './render'
 
 type UrlPattern = {
   match: (url: string) => object | null
@@ -28,7 +24,7 @@ export function matchUrlPattern(
 }
 
 export function minifyView(view: PrimitiveView | Component) {
-  const html = viewToHTML(view, new Map())
+  const html = toHTML(view)
   return minify(html)
 }
 
@@ -39,14 +35,6 @@ export function genPrimusScript(options?: IPrimusOptions) {
 
 export function genInlinePrimusScript(primus: Primus): string {
   return primus.library()
-}
-
-export function sampleInSRoot<T>(f: () => T): T {
-  return S.root(dispose => {
-    const result = S.sample(() => f())
-    dispose()
-    return result
-  })
 }
 
 type TextView = PrimitiveView | TextView[]

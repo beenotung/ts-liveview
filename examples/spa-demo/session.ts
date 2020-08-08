@@ -16,7 +16,19 @@ export function createSession(session: Session): Session | void {
   inc_counter(session_counter)
 
   log('session.params', session.params)
-  const state = new State({ url: session.params.url })
+
+  // for rate limiting
+  const sent = S.value(0)
+  session.sendMessage = msg => {
+    sent(S.sample(sent) + JSON.stringify(msg).length)
+    session.spark.write(msg)
+  }
+
+  const state = new State({
+    url: session.params.url,
+    host: session.spark.request.headers.host!,
+    sent,
+  })
 
   session.onMessage(args => {
     const [type, ...rest] = args
@@ -36,6 +48,9 @@ export function createSession(session: Session): Session | void {
     Object.assign(booking, { [name]: value })
     state.booking(booking)
   })
+
+  // for Rainbow Page
+  // actually the logic can be written in the state constructor/factory function
 
   // for Calculator Page
   state.events.on('calculator', ([name, value]: [keyof Calculator, number]) => {

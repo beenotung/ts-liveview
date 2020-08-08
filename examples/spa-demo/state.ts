@@ -1,7 +1,8 @@
 import debug from 'debug'
 import { EventEmitter } from 'events'
-import S from 's-js'
+import S, { DataSignal } from 's-js'
 import { parseHash } from '../../src/helpers/url'
+import { RainbowState } from './components/rainbow'
 import { initCalculator } from './pages/calculator-page'
 import { Booking } from './pages/form-page'
 import { dec_counter, inc_counter, live_session_counter } from './state/visitor'
@@ -32,10 +33,23 @@ export class State {
     date: Date.now(),
   })
 
+  // for Rainbow Page
+  local =
+    this.init.host.startsWith('localhost') ||
+    this.init.host.startsWith('127.0.0.1')
+  rainbow = new RainbowState(this)
+
   // for Calculator Page
   calculator = initCalculator()
 
-  constructor(public init: { url: string }) {
+  constructor(
+    public init: {
+      url: string
+      host: string
+      // number of bytes sent
+      sent: DataSignal<number>
+    },
+  ) {
     inc_counter(live_session_counter)
     S.cleanup(() => this.cleanup())
     S.on(this.hash, () => log('hash:', this.hash()))

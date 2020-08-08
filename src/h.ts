@@ -1,5 +1,6 @@
 import debug from 'debug'
 import hash from 'quick-hash'
+import { primitiveViewToHTML } from './h-client'
 import {
   ComponentDiff,
   Diff,
@@ -44,6 +45,48 @@ export function c(selector: string, template: Template): Component {
     selector,
     ...template,
   }
+}
+
+export function dynamicToHTML(
+  view: Dynamic,
+  templates: Map<string, Statics>,
+): string {
+  if (Array.isArray(view)) {
+    return view.map(view => dynamicToHTML(view, templates)).join('')
+  }
+  if (typeof view === 'object' && view !== null) {
+    return componentToHTML(view, templates)
+  }
+  return primitiveViewToHTML(view)
+}
+
+function componentToHTML(
+  component: Component,
+  templates: Map<string, Statics>,
+): string {
+  let statics = templates.get(component.template_id)
+  if (!statics) {
+    statics = component.statics
+    if (!statics) {
+      console.error('missing template:', component.template_id)
+      return ''
+    }
+    templates.set(component.template_id, statics)
+  }
+  const acc: string[] = []
+  const S = statics.length
+  const dynamics = component.dynamics
+  const D = dynamics.length
+  for (let i = 0; i < S; i++) {
+    acc.push(statics[i])
+    if (i >= D) {
+      continue
+    }
+    const view = dynamics[i]
+    const html = dynamicToHTML(view, templates)
+    acc.push(html)
+  }
+  return acc.join('')
 }
 
 function isStaticsSame(a: Statics, b: Statics) {
@@ -118,9 +161,9 @@ export function morphComponent(
       return [
         i,
         {
-          selector: dynamic.selector,
-          template_id: dynamic.template_id,
-          diff: dynamic.dynamics.map((dynamic, i) => dynamicToDiff(dynamic, i)),
+          s: dynamic.selector,
+          t: dynamic.template_id,
+          d: dynamic.dynamics.map((dynamic, i) => dynamicToDiff(dynamic, i)),
         },
       ]
     } else {
@@ -238,9 +281,9 @@ export function morphComponent(
       return false
     }
     const componentDiff: ComponentDiff = {
-      selector: target.selector,
-      template_id: target.template_id,
-      diff,
+      s: target.selector,
+      t: target.template_id,
+      d: diff,
     }
     newComponents.set(source.selector, componentDiff)
     source.selector = target.selector
@@ -252,11 +295,24 @@ export function morphComponent(
 
   const templatePatches: TemplatePatch[] = []
   for (const [template_id, statics] of newTemplates) {
-    templatePatches.push({ template_id, statics })
+    templatePatches.push({
+      t: template_id,
+      s: statics,
+    })
   }
   return {
-    templates: templatePatches,
-    components: Array.from(newComponents.values()),
-    selector: source.selector,
+    t: templatePatches,
+    c: Array.from(newComponents.values()),
+    s: source.selector,
   }
+}
+
+export function componentToPatch(target: Component) {
+  const source = createDummyComponent()
+  // template_id -> statics
+  const templates = new Map<string, Statics>()
+  // selector -> last version component
+  const components = new Map<string, Component>()
+  const patch = morphComponent(source, target, templates, components)
+  return patch
 }

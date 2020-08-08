@@ -11,7 +11,13 @@ import { inc_counter, State, visitor_counter } from './state'
 export function initialRender(req: Request, res: Response): string | Component {
   inc_counter(visitor_counter)
   return sampleView(() => {
-    return renderApp(new State({ url: req.url }))
+    return renderApp(
+      new State({
+        url: req.url,
+        host: req.headers.host!,
+        sent: S.value(0),
+      }),
+    )
   })
 }
 
