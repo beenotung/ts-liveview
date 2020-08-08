@@ -1,9 +1,6 @@
-import debug from 'debug'
 import qs from 'querystring'
 
-const log = debug('app:location')
-
-function decodeUrlSearch(url: string) {
+function parseUrlSearch(url: string) {
   const search = url.replace('/?', '')
   const o = qs.decode(search)
   if (o) {
@@ -21,7 +18,8 @@ function decodeUrlSearch(url: string) {
   return o
 }
 
-function getHashFromSearch(search: any, defaultValue: string): string {
+function parseHashFromSearchUrl(url: any, defaultValue: string): string {
+  const search = parseUrlSearch(url)
   let hash = search.hash
   if (Array.isArray(hash)) {
     hash = hash[hash.length - 1]
@@ -32,12 +30,15 @@ function getHashFromSearch(search: any, defaultValue: string): string {
   return defaultValue
 }
 
-export function getHash(url: string): string {
-  const search = decodeUrlSearch(url)
-  const hash = getHashFromSearch(search, '#/')
-  log('hash:', hash)
-  if (hash.startsWith('#')) {
-    return hash
+export function parseHash(url: string): string {
+  if (url.includes('?')) {
+    url = parseHashFromSearchUrl(url, '#/')
   }
-  return '#' + hash
+  if (url.startsWith('/#')) {
+    url = url.substr(1)
+  }
+  if (!url.startsWith('#')) {
+    url = '#' + url
+  }
+  return url
 }
