@@ -8,11 +8,15 @@ Just like [Phoenix LiveView](https://github.com/phoenixframework/phoenix_live_vi
 
 #### Examples
 
-SPA with url routing:
+- [x] Single-Page Application (SPA):
 [Demo](https://liveviews.xyz),
-[Source](./examples/spa-demo)
+[Source](./examples/spa-demo).
+With:
+  - url routing
+  - rainbow animation
+  - bandwidth quota
 
-Realtime chatroom:
+- [x] Realtime chatroom:
 [Demo](https://chat.liveviews.xyz),
 [Source](./examples/chatroom-demo)
 
