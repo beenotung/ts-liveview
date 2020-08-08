@@ -11,7 +11,7 @@ ${Object.entries(functions)
     const hash = route(name as AppFunction)
     return `
 <div style="display: inline-block; padding: 2px;">
-  <input type="checkbox" ${attrs({ checked: done })}>
+  <input type="checkbox" ${attrs({ checked: done })} name="${name}" disabled>
   <a href="${hash}">${name}</a>
 </div>`
   })
