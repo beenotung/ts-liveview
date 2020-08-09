@@ -3,7 +3,7 @@
 import { makeArray } from '@beenotung/tslib/array'
 import { format_byte } from '@beenotung/tslib/format'
 import { MB } from '@beenotung/tslib/size'
-import S, { DataSignal } from 's-js'
+import S from 's-js'
 import { c, h, s } from '../lib'
 import { State } from '../state'
 import Timer = NodeJS.Timer
@@ -16,36 +16,6 @@ export type RainbowBar = {
   rotation: number
   width: number
   hue: number
-}
-
-export class RainbowBarComponent {
-  data: DataSignal<RainbowBar>
-  dispose: () => void
-
-  constructor(public state: RainbowState, i: number) {
-    const res = S.root(dispose => {
-      return {
-        dispose,
-        data: S(
-          (): RainbowBar => {
-            const bar_count = state.bar_count()
-            const bar_width = state.bar_width()
-            const count = state.count()
-            return {
-              id: `bar${i}`,
-              x: bar_width * i,
-              translate_y: Math.sin(count / 10 + i / 5) * 100 * 0.5,
-              rotation: (count + 1) % 360,
-              width: bar_width,
-              hue: Math.trunc((360 / bar_count) * i - count) % 360,
-            }
-          },
-        ),
-      }
-    })
-    this.dispose = res.dispose
-    this.data = res.data
-  }
 }
 
 export class RainbowState {
