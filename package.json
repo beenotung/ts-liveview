@@ -17,20 +17,23 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "watch:tsc": "tsc -w",
-    "watch:js": "tsc && run-p watch:demo:*",
-    "watch:demo:spa": "nodemon --watch dist -x node dist/examples/spa-demo/main",
-    "watch:demo:chatroom": "nodemon --watch dist -x node dist/examples/chatroom-demo/main",
+    "watch:js": "run-s build:demo watch:demo",
+    "watch:demo": "nodemon --watch dist -x run-p demo:*",
+    "demo:spa": "node dist/examples/spa-demo/main",
+    "demo:chatroom": "node dist/examples/chatroom-demo/main",
     "dev": "npm run watch:tsc",
     "dev:demo": "run-p watch:tsc watch:js",
     "test": "npm run rawtest",
     "clean": "rimraf dist",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"examples/**/*.ts\" ",
     "postformat": "tslint -p . --fix",
-    "prebuild": "npm run clean && gen-index --single-quote --no-semi",
+    "gen-index": "gen-index --single-quote --no-semi",
+    "prebuild": "run-s clean gen-index",
     "build": "tsc -p tsconfig.build.json",
-    "pretest": "npm run format && npm run build",
+    "build:demo": "tsc",
+    "pretest": "run-s format build",
     "rawtest": "jest",
-    "prepublishOnly": "npm run rawtest && npm run build"
+    "prepublishOnly": "run-s rawtest build"
   },
   "husky": {
     "hook": {
