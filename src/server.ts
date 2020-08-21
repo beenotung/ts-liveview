@@ -3,7 +3,9 @@ import express from 'express'
 import http from 'http'
 import S from 's-js'
 import { IPrimusOptions, Primus } from 'typestub-primus'
+import { getClientScriptName } from './config'
 import { Component } from './h'
+import { clientScriptCode } from './helpers/client-adaptor'
 import { genMobileHTMLWrapper, HTMLOptions } from './helpers/mobile-html'
 import { sendInitialRender } from './html'
 import { Session } from './session'
@@ -16,13 +18,15 @@ export type ServerOptions = {
   /* will be called inside a s-root per client session */
   createSession?: (session: Session) => Session | void
   initialRender: (req: Request, res: Response) => PrimitiveView | Component
+  client_script?: string
+  inline_script?: boolean
+  client_script_name?: string
 } & HTMLOptions
 
 export type AttachServerOptions = {
   app: App
   server?: Server
   primus?: Primus
-  client_script?: string
 } & ServerOptions
 
 export type StartServerOptions = {
@@ -36,6 +40,16 @@ export function attachServer(options: AttachServerOptions) {
   // const server = options.server
   const primus = options.primus
   const createSession = options.createSession
+
+  const clientScriptUrl = getClientScriptName(options)
+  app.use(clientScriptUrl, (req, res) => {
+    res.contentType('application/javascript')
+    if (options.client_script) {
+      res.send(options.client_script)
+      return
+    }
+    clientScriptCode.then(code => res.send(code))
+  })
 
   const mobileHTML = genMobileHTMLWrapper(options)
   app.use('/', (req, res) => sendInitialRender(req, res, mobileHTML, options))

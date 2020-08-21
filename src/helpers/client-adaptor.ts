@@ -34,7 +34,8 @@ export function genClientCode() {
   })
 }
 
-export let clientScript = genClientCode().then(
+export let clientScriptCode = genClientCode()
+export let clientScriptTag = clientScriptCode.then(
   code => `<script>${code}</script>`,
 )
 

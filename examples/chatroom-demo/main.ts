@@ -19,6 +19,10 @@ const server = http.createServer(app)
 const primus = new Primus(server)
 
 app.use('/', express.static(path.join('examples', 'chatroom-demo', 'public')))
+app.get('/robots.txt', (req, res) => {
+  res.status(404)
+  res.send('File not found')
+})
 
 function createSession(session: Session): Session | void {
   log('start a session')
@@ -44,7 +48,7 @@ async function main() {
     heads: [
       `<meta name="description" content="A chatroom demo using ts-liveview, a SSR SPA library">`,
       `<meta name="keywords" content="SSR, SPA, Typescript, Node.js, LiveView">`,
-      `<meta name="author" content="ts-liveview"">`,
+      `<meta name="author" content="ts-liveview">`,
     ],
     initialRender: (req, res) => {
       const view = sampleInSRoot(() =>
