@@ -89,7 +89,7 @@ ${messages()
   ${
     code !== message.text
       ? `<code>${code}</code>`
-      : '<span style="color: white" ">try to inject html ;)</span>'
+      : '<span style="color: white">try to inject html ;)</span>'
   }
   </li>`,
     )

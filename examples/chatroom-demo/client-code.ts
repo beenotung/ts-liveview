@@ -11,5 +11,5 @@ export async function makeClientCode(primus: Primus) {
   fs.writeFileSync('client.cache-1.min.js', code)
   code = await require('minify')('client.cache-1.min.js')
   fs.writeFileSync('client.cache-2.min.js', code)
-  return `<script>${code}</script>`
+  return code
 }

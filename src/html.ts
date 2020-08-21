@@ -1,5 +1,6 @@
 import debug from 'debug'
-import { clientScript } from './helpers/client-adaptor'
+import { getClientScriptName } from './config'
+import { clientScriptTag } from './helpers/client-adaptor'
 import { getIsHTMLDoc, MobileHtmlWrapper } from './helpers/mobile-html'
 import { toHTML } from './helpers/render'
 import { AttachServerOptions } from './server'
@@ -7,8 +8,12 @@ import { Request, Response } from './types/server'
 
 const log = debug('liveview:html')
 
-function isScriptTag(s: string) {
-  return !!s.trim().match(/<script/i)
+function isScriptTag(script: string): boolean {
+  return !!script.trim().match(/<script/i)
+}
+
+function toScriptTag(script: string): string {
+  return isScriptTag(script) ? script : `<script>${script}</script>`
 }
 
 export function sendInitialRender(
@@ -42,13 +47,18 @@ export function sendInitialRender(
     defer()
   }
 
-  if (options.client_script) {
-    sendScript(
-      isScriptTag(options.client_script)
-        ? options.client_script
-        : `<script>${options.client_script}</script>`,
-    )
+  if (options.client_script && isScriptTag(options.client_script)) {
+    sendScript(options.client_script)
     return
   }
-  clientScript.then(script => sendScript(script))
+  if (!options.inline_script) {
+    const url = getClientScriptName(options)
+    sendScript(`<script async src="${url}"></script>`)
+    return
+  }
+  if (options.client_script) {
+    sendScript(toScriptTag(options.client_script))
+    return
+  }
+  clientScriptTag.then(script => sendScript(script))
 }
