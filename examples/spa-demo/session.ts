@@ -18,16 +18,15 @@ export function createSession(session: Session): Session | void {
   log('session.params', session.params)
 
   // for rate limiting
-  const sent = S.value(0)
   session.sendMessage = msg => {
-    sent(S.sample(sent) + JSON.stringify(msg).length)
+    state.init.sent += JSON.stringify(msg).length
     session.spark.write(msg)
   }
 
   const state = new State({
     url: session.params.url,
     host: session.spark.request.headers.host!,
-    sent,
+    sent: 0,
   })
 
   session.onMessage(args => {

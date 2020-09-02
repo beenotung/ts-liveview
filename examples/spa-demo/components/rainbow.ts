@@ -57,7 +57,7 @@ export class RainbowState {
     })
   }
   get quota_left() {
-    return this.quota - S.sample(this.state.init.sent)
+    return this.quota - this.state.init.sent
   }
 
   update = () => {
