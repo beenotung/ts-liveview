@@ -15,7 +15,7 @@ export function initialRender(req: Request, res: Response): string | Component {
       new State({
         url: req.url,
         host: req.headers.host!,
-        sent: S.value(0),
+        sent: 0,
       }),
     )
   })

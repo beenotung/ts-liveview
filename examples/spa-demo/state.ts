@@ -47,7 +47,7 @@ export class State {
       url: string
       host: string
       // number of bytes sent
-      sent: DataSignal<number>
+      sent: number
     },
   ) {
     inc_counter(live_session_counter)
