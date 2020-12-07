@@ -9,6 +9,10 @@ export type Request = ExpressRequest & IncomingMessage
 export type Response = ExpressResponse & ServerResponse
 
 export type App = {
+  get: (
+    route: string,
+    f: (req: Request, res: Response, next: () => any) => any,
+  ) => any
   use: (
     route: string,
     f: (req: Request, res: Response, next: () => any) => any,
