@@ -1,3 +1,4 @@
+export * from './config'
 export * from './h'
 export * from './h-client'
 export * from './helpers/client'
