@@ -35,11 +35,8 @@ export class Route {
     this.rules.push({ path, cb })
   }
 
-  subRoute(subdir: string) {
-    if (!(this.dir.endsWith('/') || subdir.startsWith('/'))) {
-      subdir = '/' + subdir
-    }
-    let dir = this.dir + subdir
+  subRoute(subDir: string): Route {
+    let dir = joinPath(this.dir, subDir)
     let subRoute = new Route(dir)
     this.subRoutes.push(subRoute)
     return subRoute
@@ -48,8 +45,7 @@ export class Route {
   private allRules(): Rule[] {
     let rules = this.rules.slice()
     for (let subRoute of this.subRoutes) {
-      for (let rule of sub
-        Route.allRules()) {
+      for (let rule of subRoute.allRules()) {
         rules.push(rule)
       }
     }
@@ -58,15 +54,45 @@ export class Route {
 
   createMiddleware() {
     return (req: Request, res: Response, next: NextFunction) => {
+
     }
   }
 
-  handleRoute(path:string) {
+  handleRoute(path: string) {
   }
 }
-function trimPath(path:string){
-  if (path.startsWith('/')){return path}
-  return  path
+
+type ParsedPath<Q extends object = any> = {
+  segments: string[]
+  query: Q
+}
+
+/**
+ * path example:
+ *    /post/:post_id/comments?page=2
+ * */
+function parsePath(path: string): ParsedPath {
+  let [file, search] = path.split('?')
+  let segments = file.split('/')
+  let result: ParsedPath = {
+    segments,
+    query: {},
+  }
+  for (const kv of search.split('&')) {
+    for (let [key, value] of kv.split('=')) {
+      key = decodeURIComponent(key)
+      value = decodeURIComponent(value)
+      result.query[key] = value
+    }
+  }
+  return result
+}
+
+function joinPath(a: string, b: string): string {
+  if (a.endsWith('/') || b.startsWith('/')) {
+    return a + b
+  }
+  return a + '/' + b
 }
 
 function test() {
@@ -75,3 +101,5 @@ function test() {
 
   })
 }
+
+test()
