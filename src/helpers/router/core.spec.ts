@@ -42,10 +42,10 @@ it('should handle multiple level of direct match route', function() {
 })
 
 it('should handle single route with params', function() {
-  router.add('/users/:user_id', 'profile')
+  router.add('/users/:user_id', 'profile page')
   let context = router.route('/users/123')!
   expect(context).toBeDefined()
-  expect(context.value).toBe('profile')
+  expect(context.value).toBe('profile page')
   expect(context.params).toEqual({ user_id: '123' })
 })
 
@@ -69,4 +69,21 @@ it('should handle multiple routes with params', function() {
   expect(router.route('/user/2/friends')!.params).toEqual({ uid: '2' })
 
   expect(router.route('/user/self/noodles')!.value).toEqual('n')
+})
+
+it('should handle mixed routes w/wo params', function() {
+  router.add('/','home page')
+  router.add('/posts','post list')
+  router.add('/posts/:pid','post page')
+  router.add('/posts/:pid/page/:p','post n page')
+
+  expect(router.route('/')!.value).toEqual('home page')
+
+  expect(router.route('/posts')!.value).toEqual('post list')
+
+  expect(router.route('/posts/123')!.value).toEqual('post page')
+  expect(router.route('/posts/123')!.params).toEqual({pid:'123'})
+
+  expect(router.route('/posts/123/page/42')!.value).toEqual('post n page')
+  expect(router.route('/posts/123/page/42')!.params).toEqual({pid:'123',p:'42'})
 })
