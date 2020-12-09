@@ -72,20 +72,20 @@ it('should handle multiple routes with params', function() {
 })
 
 it('should handle mixed routes w/wo params', function() {
-  router.add('/','home page')
-  router.add('/posts','post list')
-  router.add('/posts/:pid','post page')
-  router.add('/posts/:pid/page/:p','post n page')
+  router.add('/', 'home page')
+  router.add('/posts', 'post list')
+  router.add('/posts/:pid', 'post page')
+  router.add('/posts/:pid/page/:p', 'post n page')
 
   expect(router.route('/')!.value).toEqual('home page')
 
   expect(router.route('/posts')!.value).toEqual('post list')
 
   expect(router.route('/posts/123')!.value).toEqual('post page')
-  expect(router.route('/posts/123')!.params).toEqual({pid:'123'})
+  expect(router.route('/posts/123')!.params).toEqual({ pid: '123' })
 
   expect(router.route('/posts/123/page/42')!.value).toEqual('post n page')
-  expect(router.route('/posts/123/page/42')!.params).toEqual({pid:'123',p:'42'})
+  expect(router.route('/posts/123/page/42')!.params).toEqual({ pid: '123', p: '42' })
 })
 
 it('should handle routes with query', function() {
