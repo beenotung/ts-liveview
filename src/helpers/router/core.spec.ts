@@ -87,3 +87,18 @@ it('should handle mixed routes w/wo params', function() {
   expect(router.route('/posts/123/page/42')!.value).toEqual('post n page')
   expect(router.route('/posts/123/page/42')!.params).toEqual({pid:'123',p:'42'})
 })
+
+it('should handle routes with query', function() {
+  router.add('/post', 'post page')
+  router.add('/', 'home page')
+
+  let match = router.route('/post?lang=en')!
+  expect(match).toBeDefined()
+  expect(match.query).toEqual({ lang: 'en' })
+  expect(match.value).toBe('post page')
+
+  match = router.route('/?lang=en')!
+  expect(match).toBeDefined()
+  expect(match.query).toEqual({ lang: 'en' })
+  expect(match.value).toBe('home page')
+})

@@ -43,11 +43,16 @@ export class Router<T> {
     next.parts[''] = value
   }
 
-  route(path: string): Context<T> | undefined {
+  route(url: string): Context<T> | undefined {
+    let [path, search] = url.split('?')
     let parts = path.split('/')
-    let partsAcc = toList(parts)
 
-    // check for query
+    let query: object = {}
+    if (search) {
+      parseQuery(search, query)
+    }
+
+    let partsAcc = toList(parts)
 
     let match = matchParts(this.routes, partsAcc, null)
     if (!match) {
@@ -56,7 +61,7 @@ export class Router<T> {
     return {
       value: match.value,
       params: toParams(match.paramsAcc),
-      query: {},
+      query,
     }
   }
 }
@@ -135,4 +140,13 @@ function toParams(acc: ParamsAcc | null): Record<string, string> {
     acc = next
   }
   return params
+}
+
+function parseQuery(search: string, query: object): void {
+  for (let kv of search.split('&')) {
+    let [key, value] = kv.split('=')
+    key = decodeURIComponent(key)
+    value = decodeURIComponent(value)
+    ;(query as any)[key] = value
+  }
 }
