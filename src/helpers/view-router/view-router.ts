@@ -86,4 +86,26 @@ export class ViewRouter {
       }
     }
   }
+
+  createExpressMiddleware() {
+    return (req: Request, res: Response, next: NextFunction) => {
+      let url = req.url
+      let route = this.router.route(url)
+      if (!route) {
+        next()
+        return
+      }
+      route.value({
+        type: 'express',
+        req,
+        res,
+        next,
+        url,
+        params: route.params,
+        query: route.query,
+      }, view => {
+        res.send(toHTML(view))
+      })
+    }
+  }
 }
