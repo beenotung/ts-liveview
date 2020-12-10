@@ -34,8 +34,8 @@ export interface Context<T, P = any, Q = any> {
 export class Router<T> {
   private routes: Routes<T> = Routes()
 
-  add(path: string, value: T) {
-    let parts = path.split('/')
+  add(url: string, value: T) {
+    let parts = url.split('/')
     let next = this.routes
     for (let part of parts) {
       next = getOrAddNextPart(next, part) as Routes<T>
