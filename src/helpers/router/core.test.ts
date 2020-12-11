@@ -1,5 +1,5 @@
 import { Router } from './core'
-import { expect }from 'chai'
+import { expect } from 'chai'
 
 let router: Router<any>
 
@@ -73,33 +73,33 @@ it('should handle multiple routes with params', function() {
 })
 
 it('should handle mixed routes w/wo params', function() {
-  router.add('/','home page')
-  router.add('/posts','post list')
-  router.add('/posts/:pid','post page')
-  router.add('/posts/:pid/page/:p','post n page')
+  router.add('/', 'home page')
+  router.add('/posts', 'post list')
+  router.add('/posts/:pid', 'post page')
+  router.add('/posts/:pid/page/:p', 'post n page')
 
   expect(router.route('/')!.value).equals('home page')
 
   expect(router.route('/posts')!.value).equals('post list')
 
   expect(router.route('/posts/123')!.value).equals('post page')
-  expect(router.route('/posts/123')!.params).deep.equals({pid:'123'})
+  expect(router.route('/posts/123')!.params).deep.equals({ pid: '123' })
 
   expect(router.route('/posts/123/page/42')!.value).equals('post n page')
-  expect(router.route('/posts/123/page/42')!.params).deep.equals({pid:'123',p:'42'})
+  expect(router.route('/posts/123/page/42')!.params).deep.equals({ pid: '123', p: '42' })
 })
 
 it('should handle routes with query', function() {
-  router.add('/post','post page')
-  router.add('/','home page')
+  router.add('/post', 'post page')
+  router.add('/', 'home page')
 
   let match = router.route('/post?lang=en')!
   expect(match).not.undefined
-  expect(match.query).deep.equals({lang:'en'})
+  expect(match.query).deep.equals({ lang: 'en' })
   expect(match.value).equals('post page')
 
   match = router.route('/?lang=en')!
   expect(match).not.undefined
-  expect(match.query).deep.equals({lang:'en'})
+  expect(match.query).deep.equals({ lang: 'en' })
   expect(match.value).equals('home page')
 })
