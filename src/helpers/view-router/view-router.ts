@@ -1,12 +1,10 @@
-import { NextFunction, Request, Response } from 'express'
+import { Handler, NextFunction, Request, Response } from 'express'
 import { Component } from '../../h'
-import { viewToHTML } from '../../h-client'
 import { Session } from '../../session'
-import { PrimitiveView } from '../../types/view'
 import { toHTML } from '../render'
-import { Router, Context as RouterContext } from '../router/core'
+import { Router } from '../router/core'
 
-export type Context = ExpressContext | LiveviewContext
+export type ViewContext = ExpressContext | LiveviewContext
 export type ExpressContext = {
   type: 'express'
   /* from Router.Context */
@@ -28,7 +26,7 @@ export type LiveviewContext = {
   session: Session
 }
 
-export type RouteHandler = (context: Context, cb: (view: Component) => void) => void
+export type RouteHandler = (context: ViewContext, cb: (view: Component) => void) => void
 export type ViewRouteContext = {
   type: 'express'
   req: Request,
@@ -87,7 +85,7 @@ export class ViewRouter {
     }
   }
 
-  createExpressMiddleware() {
+  createExpressMiddleware(): Handler {
     return (req: Request, res: Response, next: NextFunction) => {
       let url = req.url
       let route = this.router.route(url)

@@ -25,7 +25,7 @@ function Routes<T>(): Routes<T> {
   }
 }
 
-export interface Context<T, P = any, Q = any> {
+export interface RouteContext<T, P = any, Q = any> {
   value: T
   params: P
   query: Q
@@ -43,7 +43,7 @@ export class Router<T> {
     next.parts[''] = value
   }
 
-  route(url: string): Context<T> | undefined {
+  route(url: string): RouteContext<T> | undefined {
     let [path, search] = url.split('?')
     let parts = path.split('/')
 
