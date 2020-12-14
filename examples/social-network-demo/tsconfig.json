@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "importHelpers": true,
+    "esModuleInterop": true,
+    "target": "es6",
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "strict": true
+  }
+}

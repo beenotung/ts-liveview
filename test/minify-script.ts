@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { minify } from '../src/helpers/minify'
+import { minify } from '../src/minify/html'
 
 function test(file: string) {
   let code = fs.readFileSync(file).toString()

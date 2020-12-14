@@ -1,5 +1,5 @@
+import { viewToHTML } from '../client/html'
 import { Component, dynamicToHTML } from '../h'
-import { viewToHTML } from '../h-client'
 import { PrimitiveView } from '../types/view'
 import { sampleInSRoot } from './s-js'
 

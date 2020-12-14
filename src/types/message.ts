@@ -1,4 +1,5 @@
-import { Patch } from './view'
+import type { MessageType } from './enum'
+import type { Patch } from './view'
 
 // export type ClientMessage = {
 //   type: 'event'
@@ -7,7 +8,14 @@ import { Patch } from './view'
 export type ClientMessage = any[]
 
 export type PatchMessage = {
-  type: 'patch'
+  type: MessageType.patch
 } & Patch
 
-export type ServerMessage = PatchMessage
+export type PushStateMessage = {
+  type: MessageType.pushState
+  state?: any
+  title?: string
+  url?: string
+}
+
+export type ServerMessage = PatchMessage | PushStateMessage

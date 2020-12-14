@@ -8,6 +8,7 @@ import { Component } from './h'
 import { clientScriptCode } from './helpers/client-adaptor'
 import { genMobileHTMLWrapper, HTMLOptions } from './helpers/mobile-html'
 import { sendInitialRender } from './html'
+import { SSession } from './s-session'
 import { Session } from './session'
 import { App, Request, Response, Server } from './types/server'
 import { PrimitiveView } from './types/view'
@@ -71,7 +72,7 @@ export function attachServer(options: AttachServerOptions) {
         },
       })
       S.root(dispose => {
-        const session = new Session(spark)
+        const session = new SSession(spark)
         session.attachDispose(dispose)
         const result = createSession(session)
         if (!result) {

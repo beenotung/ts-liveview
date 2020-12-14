@@ -1,5 +1,4 @@
-import morphdom from 'morphdom'
-import { ComponentView, PrimitiveView, Statics, View } from './types/view'
+import type { ComponentView, PrimitiveView, Statics, View } from '../types/view'
 
 export function primitiveViewToHTML(view: PrimitiveView): string {
   switch (typeof view) {
@@ -59,24 +58,4 @@ function componentViewToHTML(
     acc.push(html)
   }
   return acc.join('')
-}
-
-export function morph(e: Element, html: string) {
-  // console.debug('morph', html)
-  morphdom(e, html, {
-    onBeforeElUpdated: (fromEl, toEl) => {
-      if (fromEl.isEqualNode(toEl)) {
-        return false
-      }
-      if (document.activeElement === fromEl) {
-        switch (fromEl.tagName) {
-          case 'INPUT':
-          case 'SELECT':
-            // console.debug('skip morph on:', fromEl, toEl)
-            return false
-        }
-      }
-      return true
-    },
-  })
 }

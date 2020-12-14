@@ -1,9 +1,9 @@
 import escapeHTML from 'escape-html'
 import { IPrimusOptions, Primus } from 'typestub-primus'
+import { primitiveViewToHTML } from '../client/html'
 import { Component, Dynamic } from '../h'
-import { primitiveViewToHTML } from '../h-client'
+import { minify } from '../minify'
 import { PrimitiveView } from '../types/view'
-import { minify } from './minify'
 import { toHTML } from './render'
 
 type UrlPattern = {
@@ -25,7 +25,7 @@ export function matchUrlPattern(
 
 export function minifyView(view: PrimitiveView | Component) {
   const html = toHTML(view)
-  return minify(html)
+  return minify.html(html)
 }
 
 export function genPrimusScript(options?: IPrimusOptions) {

@@ -1,12 +1,12 @@
-import { Request, Response, NextFunction } from 'express'
-import { getClientScriptName, getClientScript } from './config'
+import { Request, Response } from 'express'
+import express from 'express'
+import { getClientScript, getClientScriptName } from './config'
 import { genMobileHTMLWrapper } from './helpers/mobile-html'
 import { sendInitialRender } from './html'
 import { AttachServerOptions, ServerOptions } from './server'
-import express from 'express'
 
 export function liveViewRoute(options: AttachServerOptions) {
-  let app = express.Router()
+  const app = express.Router()
 
   attachClientScriptHandler(app, options)
 
@@ -16,17 +16,18 @@ export function liveViewRoute(options: AttachServerOptions) {
   })
 }
 
-
-async function attachClientScriptHandler(app: express.Router, options: ServerOptions) {
+async function attachClientScriptHandler(
+  app: express.Router,
+  options: ServerOptions,
+) {
   const clientScriptUrl = getClientScriptName(options)
 
   app.get(clientScriptUrl, handler)
 
-  let code = await getClientScript(options)
+  const code = await getClientScript(options)
 
   function handler(req: Request, res: Response) {
     res.contentType('application/javascript')
     res.send(code)
   }
 }
-

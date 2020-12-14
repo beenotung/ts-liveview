@@ -19,7 +19,11 @@ function getClientFile() {
   return fs.existsSync(tsNodeClientFile) ? tsNodeClientFile : nodeClientFile
 }
 
+/**@deprecated TODO remove this */
 export function genClientCode() {
+  if ('dev') {
+    return Promise.resolve('')
+  }
   const b = browserify()
   b.add(getClientFile())
   return new Promise((resolve, reject) => {

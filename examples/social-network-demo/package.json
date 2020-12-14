@@ -1,0 +1,40 @@
+{
+  "name": "social-network-demo",
+  "version": "1.0.0",
+  "description": "Demo Application of ts-liveview SSR SPA",
+  "keywords": [
+    "liveview",
+    "demo",
+    "SSR",
+    "SPA",
+    "typescript"
+  ],
+  "author": {
+    "name": "Beeno Tung",
+    "email": "aabbcc1241@yahoo.com.hk",
+    "url": "https://beeno-tung.surge.sh/"
+  },
+  "license": "BSD-2.0",
+  "scripts": {
+    "prestart": "npm run build",
+    "start": "ts-node main.ts",
+    "dev": "run-p start:watch build:watch",
+    "start:watch": "ts-node-dev main.ts",
+    "prebuild": "rimraf build",
+    "build": "snowpack build",
+    "build:watch": "snowpack build --watch"
+  },
+  "dependencies": {
+    "debug": "^4.3.1",
+    "ts-liveview": "file:../..",
+    "tslib": "^2.0.3"
+  },
+  "devDependencies": {
+    "@snowpack/plugin-optimize": "^0.2.10",
+    "@types/debug": "^4.1.5",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
+    "snowpack": "^2.18.3",
+    "typescript": "^4.1.3"
+  }
+}

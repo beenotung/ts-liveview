@@ -1,16 +1,12 @@
 import debug from 'debug'
-import S from 's-js'
 import { ISpark } from 'typestub-primus'
 import { Component, createDummyComponent, morphComponent } from './h'
 import { ClientParams, parseQuery } from './helpers/client-adaptor'
+import { MessageType } from './types/enum'
 import { ClientMessage, ServerMessage } from './types/message'
 import { Patch, Statics } from './types/view'
 
 const log = debug('liveview:session')
-
-export type LiveOptions = {
-  skipInitialSend?: boolean
-}
 
 export class Session {
   // template_id -> statics
@@ -34,7 +30,7 @@ export class Session {
   sendPatch(patch: Patch) {
     // log('send patch:', patch)
     this.sendMessage({
-      type: 'patch',
+      type: MessageType.patch,
       s: patch.s,
       t: patch.t?.length! > 0 ? patch.t : undefined,
       c: patch.c,
@@ -53,30 +49,6 @@ export class Session {
       this.components.set(target.selector, target)
     }
     this.sendPatch(patch)
-  }
-
-  live(render: () => Component, options?: LiveOptions) {
-    let initial = true
-    return S(() => {
-      const component = render()
-      if (options?.skipInitialSend && initial) {
-        initial = false
-        return
-      }
-      this.sendComponent(component)
-      return component
-    })
-  }
-
-  attachDispose(dispose: () => void) {
-    this.onClose(() => {
-      log(`spark is closed, dispose S-js context now`)
-      dispose()
-    })
-    S.cleanup(() => {
-      log(`S-js context is disposed, close spark now`)
-      this.spark.end()
-    })
   }
 
   onClose(cb: () => void) {
