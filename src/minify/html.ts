@@ -103,9 +103,3 @@ export function minifyHTML(html: string): string {
     html = s
   }
 }
-
-export let minify = minifyHTML
-
-export function minifyJS(code: string): string {
-  return require('minify/lib/js')(code)
-}

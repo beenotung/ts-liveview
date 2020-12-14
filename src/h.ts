@@ -1,6 +1,6 @@
 import debug from 'debug'
 import hash from 'quick-hash'
-import { primitiveViewToHTML } from './h-client'
+import { primitiveViewToHTML } from './client/html'
 import {
   ComponentDiff,
   Diff,
@@ -38,12 +38,31 @@ export function h(statics: Statics, ...dynamics: Dynamic[]): Template {
 
 export type Component = {
   selector: string
+  title?: string
 } & Template
 
-export function c(selector: string, template: Template): Component {
-  return {
-    selector,
-    ...template,
+export function c(
+  selector: string,
+  title: string,
+  template: Template,
+): Component
+export function c(selector: string, template: Template): Component
+export function c(): Component {
+  if (arguments.length === 2) {
+    return {
+      selector: arguments[0],
+      ...(arguments[1] as Template),
+    }
+  } else if (arguments.length === 3) {
+    return {
+      selector: arguments[0],
+      title: arguments[1],
+      ...(arguments[2] as Template),
+    }
+  } else {
+    throw new Error(
+      'Assert Error: expect 2 or 3 arguments, got: ' + arguments.length,
+    )
   }
 }
 
@@ -305,14 +324,4 @@ export function morphComponent(
     c: Array.from(newComponents.values()),
     s: source.selector,
   }
-}
-
-export function componentToPatch(target: Component) {
-  const source = createDummyComponent()
-  // template_id -> statics
-  const templates = new Map<string, Statics>()
-  // selector -> last version component
-  const components = new Map<string, Component>()
-  const patch = morphComponent(source, target, templates, components)
-  return patch
 }

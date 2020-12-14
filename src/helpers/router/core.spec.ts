@@ -12,16 +12,16 @@ describe('router core TestSuit', () => {
     router = new Router<any>()
   })
 
-  it('should handle 404', function() {
+  it('should handle 404', function () {
     expect(get('/404')).undefined
   })
 
-  it('should handle root route', function() {
+  it('should handle root route', function () {
     router.add('/', 'home')
     expect(get('/')).equals('home')
   })
 
-  it('should handle multiple direct match routes', function() {
+  it('should handle multiple direct match routes', function () {
     router.add('/', 'home page')
     router.add('/profile', 'profile page')
     router.add('/settings', 'setting page')
@@ -31,7 +31,7 @@ describe('router core TestSuit', () => {
     expect(get('/404')).undefined
   })
 
-  it('should handle multiple level of direct match route', function() {
+  it('should handle multiple level of direct match route', function () {
     router.add('/', 'home')
     router.add('/users', 'user list')
     router.add('/users/1', 'profile page')
@@ -43,7 +43,7 @@ describe('router core TestSuit', () => {
     expect(get('/users/1/friends')).equals('friend list')
   })
 
-  it('should handle single route with params', function() {
+  it('should handle single route with params', function () {
     router.add('/users/:user_id', 'profile page')
     let context = router.route('/users/123')!
     expect(context).not.undefined
@@ -51,7 +51,7 @@ describe('router core TestSuit', () => {
     expect(context.params).deep.equals({ user_id: '123' })
   })
 
-  it('should handle single route with multiple params', function() {
+  it('should handle single route with multiple params', function () {
     router.add('/users/:uid/friends/:fid', 'friend')
     let context = router.route('/users/123/friends/456')!
     expect(context).not.undefined
@@ -59,7 +59,7 @@ describe('router core TestSuit', () => {
     expect(context.params).deep.equals({ uid: '123', fid: '456' })
   })
 
-  it('should handle multiple routes with params', function() {
+  it('should handle multiple routes with params', function () {
     router.add('/user/:pid/profile', 'p')
     router.add('/user/:uid/friends', 'f')
     router.add('/user/self/noodles', 'n')
@@ -73,7 +73,7 @@ describe('router core TestSuit', () => {
     expect(router.route('/user/self/noodles')!.value).equals('n')
   })
 
-  it('should handle mixed routes w/wo params', function() {
+  it('should handle mixed routes w/wo params', function () {
     router.add('/', 'home page')
     router.add('/posts', 'post list')
     router.add('/posts/:pid', 'post page')
@@ -87,10 +87,13 @@ describe('router core TestSuit', () => {
     expect(router.route('/posts/123')!.params).deep.equals({ pid: '123' })
 
     expect(router.route('/posts/123/page/42')!.value).equals('post n page')
-    expect(router.route('/posts/123/page/42')!.params).deep.equals({ pid: '123', p: '42' })
+    expect(router.route('/posts/123/page/42')!.params).deep.equals({
+      pid: '123',
+      p: '42',
+    })
   })
 
-  it('should handle routes with query', function() {
+  it('should handle routes with query', function () {
     router.add('/post', 'post page')
     router.add('/', 'home page')
 

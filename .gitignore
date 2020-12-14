@@ -4,6 +4,7 @@ package-lock.json
 pnpm-lock.yaml
 pnpm-debug.log
 dist/
+build/
 .cache/
 *.tgz
 

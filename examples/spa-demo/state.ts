@@ -1,6 +1,6 @@
 import debug from 'debug'
 import { EventEmitter } from 'events'
-import S, { DataSignal } from 's-js'
+import S from 's-js'
 import { parseHash } from '../../src/helpers/url'
 import { RainbowState } from './components/rainbow'
 import { initCalculator } from './pages/calculator-page'
