@@ -13,7 +13,7 @@ import { viewToHTML } from './html'
 // template_id -> statics
 const templates = new Map<string, Statics>()
 
-export function onPatch(patch: Patch, options: {}) {
+export function onPatch(patch: Patch) {
   // update template
   if (patch.t) {
     for (const template of patch.t) {
