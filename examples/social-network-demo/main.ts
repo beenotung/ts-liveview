@@ -7,7 +7,7 @@ import { getComponentTitle, minify_dir, toHTML } from 'ts-liveview'
 import { Primus } from 'typestub-primus'
 import { defaultTitle, htmlTemplate, scripts } from './config'
 import { router } from './router'
-import { attachPrimus } from './session'
+import { attachSession } from './session'
 
 const port = +process.env.PORT! || 8100
 const app = express()
@@ -35,7 +35,7 @@ app.use(
     })
   }),
 )
-attachPrimus(primus, router)
+attachSession(primus, router)
 
 server.listen(port, '0.0.0.0', () => {
   console.log(`listening on http://localhost:${port}`)

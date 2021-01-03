@@ -29,7 +29,8 @@
     "s-array": "^0.4.10",
     "s-js": "^0.4.9",
     "ts-liveview": "file:../..",
-    "tslib": "^2.0.3"
+    "tslib": "^2.0.3",
+    "typestub-primus": "^1.3.2"
   },
   "devDependencies": {
     "@snowpack/plugin-optimize": "^0.2.10",
