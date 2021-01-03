@@ -1,7 +1,7 @@
 import sinon from 'sinon'
 import { expect } from 'chai'
-import { c, h } from '../../h'
-import { Session } from '../../session'
+import { c, h } from '../h'
+import { LiveSession } from '../live-session'
 import { ViewRouter } from './view-router'
 
 describe('view-router TestSuit', () => {
@@ -22,7 +22,7 @@ describe('view-router TestSuit', () => {
   })
 
   it('should route to home page', function () {
-    let session: Session = {} as any
+    let session: LiveSession = {} as any
     let sendComponent = sinon.fake()
     session.sendComponent = sendComponent
     let next = sinon.fake()
