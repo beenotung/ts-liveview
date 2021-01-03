@@ -11,7 +11,6 @@ export type LiveOptions = {
 }
 
 export class SLiveSession extends LiveSession {
-
   live(render: () => Component, options?: LiveOptions) {
     let initial = true
     return S(() => {
@@ -35,6 +34,7 @@ export class SLiveSession extends LiveSession {
       this.spark.end()
     })
   }
+
   static spawnFromRoot<T extends SLiveSession>(
     sparkOrFn: ISpark | (() => T),
   ): T {
