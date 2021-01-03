@@ -1,9 +1,10 @@
+import { ISpark } from 'typestub-primus'
 import {
   c,
   ClientMessage,
   genPrimusScript,
   h,
-  Session,
+  LiveSession,
   startServer,
 } from '../src'
 
@@ -36,7 +37,8 @@ function render(state: State = initialState()) {
   )
 }
 
-function createSession(session: Session): Session | void {
+function createSession(spark: ISpark): LiveSession | void {
+  const session = new LiveSession(spark)
   const state = initialState()
 
   function update() {

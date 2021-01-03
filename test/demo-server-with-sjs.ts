@@ -1,11 +1,12 @@
 import S from 's-js'
+import { ISpark } from 'typestub-primus'
 import {
   c,
   genPrimusScript,
   h,
   Request,
   Response,
-  Session,
+  SLiveSession,
   startServer,
 } from '../src'
 
@@ -28,7 +29,8 @@ function initialView(req: Request, res: Response) {
 
 // this callback will be called from a S.root context
 // the context will be cleanup automatically when the client connection is closed
-function createSession(session: Session): Session | void {
+function createSession(spark: ISpark): SLiveSession | void {
+  const session = SLiveSession.spawnFromRoot(spark)
   const clock = S.data(Date.now())
   const timer = setInterval(() => clock(Date.now()), 1000)
   S.cleanup(() => clearInterval(timer))
