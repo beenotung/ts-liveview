@@ -1,7 +1,6 @@
 import debug from 'debug'
 import { ISpark } from 'typestub-primus'
 import { Component, createDummyComponent, morphComponent } from './h'
-import { ClientParams, parseQuery } from './helpers/client-adaptor'
 import { MessageType } from './types/enum'
 import { ClientMessage, ServerMessage } from './types/message'
 import { Patch, Statics } from './types/view'
@@ -15,13 +14,7 @@ export class LiveSession {
   // selector -> last version component
   components = new Map<string, Component>()
 
-  // merge pathname and hash into search, then parsed into json
-  params: ClientParams
-
-  constructor(public spark: ISpark) {
-    this.params = parseQuery(spark.query)
-    log('params:', this.params)
-  }
+  constructor(public spark: ISpark) {}
 
   sendMessage(message: ServerMessage) {
     this.spark.write(message)
