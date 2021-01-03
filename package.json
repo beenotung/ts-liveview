@@ -16,6 +16,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "postinstall": "rimraf node_modules/@beenotung/tslib/index.d.ts",
     "watch:tsc": "tsc -w",
     "watch:js": "run-s build:demo watch:demo",
     "watch:demo": "nodemon --watch dist -x run-p demo:*",
