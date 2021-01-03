@@ -1,7 +1,6 @@
 import browserify from 'browserify'
 import fs from 'fs'
 import path from 'path'
-import qs from 'querystring'
 
 function getClientFile() {
   // ts-node version
@@ -42,39 +41,3 @@ export let clientScriptCode = genClientCode()
 export let clientScriptTag = clientScriptCode.then(
   code => `<script>${code}</script>`,
 )
-
-export type ClientParams = {
-  pathname: string
-  hash: string
-  url: string
-  search: string
-  query: object | any
-}
-
-export function parseQuery(query: object | any): ClientParams {
-  let pathname = query.pathname || '/'
-  if (!pathname.startsWith('/')) {
-    pathname = '/' + pathname
-  }
-  let hash = query.hash || ''
-  if (hash && !hash.startsWith('#')) {
-    hash = '#' + hash
-  }
-  query = Object.assign({}, query)
-  delete query.pathname
-  delete query.hash
-  delete query._primuscb
-  const search = qs.encode(query)
-  let url = pathname
-  if (search) {
-    url += '?' + search
-  }
-  url += hash
-  return {
-    url,
-    pathname,
-    hash,
-    search,
-    query,
-  }
-}
