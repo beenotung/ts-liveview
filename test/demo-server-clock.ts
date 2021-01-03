@@ -1,4 +1,5 @@
-import { c, h, Session, startServer } from '../src'
+import { ISpark } from 'typestub-primus'
+import { c, h, LiveSession, startServer } from '../src'
 
 function render(state: number) {
   return c(
@@ -7,7 +8,8 @@ function render(state: number) {
   )
 }
 
-function createSession(session: Session): Session | void {
+function createSession(spark: ISpark): LiveSession | void {
+  const session = new LiveSession(spark)
   let state = Date.now()
 
   function update() {

@@ -1,15 +1,13 @@
 import debug from 'debug'
 import express from 'express'
 import http from 'http'
-import S from 's-js'
-import { IPrimusOptions, Primus } from 'typestub-primus'
+import { IPrimusOptions, ISpark, Primus } from 'typestub-primus'
 import { getClientScriptName } from './config'
 import { Component } from './h'
 import { clientScriptCode } from './helpers/client-adaptor'
 import { genMobileHTMLWrapper, HTMLOptions } from './helpers/mobile-html'
 import { sendInitialRender } from './html'
-import { SSession } from './s-session'
-import { Session } from './session'
+import { LiveSession } from './live-session'
 import { App, Request, Response, Server } from './types/server'
 import { PrimitiveView } from './types/view'
 
@@ -17,7 +15,7 @@ const log = debug('liveview:server')
 
 export type ServerOptions = {
   /* will be called inside a s-root per client session */
-  createSession?: (session: Session) => Session | void
+  createSession?: (spark: ISpark) => LiveSession | void
   initialRender: (req: Request, res: Response) => PrimitiveView | Component
   client_script?: string
   inline_script?: boolean
@@ -71,14 +69,7 @@ export function attachServer(options: AttachServerOptions) {
           port: connection.localPort,
         },
       })
-      S.root(dispose => {
-        const session = new SSession(spark)
-        session.attachDispose(dispose)
-        const result = createSession(session)
-        if (!result) {
-          dispose() // the application has rejected this session
-        }
-      })
+      createSession(spark)
     })
   }
 }
