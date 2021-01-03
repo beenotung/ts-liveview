@@ -6,9 +6,9 @@ import { MessageType } from './types/enum'
 import { ClientMessage, ServerMessage } from './types/message'
 import { Patch, Statics } from './types/view'
 
-const log = debug('liveview:session')
+const log = debug('liveview:live-session')
 
-export class Session {
+export class LiveSession {
   // template_id -> statics
   templates = new Map<string, Statics>()
 
