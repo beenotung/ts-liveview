@@ -1,6 +1,6 @@
 import S from 's-js'
+import { morph } from '../src/client/view'
 import { c, h } from '../src/h'
-import { morph } from '../src/h-client'
 import { toHTML } from '../src/helpers/render'
 
 const app = document.createElement('div')

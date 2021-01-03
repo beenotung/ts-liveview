@@ -1,9 +1,9 @@
 import fs from 'fs'
-import { minify } from '../src/minify/html'
+import { minifyHTML } from '../src/minify/html'
 
 function test(file: string) {
   let code = fs.readFileSync(file).toString()
-  code = minify(code)
+  code = minifyHTML(code)
   const ss = file.split('.')
   const ext = ss.pop()!
   ss.push('min', ext)
