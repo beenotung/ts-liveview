@@ -3,7 +3,9 @@ import { Router } from 'url-router.ts'
 import { Component } from '../h'
 import { LiveSession } from '../live-session'
 
-export type ViewContext = ExpressContext | LiveviewContext
+export type ViewContext<Session extends LiveSession> =
+  | ExpressContext
+  | LiveviewContext<Session>
 export type ExpressContext = {
   type: 'express'
   /* from Router.Context */
@@ -16,7 +18,7 @@ export type ExpressContext = {
   res: Response
   next: NextFunction
 }
-export type LiveviewContext = {
+export type LiveviewContext<Session extends LiveSession> = {
   type: 'liveview'
   /* from Router.Context */
   url: string
@@ -24,14 +26,14 @@ export type LiveviewContext = {
   search?: string
   hash?: string
   /* from LiveView.LiveSession */
-  session: LiveSession
+  session: Session
 }
 
-export type RouteHandler = (
-  context: ViewContext,
+export type RouteHandler<Session extends LiveSession> = (
+  context: ViewContext<Session>,
   cb: (view: Component) => void,
 ) => void
-export type ViewRouteContext =
+export type ViewRouteContext<Session extends LiveSession> =
   | {
       type: 'express'
       req: Request
@@ -41,18 +43,18 @@ export type ViewRouteContext =
     }
   | {
       type: 'liveview'
-      session: LiveSession
+      session: Session
       next: NextFunction
     }
 
-export class ViewRouter {
-  private router = new Router<RouteHandler>()
+export class ViewRouter<Session extends LiveSession> {
+  private router = new Router<RouteHandler<Session>>()
 
-  add(url: string, handler: RouteHandler) {
+  add(url: string, handler: RouteHandler<Session>) {
     this.router.add(url, handler)
   }
 
-  dispatch(url: string, context: ViewRouteContext) {
+  dispatch(url: string, context: ViewRouteContext<Session>) {
     const route = this.router.route(url)
     if (!route) {
       context.next()
@@ -94,7 +96,7 @@ export class ViewRouter {
         break
       default: {
         const c: never = context
-        const type = (c as ViewRouteContext).type
+        const type = (c as ViewRouteContext<Session>).type
         throw new Error('unsupported context type: ' + type)
       }
     }

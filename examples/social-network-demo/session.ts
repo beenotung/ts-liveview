@@ -1,39 +1,49 @@
 import debug from 'debug'
-import { Session } from 'ts-liveview'
+import S from 's-js'
 import type { ViewRouter } from 'ts-liveview'
-import { Primus } from 'typestub-primus'
+import { SLiveSession } from 'ts-liveview'
+import { ISpark, Primus } from 'typestub-primus'
 
 const log = debug('session.ts')
+log.enabled = true
 
-// log.enabled = true
+export class AppSession extends SLiveSession {
+  url = S.data('init')
 
-export function attachPrimus(primus: Primus, router: ViewRouter) {
-  primus.on('connection', spark => {
+  constructor(spark: ISpark, router: ViewRouter<AppSession>) {
+    super(spark)
     log('connection', spark.id)
-    const session = new Session(spark)
-    spark.on('end', () => {
+    this.onClose(() => {
       log('disconnect', spark.id)
     })
-    spark.on('data', data => {
-      if (!Array.isArray(data)) {
-        log('unknown data from ws:', data)
-        return
-      }
-      log('data', data)
-      switch (data[0]) {
+    this.onMessage(args => {
+      switch (args[0]) {
         case 'url':
-          return route(data[1])
+          log('url:', args[1])
+          this.url(args[1])
+          break
+        default:
+          log('unknown message:', args)
       }
     })
-
-    function route(url: string) {
+    S.on(this.url, () => {
+      const url = this.url()
+      if (url === 'init') {
+        return
+      }
       router.dispatch(url, {
         type: 'liveview',
-        session,
-        next: (...args: any[]) => {
-          log('unknown route:', args)
+        session: this,
+        next: () => {
+          log('404:', url)
         },
       })
-    }
+    })
+  }
+}
+
+export function attachSession(primus: Primus, router: ViewRouter<AppSession>) {
+  primus.on('connection', spark => {
+    SLiveSession.spawnFromRoot(() => new AppSession(spark, router))
   })
 }
