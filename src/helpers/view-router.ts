@@ -1,7 +1,7 @@
 import { Handler, NextFunction, Request, Response } from 'express'
-import { Component } from '../../h'
-import { Session } from '../../session'
-import { Router } from '../router/core'
+import { Router } from 'url-router.ts'
+import { Component } from '../h'
+import { LiveSession } from '../live-session'
 
 export type ViewContext = ExpressContext | LiveviewContext
 export type ExpressContext = {
@@ -9,7 +9,8 @@ export type ExpressContext = {
   /* from Router.Context */
   url: string
   params: any
-  query: any
+  search?: string
+  hash: undefined
   /* from express */
   req: Request
   res: Response
@@ -20,9 +21,10 @@ export type LiveviewContext = {
   /* from Router.Context */
   url: string
   params: any
-  query: any
-  /* from LiveView.Session */
-  session: Session
+  search?: string
+  hash?: string
+  /* from LiveView.LiveSession */
+  session: LiveSession
 }
 
 export type RouteHandler = (
@@ -39,7 +41,7 @@ export type ViewRouteContext =
     }
   | {
       type: 'liveview'
-      session: Session
+      session: LiveSession
       next: NextFunction
     }
 
@@ -67,7 +69,8 @@ export class ViewRouter {
             next: context.next,
             url,
             params: route.params,
-            query: route.query,
+            search: route.search,
+            hash: undefined,
           },
           view => {
             context.res.send(context.toHTML(view))
@@ -80,8 +83,9 @@ export class ViewRouter {
             type: 'liveview',
             session: context.session,
             url,
-            query: route.query,
             params: route.params,
+            search: route.search,
+            hash: route.hash,
           },
           view => {
             context.session.sendComponent(view)
@@ -112,7 +116,8 @@ export class ViewRouter {
           next,
           url,
           params: route.params,
-          query: route.query,
+          search: route.search,
+          hash: undefined,
         },
         view => {
           res.send(toHTML(view))
