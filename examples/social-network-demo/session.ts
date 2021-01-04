@@ -1,14 +1,19 @@
 import debug from 'debug'
+import { LocalStorage } from 'node-localstorage'
+import { join } from 'path'
 import S from 's-js'
 import type { ViewRouter } from 'ts-liveview'
 import { SLiveSession } from 'ts-liveview'
 import { ISpark, Primus } from 'typestub-primus'
+import { createPersistentSession } from './persistent-session'
+import { newUser } from './store'
 
 const log = debug('session.ts')
 log.enabled = true
 
 export class AppSession extends SLiveSession {
   url = S.data('init')
+  user = newUser()
 
   constructor(spark: ISpark, router: ViewRouter<AppSession>) {
     super(spark)
@@ -47,3 +52,9 @@ export function attachSession(primus: Primus, router: ViewRouter<AppSession>) {
     SLiveSession.spawnFromRoot(() => new AppSession(spark, router))
   })
 }
+
+const storage = new LocalStorage(join('data', 'session'))
+export let appSessionMiddleware = createPersistentSession({
+  sessionKey: 'live-session',
+  storage,
+})
