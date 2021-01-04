@@ -24,7 +24,7 @@ if (!process.env.TS_NODE_DEV) {
 
 app.use('/client', express.static(path.join('build', 'client')))
 app.use('/web_modules', express.static(path.join('build', 'web_modules')))
-app.use('/img', express.static(path.join('public', 'img')))
+app.use('/icon', express.static(path.join('public', 'icon')))
 
 app.use(
   router.createExpressMiddleware(component => {
