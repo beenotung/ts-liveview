@@ -1,11 +1,11 @@
-// import debug from 'debug'
+import debug from 'debug'
 import { ISpark } from 'typestub-primus'
 import { Component, createDummyComponent, morphComponent } from './h'
 import { MessageType } from './types/enum'
 import { ClientMessage, ServerMessage } from './types/message'
 import { Patch, Statics } from './types/view'
 
-// const log = debug('liveview:live-session')
+const log = debug('liveview:live-session')
 
 export class LiveSession {
   // template_id -> statics
@@ -21,7 +21,7 @@ export class LiveSession {
   }
 
   sendPatch(patch: Patch) {
-    // log('send patch:', patch)
+    log('send patch:', patch)
     this.sendMessage({
       type: MessageType.patch,
       s: patch.s,
@@ -31,7 +31,7 @@ export class LiveSession {
   }
 
   sendComponent(target: Component) {
-    // log('send component:', target)
+    log('send component:', target)
     let source = this.components.get(target.selector)
     let patch: Patch
     if (source) {
