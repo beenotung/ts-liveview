@@ -1,6 +1,6 @@
 import compression from 'compression'
-import cookieParser from 'cookie-parser'
 import express, { Handler } from 'express'
+import session from 'express-session'
 import minify from 'express-minify'
 import http from 'http'
 import path from 'path'
@@ -8,7 +8,7 @@ import { getComponentTitle, minify_dir, toHTML } from 'ts-liveview'
 import { Primus } from 'typestub-primus'
 import { defaultTitle, htmlTemplate, scripts } from './config'
 import { router } from './router'
-import { appSessionMiddleware, attachSession } from './session'
+import { attachSession, sessionKey } from './session'
 
 const port = +process.env.PORT! || 8100
 const app = express()
@@ -26,8 +26,25 @@ if (!process.env.TS_NODE_DEV) {
 app.use('/client', express.static(path.join('build', 'client')))
 app.use('/web_modules', express.static(path.join('build', 'web_modules')))
 app.use('/icon', express.static(path.join('public', 'icon')))
-app.use(cookieParser())
-app.use(appSessionMiddleware)
+app.use(
+  session({
+    name: sessionKey,
+    secret: 'social-network-demo',
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+      sameSite: true,
+      httpOnly: true,
+    },
+  }),
+)
+app.use((req, res, next) => {
+  console.log(req.method, req.url, {
+    id: req.session.id,
+    sid: req.sessionID,
+  })
+  next()
+})
 
 app.use(
   router.createExpressMiddleware(component => {
