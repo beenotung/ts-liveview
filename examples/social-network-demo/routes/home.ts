@@ -3,11 +3,13 @@ import { defaultTitle } from '../config'
 import { router } from '../router'
 import { comments } from '../store'
 import { feedList } from '../views/feed-list'
+import { tagList } from '../views/tag-list'
 import { userList } from '../views/user-list'
 
 enum Tab {
   feeds = 'feeds',
   users = 'users',
+  tags = 'tags',
 }
 
 router.add('/', (context, cb) => {
@@ -54,6 +56,8 @@ ${(() => {
       return feedList()
     case Tab.users:
       return userList()
+    case Tab.tags:
+      return tagList()
   }
 })()}
 </main>`,
