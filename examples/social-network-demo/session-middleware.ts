@@ -19,7 +19,9 @@ export function createNewIdFn(ids: Record<string, true>): NewIdFn {
   return function newIdFn(cb: (id: string) => void): void {
     for (;;) {
       const id = randomBytes(64).toString('base64')
-      if (id in ids) { continue }
+      if (id in ids) {
+        continue
+      }
       ids[id] = true
       cb(id)
       return
