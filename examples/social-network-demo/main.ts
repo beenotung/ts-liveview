@@ -1,10 +1,14 @@
 import compression from 'compression'
 import express, { Handler } from 'express'
 import minify from 'express-minify'
-import session from 'express-session'
 import http from 'http'
 import path from 'path'
-import { getComponentTitle, minify_dir, toHTML } from 'ts-liveview'
+import {
+  createSession,
+  getComponentTitle,
+  minify_dir,
+  toHTML,
+} from 'ts-liveview'
 import { Primus } from 'typestub-primus'
 import { defaultTitle, htmlTemplate, scripts } from './config'
 import { router } from './router'
@@ -27,11 +31,8 @@ app.use('/client', express.static(path.join('build', 'client')))
 app.use('/web_modules', express.static(path.join('build', 'web_modules')))
 app.use('/icon', express.static(path.join('public', 'icon')))
 app.use(
-  session({
+  createSession({
     name: sessionKey,
-    secret: 'social-network-demo',
-    resave: true,
-    saveUninitialized: true,
     cookie: {
       sameSite: true,
       httpOnly: true,
