@@ -1,7 +1,7 @@
 import compression from 'compression'
 import express, { Handler } from 'express'
-import session from 'express-session'
 import minify from 'express-minify'
+import session from 'express-session'
 import http from 'http'
 import path from 'path'
 import { getComponentTitle, minify_dir, toHTML } from 'ts-liveview'
