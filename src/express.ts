@@ -1,3 +1,5 @@
+/**@deprecated*/
+
 import { Request, Response } from 'express'
 import express from 'express'
 import { getClientScript, getClientScriptName } from './config'
