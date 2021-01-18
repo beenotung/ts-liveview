@@ -39,10 +39,20 @@ export function createSession(options?: {
   const ids: Record<string, true> = {}
   const newIdFn: NewIdFn = options?.newIdFn || createNewIdFn(ids)
   return function session(req: Request, res: Response, next: NextFunction) {
-    if (req.cookies.name in ids) {
-      req.sessionID = req.cookies.name
+    if (!req.cookies) {
+      // cookie is not supported
+      next()
+    }
+    if (req.sessionID) {
+      // already assigned session by other middleware
+      next()
+    }
+    if (req.cookies[name] in ids) {
+      req.sessionID = req.cookies[name]
+      // old session
       return next()
     }
+    // new session
     newIdFn(id => {
       res.cookie(name, id, cookieOptions)
       req.sessionID = id
