@@ -1,5 +1,7 @@
 import { randomBytes } from 'crypto'
-import { CookieOptions, NextFunction, Request, Response } from 'express'
+import type { CookieOptions } from 'express'
+import type { NextFunction, Request, Response } from 'express-serve-static-core'
+import type { IncomingMessage, ServerResponse } from 'http'
 
 export let defaultName = 'sid'
 export type NewIdFn = (cb: (id: string) => void) => void
@@ -29,11 +31,17 @@ export function createNewIdFn(ids: Record<string, true>): NewIdFn {
   }
 }
 
+type RequestHandler = (
+  request: IncomingMessage,
+  response: ServerResponse,
+  next: () => void,
+) => any
+
 export function createSession(options?: {
   name?: string
   newIdFn?: NewIdFn
   cookie?: CookieOptions
-}) {
+}): RequestHandler {
   const name = options?.name || defaultName
   const cookieOptions = options?.cookie || defaultCookieOptions
   const ids: Record<string, true> = {}
@@ -58,5 +66,5 @@ export function createSession(options?: {
       req.sessionID = id
       next()
     })
-  }
+  } as RequestHandler
 }
