@@ -3,19 +3,22 @@ import S from 's-js'
 import type { ViewRouter } from 'ts-liveview'
 import { SLiveSession } from 'ts-liveview'
 import { ISpark, Primus } from 'typestub-primus'
-import { newUser } from './store'
+import { newUser, User } from './store'
 
 const log = debug('session.ts')
 log.enabled = true
 
 export class AppSession extends SLiveSession {
   url = S.data('init')
-  user = newUser()
+  user: User
+  cookies: URLSearchParams
 
   constructor(spark: ISpark, router: ViewRouter<AppSession>) {
     super(spark)
     log('connection', spark.id)
-    log('cookie', spark.request.headers.cookie)
+    this.cookies = new URLSearchParams(spark.request.headers.cookie)
+    // log('cookies', this.cookies)
+    this.user = userFromSession(this.cookies.get(SessionKey)!)
     this.onClose(() => {
       log('disconnect', spark.id)
     })
@@ -51,4 +54,15 @@ export function attachSession(primus: Primus, router: ViewRouter<AppSession>) {
   })
 }
 
-export let sessionKey = 'sid'
+export let SessionKey = 'sid'
+
+const sessionUsers: Record<string, User> = {}
+
+export function userFromSession(sid: string): User {
+  if (sid in sessionUsers) {
+    return sessionUsers[sid]
+  }
+  const user = newUser()
+  sessionUsers[sid] = user
+  return user
+}
