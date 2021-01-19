@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+set -o pipefail
+
+content="$(cat src/index.ts)"
+echo "$content" | sort > src/index.ts
