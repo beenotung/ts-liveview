@@ -1,7 +1,7 @@
 import { c, h } from 'ts-liveview'
-import { users } from '../store'
+import { User, users } from '../store'
 
-export function userList() {
+export function userList(self: User | undefined) {
   return c(
     `ul.user-list`,
     h`<ul class="user-list">
@@ -15,7 +15,7 @@ ${users().map(user => {
   <circle cx="50" cy="45" r="24" stroke="black" stroke-width="3" fill="orange"></circle>
   <circle cx="50" cy="15" r="12" stroke="black" stroke-width="3" fill="orange"></circle>
 </svg>
-[${id}] <a href="/user/${id}">${name}</a></li>
+[${id}] <a href="/user/${id}">${name}</a>${user === self ? ' (self)' : ''}</li>
 </li>`,
   )
 })}

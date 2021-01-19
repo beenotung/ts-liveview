@@ -1,4 +1,6 @@
 import compression from 'compression'
+import cookieParser from 'cookie-parser'
+import debug from 'debug'
 import express, { Handler } from 'express'
 import minify from 'express-minify'
 import http from 'http'
@@ -12,7 +14,10 @@ import {
 import { Primus } from 'typestub-primus'
 import { defaultTitle, htmlTemplate, scripts } from './config'
 import { router } from './router'
-import { attachSession, sessionKey } from './session'
+import { attachSession, SessionKey } from './session'
+
+const log = debug('main.ts')
+log.enabled = true
 
 const port = +process.env.PORT! || 8100
 const app = express()
@@ -30,9 +35,10 @@ if (!process.env.TS_NODE_DEV) {
 app.use('/client', express.static(path.join('build', 'client')))
 app.use('/web_modules', express.static(path.join('build', 'web_modules')))
 app.use('/icon', express.static(path.join('public', 'icon')))
+app.use(cookieParser())
 app.use(
   createSession({
-    name: sessionKey,
+    name: SessionKey,
     cookie: {
       sameSite: true,
       httpOnly: true,
@@ -40,10 +46,13 @@ app.use(
   }),
 )
 app.use((req, res, next) => {
-  console.log(req.method, req.url, {
-    id: req.session.id,
-    sid: req.sessionID,
-  })
+  if (process.env.MODE === 'detail') {
+    log(req.method, req.url, {
+      sessionID: req.sessionID,
+    })
+  } else {
+    log(req.method, req.url)
+  }
   next()
 })
 

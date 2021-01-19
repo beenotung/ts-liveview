@@ -13,6 +13,7 @@ enum Tab {
 }
 
 router.add('/', (context, cb) => {
+  const self = context.type === 'liveview' ? context.session.user : undefined
   const defaultTab: Tab = comments().length > 0 ? Tab.feeds : Tab.users
   let activeTab: Tab =
     'hash' in context ? (context.hash?.replace('#', '') as Tab) : defaultTab
@@ -55,7 +56,7 @@ ${(() => {
     case Tab.feeds:
       return feedList()
     case Tab.users:
-      return userList()
+      return userList(self)
     case Tab.tags:
       return tagList()
   }
