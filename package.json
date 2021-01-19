@@ -30,6 +30,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"examples/**/*.ts\" ",
     "postformat": "tslint -p . --fix",
     "gen-index": "gen-index --single-quote --no-semi --excludeDir test",
+    "postgen-index": "sh scripts/sort-index",
     "prebuild": "run-s clean gen-index",
     "build": "run-p format build:lib",
     "build:lib": "tsc -p tsconfig.build.json",
