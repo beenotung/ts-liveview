@@ -33,6 +33,8 @@ export class AppSession extends SLiveSession {
           this.msgText(args[1])
           break
         default:
+        case 'sendComment':
+          this.sendComment(args[1])
           log('unknown message:', args)
       }
     })
@@ -49,6 +51,12 @@ export class AppSession extends SLiveSession {
         },
       })
     })
+  }
+
+  sendComment(to: string) {
+    const msg = S.sample(this.msgText)
+    this.user.sendComment(to, msg, [])
+    this.msgText('')
   }
 }
 
