@@ -12,6 +12,7 @@ export class AppSession extends SLiveSession {
   url = S.data('init')
   user: User
   cookies: URLSearchParams
+  msgText = S.data('')
 
   constructor(spark: ISpark, router: ViewRouter<AppSession>) {
     super(spark)
@@ -28,11 +29,14 @@ export class AppSession extends SLiveSession {
           log('url:', args[1])
           this.url(args[1])
           break
+        case 'msgText':
+          this.msgText(args[1])
+          break
         default:
           log('unknown message:', args)
       }
     })
-    S.on(this.url, () => {
+    S(() => {
       const url = this.url()
       if (url === 'init') {
         return
