@@ -58,6 +58,7 @@
     "quick-hash": "^1.0.4",
     "route-node": "^4.1.1",
     "s-js": "^0.4.9",
+    "sanitize-html": "^2.3.0",
     "tslib": "^1.11.1",
     "typestub-primus": "^1.3.2",
     "url-router.ts": "^0.2.1"
@@ -80,6 +81,7 @@
     "@types/node": "*",
     "@types/quick-hash": "^1.0.0",
     "@types/react": "^16.9.35",
+    "@types/sanitize-html": "^1.27.0",
     "@types/serve-static": "^1.13.3",
     "@types/sinon": "^9.0.9",
     "@types/ws": "^7.2.3",
