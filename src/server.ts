@@ -1,86 +1,34 @@
-import debug from 'debug'
-import express from 'express'
+
 import http from 'http'
 import { IPrimusOptions, ISpark, Primus } from 'typestub-primus'
-import { getClientScriptName } from './config'
-import { Component } from './h'
-import { clientScriptCode } from './helpers/client-adaptor'
-import { genMobileHTMLWrapper, HTMLOptions } from './helpers/mobile-html'
-import { sendInitialRender } from './html'
 import { LiveSession } from './live-session'
-import { App, Request, Response, Server } from './types/server'
-import { PrimitiveView } from './types/view'
-
-const log = debug('liveview:server')
+import { App, Server } from './types/server'
 
 export type ServerOptions = {
-  /* will be called inside a s-root per client session */
-  createSession?: (spark: ISpark) => LiveSession | void
-  initialRender: (req: Request, res: Response) => PrimitiveView | Component
+  // return void if refuse to establish live session
+  createSession: (spark: ISpark) => LiveSession | void
   client_script?: string
-  inline_script?: boolean
-  client_script_name?: string
-} & HTMLOptions
-
-export type AttachServerOptions = {
-  app: App
-  server?: Server
-  primus?: Primus
-} & ServerOptions
+}
 
 export type StartServerOptions = {
   port: number
   prehook?: (app: App, sever: Server) => void
   primusOptions?: IPrimusOptions
+  onListen?: (port: number) => void
+  handler: express.Handler
 } & ServerOptions
 
-export function attachServer(options: AttachServerOptions) {
-  const app = options.app
-  // const server = options.server
-  const primus = options.primus
-  const createSession = options.createSession
-
-  const clientScriptUrl = getClientScriptName(options)
-  app.use(clientScriptUrl, (req, res) => {
-    res.contentType('application/javascript')
-    if (options.client_script) {
-      res.send(options.client_script)
-      return
-    }
-    clientScriptCode.then(code => res.send(code))
-  })
-
-  const mobileHTML = genMobileHTMLWrapper(options)
-  app.use('/', (req, res) => sendInitialRender(req, res, mobileHTML, options))
-
-  if (createSession && primus) {
-    primus.on('connection', spark => {
-      const connection = (spark.request as http.IncomingMessage).connection
-      log('spark connection:', {
-        id: spark.id,
-        address: spark.address,
-        query: spark.query,
-        remote: {
-          address: connection.remoteAddress,
-          port: connection.remotePort,
-        },
-        local: {
-          address: connection.localAddress,
-          port: connection.localPort,
-        },
-      })
-      createSession(spark)
-    })
-  }
+function defaultOnListen(port: number) {
+  console.log('listening on http://0.0.0.0:' + port)
 }
 
-export function startServer(
-  options: StartServerOptions,
-): {
+export type Servers = {
   app: express.Express
   server: Server
   primus: Primus | undefined
-} {
+}
+
+export function startServer(options: StartServerOptions): Servers {
   const port = options.port
 
   const app = express()
@@ -90,15 +38,11 @@ export function startServer(
     options.prehook(app, server)
   }
 
-  const primus = options.createSession
-    ? new Primus(server, options.primusOptions)
-    : undefined
+  const primus = new Primus(server, options.primusOptions)
 
-  attachServer({ app, server, primus, ...options })
+  app.use(options.handler)
 
-  server.listen(port, () => {
-    console.log('server started on port ' + port)
-  })
+  server.listen(port, () => (options.onListen || defaultOnListen)(port))
   return {
     app,
     server,

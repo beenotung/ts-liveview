@@ -1,7 +1,7 @@
 import debug from 'debug'
 import express from 'express'
 import http from 'http'
-import path from 'path'
+import { join } from 'path'
 import S from 's-js'
 import { Primus } from 'typestub-primus'
 import { makeClientCode } from './client-code'
@@ -18,11 +18,9 @@ const app = express()
 const server = http.createServer(app)
 const primus = new Primus(server)
 
-app.use('/', express.static(path.join('examples', 'chatroom-demo', 'public')))
-app.get('/robots.txt', (req, res) => {
-  res.status(404)
-  res.send('File not found')
-})
+primus.save(join(__dirname, 'client', 'ws.js'))
+
+app.use('/', express.static(join(__dirname, 'public')))
 
 function createSession(session: Session): Session | void {
   log('start a session')
