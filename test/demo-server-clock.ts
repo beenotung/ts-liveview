@@ -1,10 +1,14 @@
 import { ISpark } from 'typestub-primus'
-import { c, h, LiveSession, startServer } from '../src'
+import { c, h } from '../src/h'
+import { wrapMobileHTML } from '../src/helpers/mobile-html'
+import { toHTML } from '../src/helpers/render'
+import { LiveSession } from '../src/live-session'
+import { startServer } from '../src/server'
 
 function render(state: number) {
   return c(
     '#clock',
-    h`<div id="clock">${new Date(state).toLocaleString()}</div>`,
+    h`<div id='clock'>${new Date(state).toLocaleString()}</div>`,
   )
 }
 
@@ -29,12 +33,13 @@ function createSession(spark: ISpark): LiveSession | void {
 
 startServer({
   port: 3000,
-  heads: [
-    // default path for websocket lib
-    `<script src="/primus/primus.js"></script>`,
-  ],
   createSession,
-  initialRender: (req, res) => {
-    return render(Date.now())
+  handler: (req, res) => {
+    const component = render(Date.now())
+    const body = toHTML(component)
+    const html = wrapMobileHTML(body, {
+      heads: [`<script src='/primus/primus.js'></script>`],
+    })
+    res.send(html)
   },
 })

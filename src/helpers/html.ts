@@ -60,15 +60,15 @@ export function radios(options: RadioOptions) {
     .map(o => {
       const id = options.id + '_' + o.value
       return `
-<div style="display: inline-block">
-  <input type="radio" ${attrs({
+<div style='display: inline-block'>
+  <input type='radio' ${attrs({
     id,
     value: o.value,
     name: options.id,
     onchange: options.onchange,
     checked: o.value === options.value ? 'checked' : undefined,
   })}>
-  <label for="${id}">${o.text}</label>
+  <label for='${id}'>${o.text}</label>
 </div>
   `
     })
@@ -80,4 +80,12 @@ export function escape<T>(o: T): T {
     return escapeHTML(o) as any
   }
   return o
+}
+
+export function isScriptTag(script: string): boolean {
+  return !!script.trimLeft().match(/^<script/i)
+}
+
+export function toScriptTag(script: string): string {
+  return isScriptTag(script) ? script : `<script>${script}</script>`
 }
