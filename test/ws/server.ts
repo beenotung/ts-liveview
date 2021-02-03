@@ -1,27 +1,44 @@
-import compression from 'compression'
+import debug from 'debug'
 import express from 'express'
-import minify from 'express-minify'
 import * as http from 'http'
-import { Primus } from 'typestub-primus'
+import path from 'path'
+import { createWebSocketServer } from '../../src'
+
+const log = debug('server.ts')
+
+const SECOND = 1000
+const MINUTE = SECOND * 60
 
 const app = express()
 const server = http.createServer(app)
-const primus = new Primus(server)
-
-primus.save('public/ws.js')
-primus.on('connection', spark => {
-  console.log('connection', spark.id)
-  spark.on('data', data => {
-    console.log('data', data)
-  })
-  spark.write({ from: 'server', msg: 'hi' })
+const wss = createWebSocketServer({
+  server: { server },
+  heartbeat: {
+    interval: SECOND * 5,
+    timeout: SECOND * 5 * 2,
+  },
+  onConnection: ws => {
+    console.log('onConnection', {
+      type: ws.binaryType,
+      ext: ws.extensions,
+      url: ws.url,
+    })
+    ws.addEventListener('message', event => {
+      console.log('message', event.data)
+    })
+  },
 })
 
-app.use(compression() as express.Handler)
-app.use(minify() as express.Handler)
-app.use(express.static('public'))
-
-const port = 8100
-server.listen(port, '0.0.0.0', () => {
-  console.log(`listening on http://localhost:${port}`)
+server.listen(8100, () => {
+  console.log('listening on http://localhost:8100')
 })
+
+console.log('wss', wss.address())
+
+app.use((req, res, next) => {
+  log(req.method, req.url)
+  next()
+})
+
+app.use('/build', express.static(path.join('client', 'build')))
+app.use('/', express.static(path.join('client', 'public')))

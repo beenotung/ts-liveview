@@ -1,6 +1,4 @@
-import type http from 'http'
-import type https from 'http'
-import { Server } from 'ws'
+import { Server, ServerOptions } from 'ws'
 import type WebSocket from 'ws'
 
 interface ManagedWebSocket extends WebSocket {
@@ -8,13 +6,14 @@ interface ManagedWebSocket extends WebSocket {
 }
 
 export function createWebSocketServer(options: {
-  server: http.Server | https.Server
+  server: ServerOptions
   heartbeat: {
     interval: number
     timeout: number
   }
+  onConnection: (ws: ManagedWebSocket) => void
 }) {
-  const wss = new Server({ server: options.server })
+  const wss = new Server(options.server)
 
   const timer = setInterval(() => {
     wss.clients.forEach((ws: ManagedWebSocket) => {
@@ -35,5 +34,11 @@ export function createWebSocketServer(options: {
     ws.on('pong', () => {
       ws.isAlive = true
     })
+    options.onConnection(ws)
+    ws.onopen = event => {
+      console.log('open', event)
+    }
   })
+
+  return wss
 }
