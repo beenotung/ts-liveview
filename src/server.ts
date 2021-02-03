@@ -1,4 +1,4 @@
-
+import express from 'express'
 import http from 'http'
 import { IPrimusOptions, ISpark, Primus } from 'typestub-primus'
 import { LiveSession } from './live-session'
