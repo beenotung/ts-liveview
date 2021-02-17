@@ -1,4 +1,4 @@
-import { MINUTE, MONTH, SECOND } from '@beenotung/tslib/time'
+import { MONTH, SECOND } from '@beenotung/tslib/time'
 import debug from 'debug'
 import dotenv from 'dotenv'
 import express from 'express'
@@ -7,10 +7,14 @@ import { makeCookieSession } from 'ts-liveview/dist/helpers/cookie-session'
 import { createWebSocketServer } from 'ts-liveview/dist/websocket/server'
 dotenv.config()
 
-const log = debug('test/ws/server.ts')
-log.enabled = true
+const PING_INTERVAL = SECOND * 30
+const PING_TIMEOUT = PING_INTERVAL * 1.5
+const SESSION_MAX_AGE = MONTH * 3
+const SESSION_MIN_AGE = MONTH * 1
+const DEBUG = true
 
-const INTERVAL = 'dev' ? SECOND * 5 : 30 * MINUTE
+const log = debug('test/ws/server.ts')
+log.enabled = DEBUG
 
 const app = express()
 
@@ -33,8 +37,8 @@ if (!process.env.SESSION_SECRET) {
 const { session, decodeSession, autoRenewSession } = makeCookieSession<
   AppSessionData
 >({
-  maxAge: MONTH * 3,
-  minAge: MONTH * 1,
+  maxAge: SESSION_MAX_AGE,
+  minAge: SESSION_MIN_AGE,
   secret: process.env.SESSION_SECRET,
   lastTimeKey: 'lastTime',
 })
@@ -62,8 +66,8 @@ server.listen(PORT, () => {
 const wss = createWebSocketServer({
   server: { server },
   heartbeat: {
-    interval: INTERVAL,
-    timeout: INTERVAL * 2,
+    interval: PING_INTERVAL,
+    timeout: PING_TIMEOUT,
   },
   onConnection: (ws, req) => {
     decodeSession(req, session => {
