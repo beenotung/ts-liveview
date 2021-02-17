@@ -5,7 +5,8 @@ import { createWebsocketClient } from './client'
 const socket = createWebsocketClient({
   initWS: ws => {
     Object.assign(window, { ws })
-    ws.on('open', () => console.log('open'))
+    ws.addEventListener('open', () => console.log('open'))
+    ws.addEventListener('close', () => console.log('close'))
   },
 })
 Object.assign(window, { socket })

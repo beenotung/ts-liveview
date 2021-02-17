@@ -1,5 +1,3 @@
-import WebSocket from 'ws'
-
 // reference: https://github.com/Luka967/websocket-close-codes
 export const CLOSE_NORMAL = 1000
 export const CLOSE_GOING_AWAY = 1001
@@ -58,7 +56,7 @@ export function createWebsocketClient(options: {
   shouldReconnect?: typeof defaultShouldReconnect
   backoffStrategy?: ReturnType<typeof defaultBackoffStrategy>
 }) {
-  let ws = open()
+  let ws: WebSocket
   let shouldReconnect = true
   let isOpened = false
   const backoffStrategy = options.backoffStrategy || defaultBackoffStrategy()
@@ -69,14 +67,16 @@ export function createWebsocketClient(options: {
   ) {
     shouldReconnect = false
     ws.close(code, reason)
-    if (wsCallback) { wsCallback(ws) }
+    if (wsCallback) {
+      wsCallback(ws)
+    }
   }
   function refresh() {
     shouldReconnect = true
     ws.close(SERVICE_RESTART)
-    ws = open()
+    open()
   }
-  function open(): WebSocket {
+  function open() {
     const oldWs = ws || null
     const url = options.url || location.href.replace('http', 'ws')
     ws = new WebSocket(url)
@@ -87,11 +87,9 @@ export function createWebsocketClient(options: {
     ws.addEventListener('close', event => {
       isOpened = false
       const predicate = options.shouldReconnect || defaultShouldReconnect
-      if (shouldReconnect && predicate(event as any)) {
+      if (shouldReconnect && predicate(event)) {
         backoffStrategy.onFailure()
-        setTimeout(() => {
-          ws = open()
-        }, backoffStrategy.getInterval())
+        setTimeout(open, backoffStrategy.getInterval())
       }
     })
     options.initWS(ws, oldWs)
@@ -104,6 +102,7 @@ export function createWebsocketClient(options: {
       console.log('TODO cannot send when the socket is not opened')
     }
   }
+  open()
   return {
     close,
     refresh,
