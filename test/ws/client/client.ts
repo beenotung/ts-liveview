@@ -5,6 +5,8 @@ export const MANDATORY_EXTENSION = 1010
 export const SERVICE_RESTART = 1012
 export const TRY_AGAIN_LATER = 1013
 
+export type WebsocketData = string | ArrayBufferLike | Blob | ArrayBufferView
+
 export function defaultShouldReconnect(
   event: WebSocketEventMap['close'],
 ): boolean {
@@ -60,6 +62,7 @@ export function createWebsocketClient(options: {
   let shouldReconnect = true
   let isOpened = false
   const backoffStrategy = options.backoffStrategy || defaultBackoffStrategy()
+  let sendQueue: WebsocketData[] = []
   function close(
     code: number = CLOSE_NORMAL,
     reason?: string,
@@ -83,6 +86,8 @@ export function createWebsocketClient(options: {
     ws.addEventListener('open', () => {
       isOpened = true
       backoffStrategy.onSuccess()
+      sendQueue.forEach(data => ws.send(data))
+      sendQueue = []
     })
     ws.addEventListener('close', event => {
       isOpened = false
@@ -95,11 +100,11 @@ export function createWebsocketClient(options: {
     options.initWS(ws, oldWs)
     return ws
   }
-  function send(data: string | ArrayBufferLike | Blob | ArrayBufferView) {
+  function send(data: WebsocketData) {
     if (isOpened) {
       ws.send(data)
     } else {
-      console.log('TODO cannot send when the socket is not opened')
+      sendQueue.push(data)
     }
   }
   open()

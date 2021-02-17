@@ -5,6 +5,7 @@ import express from 'express'
 import * as http from 'http'
 import { makeCookieSession } from 'ts-liveview/dist/helpers/cookie-session'
 import { createWebSocketServer } from 'ts-liveview/dist/websocket/server'
+import { WebsocketData } from './client/client'
 dotenv.config()
 
 const PING_INTERVAL = SECOND * 30
@@ -34,9 +35,11 @@ if (!process.env.SESSION_SECRET) {
   console.error('missing SESSION_SECRET in env')
   process.exit(1)
 }
-const { session, decodeSession, autoRenewSession } = makeCookieSession<
-  AppSessionData
->({
+const {
+  session,
+  decodeSession,
+  autoRenewSession,
+} = makeCookieSession<AppSessionData>({
   maxAge: SESSION_MAX_AGE,
   minAge: SESSION_MIN_AGE,
   secret: process.env.SESSION_SECRET,
@@ -74,7 +77,9 @@ const wss = createWebSocketServer({
       log('ws client session:', session.lastTime)
     })
     ws.addEventListener('message', event => {
-      log('message', event.data)
+      const data: WebsocketData = event.data
+      const message = JSON.parse(data.toString())
+      log('message:', message)
     })
   },
 })

@@ -9,4 +9,7 @@ const socket = createWebsocketClient({
     ws.addEventListener('close', () => console.log('close'))
   },
 })
-Object.assign(window, { socket })
+Object.assign(window, { socket, send })
+function send(...args: any[]) {
+  socket.send(JSON.stringify(args))
+}
