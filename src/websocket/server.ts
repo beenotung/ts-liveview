@@ -1,6 +1,6 @@
+import { IncomingMessage } from 'http'
 import { Server, ServerOptions } from 'ws'
 import type WebSocket from 'ws'
-
 interface ManagedWebSocket extends WebSocket {
   isAlive?: boolean
 }
@@ -11,7 +11,7 @@ export function createWebSocketServer(options: {
     interval: number
     timeout: number
   }
-  onConnection: (ws: ManagedWebSocket) => void
+  onConnection: (ws: ManagedWebSocket, req: IncomingMessage) => void
 }) {
   const wss = new Server(options.server)
 
@@ -29,15 +29,12 @@ export function createWebSocketServer(options: {
     clearInterval(timer)
   })
 
-  wss.on('connection', (ws: ManagedWebSocket) => {
+  wss.on('connection', (ws: ManagedWebSocket, req) => {
     ws.isAlive = true
     ws.on('pong', () => {
       ws.isAlive = true
     })
-    options.onConnection(ws)
-    ws.onopen = event => {
-      console.log('open', event)
-    }
+    options.onConnection(ws, req)
   })
 
   return wss
