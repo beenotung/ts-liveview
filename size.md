@@ -4,5 +4,7 @@
 |---|---|
 | socket.io-client | 48.1 KiB |
 | primus client    | 32.0 KiB |
+| own impl**       |  1.2 KiB |
 
 *: using snowpack optimized build
+**: Work in Progress

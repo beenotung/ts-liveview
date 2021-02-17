@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "snowpack build",
     "dev:client": "snowpack build --watch",
     "dev:server": "ts-node-dev server.ts",
     "start": "run-p dev:*"
