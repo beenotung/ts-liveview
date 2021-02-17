@@ -9,6 +9,7 @@ build/
 *.tgz
 
 data/
+.env
 
 # minify test files
 primus.js
