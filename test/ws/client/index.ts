@@ -2,5 +2,10 @@ console.log('ts')
 
 import { createWebsocketClient } from './client'
 
-const ws = createWebsocketClient()
-Object.assign(window, { ws })
+const socket = createWebsocketClient({
+  initWS: ws => {
+    Object.assign(window, { ws })
+    ws.on('open', () => console.log('open'))
+  },
+})
+Object.assign(window, { socket })
