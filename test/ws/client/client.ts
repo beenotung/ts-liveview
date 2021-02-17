@@ -52,17 +52,43 @@ export function defaultBackoffStrategy(
   }
 }
 
+export function defaultSendQueue(
+  options: {
+    storageKey?: string // key to persist with localStorage. If omited, will not be persisted
+  } = {},
+) {
+  let queue: WebsocketData[] = []
+  const KEY = options.storageKey
+  if (KEY) {
+    queue = JSON.parse(localStorage.getItem(KEY) || '[]')
+  }
+  function push(data: WebsocketData) {
+    queue.push(data)
+    if (KEY) { localStorage.setItem(KEY, JSON.stringify(queue)) }
+  }
+  function clear() {
+    queue = []
+    if (KEY) { localStorage.removeItem(KEY) }
+  }
+  function toArray() {
+    return queue
+  }
+  return { push, clear, toArray }
+}
+
 export function createWebsocketClient(options: {
   url?: string
   initWS: (ws: WebSocket, oldWs: WebSocket | null) => void
   shouldReconnect?: typeof defaultShouldReconnect
   backoffStrategy?: ReturnType<typeof defaultBackoffStrategy>
+  sendQueue?: ReturnType<typeof defaultSendQueue>
 }) {
   let ws: WebSocket
   let shouldReconnect = true
   let isOpened = false
   const backoffStrategy = options.backoffStrategy || defaultBackoffStrategy()
-  let sendQueue: WebsocketData[] = []
+  const sendQueue =
+    options.sendQueue || defaultSendQueue({ storageKey: 'sendQueue' })
   function close(
     code: number = CLOSE_NORMAL,
     reason?: string,
@@ -86,8 +112,8 @@ export function createWebsocketClient(options: {
     ws.addEventListener('open', () => {
       isOpened = true
       backoffStrategy.onSuccess()
-      sendQueue.forEach(data => ws.send(data))
-      sendQueue = []
+      sendQueue.toArray().forEach(data => ws.send(data))
+      sendQueue.clear()
     })
     ws.addEventListener('close', event => {
       isOpened = false
