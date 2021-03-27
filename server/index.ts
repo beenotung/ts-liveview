@@ -45,10 +45,10 @@ primus.on('connection', spark => {
     let [type, value] = data
     switch (type) {
       case 'username':
-        spark.write(['update', ['#username.out', [], [value]]])
+        spark.write(['update', ['#username-out', [], [value]]])
         break
       case 'password':
-        spark.write(['update', ['#password.out', [], [value]]])
+        spark.write(['update', ['#password-out', [], [value]]])
         break
     }
   })
