@@ -1,9 +1,9 @@
 {
     "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
         "jsx": "react",
         "reactNamespace": "JSX",
         "strict": true,
-        "esModuleInterop": true,
         "moduleResolution": "node",
         "target": "ES2015",
         "lib": [

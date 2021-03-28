@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "run-p server tsc:watch serve",
-    "server": "ts-node-dev server",
-    "tsc:watch": "tsc -p . -w",
-    "serve": "snowpack dev"
+    "start": "run-p server tsc:watch",
+    "preserver": "tsc -p .",
+    "server": "nodemon --ignore public/js dist/server/index.js",
+    "tsc:watch": "tsc -p . -w"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,7 @@
   "dependencies": {
     "compression": "^1.7.4",
     "dotenv": "^8.2.0",
+    "escape-html": "^1.0.3",
     "express": "^4.17.1",
     "minify": "^7.0.1",
     "socket.io": "^4.0.0",
@@ -22,10 +24,12 @@
   },
   "devDependencies": {
     "@types/compression": "^1.7.0",
+    "@types/escape-html": "^1.0.0",
     "@types/express": "^4.17.11",
     "@types/minify": "^6.0.0",
     "@types/node": "^14.14.35",
     "@types/socket.io": "^2.1.13",
+    "nodemon": "^2.0.7",
     "npm-run-all": "^4.1.5",
     "snowpack": "^3.0.11",
     "ts-node": "^9.1.1",

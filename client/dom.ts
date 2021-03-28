@@ -1,4 +1,4 @@
-export type VNode = [selector, attrs?, children?]
+export type VNode = ['raw' | selector, attrs?, children?]
 type text = string
 type selector = string
 type attrs = [key, value][]
@@ -6,7 +6,7 @@ type key = string
 type value = string
 export type children = (VNode | text)[]
 
-export function mountNode([selector, attrs, children]: VNode) {
+export function updateNode([selector, attrs, children]: VNode) {
   let e = document.querySelector(selector)
   if (!e) {
     console.log('Failed to lookup element to mountNode, selector:', selector)
@@ -47,7 +47,7 @@ function createChildren(e: Element, children?: children) {
   )
 }
 
-let tagNameRegex = /([\w-]+)/
+export let tagNameRegex = /([\w-]+)/
 
 function applySelector(e: Element, selector: selector) {
   let idMatches = selector.match(/#([\w-]+)/)

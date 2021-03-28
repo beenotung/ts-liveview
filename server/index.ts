@@ -1,29 +1,32 @@
 import express from 'express'
-import socketIO from 'socket.io'
-import http from 'http'
-import dotenv from 'dotenv'
+import { Server as SocketIOServer } from 'socket.io'
+import { Server as HttpServer } from 'http'
+import { config } from 'dotenv'
 import { Primus } from 'typestub-primus'
-import path from 'path'
-import fs from 'fs'
+import { join } from 'path'
+import { mkdirSync, writeFileSync } from 'fs'
 import compression from 'compression'
 import minify from 'minify'
+import {initView} from './ui.js'
+import { loadTemplate } from './template.js'
+import { VNodeToString } from './dom.js'
 
-dotenv.config()
+config()
 
 let app = express()
-let server = http.createServer(app)
-let io = new socketIO.Server(server)
+let server = new HttpServer(app)
+let io = new SocketIOServer(server)
 let primus = new Primus(server)
 
-let public_js = path.join('public', 'js')
-fs.mkdirSync(public_js, { recursive: true })
-let primus_js = path.join(public_js, 'primus.js')
+let public_js = join('public', 'js')
+mkdirSync(public_js, { recursive: true })
+let primus_js = join(public_js, 'primus.js')
 primus.save(primus_js)
 minify(primus_js)
-  .then(content =>
-    fs.writeFileSync(path.join(public_js, 'primus.min.js'), content),
+  .then((content: string) =>
+    writeFileSync(join(public_js, 'primus.min.js'), content),
   )
-  .catch(err => {
+  .catch((err: any) => {
     console.log('failed to minify primus.js:', err)
   })
 
@@ -41,7 +44,6 @@ primus.on('connection', spark => {
       spark.write(data)
       return
     }
-    console.log('data:', data)
     let [type, value] = data
     switch (type) {
       case 'username':
@@ -50,12 +52,26 @@ primus.on('connection', spark => {
       case 'password':
         spark.write(['update', ['#password-out', [], [value]]])
         break
+      default:
+        console.log('unknown data:', data)
     }
   })
 })
 
 app.use(compression())
 app.use(express.static('public'))
+app.use(express.static(join('dist', 'client')))
+
+let index = loadTemplate('index')
+
+app.get('/', (req, res) => {
+  res.setHeader('Content-Type', 'text/html')
+  let content = index({
+    title: 'LiveView Demo',
+    app: VNodeToString(initView)
+  })
+  res.end(content)
+})
 
 let PORT = +process.env.PORT! || 8100
 server.listen(PORT, () => {

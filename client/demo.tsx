@@ -1,4 +1,4 @@
-import JSX from './jsx'
+import JSX from './jsx.js'
 
 let name = 'Alice'
 
