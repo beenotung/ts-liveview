@@ -7,7 +7,6 @@ export function VNodeToString([selector, attrs, children]: VNode): string {
     return children ? children.join('') : ''
   }
   let tagName = selector.match(tagNameRegex)![1]
-  console.log({ selector, tagName })
   let html = `<${tagName}`
   attrs?.forEach(([key, value]) => {
     value = JSON.stringify(value)
