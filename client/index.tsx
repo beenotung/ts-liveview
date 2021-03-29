@@ -5,7 +5,11 @@ import JSX from './jsx.js'
 
 let win = (typeof window === 'undefined' ? global : window) as any
 
-let primus: Primus = win.Primus.connect('ws://localhost:8100/')
+let primus: Primus = win.Primus.connect('ws://localhost:8100/',{
+  reconnect: {
+    max: 10 * 1000
+  }
+})
 
 primus.on('open', () => {
   console.log('open')
