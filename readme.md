@@ -22,3 +22,10 @@ I chose to rename the project for a few reasons:
 Previous versions of ts-liveview use [template string](https://github.com/beenotung/ts-liveview/blob/25f54760b378c0a0d8d2607bde4afa2878bb0ae6/test/demo-server-clock.ts#L11) to build html. It allows the engine to quickly construct the html output for [morphdom](https://github.com/patrick-steele-idem/morphdom) to patch the DOM.
 
 With the template string based approach, html injection *could be* avoided when explicitly using helper function to sanitize the dynamic content. However it requires the developer to be careful which could be bug-prone.
+
+## Demo
+- [ ] Thermostat
+- [ ] Image Editor
+- [ ] Autocomplete Searching
+- [ ] Form Validations
+- [ ] Snake Game
