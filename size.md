@@ -1,9 +1,10 @@
-## Benchmark
+## WebSocket Client Benchmark
 
 | name | .js | min.js | .min.js.gz |
-|---|---|---|---|
-| primus.js    |  97K | 32K | 11K |
-| socket.io.js | 181K | 64K | 15K |
+|---|--:|--:|--:|
+| **own impl** | 585B | 348B | 207B |
+| primus.js    |  97K |  32K | 11K |
+| socket.io.js | 181K |  64K | 15K |
 
 ### Reference
 

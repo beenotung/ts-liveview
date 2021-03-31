@@ -1,39 +1,43 @@
-import type { Primus } from 'typestub-primus'
 import type { VNode } from './dom.js'
 import { mountElement, updateNode } from './dom.js'
 import JSX from './jsx.js'
+import { connectWS } from './ws.js'
 
 let win = (typeof window === 'undefined' ? global : window) as any
 
-let primus: Primus = win.Primus.connect('ws://localhost:8100/',{
-  reconnect: {
-    max: 10 * 1000
-  }
-})
-
-primus.on('open', () => {
-  console.log('open')
-  primus.id(id => {
-    console.log('id:', id)
-  })
+let wsUrl = location.origin.replace('http', 'ws')
+let ws: WebSocket
+connectWS({
+  createWS() {
+    return new WebSocket(wsUrl)
+  },
+  initWS(_ws) {
+    ws = _ws
+    ws.addEventListener('message', event => {
+      console.log('ws message:', event.data)
+      let message = JSON.parse(String(event.data))
+      onServerMessage(message)
+    })
+  },
 })
 
 type ServerMessage = ['update', VNode]
 
-primus.on('data', (data: any) => {
-  let [type, value] = data as ServerMessage
+function onServerMessage(message: ServerMessage) {
+  let [type, value] = message as ServerMessage
   switch (type) {
     case 'update':
       updateNode(value)
       break
     default:
-      console.log('data:', data)
+      console.log('message:', message)
   }
-})
+}
 
 function emit(data: any) {
-  primus.write(data)
+  ws.send(JSON.stringify(data))
 }
+
 win.emit = emit
 
 let app = document.querySelector('#app')!
