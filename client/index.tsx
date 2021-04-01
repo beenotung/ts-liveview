@@ -9,15 +9,12 @@ let wsUrl = location.origin.replace('http', 'ws')
 let ws: WebSocket
 connectWS({
   createWS() {
-    return new WebSocket(wsUrl)
+    return (ws = new WebSocket(wsUrl))
   },
-  initWS(_ws) {
-    ws = _ws
-    ws.addEventListener('message', event => {
-      console.log('ws message:', event.data)
-      let message = JSON.parse(String(event.data))
-      onServerMessage(message)
-    })
+  onMessage(event) {
+    console.log('ws message:', event.data)
+    let message = JSON.parse(String(event.data))
+    onServerMessage(message)
   },
 })
 
@@ -35,6 +32,7 @@ function onServerMessage(message: ServerMessage) {
 }
 
 function emit(data: any) {
+  // TODO queue if not ready
   ws.send(JSON.stringify(data))
 }
 

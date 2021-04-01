@@ -10,6 +10,7 @@ import { initView } from './ui.js'
 import { loadTemplate } from './template.js'
 import { VNodeToString } from './dom.js'
 import { setupWSS } from './wss.js'
+import { heartHeatInterval, heartHeatTimeout } from '../client/ws.js'
 
 config()
 
@@ -19,8 +20,8 @@ let wss = new ws.Server({ server })
 setupWSS({
   wss,
   heartbeat: {
-    interval: 30 * 1000,
-    timeout: 45 * 1000,
+    interval: heartHeatInterval,
+    timeout: heartHeatTimeout,
   },
 })
 
@@ -28,9 +29,16 @@ function send(ws: WebSocket, data: any) {
   ws.send(JSON.stringify(data))
 }
 
+let pongMessage = Buffer.from([])
 wss.on('connection', ws => {
   console.log('ws connected')
   ws.on('message', (data: Data) => {
+    if ((data as Buffer).length === 0) {
+      console.log('received ping')
+      ws.send(pongMessage)
+      return // skip ping message
+    }
+    console.log('ws received message:', data)
     let [type, value] = JSON.parse(String(data))
     switch (type) {
       case 'username':
