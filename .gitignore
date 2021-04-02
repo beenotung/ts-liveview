@@ -2,4 +2,5 @@ node_modules
 pnpm-lock.yaml
 .idea
 public/js/primus.*js
+build/
 dist/
