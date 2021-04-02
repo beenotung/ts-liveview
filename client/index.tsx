@@ -3,18 +3,17 @@ import { mountElement, updateNode } from './dom.js'
 import JSX from './jsx.js'
 import { connectWS } from './ws.js'
 
-let win = (typeof window === 'undefined' ? global : window) as any
-
 let wsUrl = location.origin.replace('http', 'ws')
-let ws: WebSocket
-connectWS({
+connectWS<ServerMessage>({
   createWS() {
-    return (ws = new WebSocket(wsUrl))
+    return new WebSocket(wsUrl)
+  },
+  attachWS(ws) {
+    ;(window as any).emit = ws.send
   },
   onMessage(event) {
-    console.log('ws message:', event.data)
-    let message = JSON.parse(String(event.data))
-    onServerMessage(message)
+    console.log('on ws message:', event)
+    onServerMessage(event)
   },
 })
 
@@ -30,13 +29,6 @@ function onServerMessage(message: ServerMessage) {
       console.log('message:', message)
   }
 }
-
-function emit(data: any) {
-  // TODO queue if not ready
-  ws.send(JSON.stringify(data))
-}
-
-win.emit = emit
 
 let app = document.querySelector('#app')!
 let root: VNode = ['div#app.loading', [], [['h1', [], ['loading']]]]

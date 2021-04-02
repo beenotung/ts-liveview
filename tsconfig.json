@@ -7,7 +7,8 @@
         "moduleResolution": "node",
         "target": "ES2015",
         "lib": [
-            "ES2020.String"
+            "dom",
+            "es2020.string"
         ],
         "outDir": "dist"
     },
