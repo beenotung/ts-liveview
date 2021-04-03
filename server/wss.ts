@@ -14,8 +14,8 @@ function pongCallback() {
 function onConnection(ws: ManagedWebSocket) {
   ws.isAlive = true
   ws.on('pong', pongCallback)
-  ws.on('message',(data:Data)=>{
-    if((data as Buffer).length===0){
+  ws.on('message', (data: Data) => {
+    if ((data as Buffer).length === 0) {
       pongCallback // TODO
     }
   })

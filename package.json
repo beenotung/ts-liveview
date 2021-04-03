@@ -5,8 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "run-p server tsc:watch",
-    "preserver": "tsc -p .",
+    "format": "prettier --write . && format-json-cli",
+    "build": "tsc -p .",
+    "start": "npm run build && run-p server tsc:watch",
     "server": "nodemon --ignore public/js dist/server/index.js",
     "tsc:watch": "tsc -p . -w"
   },
@@ -30,8 +31,10 @@
     "@types/minify": "^6.0.0",
     "@types/node": "^14.14.35",
     "@types/ws": "^7.4.0",
+    "format-json-cli": "^0.1.1",
     "nodemon": "^2.0.7",
     "npm-run-all": "^4.1.5",
+    "prettier": "^2.2.1",
     "snowpack": "^3.0.11",
     "ts-node": "^9.1.1",
     "ts-node-dev": "^1.1.1",

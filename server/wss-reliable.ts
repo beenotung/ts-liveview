@@ -1,7 +1,15 @@
 import type { Server } from 'ws'
 import type WebSocket from 'ws'
 import debug from 'debug'
-import { Ping, Pong, RawPong, Received, RequestResend, Send, WsMessage } from '../client/ws-reliable.js'
+import {
+  Ping,
+  Pong,
+  RawPong,
+  Received,
+  RequestResend,
+  Send,
+  WsMessage,
+} from '../client/ws-reliable.js'
 
 let log = debug('wss-reliable.ts')
 log.enabled = true
@@ -39,7 +47,11 @@ export function listenWSS<ClientEvent = any, ServerEvent = any>(options: {
     let inbox: ClientEvent[] = []
 
     function send(event: ServerEvent) {
-      let serverMessage: WsMessage<ServerEvent> = [Send, nextOutgoingMessageId, event]
+      let serverMessage: WsMessage<ServerEvent> = [
+        Send,
+        nextOutgoingMessageId,
+        event,
+      ]
       let data = JSON.stringify(serverMessage)
       outbox[nextOutgoingMessageId] = data
       nextOutgoingMessageId++
@@ -83,7 +95,10 @@ export function listenWSS<ClientEvent = any, ServerEvent = any>(options: {
         // 1. store into inbox buffer
         inbox[incomingMessageId] = clientEvent
         // 2. request the peer to resend the expected message by id
-        let followupMessage: WsMessage<ServerEvent> = [RequestResend, nextIncomingMessageId]
+        let followupMessage: WsMessage<ServerEvent> = [
+          RequestResend,
+          nextIncomingMessageId,
+        ]
         ws.send(JSON.stringify(followupMessage))
         return
       }

@@ -4,7 +4,7 @@ import {
   HeartBeatTimeoutReason,
   HeartHeatInterval,
   HeartHeatTimeout,
-  MaxReconnectInterval
+  MaxReconnectInterval,
 } from './ws-config.js'
 
 export const Ping = 1
@@ -73,7 +73,11 @@ export function connectWS<ServerEvent = any, ClientEvent = any>(options: {
       // don't auto-reconnect when the browser is navigating away from the page
       return
     }
-    console.debug('will reconnect ws after', (reconnectInterval / 1000).toFixed(1), 'seconds')
+    console.debug(
+      'will reconnect ws after',
+      (reconnectInterval / 1000).toFixed(1),
+      'seconds',
+    )
     setTimeout(() => connectWS(options), reconnectInterval)
     reconnectInterval = Math.min(reconnectInterval * 1.5, MaxReconnectInterval)
   })
@@ -99,7 +103,7 @@ export function connectWS<ServerEvent = any, ClientEvent = any>(options: {
     let clientMessage: WsMessage<ClientEvent> = [
       Send,
       nextOutgoingMessageId,
-      event
+      event,
     ]
     let data = JSON.stringify(clientMessage)
     outbox[nextOutgoingMessageId] = data
@@ -147,7 +151,7 @@ export function connectWS<ServerEvent = any, ClientEvent = any>(options: {
       // 2. request the peer to resend the expected message by id
       let followupMessage: WsMessage<ClientEvent> = [
         RequestResend,
-        nextIncomingMessageId
+        nextIncomingMessageId,
       ]
       ws.send(JSON.stringify(followupMessage))
       return

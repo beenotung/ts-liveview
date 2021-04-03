@@ -1,15 +1,15 @@
 {
-    "compilerOptions": {
-        "allowSyntheticDefaultImports": true,
-        "jsx": "react",
-        "reactNamespace": "JSX",
-        "strict": true,
-        "moduleResolution": "node",
-        "target": "ES2015",
-        "lib": [
-            "dom",
-            "es2020.string"
-        ],
-        "outDir": "dist"
-    },
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react",
+    "reactNamespace": "JSX",
+    "strict": true,
+    "moduleResolution": "node",
+    "target": "ES2015",
+    "lib": [
+      "dom",
+      "es2020.string"
+    ],
+    "outDir": "dist"
+  }
 }

@@ -1,11 +1,11 @@
 ## Benchmark
 
-| test | speed |
-|---|---|
-| string    += 'foo' | 3500k tps |
-| innerHTML += 'foo' |    8k tps |
-| socket.io echo | 3k tps |
-| primus.js echo | 5k tps |
+| Test               | Speed     |
+| ------------------ | --------- |
+| string += 'foo'    | 3500k tps |
+| innerHTML += 'foo' | 8k tps    |
+| socket.io echo     | 3k tps    |
+| primus.js echo     | 5k tps    |
 
 ### Observation
 

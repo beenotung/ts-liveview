@@ -7,8 +7,9 @@ Like ts-liveview, ? helps to deliver fast and interactive user interface that no
 ## Why the rename?
 
 I chose to rename the project for a few reasons:
+
 - I wanted the freedom to clean up mistakes and remove ideas that hadn't worked out as cleanly as I wanted
-- 
+-
 
 ## Inspired from:
 
@@ -21,9 +22,10 @@ I chose to rename the project for a few reasons:
 
 Previous versions of ts-liveview use [template string](https://github.com/beenotung/ts-liveview/blob/25f54760b378c0a0d8d2607bde4afa2878bb0ae6/test/demo-server-clock.ts#L11) to build html. It allows the engine to quickly construct the html output for [morphdom](https://github.com/patrick-steele-idem/morphdom) to patch the DOM.
 
-With the template string based approach, html injection *could be* avoided when explicitly using helper function to sanitize the dynamic content. However it requires the developer to be careful which could be bug-prone.
+With the template string based approach, html injection _could be_ avoided when explicitly using helper function to sanitize the dynamic content. However it requires the developer to be careful which could be bug-prone.
 
 ## Demo
+
 - [ ] Thermostat
 - [ ] Image Editor
 - [ ] Autocomplete Searching
