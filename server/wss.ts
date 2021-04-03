@@ -43,7 +43,7 @@ export function setupWSS(options: {
     interval: number
     timeout: number
   }
-  onMessage: (ws: WebSocket, event: Data) => void
+  onMessage: (ws: WebSocket, data: Data) => void
 }) {
   const { wss } = options
   wss.on('connection', onConnection)

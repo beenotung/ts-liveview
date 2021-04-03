@@ -1,9 +1,11 @@
-const defaultReconnectInterval = 250
-const maxReconnectInterval = 10 * 1000
-let reconnectInterval = defaultReconnectInterval
-
-export const heartHeatInterval = 30 * 1000
-export const heartHeatTimeout = 45 * 1000
+import {
+  DefaultReconnectInterval,
+  HeartBeatTimeoutCode,
+  HeartBeatTimeoutReason,
+  HeartHeatInterval,
+  HeartHeatTimeout,
+  MaxReconnectInterval
+} from './ws-config.js'
 
 export const Ping = 1
 export const Pong = 2
@@ -22,18 +24,20 @@ export const RawPong = JSON.stringify(Pong)
 
 type Timer = ReturnType<typeof setTimeout>
 
-type ManagedWebsocket<ClientEvent = any> = {
+export type ManagedWebsocket<ClientEvent = any> = {
   ws: WebSocket
   send(event: ClientEvent): void
   close(code?: number, reason?: string): void
 }
 
+let reconnectInterval = DefaultReconnectInterval
+
 export function connectWS<ServerEvent = any, ClientEvent = any>(options: {
-  createWS: () => WebSocket
+  createWS: (protocol: string) => WebSocket
   attachWS: (ws: ManagedWebsocket) => void
   onMessage: (data: ServerEvent) => void
 }) {
-  const ws = options.createWS()
+  const ws = options.createWS('ws-reliable')
 
   let pingTimer: Timer
   let pongTimer: Timer
@@ -42,8 +46,8 @@ export function connectWS<ServerEvent = any, ClientEvent = any>(options: {
   function heartbeat() {
     clearTimeout(pingTimer)
     clearTimeout(pongTimer)
-    pingTimer = setTimeout(sendPing, heartHeatInterval)
-    pongTimer = setTimeout(onHeartbeatTimeout, heartHeatTimeout)
+    pingTimer = setTimeout(sendPing, HeartHeatInterval)
+    pongTimer = setTimeout(onHeartbeatTimeout, HeartHeatTimeout)
   }
 
   function sendPing() {
@@ -54,23 +58,24 @@ export function connectWS<ServerEvent = any, ClientEvent = any>(options: {
 
   function onHeartbeatTimeout() {
     console.debug('onHeartbeatTimeout')
-    // ws.close(1013, 'heartbeat timeout')
-    ws.close(4013, 'heartbeat timeout')
+    ws.close(HeartBeatTimeoutCode, HeartBeatTimeoutReason)
   }
 
   ws.addEventListener('open', () => {
-    reconnectInterval = defaultReconnectInterval
+    reconnectInterval = DefaultReconnectInterval
     heartbeat()
   })
+
   ws.addEventListener('close', event => {
+    teardown()
     // reference: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
     if (event.code === 1001) {
       // don't auto-reconnect when the browser is navigating away from the page
       return
     }
-    teardown()
+    console.debug('will reconnect ws after', (reconnectInterval / 1000).toFixed(1), 'seconds')
     setTimeout(() => connectWS(options), reconnectInterval)
-    reconnectInterval = Math.max(reconnectInterval * 1.5, maxReconnectInterval)
+    reconnectInterval = Math.min(reconnectInterval * 1.5, MaxReconnectInterval)
   })
 
   function teardown() {
@@ -94,7 +99,7 @@ export function connectWS<ServerEvent = any, ClientEvent = any>(options: {
     let clientMessage: WsMessage<ClientEvent> = [
       Send,
       nextOutgoingMessageId,
-      event,
+      event
     ]
     let data = JSON.stringify(clientMessage)
     outbox[nextOutgoingMessageId] = data
@@ -109,11 +114,12 @@ export function connectWS<ServerEvent = any, ClientEvent = any>(options: {
   }
 
   ws.addEventListener('message', event => {
-    console.log('received ws message:', event)
     heartbeat()
     let serverMessage: WsMessage<ServerEvent> = JSON.parse(String(event.data))
     if (serverMessage === Ping) {
-      ws.send(RawPong)
+      if (ws.bufferedAmount === 0) {
+        ws.send(RawPong)
+      }
       return
     }
     if (serverMessage === Pong) {
@@ -141,7 +147,7 @@ export function connectWS<ServerEvent = any, ClientEvent = any>(options: {
       // 2. request the peer to resend the expected message by id
       let followupMessage: WsMessage<ClientEvent> = [
         RequestResend,
-        nextIncomingMessageId,
+        nextIncomingMessageId
       ]
       ws.send(JSON.stringify(followupMessage))
       return
@@ -149,6 +155,7 @@ export function connectWS<ServerEvent = any, ClientEvent = any>(options: {
     if (serverMessage[0] === Received) {
       let receivedMessageId = serverMessage[1]
       delete outbox[receivedMessageId]
+      // TODO check for missed messages in-between
       return
     }
     if (serverMessage[0] === RequestResend) {
@@ -160,7 +167,7 @@ export function connectWS<ServerEvent = any, ClientEvent = any>(options: {
       }
       return
     }
-    console.debug('received unknown ws message:', serverMessage)
+    console.debug('received unknown ws message:', event)
   })
 
   options.attachWS({ ws, send, close })

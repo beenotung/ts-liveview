@@ -1,15 +1,29 @@
 import type { VNode } from './dom.js'
 import { mountElement, updateNode } from './dom.js'
 import JSX from './jsx.js'
-import { connectWS } from './ws.js'
+import { connectWS } from './ws-reliable.js'
 
 let wsUrl = location.origin.replace('http', 'ws')
 connectWS<ServerMessage>({
-  createWS() {
-    return new WebSocket(wsUrl)
+  createWS(protocol) {
+    let status = document.querySelector('#ws_status')
+    if (status) {
+      status.textContent = 'connecting ws...'
+    }
+    return new WebSocket(wsUrl, [protocol])
   },
   attachWS(ws) {
+    console.log('attach ws')
     ;(window as any).emit = ws.send
+    const status = document.querySelector('#ws_status')
+    if (status) {
+      ws.ws.addEventListener('open', () => {
+        status.textContent = 'connected ws'
+      })
+      ws.ws.addEventListener('close', () => {
+        status.textContent = 'disconnected ws'
+      })
+    }
   },
   onMessage(event) {
     console.log('on ws message:', event)
