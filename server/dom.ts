@@ -13,6 +13,14 @@ export function VNodeToString([selector, attrs, children]: VNode): string {
     html += ` ${key}=${value}`
   })
   html += `>`
+  switch (tagName) {
+    case 'img':
+    case 'input':
+    case 'br':
+    case 'hr':
+    case 'meta':
+      return html
+  }
   children?.forEach(child => {
     if (typeof child === 'string') {
       html += escapeHTML(child)
