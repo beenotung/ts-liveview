@@ -4,10 +4,8 @@ import ws from 'ws'
 import { config } from 'dotenv'
 import { join } from 'path'
 import compression from 'compression'
-import { initView } from './ui.js'
-import { loadTemplate } from './template.js'
-import { VNodeToString } from './dom.js'
 import { listenWSS } from './wss-reliable.js'
+import { router } from './views/router.js'
 
 config()
 
@@ -42,16 +40,7 @@ app.use(compression())
 app.use(express.static('public'))
 app.use(express.static(join('dist', 'client')))
 
-let index = loadTemplate('index')
-
-app.get('/', (req, res) => {
-  res.setHeader('Content-Type', 'text/html')
-  let content = index({
-    title: 'LiveView Demo',
-    app: VNodeToString(initView),
-  })
-  res.end(content)
-})
+app.use(router)
 
 let PORT = +process.env.PORT! || 8100
 server.listen(PORT, () => {

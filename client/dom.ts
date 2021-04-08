@@ -1,10 +1,13 @@
-export type VNode = ['raw' | selector, attrs?, children?]
+export type VNode = [selector, attrs?, children?]
+export type children = Array<text | Raw | VNodeList | VNode>
+export type Raw = ['raw', html]
+export type VNodeList = ['list', children]
+type html = string
 type text = string
 type selector = string
 type attrs = [key, value][]
 type key = string
 type value = string
-export type children = (VNode | text)[]
 
 export function updateNode([selector, attrs, children]: VNode) {
   let e = document.querySelector(selector)
@@ -25,7 +28,7 @@ export function mountElement(e: Element, [selector, attrs, children]: VNode) {
   console.log({ json: jsonSize, html: htmlSize })
 }
 
-function createNode([selector, attrs, children]: VNode) {
+function createNode([selector, attrs, children]: VNode): Element {
   let e = createElementBySelector(selector)
   setAttrs(e, attrs)
   createChildren(e, children)
@@ -37,14 +40,30 @@ function setAttrs(e: Element, attrs?: attrs) {
     e.setAttribute(key, value)
   })
 }
+
 function createChildren(e: Element, children?: children) {
-  children?.forEach(child =>
+  if (!children) {
+    return
+  }
+  children.forEach(child => createChild(e, child))
+}
+
+function createChild(e: Element, child: children[number]) {
+  if (typeof child === 'string') {
+    e.appendChild(document.createTextNode(child))
+    return
+  }
+  if (child[0] === 'raw') {
     e.appendChild(
-      typeof child === 'string'
-        ? document.createTextNode(child)
-        : createNode(child),
-    ),
-  )
+      document.createRange().createContextualFragment((child as Raw)[1]),
+    )
+    return
+  }
+  if (child[1] === 'list') {
+    ;(child as VNodeList)[1].forEach(child => createChild(e, child))
+    return
+  }
+  e.appendChild(createNode(child as VNode))
 }
 
 export let tagNameRegex = /([\w-]+)/
@@ -62,7 +81,7 @@ function applySelector(e: Element, selector: selector) {
   e.className = classList.join(' ')
 }
 
-function createElementBySelector(selector: selector) {
+function createElementBySelector(selector: selector): Element {
   let tagNameMatch = selector.match(tagNameRegex)
   if (!tagNameMatch) {
     console.error('Failed to parse tagName from selector:', selector)

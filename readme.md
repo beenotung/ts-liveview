@@ -41,3 +41,5 @@ With the template string based approach, html injection _could be_ avoided when 
 - [ ] Autocomplete Searching
 - [ ] Form Validations
 - [ ] Snake Game
+
+Inspired from https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript

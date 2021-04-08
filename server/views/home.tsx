@@ -1,14 +1,19 @@
-import type { VNode } from '../client/dom'
-import JSX from '../client/jsx.js'
+import type { VNode } from '../../client/dom'
+import JSX from '../../client/jsx.js'
 
-export let initView: VNode = (
+let links = ['thermostat', 'home']
+
+// TODO debug list rendering
+export let homeView: VNode = (
   <div id="app" className="light live">
+    {['list', links.map(link => <a href={link}>{link}</a>)]}
     <h1>Login Form</h1>
     <form>
       {['a', [['href', '#']], ['hash link']]}
       <style>
-        <raw>
-          {`
+        {[
+          'raw',
+          `
 form > label {
   color: green;
 }
@@ -20,8 +25,8 @@ label {
 label::after {
   content: ":";
 }
-`}
-        </raw>
+`,
+        ]}
       </style>
       <label htmlFor="username">username</label>
       <input
