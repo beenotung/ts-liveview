@@ -18,6 +18,16 @@ I chose to rename the project for a few reasons:
 - [htmx](https://htmx.org) (Derived from [intercooler.js](https://intercoolerjs.org))
 - JSX in [Surplus](https://github.com/adamhaile/surplus), [Stencil](https://stenciljs.com/docs/templating-jsx), and [React](https://reactjs.org/docs/react-without-jsx.html)
 
+## Features
+
+- [x] Response contentful html page directly to GET request
+- [x] Enable interactive UI with minimal amount of javascript to be downloaded
+- [x] Realtime-update with server events
+- [x] JSX support
+- [x] Efficient wire format
+- [x] Lightweight WebSocket [(1.9K minified, 30x smaller than socket.io)](./size.md)
+- [ ] Reliable connection (Auto send accumulated messages when network resume)
+
 ## Why JSX?
 
 Previous versions of ts-liveview use [template string](https://github.com/beenotung/ts-liveview/blob/25f54760b378c0a0d8d2607bde4afa2878bb0ae6/test/demo-server-clock.ts#L11) to build html. It allows the engine to quickly construct the html output for [morphdom](https://github.com/patrick-steele-idem/morphdom) to patch the DOM.
