@@ -1,1 +1,9 @@
+# npm
+pnpm-lock.yaml
+*.json
+
+# built files
 dist/
+
+# lighthouse report
+localhost_*.report.html
