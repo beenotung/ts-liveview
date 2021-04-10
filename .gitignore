@@ -1,6 +1,14 @@
+# npm
 node_modules
 pnpm-lock.yaml
-.idea
+
+# IDE
+.idea/
+
+# built files
 public/js/primus.*js
 build/
 dist/
+
+# lighthouse report
+localhost_*.report.html
