@@ -8,6 +8,7 @@
     "target": "ES2015",
     "lib": [
       "dom",
+      "es2019.object",
       "es2020.string"
     ],
     "outDir": "dist"

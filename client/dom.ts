@@ -1,15 +1,16 @@
-export type VNode = [selector, attrs?, children?]
-export type children = Array<text | Raw | VNodeList | VNode>
+export type VElement = [selector, attrs?, VNodeList?]
+export type VNodeList = VNode[]
+export type VNode = text | Raw | VFragment | VElement
 export type Raw = ['raw', html]
-export type VNodeList = ['list', children]
+export type VFragment = [VNodeList]
 type html = string
 type text = string
-type selector = string
-type attrs = [key, value][]
+export type selector = string
+export type attrs = [key, value][]
 type key = string
 type value = string
 
-export function updateNode([selector, attrs, children]: VNode) {
+export function updateElement([selector, attrs, children]: VElement) {
   let e = document.querySelector(selector)
   if (!e) {
     console.log('Failed to lookup element to mountNode, selector:', selector)
@@ -18,7 +19,10 @@ export function updateNode([selector, attrs, children]: VNode) {
   mountElement(e, [selector, attrs, children])
 }
 
-export function mountElement(e: Element, [selector, attrs, children]: VNode) {
+export function mountElement(
+  e: Element,
+  [selector, attrs, children]: VElement,
+) {
   let jsonSize = JSON.stringify([selector, attrs, children]).length
   applySelector(e, selector)
   setAttrs(e, attrs)
@@ -28,7 +32,7 @@ export function mountElement(e: Element, [selector, attrs, children]: VNode) {
   console.log({ json: jsonSize, html: htmlSize })
 }
 
-function createNode([selector, attrs, children]: VNode): Element {
+function createElement([selector, attrs, children]: VElement): Element {
   let e = createElementBySelector(selector)
   setAttrs(e, attrs)
   createChildren(e, children)
@@ -36,19 +40,20 @@ function createNode([selector, attrs, children]: VNode): Element {
 }
 
 function setAttrs(e: Element, attrs?: attrs) {
-  attrs?.forEach(([key, value]) => {
-    e.setAttribute(key, value)
-  })
-}
-
-function createChildren(e: Element, children?: children) {
-  if (!children) {
-    return
+  if (attrs) {
+    attrs.forEach(([key, value]) => {
+      e.setAttribute(key, value)
+    })
   }
-  children.forEach(child => createChild(e, child))
 }
 
-function createChild(e: Element, child: children[number]) {
+function createChildren(e: Element, children?: VNodeList) {
+  if (children) {
+    children.forEach(child => createChild(e, child))
+  }
+}
+
+function createChild(e: Element, child: VNode) {
   if (typeof child === 'string') {
     e.appendChild(document.createTextNode(child))
     return
@@ -59,11 +64,11 @@ function createChild(e: Element, child: children[number]) {
     )
     return
   }
-  if (child[1] === 'list') {
-    ;(child as VNodeList)[1].forEach(child => createChild(e, child))
+  if (Array.isArray(child[0])) {
+    ;(child as VFragment)[0].forEach(child => createChild(e, child))
     return
   }
-  e.appendChild(createNode(child as VNode))
+  e.appendChild(createElement(child as VElement))
 }
 
 export let tagNameRegex = /([\w-]+)/

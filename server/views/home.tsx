@@ -1,12 +1,8 @@
-import type { VNode } from '../../client/dom'
+import type { VElement } from '../../client/dom'
 import JSX from '../../client/jsx.js'
 
-let links = ['thermostat', 'home']
-
-// TODO debug list rendering
-export let homeView: VNode = (
+export let homeView: VElement = (
   <div id="app" className="light live">
-    {['list', links.map(link => <a href={link}>{link}</a>)]}
     <h1>Login Form</h1>
     <form>
       {['a', [['href', '#']], ['hash link']]}
@@ -28,14 +24,14 @@ label::after {
 `,
         ]}
       </style>
-      <label htmlFor="username">username</label>
+      <label for="username">username</label>
       <input
         type="text"
         name="username"
         id="username"
         oninput="emit(['username',this.value])"
       />
-      <label htmlFor="password">password</label>
+      <label for="password">password</label>
       <input
         type="password"
         name="password"
@@ -48,9 +44,9 @@ label::after {
     </form>
     <h2>Live Preview</h2>
     <div>
-      username: <span id="username-out"></span>
+      username: <span id="username-out" />
       <br />
-      password: <span id="password-out"></span>
+      password: <span id="password-out" />
     </div>
     <h1>Code Snippet</h1>
     <p>html code can be escaped</p>

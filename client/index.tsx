@@ -1,5 +1,5 @@
-import type { VNode } from './dom.js'
-import { mountElement, updateNode } from './dom.js'
+import type { VElement } from './dom.js'
+import { mountElement, updateElement } from './dom.js'
 import JSX from './jsx.js'
 import { connectWS } from './ws-reliable.js'
 
@@ -31,13 +31,13 @@ connectWS<ServerMessage>({
   },
 })
 
-type ServerMessage = ['update', VNode]
+type ServerMessage = ['update', VElement]
 
 function onServerMessage(message: ServerMessage) {
   let [type, value] = message as ServerMessage
   switch (type) {
     case 'update':
-      updateNode(value)
+      updateElement(value)
       break
     default:
       console.log('message:', message)
@@ -45,7 +45,7 @@ function onServerMessage(message: ServerMessage) {
 }
 
 let app = document.querySelector('#app')!
-let root: VNode = ['div#app.loading', [], [['h1', [], ['loading']]]]
+let root: VElement = ['div#app.loading', [], [['h1', [], ['loading']]]]
 root = (
   <div id="app" className="loading">
     <h1>loading</h1>

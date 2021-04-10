@@ -1,5 +1,5 @@
 declare module JSX {
-  type Element = string
+  type Element = any
   interface IntrinsicElements {
     [elemName: string]: any
   }
