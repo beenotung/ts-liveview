@@ -1,0 +1,6 @@
+# Default Group
+User-agent: *
+Allow: /
+
+# Sitemap: http://localhost:8100/sitemap.xml
+# Reference: https://www.xml-sitemaps.com
