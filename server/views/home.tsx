@@ -36,14 +36,14 @@ label::after {
         type="text"
         name="username"
         id="username"
-        oninput="emit(['username',this.value])"
+        oninput="emit('username',this.value)"
       />
       <label for="password">password</label>
       <input
         type="password"
         name="password"
         id="password"
-        oninput="emit(['password',this.value])"
+        oninput="emit('password',this.value)"
       />
       <br />
       <br />

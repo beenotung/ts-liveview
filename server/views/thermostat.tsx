@@ -16,11 +16,11 @@ function render() {
           }
         `}
       />
-      <a href="/thermostat/inc" onclick="emit(['inc'])">
+      <a href="/thermostat/inc" onclick="emit('inc')">
         <button>+</button>
       </a>
       <span id="count">{count}</span>
-      <a href="/thermostat/dec" onclick="emit(['dec'])">
+      <a href="/thermostat/dec" onclick="emit('dec')">
         <button>-</button>
       </a>
     </div>

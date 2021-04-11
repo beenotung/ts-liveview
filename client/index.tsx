@@ -14,8 +14,8 @@ connectWS<ServerMessage>({
   },
   attachWS(ws) {
     console.log('attach ws')
-    ;(window as any).emit = function (data: any) {
-      ws.send(data)
+    ;(window as any).emit = function () {
+      ws.send(Array.from(arguments))
       if (window.event) {
         window.event.preventDefault()
       }
