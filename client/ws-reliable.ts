@@ -1,3 +1,4 @@
+import type { ManagedWebsocket } from './ws'
 import {
   DefaultReconnectInterval,
   HeartBeatTimeoutCode,
@@ -23,12 +24,6 @@ export const RawPing = JSON.stringify(Ping)
 export const RawPong = JSON.stringify(Pong)
 
 type Timer = ReturnType<typeof setTimeout>
-
-export type ManagedWebsocket<ClientEvent = any> = {
-  ws: WebSocket
-  send(event: ClientEvent): void
-  close(code?: number, reason?: string): void
-}
 
 let reconnectInterval = DefaultReconnectInterval
 

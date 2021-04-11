@@ -1,12 +1,8 @@
+import type { ManagedWebsocket } from './ws'
+
 const defaultReconnectInterval = 250
 const maxReconnectInterval = 10 * 1000
 let reconnectInterval = defaultReconnectInterval
-
-export type ManagedWebsocket<ClientEvent = any> = {
-  ws: WebSocket
-  send(event: ClientEvent): void
-  close(code?: number, reason?: string): void
-}
 
 export function connectWS<ServerEvent = any, ClientEvent = any>(options: {
   createWS: (protocol: string) => WebSocket
