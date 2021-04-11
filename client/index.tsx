@@ -14,7 +14,12 @@ connectWS<ServerMessage>({
   },
   attachWS(ws) {
     console.log('attach ws')
-    ;(window as any).emit = ws.send
+    ;(window as any).emit = function (data: any) {
+      ws.send(data)
+      if (window.event) {
+        window.event.preventDefault()
+      }
+    }
     const status = document.querySelector('#ws_status')
     if (status) {
       ws.ws.addEventListener('open', () => {

@@ -11,7 +11,22 @@
     <meta name="description" content="{description}" />
   </head>
   <body>
-    <div id="ws_status">loading...</div>
+    <div id="noscript">
+      <style>
+        #noscript {
+          margin: 1em;
+          padding: 1em;
+          outline: 1px solid red;
+        }
+      </style>
+      Javascript is not enabled. This site can still works but it'll be more
+      interactive when javascript is enabled.
+    </div>
+    <div id="ws_status" hidden>loading...</div>
+    <script>
+      document.getElementById('noscript').remove()
+      document.getElementById('ws_status').removeAttribute('hidden')
+    </script>
     {app}
     <script src="/index.js" type="module" defer></script>
     <script src="/demo.js" type="module" defer></script>

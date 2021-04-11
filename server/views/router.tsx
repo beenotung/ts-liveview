@@ -110,13 +110,23 @@ router.get('/', (req, res) => {
   res.redirect('/home')
 })
 
+router.get('/thermostat/inc', (req, res) => {
+  ;(thermostatView.onMessages.inc as any)()
+  res.redirect('/thermostat')
+})
+router.get('/thermostat/dec', (req, res) => {
+  ;(thermostatView.onMessages.dec as any)()
+  res.redirect('/thermostat')
+})
+
 router.get('/:page', (req, res, next) => {
   let page = req.params.page
+  res.setHeader('Connection', 'Keep-Alive')
+  res.setHeader('Content-Type', 'text/html')
+  res.setHeader('Link', `<http://localhost:8100/${page}>; rel="canonical"`)
   let html = template({
     title: `${page} - LiveView Demo`,
     app: VElementToString(<App url={page} />),
   })
-  res.setHeader('Content-Type', 'text/html')
-  res.setHeader('Link', `<http://localhost:8100/${page}>; rel="canonical"`)
   res.end(html)
 })
