@@ -1,22 +1,16 @@
-import type WebSocket from 'ws'
 import type { Server } from 'ws'
-import debug from 'debug'
 import { Ping, Pong, Send } from '../client/ws-lite.js'
+import { debugLog } from './debug.js'
+import type { ManagedWebsocket, OnWsMessage } from './wss'
 
-let log = debug('wss-lite.ts')
+let log = debugLog('wss-lite.ts')
 log.enabled = true
-
-export type ManagedWebsocket<ServerEvent = any> = {
-  ws: WebSocket
-  send(event: ServerEvent): void
-  close(code?: number, reason?: string): void
-}
 
 export function listenWSS<ClientEvent = any, ServerEvent = any>(options: {
   wss: Server
   attachWS: (ws: ManagedWebsocket) => void
   onClose: (ws: ManagedWebsocket, code?: number, reason?: string) => void
-  onMessage: (ws: ManagedWebsocket, event: ClientEvent) => void
+  onMessage: OnWsMessage
 }) {
   const { wss } = options
   wss.on('connection', ws => {
@@ -49,7 +43,8 @@ export function listenWSS<ClientEvent = any, ServerEvent = any>(options: {
         return
       }
       if (message[0] === Send) {
-        options.onMessage(managedWS, JSON.parse(message.slice(1)))
+        let event = JSON.parse(message.slice(1))
+        options.onMessage(event, managedWS, wss)
         return
       }
       log('received unknown ws message:', data)

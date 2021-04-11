@@ -1,15 +1,24 @@
 import type { Server } from 'ws'
 import type JSX from '../../client/jsx'
-import type { ManagedWebSocket } from '../wss'
+import type { ManagedWebsocket } from '../wss'
 
-export type View<
-  Props extends Record<string, any> = any,
-  Events extends Record<string, any> = any
-> = {
+type Dict = Record<string, any>
+
+export type View<Props extends Dict = any, Events extends Dict = any> = {
   initView?: JSX.Element
-  render?: (props: Props) => JSX.Element
-  onMessages?: Record<
-    keyof Events,
-    (event: Events[keyof Events], ws: ManagedWebSocket, wss: Server) => void
-  >
+  render?: Render<Props>
+  onMessages?: OnMessages<Events>
 }
+
+export type Render<Props extends Dict = any> = (props: Props) => JSX.Element
+
+export type OnMessages<Events extends Dict = any> = Record<
+  keyof Events,
+  EventListener<Events[keyof Events]>
+>
+
+export type EventListener<Event = any> = (
+  event: Event,
+  ws: ManagedWebsocket,
+  wss: Server,
+) => void

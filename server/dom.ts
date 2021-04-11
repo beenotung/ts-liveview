@@ -20,8 +20,12 @@ export function Raw(props: { html: string }): JSX.Element {
   return ['raw', props.html] as any
 }
 
-export function Fragment(props: { list: VNodeList }): JSX.Element {
-  return [props.list] as any
+export function Fragment(
+  props?: { list?: VNodeList },
+  children?: VNodeList,
+): JSX.Element {
+  let nodes: VNodeList = props?.list || children || []
+  return [nodes] as any
 }
 
 export function VElementToString([selector, attrs, children]:

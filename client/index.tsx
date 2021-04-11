@@ -31,7 +31,7 @@ connectWS<ServerMessage>({
   },
 })
 
-type ServerMessage = ['update', VElement]
+export type ServerMessage = ['update', VElement]
 
 function onServerMessage(message: ServerMessage) {
   let [type, value] = message as ServerMessage

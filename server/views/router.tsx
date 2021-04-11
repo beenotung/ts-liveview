@@ -1,16 +1,17 @@
 import express from 'express'
+import { debugLog } from '../debug.js'
 import { loadTemplate } from '../template.js'
-import {
-  flagsToClassName,
-  Fragment,
-  VElementToString,
-  VNodeToString,
-} from '../dom.js'
+import { flagsToClassName, Fragment, VElementToString } from '../dom.js'
+import { OnWsMessage } from '../wss'
 import { notImplemented, pageNotFoundView } from './errors.js'
 import { homeView } from './home.js'
 import { Style } from '../components.js'
 import JSX from '../../client/jsx.js'
-import type { View } from './view.js'
+import { thermostatView } from './thermostat.js'
+import type { View, EventListener } from './view.js'
+
+let log = debugLog('router.ts')
+log.enabled = true
 
 let template = loadTemplate<{
   title: string
@@ -25,47 +26,72 @@ type Page = {
 }
 let pages: Page[] = [
   { url: 'home', view: homeView },
-  { url: 'thermostat', view: homeView },
+  { url: 'thermostat', view: thermostatView },
 ]
 
+// page indices
 let pageUrls: string[] = []
 let pageRecord: Record<string, View> = {}
-pages.forEach(page => {
-  pageUrls.push(page.url)
-  pageRecord[page.url] = page.view
+// key -> listeners
+let messageListeners: Record<string, EventListener[]> = {}
+
+// populate page indices
+pages.forEach(({ url, view }) => {
+  pageUrls.push(url)
+
+  pageRecord[url] = view
+
+  if (view.onMessages) {
+    Object.entries(view.onMessages).forEach(([type, onMessage]) => {
+      if (type in messageListeners) {
+        messageListeners[type].push(onMessage)
+      } else {
+        messageListeners[type] = [onMessage]
+      }
+    })
+  }
 })
+
+export let onWSMessage: OnWsMessage = (event, ws, wss) => {
+  let [type, value] = event
+  if (!(type in messageListeners)) {
+    log(`unknown ws message type:`, type)
+    return
+  }
+  messageListeners[type].forEach(listener => {
+    listener(value, ws, wss)
+  })
+}
 
 function Menu({ selected }: { selected: string }) {
   return (
-    <Fragment
-      list={[
-        <Style
-          css={`
-            .menu > a {
-              margin: 0.25em;
-              text-decoration: none;
-              border-bottom: 1px solid black;
-            }
-            .menu > a.selected {
-              border-bottom: 2px solid black;
-            }
-          `}
-        />,
-        <h1>Menu</h1>,
-        <div class="menu">
-          <Fragment
-            list={pageUrls.map(url => {
-              let className = flagsToClassName({ selected: url === selected })
-              return (
-                <a href={url} class={className}>
-                  {url}
-                </a>
-              )
-            })}
-          />
-        </div>,
-      ]}
-    />
+    <Fragment>
+      <Style
+        css={`
+          .menu > a {
+            margin: 0.25em;
+            text-decoration: none;
+            border-bottom: 1px solid black;
+          }
+          .menu > a.selected {
+            border-bottom: 2px solid black;
+          }
+        `}
+      />
+      <h1>Menu</h1>
+      <div class="menu">
+        <Fragment
+          list={pageUrls.map(url => {
+            let className = flagsToClassName({ selected: url === selected })
+            return (
+              <a href={url} class={className}>
+                {url}
+              </a>
+            )
+          })}
+        />
+      </div>
+    </Fragment>
   )
 }
 

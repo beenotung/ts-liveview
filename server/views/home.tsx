@@ -1,8 +1,15 @@
+import type { ServerMessage } from '../../client'
+import { VElement } from '../../client/dom'
 import JSX from '../../client/jsx.js'
-import type { ManagedWebSocket } from '../wss'
+import { debugLog } from '../debug.js'
+import { Fragment } from '../dom.js'
+import { OnMessages, View } from './view'
+
+let log = debugLog('home.tsx')
+log.enabled = true
 
 let initView = (
-  <div id="app" className="light live">
+  <Fragment>
     <h1>Login Form</h1>
     <form>
       {['a', [['href', '#']], ['hash link']]}
@@ -55,9 +62,21 @@ label::after {
         /*html*/ `<button onclick="alert('running js')">click me</button>`
       }</code>
     </pre>
-  </div>
+  </Fragment>
 )
 
-export let homeView = {
+let onMessages: OnMessages = {
+  username(value, ws) {
+    let msg: ServerMessage = ['update', ['#username-out', [], [value]]]
+    ws.send(msg)
+  },
+  password(value, ws) {
+    let msg: ServerMessage = ['update', ['#password-out', [], [value]]]
+    ws.send(msg)
+  },
+}
+
+export let homeView: View = {
   initView,
+  onMessages,
 }

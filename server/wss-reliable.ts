@@ -1,6 +1,4 @@
 import type { Server } from 'ws'
-import type WebSocket from 'ws'
-import debug from 'debug'
 import {
   Ping,
   Pong,
@@ -10,21 +8,17 @@ import {
   Send,
   WsMessage,
 } from '../client/ws-reliable.js'
+import { debugLog } from './debug.js'
+import type { ManagedWebsocket, OnWsMessage } from './wss'
 
-let log = debug('wss-reliable.ts')
+let log = debugLog('wss-reliable.ts')
 log.enabled = true
-
-export type ManagedWebsocket<ServerEvent = any> = {
-  ws: WebSocket
-  send(event: ServerEvent): void
-  close(code?: number, reason?: string): void
-}
 
 export function listenWSS<ClientEvent = any, ServerEvent = any>(options: {
   wss: Server
-  attachWS: (ws: ManagedWebsocket) => void
+  onConnection: (ws: ManagedWebsocket) => void
   onClose: (ws: ManagedWebsocket, code?: number, reason?: string) => void
-  onMessage: (ws: ManagedWebsocket, event: ClientEvent) => void
+  onMessage: OnWsMessage<ClientEvent>
 }) {
   const { wss } = options
   wss.on('connection', ws => {
@@ -61,7 +55,7 @@ export function listenWSS<ClientEvent = any, ServerEvent = any>(options: {
     function onClientEvent(event: ClientEvent) {
       let ackMessage: WsMessage<ServerEvent> = [Received, nextIncomingMessageId]
       ws.send(JSON.stringify(ackMessage))
-      options.onMessage(managedWS, event)
+      options.onMessage(event, managedWS, wss)
     }
 
     ws.on('message', data => {
@@ -121,6 +115,6 @@ export function listenWSS<ClientEvent = any, ServerEvent = any>(options: {
     })
 
     const managedWS: ManagedWebsocket = { ws, send, close }
-    options.attachWS(managedWS)
+    options.onConnection(managedWS)
   })
 }

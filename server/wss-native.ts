@@ -1,21 +1,15 @@
-import type WebSocket from 'ws'
 import type { Server } from 'ws'
-import debug from 'debug'
+import { debugLog } from './debug.js'
+import type { ManagedWebsocket, OnWsMessage } from './wss'
 
-let log = debug('wss-native.ts')
+let log = debugLog('wss-native.ts')
 log.enabled = true
-
-export type ManagedWebsocket<ServerEvent = any> = {
-  ws: WebSocket
-  send(event: ServerEvent): void
-  close(code?: number, reason?: string): void
-}
 
 export function listenWSS<ClientEvent = any, ServerEvent = any>(options: {
   wss: Server
   attachWS: (ws: ManagedWebsocket) => void
   onClose: (ws: ManagedWebsocket, code?: number, reason?: string) => void
-  onMessage: (ws: ManagedWebsocket, event: ClientEvent) => void
+  onMessage: OnWsMessage
 }) {
   const { wss } = options
   wss.on('connection', ws => {
@@ -37,7 +31,8 @@ export function listenWSS<ClientEvent = any, ServerEvent = any>(options: {
     }
 
     ws.on('message', data => {
-      options.onMessage(managedWS, JSON.parse(String(data)))
+      let event = JSON.parse(String(data))
+      options.onMessage(event, managedWS, wss)
     })
 
     const managedWS: ManagedWebsocket = { ws, send, close }

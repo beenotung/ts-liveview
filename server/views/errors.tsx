@@ -6,16 +6,18 @@ type Props = { url: string }
 
 export let pageNotFoundView: View<Props> = {
   initView: (
-    <Fragment
-      list={[<h1>404 Page Not Found</h1>, <a href="/">Back to Home Page</a>]}
-    />
+    <Fragment>
+      <h1>404 Page Not Found</h1>
+      <a href="/">Back to Home Page</a>
+    </Fragment>
   ),
 }
 
 export let notImplemented: View<Props> = {
   initView: (
-    <Fragment
-      list={[<h1>Not Implemented</h1>, <a href="/">Back to Home Page</a>]}
-    />
+    <Fragment>
+      <h1>Not Implemented</h1>
+      <a href="/">Back to Home Page</a>
+    </Fragment>
   ),
 }
