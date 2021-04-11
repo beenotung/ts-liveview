@@ -68,8 +68,11 @@ export function VElementToString([selector, attrs, children]:
 }
 
 export function VNodeToString(node: VNode): string {
-  if (typeof node === 'string') {
-    return escapeHTML(node)
+  switch (typeof node) {
+    case 'string':
+      return escapeHTML(node)
+    case 'number':
+      return String(node)
   }
   if (node[0] === 'raw') {
     return (node as Raw)[1]

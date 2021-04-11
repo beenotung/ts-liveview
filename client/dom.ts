@@ -4,7 +4,7 @@ export type VNode = text | Raw | VFragment | VElement
 export type Raw = ['raw', html]
 export type VFragment = [VNodeList]
 type html = string
-type text = string
+type text = string | number
 export type selector = string
 export type attrs = [key, value][]
 type key = string
@@ -54,9 +54,13 @@ function createChildren(e: Element, children?: VNodeList) {
 }
 
 function createChild(e: Element, child: VNode) {
-  if (typeof child === 'string') {
-    e.appendChild(document.createTextNode(child))
-    return
+  switch (typeof child) {
+    case 'string':
+      e.appendChild(document.createTextNode(child))
+      return
+    case 'number':
+      e.appendChild(document.createTextNode(String(child)))
+      return
   }
   if (child[0] === 'raw') {
     e.appendChild(
