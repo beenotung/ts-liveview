@@ -1,10 +1,16 @@
 import express from 'express'
 import { loadTemplate } from '../template.js'
-import { Fragment, VElementToString, VNodeToString } from '../dom.js'
+import {
+  flagsToClassName,
+  Fragment,
+  VElementToString,
+  VNodeToString,
+} from '../dom.js'
+import { notImplemented, pageNotFoundView } from './errors.js'
 import { homeView } from './home.js'
 import { Style } from '../components.js'
 import JSX from '../../client/jsx.js'
-import type { VNode } from '../../client/dom'
+import type { View } from './view.js'
 
 let template = loadTemplate<{
   title: string
@@ -14,19 +20,19 @@ let template = loadTemplate<{
 export let router = express.Router()
 
 type Page = {
-  path: string
-  view: VNode
+  url: string
+  view: View
 }
 let pages: Page[] = [
-  { path: 'home', view: homeView },
-  { path: 'thermostat', view: homeView },
+  { url: 'home', view: homeView },
+  { url: 'thermostat', view: homeView },
 ]
 
-let pagePaths: string[] = []
-let pageRecord: Record<string, VNode> = {}
+let pageUrls: string[] = []
+let pageRecord: Record<string, View> = {}
 pages.forEach(page => {
-  pagePaths.push(page.path)
-  pageRecord[page.path] = page.view
+  pageUrls.push(page.url)
+  pageRecord[page.url] = page.view
 })
 
 function Menu({ selected }: { selected: string }) {
@@ -48,11 +54,11 @@ function Menu({ selected }: { selected: string }) {
         <h1>Menu</h1>,
         <div class="menu">
           <Fragment
-            list={pagePaths.map(path => {
-              let className = path === selected ? 'selected' : ''
+            list={pageUrls.map(url => {
+              let className = flagsToClassName({ selected: url === selected })
               return (
-                <a href={path} class={className}>
-                  {path}
+                <a href={url} class={className}>
+                  {url}
                 </a>
               )
             })}
@@ -63,15 +69,13 @@ function Menu({ selected }: { selected: string }) {
   )
 }
 
-function App({ path }: { path: string }) {
-  let page = pageRecord[path]
-  if (!page) {
-    page = `404 Page Not Found - ${path}`
-  }
+function App({ url }: { url: string }) {
+  let view = pageRecord[url] || pageNotFoundView
+  let node = view.initView || view.render?.({ url }) || notImplemented.initView
   return (
     <div id="app" class="light live">
-      <Menu selected={path} />
-      {page}
+      <Menu selected={url} />
+      {node}
     </div>
   )
 }
@@ -81,12 +85,12 @@ router.get('/', (req, res) => {
 })
 
 router.get('/:page', (req, res, next) => {
-  let path = req.params.page
+  let page = req.params.page
   let html = template({
-    title: `${path} - LiveView Demo`,
-    app: VElementToString(<App path={path} />),
+    title: `${page} - LiveView Demo`,
+    app: VElementToString(<App url={page} />),
   })
   res.setHeader('Content-Type', 'text/html')
-  res.setHeader('Link', `<http://localhost:8100/${path}>; rel="canonical"`)
+  res.setHeader('Link', `<http://localhost:8100/${page}>; rel="canonical"`)
   res.end(html)
 })

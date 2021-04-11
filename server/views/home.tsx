@@ -1,7 +1,7 @@
-import type { VElement } from '../../client/dom'
 import JSX from '../../client/jsx.js'
+import type { ManagedWebSocket } from '../wss'
 
-export let homeView: VElement = (
+let initView = (
   <div id="app" className="light live">
     <h1>Login Form</h1>
     <form>
@@ -56,4 +56,8 @@ label::after {
       }</code>
     </pre>
   </div>
-) as any
+)
+
+export let homeView = {
+  initView,
+}

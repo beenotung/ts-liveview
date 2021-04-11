@@ -71,10 +71,19 @@ export function VNodeToString(node: VNode): string {
     return (node as Raw)[1]
   }
   if (Array.isArray(node[0])) {
-    console.log({ node })
     let html = ''
     ;(node as VFragment)[0].forEach(node => (html += VNodeToString(node)))
     return html
   }
   return VElementToString(node as VElement)
+}
+
+export function flagsToClassName(flags: Record<string, any>) {
+  let classes: string[] = []
+  Object.entries(flags).forEach(([key, value]) => {
+    if (value) {
+      classes.push(key)
+    }
+  })
+  return classes.join(' ')
 }
