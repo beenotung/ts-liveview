@@ -37,6 +37,13 @@ export function VElementToString([selector, attrs, children]:
   let tagName = selector.match(tagNameRegex)![1]
   let html = `<${tagName}`
   attrs?.forEach(([key, value]) => {
+    switch (key) {
+      case 'class':
+      case 'style':
+        if (!value) {
+          return
+        }
+    }
     value = JSON.stringify(value)
     html += ` ${key}=${value}`
   })
