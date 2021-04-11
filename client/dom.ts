@@ -13,7 +13,7 @@ type value = string
 export function updateElement([selector, attrs, children]: VElement) {
   let e = document.querySelector(selector)
   if (!e) {
-    console.log('Failed to lookup element to mountNode, selector:', selector)
+    console.error('Failed to lookup element to mountNode, selector:', selector)
     throw new Error('Failed to lookup element to mountNode')
   }
   mountElement(e, [selector, attrs, children])
@@ -29,7 +29,7 @@ export function mountElement(
   e.innerHTML = ''
   createChildren(e, children)
   let htmlSize = e.outerHTML.length
-  console.log({ json: jsonSize, html: htmlSize })
+  console.debug({ json: jsonSize, html: htmlSize })
 }
 
 function createElement([selector, attrs, children]: VElement): Element {
