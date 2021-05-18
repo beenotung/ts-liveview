@@ -7,9 +7,11 @@
   "scripts": {
     "format": "prettier --write . && format-json-cli",
     "build": "tsc -p .",
-    "start": "npm run build && run-p server tsc:watch",
-    "server": "nodemon --ignore public/js dist/server/index.js",
-    "tsc:watch": "tsc -p . -w"
+    "start": "node dist/server/index.js",
+    "dev": "run-s build watch",
+    "watch":"run-p watch:*",
+    "watch:ts": "tsc -p . -w",
+    "watch:js": "nodemon --ignore public/js dist/server/index.js"
   },
   "keywords": [],
   "author": "",
