@@ -20,6 +20,7 @@ export function Raw(props: { html: string }): JSX.Element {
   return ['raw', props.html] as any
 }
 
+// alias as `<> ... </>`
 export function Fragment(
   props?: { list?: VNodeList },
   children?: VNodeList,
@@ -31,6 +32,10 @@ export function Fragment(
 export function VElementToString([selector, attrs, children]:
   | VElement
   | ComponentInvoke): string {
+  // fragment
+  if (!selector && !attrs) {
+    return VNodeToString([children as VNodeList])
+  }
   // component function
   if (typeof selector === 'function') {
     let component = selector as Component<any>
