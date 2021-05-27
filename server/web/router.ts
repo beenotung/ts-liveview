@@ -1,7 +1,7 @@
 import express from 'express'
 import { Router as UrlRouter } from 'url-router.ts'
 import { VNodeToString } from '../dom.js'
-import type { OnWsMessage } from '../wss.js'
+import type { OnWsMessage } from '../ws/wss.js'
 import type { Context, ContextHandler } from './context.js'
 import type { View } from './view.js'
 

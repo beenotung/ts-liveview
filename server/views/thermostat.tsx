@@ -1,6 +1,6 @@
 import JSX from '../../client/jsx.js'
-import { Style } from '../components.js'
-import { ManagedWebsocket } from '../wss.js'
+import { Style } from '../components/style.js'
+import { ManagedWebsocket } from '../ws/wss.js'
 import type { OnMessages, View } from './view'
 
 let count = 0

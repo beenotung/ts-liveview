@@ -5,7 +5,7 @@ import { config } from 'dotenv'
 import { join } from 'path'
 import compression from 'compression'
 import { debugLog } from './debug.js'
-import { listenWSS } from './wss-reliable.js'
+import { listenWSS } from './ws/wss-reliable.js'
 import { expressRouter, onWsMessage } from './web/router.js'
 
 config()

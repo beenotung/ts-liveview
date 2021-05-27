@@ -1,7 +1,7 @@
 import type { VElement, VNode } from '../../../client/dom.js'
 import type express from 'express'
 import { VNodeToString } from '../../dom.js'
-import type { ManagedWebsocket } from '../../wss.js'
+import type { ManagedWebsocket } from '../../ws/wss.js'
 import type { ServerMessage } from '../../../client/index.js'
 import type { Context } from '../context.js'
 import { loadTemplate } from '../../template.js'

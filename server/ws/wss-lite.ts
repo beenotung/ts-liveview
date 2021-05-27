@@ -1,8 +1,9 @@
 import type { Server } from 'ws'
-import { debugLog } from './debug.js'
+import { Ping, Pong, Send } from '../../client/ws-lite.js'
+import { debugLog } from '../debug.js'
 import type { ManagedWebsocket, OnWsMessage } from './wss'
 
-let log = debugLog('wss-native.ts')
+let log = debugLog('wss-lite.ts')
 log.enabled = true
 
 export function listenWSS<ClientEvent = any, ServerEvent = any>(options: {
@@ -13,7 +14,7 @@ export function listenWSS<ClientEvent = any, ServerEvent = any>(options: {
 }) {
   const { wss } = options
   wss.on('connection', ws => {
-    if (ws.protocol !== 'ws-native') {
+    if (ws.protocol !== 'ws-lite') {
       log('unknown ws protocol:', ws.protocol)
       return
     }
@@ -26,13 +27,27 @@ export function listenWSS<ClientEvent = any, ServerEvent = any>(options: {
     }
 
     function send(event: ServerEvent) {
-      let data = JSON.stringify(event)
+      let data = Send + JSON.stringify(event)
       ws.send(data)
     }
 
     ws.on('message', data => {
-      let event = JSON.parse(String(data))
-      options.onMessage(event, managedWS, wss)
+      let message = String(data)
+      if (message === Ping) {
+        if (ws.bufferedAmount === 0) {
+          ws.send(Pong)
+        }
+        return
+      }
+      if (message === Pong) {
+        return
+      }
+      if (message[0] === Send) {
+        let event = JSON.parse(message.slice(1))
+        options.onMessage(event, managedWS, wss)
+        return
+      }
+      log('received unknown ws message:', data)
     })
 
     const managedWS: ManagedWebsocket = { ws, send, close }

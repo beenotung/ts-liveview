@@ -1,7 +1,7 @@
 import type { Router } from 'url-router.ts'
 import JSX from '../../../client/jsx.js'
-import { Style } from '../../components.js'
-import { ManagedWebsocket } from '../../wss.js'
+import { Style } from '../../components/style.js'
+import { ManagedWebsocket } from '../../ws/wss.js'
 import { ContextHandler } from '../context.js'
 import { sendVElement, updateVElement } from '../helpers/response.js'
 

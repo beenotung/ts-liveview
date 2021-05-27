@@ -1,7 +1,6 @@
 import type {
   attrs,
   Raw,
-  selector,
   VElement,
   VFragment,
   VNode,

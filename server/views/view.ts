@@ -1,6 +1,6 @@
 import type { Server } from 'ws'
 import type JSX from '../../client/jsx'
-import type { ManagedWebsocket } from '../wss'
+import type { ManagedWebsocket } from '../ws/wss'
 
 type Dict = Record<string, any>
 

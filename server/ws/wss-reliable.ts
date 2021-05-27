@@ -7,9 +7,9 @@ import {
   RequestResend,
   Send,
   WsMessage,
-} from '../client/ws-reliable.js'
-import { debugLog } from './debug.js'
-import type { ManagedWebsocket, OnWsMessage } from './wss'
+} from '../../client/ws-reliable.js'
+import { debugLog } from '../debug.js'
+import type { ManagedWebsocket, OnWsMessage } from './wss.js'
 
 let log = debugLog('wss-reliable.ts')
 log.enabled = true

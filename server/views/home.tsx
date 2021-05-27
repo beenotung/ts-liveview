@@ -1,5 +1,4 @@
 import type { ServerMessage } from '../../client'
-import { VElement } from '../../client/dom'
 import JSX from '../../client/jsx.js'
 import { debugLog } from '../debug.js'
 import { Fragment } from '../dom.js'
