@@ -1,5 +1,5 @@
 import JSX from '../../client/jsx.js'
-import { Raw } from '../dom.js'
+import { Raw } from './raw.js'
 
 export function Style(props: { css: string }) {
   let css = props.css

@@ -1,7 +1,7 @@
 import type { ServerMessage } from '../../client'
 import JSX from '../../client/jsx.js'
 import { debugLog } from '../debug.js'
-import { Fragment } from '../dom.js'
+import { Fragment } from '../components/fragment.js'
 import { OnMessages, View } from './view'
 
 let log = debugLog('home.tsx')

@@ -1,5 +1,5 @@
 import JSX from '../../client/jsx.js'
-import { Fragment } from '../dom.js'
+import { Fragment } from '../components/fragment.js'
 import type { View } from './view'
 
 type Props = { url: string }
