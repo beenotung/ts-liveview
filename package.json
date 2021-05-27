@@ -9,7 +9,7 @@
     "build": "tsc -p .",
     "start": "node dist/server/index.js",
     "dev": "run-s build watch",
-    "watch":"run-p watch:*",
+    "watch": "run-p watch:*",
     "watch:ts": "tsc -p . -w",
     "watch:js": "nodemon --ignore public/js dist/server/index.js"
   },
@@ -23,6 +23,7 @@
     "escape-html": "^1.0.3",
     "express": "^4.17.1",
     "minify": "^7.0.1",
+    "url-router.ts": "^0.2.1",
     "ws": "^7.4.4"
   },
   "devDependencies": {

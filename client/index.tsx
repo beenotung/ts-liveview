@@ -14,12 +14,21 @@ connectWS<ServerMessage>({
   },
   attachWS(ws) {
     console.log('attach ws')
-    ;(window as any).emit = function () {
+
+    let emit = function emit() {
       ws.send(Array.from(arguments))
       if (window.event) {
+        console.debug('preventDefault')
         window.event.preventDefault()
       }
+    } as (...args: any[]) => void
+    function emitHref(a: HTMLAnchorElement) {
+      emit(a.getAttribute('href'))
     }
+    let win = window as any
+    win.emit = emit
+    win.emitHref = emitHref
+
     const status = document.querySelector('#ws_status')
     if (status) {
       ws.ws.addEventListener('open', () => {

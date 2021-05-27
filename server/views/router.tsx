@@ -111,11 +111,11 @@ router.get('/', (req, res) => {
 })
 
 router.get('/thermostat/inc', (req, res) => {
-  ;(thermostatView.onMessages.inc as any)()
+  thermostatView.onMessages.inc()
   res.redirect('/thermostat')
 })
 router.get('/thermostat/dec', (req, res) => {
-  ;(thermostatView.onMessages.dec as any)()
+  thermostatView.onMessages.dec()
   res.redirect('/thermostat')
 })
 

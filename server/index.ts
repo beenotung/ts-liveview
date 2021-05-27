@@ -6,7 +6,7 @@ import { join } from 'path'
 import compression from 'compression'
 import { debugLog } from './debug.js'
 import { listenWSS } from './wss-reliable.js'
-import { router, onWSMessage } from './views/router.js'
+import { expressRouter, onWsMessage } from './web/router.js'
 
 config()
 let log = debugLog('index.ts')
@@ -23,14 +23,14 @@ listenWSS({
   onClose: (ws, code, reason) => {
     log('close ws:', ws.ws.protocol, code, reason)
   },
-  onMessage: onWSMessage,
+  onMessage: onWsMessage,
 })
 
 app.use(compression())
 app.use(express.static('public'))
 app.use(express.static(join('dist', 'client')))
 
-app.use(router)
+app.use(expressRouter)
 
 let PORT = +process.env.PORT! || 8100
 server.listen(PORT, () => {
