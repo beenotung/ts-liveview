@@ -33,7 +33,7 @@ function render() {
   )
 }
 function updateCurrent(ws: ManagedWebsocket) {
-  updateVElement(ws, ['#thermostat .current', void 0, [current]])
+  updateVElement(ws, ['#thermostat .current', [], [current]])
 }
 
 export default function (router: Router<ContextHandler>) {

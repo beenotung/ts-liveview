@@ -12,7 +12,7 @@ export const JSX = {
       }
       return [tagName, Object.entries(attrs)]
     }
-    return [tagName, attrs ? Object.entries(attrs) : undefined, children]
+    return [tagName, attrs ? Object.entries(attrs) : [], children]
   },
 }
 
