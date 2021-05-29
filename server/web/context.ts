@@ -1,7 +1,8 @@
-import { RouteContext as RouteMatch } from 'url-router.ts'
-import express from 'express'
+import type { RouteContext as RouteMatch } from 'url-router.ts'
+import type express from 'express'
 import type { ManagedWebsocket } from '../ws/wss.js'
-import { Server } from 'ws'
+import type { Server } from 'ws'
+import type { ServerMessage } from '../../client/index.js'
 
 export type Context = ExpressContext | WsContext
 
@@ -20,7 +21,7 @@ export type ExpressContext = RouteContext & {
 }
 export type WsContext = RouteContext & {
   type: 'ws'
-  ws: ManagedWebsocket
+  ws: ManagedWebsocket<ServerMessage>
   wss: Server
   rest: any[]
 }

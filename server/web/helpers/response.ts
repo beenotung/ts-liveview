@@ -1,7 +1,7 @@
 import type { VElement, VNode } from '../../../client/dom.js'
 import type express from 'express'
 import { VNodeToString } from '../../dom.js'
-import type { ManagedWebsocket } from '../../ws/wss.js'
+import type { WsContext } from '../context.js';
 import type { ServerMessage } from '../../../client/index.js'
 import type { Context } from '../context.js'
 import { loadTemplate } from '../../template.js'
@@ -19,7 +19,7 @@ export function renderVNode(res: express.Response, node: VNode) {
   res.end(html)
 }
 
-export function updateVElement(ws: ManagedWebsocket, node: VElement) {
+export function updateVElement(ws: WsContext['ws'], node: VElement) {
   let msg: ServerMessage = ['update', node]
   ws.send(msg)
 }

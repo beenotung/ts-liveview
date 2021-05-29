@@ -1,9 +1,9 @@
 import type { Router } from 'url-router.ts'
 import JSX from '../../../client/jsx.js'
 import { Style } from '../../components/style.js'
-import { ManagedWebsocket } from '../../ws/wss.js'
 import { ContextHandler } from '../context.js'
-import { sendVElement, updateVElement } from '../helpers/response.js'
+import { sendVElement } from '../helpers/response.js'
+import { Context } from '../context'
 
 let current = 0
 
@@ -32,8 +32,11 @@ function render() {
     </div>
   )
 }
-function updateCurrent(ws: ManagedWebsocket) {
-  updateVElement(ws, ['#thermostat .current', [], [current]])
+
+function onUpdateCurrent(context: Context) {
+  context.type === 'express'
+    ? context.res.redirect('/thermostat')
+    : context.ws.send(['update', ['#thermostat .current', [], [current]]])
 }
 
 export default function (router: Router<ContextHandler>) {
@@ -42,14 +45,10 @@ export default function (router: Router<ContextHandler>) {
   })
   router.add('/thermostat/inc', context => {
     current++
-    context.type === 'express'
-      ? context.res.redirect('/thermostat')
-      : updateCurrent(context.ws)
+    onUpdateCurrent(context)
   })
   router.add('/thermostat/dec', context => {
     current--
-    context.type === 'express'
-      ? context.res.redirect('/thermostat')
-      : updateCurrent(context.ws)
+    onUpdateCurrent(context)
   })
 }
