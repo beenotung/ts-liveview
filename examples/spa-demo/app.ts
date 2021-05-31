@@ -22,7 +22,7 @@ export function initialRender(req: Request, res: Response): string | Component {
 }
 
 export function renderApp(state: State) {
-  const chatroom = 'https://chat.liveviews.xyz'
+  const chatroom = 'https://chat.liveviews.cc'
   return S.sample(() =>
     c(
       '#app',
