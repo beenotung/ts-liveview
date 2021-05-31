@@ -9,7 +9,7 @@ Just like [Phoenix LiveView](https://github.com/phoenixframework/phoenix_live_vi
 #### Examples
 
 - [x] Single-Page Application (SPA):
-[Demo](https://liveviews.xyz),
+[Demo](https://liveviews.cc),
 [Source](./examples/spa-demo).
 With:
   - url routing
@@ -17,7 +17,7 @@ With:
   - bandwidth quota
 
 - [x] Realtime chatroom:
-[Demo](https://chat.liveviews.xyz),
+[Demo](https://chat.liveviews.cc),
 [Source](./examples/chatroom-demo)
 
 ## Why server-rendered?
