@@ -32,7 +32,7 @@ export function renderRoot(
   </dl>
 `
   }
-  const spa = 'https://liveviews.xyz'
+  const spa = 'https://liveviews.cc'
   const component = c(
     '.main',
     h`
