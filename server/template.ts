@@ -13,3 +13,28 @@ export function renderTemplate<T extends object>(template: string, options: T) {
   })
   return template
 }
+
+function extractParams(text: string): string[] {
+  let matches = text.match(/\{(.*)\}/g)
+  if (!matches) {
+    return []
+  }
+  return matches.map(match => match.replace('{', '').replace('}', ''))
+}
+
+export function buildTemplate(file: string) {
+  let text = readFileSync(file).toString()
+  let params = extractParams(text)
+  let name = basename(file)
+  name = JSON.stringify(name)
+  let keys = params.map(name => JSON.stringify(name)).join(' | ')
+  let code = `
+export default type Template {
+  [${name}]: 
+}
+`.trim()
+}
+
+if ('test') {
+  buildTemplate(join('template', 'index.html'))
+}
