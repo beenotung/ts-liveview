@@ -45,8 +45,8 @@ export let onWsMessage: OnWsMessage = (event, ws, wss) => {
   handler(context)
 }
 
-import index from './views/index.js'
-index(urlRouter)
+import home from './views/home.js'
+home(urlRouter)
 
 import thermostat from './views/thermostat.js'
 thermostat(urlRouter)
