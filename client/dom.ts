@@ -75,7 +75,7 @@ function createChild(e: Element, child: VNode) {
   e.appendChild(createElement(child as VElement))
 }
 
-export let tagNameRegex = /([\w-]+)/
+export const tagNameRegex = /([\w-]+)/
 
 function applySelector(e: Element, selector: selector) {
   let idMatches = selector.match(/#([\w-]+)/)

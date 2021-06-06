@@ -1,9 +1,16 @@
 import { readFileSync } from 'fs'
-import { join } from 'path'
-import { basename } from 'path'
+import { writeFileSync } from 'node:fs'
+import { join, basename, extname } from 'path'
 
-export function loadTemplate<T extends object>(page: string) {
-  let file = join('template', page + '.html')
+export function toTemplateFile(page: string) {
+  return join('template', page + '.html')
+}
+
+export function loadTemplate<T extends object>(page_or_file: string) {
+  let file = page_or_file.endsWith('.html')
+    ? page_or_file
+    : toTemplateFile(page_or_file)
+  genTemplateType(file)
   let template = readFileSync(file, 'utf-8')
   return (options: T) => renderTemplate(template, options)
 }
@@ -23,19 +30,23 @@ function extractParams(text: string): string[] {
   return matches.map(match => match.replace('{', '').replace('}', ''))
 }
 
-export function buildTemplate(file: string) {
-  let text = readFileSync(file).toString()
-  let params = extractParams(text)
-  let name = basename(file)
-  name = JSON.stringify(name)
-  let keys = params.map(name => JSON.stringify(name)).join(' | ')
-  let code = `
-export default type Template {
-  [${name}]: 
-}
-`.trim()
+function calcTemplateName(file: string): string {
+  file = basename(file)
+  file = file.replace(extname(file), '')
+  file = file.replace(/-/g, '_')
+  return file
 }
 
-if ('test') {
-  buildTemplate(join('template', 'index.html'))
+export function genTemplateType(
+  file: string,
+  name: string = calcTemplateName(file),
+) {
+  let text = readFileSync(file).toString()
+  let params = extractParams(text)
+  let keys = params.map(name => JSON.stringify(name)).join(' | ')
+  let code = `
+export type ${name}_key = ${keys}
+export type ${name} = Record<${name}_key, string | number>
+`.trim()
+  writeFileSync(file + '.ts', code)
 }
