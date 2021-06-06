@@ -2,7 +2,7 @@ import JSX from './jsx/jsx.js'
 import type { index } from '../../template/index.html'
 import { loadTemplate } from '../template.js'
 import express from 'express'
-import type { ExpressContext } from './context'
+import type { ExpressContext, WsContext } from './context'
 import type { Node } from './jsx/types'
 import { nodeToHTML } from './jsx/html.js'
 import { sendHTML } from './express.js'
@@ -10,6 +10,9 @@ import { getContext } from './context.js'
 import { attrs } from './jsx/types'
 import { Switch } from './components/router.js'
 import { mapArray } from './components/list.js'
+import { OnWsMessage } from '../ws/wss.js'
+import { ContextSymbol } from './context'
+import { dispatch } from './jsx/dispatch.js'
 
 let template = loadTemplate<index>('index')
 
@@ -23,7 +26,9 @@ export function App(): Node {
           ['/', '/home', '/about', '/some/page/that/does-not/exist'],
           link => (
             <li>
-              <a href={link}>{link}</a>
+              <a href={link} onclick="emitHref(this)">
+                {link}
+              </a>
             </li>
           ),
         )}
@@ -88,3 +93,16 @@ expressRouter.use((req, res, next) => {
   })
   sendHTML(res, html)
 })
+
+export let onWsMessage: OnWsMessage = (event, ws, wss) => {
+  console.log('ws message:', event)
+  let [url, ...args] = event
+  let context: WsContext = {
+    type: 'ws',
+    ws,
+    wss,
+    url,
+    args,
+  }
+  dispatch(App, context)
+}

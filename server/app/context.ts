@@ -4,7 +4,7 @@ import type { ServerMessage } from '../../client'
 import type { ManagedWebsocket } from '../ws/wss'
 import type { RouteContext } from 'url-router.ts'
 
-export type Context = ExpressContext | LiveContext
+export type Context = ExpressContext | WsContext
 
 export type ExpressContext = {
   type: 'express'
@@ -13,7 +13,7 @@ export type ExpressContext = {
   next: express.NextFunction
 } & RouterContext
 
-export type LiveContext = {
+export type WsContext = {
   type: 'ws'
   ws: ManagedWebsocket<ServerMessage>
   wss: Server
