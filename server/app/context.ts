@@ -1,7 +1,8 @@
-import express from 'express'
-import { Server } from 'ws'
-import { ServerMessage } from '../../client'
-import { ManagedWebsocket } from '../ws/wss'
+import type express from 'express'
+import type { Server } from 'ws'
+import type { ServerMessage } from '../../client'
+import type { ManagedWebsocket } from '../ws/wss'
+import type { RouteContext } from 'url-router.ts'
 
 export type Context = ExpressContext | LiveContext
 
@@ -10,20 +11,25 @@ export type ExpressContext = {
   req: express.Request
   res: express.Response
   next: express.NextFunction
-}
+} & RouterContext
 
 export type LiveContext = {
   type: 'ws'
   ws: ManagedWebsocket<ServerMessage>
   wss: Server
-  url?: string
   event?: string
   args?: any[]
+} & RouterContext
+
+export type RouterContext = {
+  url: string
+  routerMatch?: RouterMatch
 }
 
-export function getUrl(context: Context): string {
-  if (context.type === 'express') {
-    return context.req.url
-  }
-  return context.url!
+export type RouterMatch = Omit<RouteContext<any>, 'value'>
+
+export const ContextSymbol = Symbol('context')
+
+export function getContext(attrs: object): Context {
+  return (attrs as any)[ContextSymbol]
 }

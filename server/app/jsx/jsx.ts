@@ -3,16 +3,16 @@ import { Element, NodeList, attrs } from './types'
 export const JSX = {
   createElement(
     tagName: string,
-    attrs: attrs | null,
+    props: attrs | null,
     ...children: NodeList
   ): Element {
     if (children.length === 0) {
-      if (!attrs) {
+      if (!props) {
         return [tagName]
       }
-      return [tagName, attrs]
+      return [tagName, props]
     }
-    return [tagName, attrs || {}, children]
+    return [tagName, props || {}, children]
   },
 }
 

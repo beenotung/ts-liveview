@@ -1,6 +1,7 @@
 import escapeHTML from 'escape-html'
-import { Context } from '../context'
-import {
+import type { Context } from '../context'
+import { ContextSymbol } from '../context.js'
+import type {
   html,
   Node,
   Raw,
@@ -41,7 +42,11 @@ export function nodeToHTML(node: Node, context: Context): html {
 
   if (typeof node[0] === 'function') {
     node = node as Component
-    return nodeToHTML(node[0](context, node[1], node[2]), context)
+    let attrs = {
+      [ContextSymbol]: context,
+      ...node[1],
+    }
+    return nodeToHTML(node[0](attrs, node[2]), context)
   }
 
   return elementToHTML(node, context)
