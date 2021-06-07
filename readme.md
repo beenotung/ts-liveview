@@ -4,6 +4,8 @@ The successor to ts-liveview.
 
 Like ts-liveview, ? helps to deliver fast and interactive user interface that normally require javascript (MBs of js to be downloaded and executed on the client side) directly from the server.
 
+JSX is supported but Virtual DOM is not required.
+
 ## Why the rename?
 
 I chose to rename the project for a few reasons:
