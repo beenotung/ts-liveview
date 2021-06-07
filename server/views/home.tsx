@@ -66,11 +66,11 @@ label::after {
 
 let onMessages: OnMessages = {
   username(value, ws) {
-    let msg: ServerMessage = ['update', ['#username-out', [], [value]]]
+    let msg: ServerMessage = ['update', ['#username-out', {}, [value]]]
     ws.send(msg)
   },
   password(value, ws) {
-    let msg: ServerMessage = ['update', ['#password-out', [], [value]]]
+    let msg: ServerMessage = ['update', ['#password-out', {}, [value]]]
     ws.send(msg)
   },
 }

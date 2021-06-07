@@ -1,10 +1,11 @@
-import type { VElement, VNode } from '../../../client/dom.js'
+import type { VElement, VNode } from '../../../client/app/types.js'
 import type express from 'express'
-import { VNodeToString } from '../../dom.js'
 import type { WsContext } from '../context.js'
 import type { ServerMessage } from '../../../client/index.js'
 import type { Context } from '../context.js'
 import { loadTemplate } from '../../template.js'
+import { nodeToHTML } from '../../app/jsx/html.js'
+import { ExpressContext } from '../../app/context.js'
 
 let template = loadTemplate<{
   title: string
@@ -12,7 +13,14 @@ let template = loadTemplate<{
 }>('index')
 
 export function renderVNode(res: express.Response, node: VNode) {
-  let html = VNodeToString(node)
+  let context: ExpressContext = {
+    type: 'express',
+    req: res.req!,
+    res,
+    url: res.req!.url,
+    next: res.req!.next!,
+  }
+  let html = nodeToHTML(node, context)
   html = template({ title: 'todo', app: html })
   res.setHeader('Content-Type', 'text/html')
   res.setHeader('X-Powered-By', 'ts-liveview')

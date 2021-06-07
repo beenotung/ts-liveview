@@ -1,7 +1,6 @@
 import express from 'express'
 import { debugLog } from '../debug.js'
 import { loadTemplate } from '../template.js'
-import { flagsToClassName, VElementToString } from '../dom.js'
 import { Fragment } from '../components/fragment.js'
 import type { OnWsMessage } from '../ws/wss.js'
 import { notImplemented, pageNotFoundView } from './errors.js'
@@ -10,6 +9,8 @@ import { Style } from '../components/style.js'
 import JSX from '../../client/jsx.js'
 import { thermostatView } from './thermostat.js'
 import type { View, EventListener } from './view.js'
+import { flagsToClassName, nodeToHTML } from '../app/jsx/html.js'
+import { ExpressContext } from '../app/context'
 
 let log = debugLog('router.ts')
 log.enabled = true
@@ -125,9 +126,17 @@ router.get('/:page', (req, res, next) => {
   res.setHeader('Connection', 'Keep-Alive')
   res.setHeader('Content-Type', 'text/html')
   res.setHeader('Link', `<http://localhost:8100/${page}>; rel="canonical"`)
-  let html = template({
+  let context: ExpressContext = {
+    type: 'express',
+    req,
+    res,
+    next,
+    url: req.url,
+  }
+  let html = nodeToHTML(<App url={page} />, context)
+  html = template({
     title: `${page} - LiveView Demo`,
-    app: VElementToString(<App url={page} />),
+    app: html,
   })
   res.end(html)
 })

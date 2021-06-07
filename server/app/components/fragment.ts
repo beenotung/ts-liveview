@@ -1,6 +1,6 @@
 import { Node, Fragment, NodeList } from '../jsx/types'
 
-export function Array(nodeList: NodeList): Fragment {
+export function Fragment(nodeList: NodeList): Fragment {
   return [nodeList]
 }
 

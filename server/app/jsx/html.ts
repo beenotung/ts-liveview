@@ -1,3 +1,4 @@
+import { selector } from './../../../client/dom'
 import escapeHTML from 'escape-html'
 import type { Context } from '../context'
 import { ContextSymbol } from '../context.js'
@@ -11,8 +12,6 @@ import type {
   Component,
   Element,
 } from './types'
-
-export const tagNameRegex = /([\w-]+)/
 
 export function nodeToHTML(node: Node, context: Context): html {
   switch (node) {
@@ -46,7 +45,8 @@ export function nodeToHTML(node: Node, context: Context): html {
       [ContextSymbol]: context,
       ...node[1],
     }
-    return nodeToHTML(node[0](attrs, node[2]), context)
+    node = node[0](attrs, node[2])
+    return nodeToHTML(node, context)
   }
 
   return elementToHTML(node, context)
@@ -58,12 +58,28 @@ function nodeListToHTML(nodeList: NodeList, context: Context): html {
   return html
 }
 
+const tagNameRegex = /([\w-]+)/
+const idRegex = /#([\w-]+)/
+const classListRegex = /\.([\w-]+)/g
+
 function elementToHTML(
   [selector, attrs, children]: Element,
   context: Context,
 ): html {
   let tagName = selector.match(tagNameRegex)![1]
   let html = `<${tagName}`
+  let idMatch = selector.match(idRegex)
+  if (idMatch) {
+    selector = selector.replace(idMatch[0], '')
+    html += ` id="${idMatch[1]}"`
+  }
+  let classList: string[] = []
+  for (let classMatch of selector.matchAll(classListRegex)) {
+    classList.push(classMatch[1])
+  }
+  if (classList.length > 0) {
+    html += ` class="${classList.join(' ')}"`
+  }
   if (attrs) {
     Object.entries(attrs).forEach(([name, value]) => {
       switch (name) {

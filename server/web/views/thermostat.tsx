@@ -36,7 +36,7 @@ function render() {
 function onUpdateCurrent(context: Context) {
   context.type === 'express'
     ? context.res.redirect('/thermostat')
-    : context.ws.send(['update', ['#thermostat .current', [], [current]]])
+    : context.ws.send(['update', ['#thermostat .current', {}, [current]]])
 }
 
 export default function (router: Router<ContextHandler>) {

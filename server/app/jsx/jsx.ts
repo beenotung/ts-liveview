@@ -1,11 +1,14 @@
-import { Element, NodeList, attrs } from './types'
+import { JSXFragment, Element, NodeList, attrs } from './types'
 
 export const JSX = {
   createElement(
     tagName: string,
     props: attrs | null,
     ...children: NodeList
-  ): Element {
+  ): Element | JSXFragment {
+    if (!tagName && !props) {
+      return [undefined, null, children]
+    }
     if (children.length === 0) {
       if (!props) {
         return [tagName]

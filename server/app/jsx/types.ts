@@ -1,5 +1,5 @@
 export type Node = Literal | Raw | Fragment | JSXFragment | Component | Element
-export type JSXFragment = [undefined, undefined, NodeList]
+export type JSXFragment = [undefined, null, NodeList]
 export type Component = [ComponentFn, attrs?, NodeList?]
 export type Element = [selector, attrs?, NodeList?]
 export type NodeList = Node[]

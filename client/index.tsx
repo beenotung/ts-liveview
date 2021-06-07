@@ -1,6 +1,5 @@
-import type { VElement } from './dom.js'
-import { mountElement, updateElement } from './dom.js'
-import JSX from './jsx.js'
+import type { VElement } from './app/types'
+import { updateElement } from './app/dom.js'
 import { connectWS } from './ws-reliable.js'
 
 let wsUrl = location.origin.replace('http', 'ws')
@@ -23,7 +22,14 @@ connectWS<ServerMessage>({
       }
     } as (...args: any[]) => void
     function emitHref(a: HTMLAnchorElement) {
-      emit(a.getAttribute('href'))
+      let url = a.getAttribute('href')
+      let title = a.getAttribute('title') || document.title
+      history.pushState(null, title, url)
+      emit(url)
+    }
+    window.onpopstate = (event: PopStateEvent) => {
+      let url = location.href.replace(location.origin, '')
+      emit(url)
     }
     let win = window as any
     win.emit = emit
@@ -56,16 +62,4 @@ function onServerMessage(message: ServerMessage) {
     default:
       console.log('message:', message)
   }
-}
-
-let app = document.querySelector('#app')!
-let root: VElement = ['div#app.loading', [], [['h1', [], ['loading']]]]
-root = (
-  <div id="app" className="loading">
-    <h1>loading</h1>
-  </div>
-) as any
-
-if (!'local') {
-  mountElement(app, root)
 }

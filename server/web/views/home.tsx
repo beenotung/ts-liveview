@@ -1,5 +1,5 @@
+import JSX from '../../app/jsx/jsx.js'
 import type { Router } from 'url-router.ts'
-import JSX from '../../../client/jsx.js'
 import type { ContextHandler } from '../context.js'
 import { sendVElement } from '../helpers/response.js'
 

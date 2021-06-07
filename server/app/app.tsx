@@ -3,49 +3,52 @@ import type { index } from '../../template/index.html'
 import { loadTemplate } from '../template.js'
 import express from 'express'
 import type { ExpressContext, WsContext } from './context'
-import type { Node } from './jsx/types'
+import type { Node, Element } from './jsx/types'
 import { nodeToHTML } from './jsx/html.js'
 import { sendHTML } from './express.js'
 import { getContext } from './context.js'
 import { attrs } from './jsx/types'
 import { Switch } from './components/router.js'
-import { mapArray } from './components/list.js'
+import { Fragment, mapArray } from './components/fragment.js'
 import { OnWsMessage } from '../ws/wss.js'
-import { ContextSymbol } from './context'
-import { dispatch } from './jsx/dispatch.js'
+import { dispatchUpdate } from './jsx/dispatch.js'
 
 let template = loadTemplate<index>('index')
 
-export function App(): Node {
-  return (
-    <div class="app">
-      <h1>ts-liveview Demo</h1>
-      <p>This page is powered by Server-Side-Rendered JSX Components</p>
-      <ul id="menu">
-        {mapArray(
-          ['/', '/home', '/about', '/some/page/that/does-not/exist'],
-          link => (
-            <li>
-              <a href={link} onclick="emitHref(this)">
-                {link}
-              </a>
-            </li>
-          ),
-        )}
-      </ul>
-      <fieldset>
-        <legend>Router Demo</legend>
-        {Switch(
-          {
-            '/': [Home],
-            '/home': [Home],
-            '/about': [About],
-          },
-          <NotMatch />,
-        )}
-      </fieldset>
-    </div>
-  )
+export function App(): Element {
+  return [
+    'div.app',
+    {},
+    [
+      <>
+        <h1>ts-liveview Demo</h1>
+        <p>This page is powered by Server-Side-Rendered JSX Components</p>
+        <ul id="menu">
+          {mapArray(
+            ['/', '/home', '/about', '/some/page/that/does-not/exist'],
+            link => (
+              <li>
+                <a href={link} onclick="emitHref(this)">
+                  {link}
+                </a>
+              </li>
+            ),
+          )}
+        </ul>
+        <fieldset>
+          <legend>Router Demo</legend>
+          {Switch(
+            {
+              '/': [Home],
+              '/home': [Home],
+              '/about': [About],
+            },
+            <NotMatch />,
+          )}
+        </fieldset>
+      </>,
+    ],
+  ]
 }
 
 function Home() {
@@ -89,7 +92,7 @@ expressRouter.use((req, res, next) => {
   let html = template({
     title: 'TODO',
     description: 'TODO',
-    app: nodeToHTML([App], context),
+    app: nodeToHTML(<App />, context),
   })
   sendHTML(res, html)
 })
@@ -104,5 +107,5 @@ export let onWsMessage: OnWsMessage = (event, ws, wss) => {
     url,
     args,
   }
-  dispatch(App, context)
+  dispatchUpdate(<App />, context)
 }
