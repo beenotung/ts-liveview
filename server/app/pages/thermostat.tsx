@@ -5,7 +5,7 @@ import { Message } from '../helpers.js'
 import JSX from '../jsx/jsx.js'
 import { attrs } from '../jsx/types.js'
 
-let count = 0
+let current = 0
 
 export function Thermostat(attrs: attrs) {
   let context = getContext(attrs)
@@ -13,10 +13,10 @@ export function Thermostat(attrs: attrs) {
   let unknownCmd = false
   switch (cmd) {
     case 'inc':
-      count++
+      current++
       break
     case 'dec':
-      count--
+      current--
       break
     default:
       unknownCmd = true
@@ -49,7 +49,7 @@ export function Thermostat(attrs: attrs) {
       <Link href="/thermostat/inc" no-history>
         <button>+</button>
       </Link>
-      <span id="count">{count}</span>
+      <span id="count">{current}</span>
       <Link href="/thermostat/dec" no-history>
         <button>-</button>
       </Link>

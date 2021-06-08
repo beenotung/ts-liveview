@@ -64,7 +64,8 @@ function onServerMessage(message: ServerMessage) {
       break
     case 'update-in':
       updateNode(message[1], message[2])
+      break
     default:
-      console.log('message:', message)
+      console.log('unknown server message:', message)
   }
 }
