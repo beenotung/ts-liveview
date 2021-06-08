@@ -7,8 +7,10 @@ export const JSX = {
     ...children: NodeList
   ): Element | JSXFragment {
     if (!tagName && !props) {
+      // simplify JSXFragment
       return [undefined, null, children]
     }
+    // skip empty fields
     if (children.length === 0) {
       if (!props) {
         return [tagName]
