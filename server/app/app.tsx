@@ -3,7 +3,7 @@ import type { index } from '../../template/index.html'
 import { loadTemplate } from '../template.js'
 import express from 'express'
 import type { ExpressContext, WsContext } from './context'
-import type { Element } from './jsx/types'
+import type { ComponentFn, Element } from './jsx/types'
 import { nodeToHTML } from './jsx/html.js'
 import { sendHTML } from './express.js'
 import { Switch } from './components/router.js'
@@ -49,8 +49,8 @@ export function App(): Element {
               '/': [Home],
               '/home': [Home],
               '/about': [About],
-              '/thermostat': [Thermostat],
-              '/thermostat/:cmd': [Thermostat],
+              '/thermostat': [Thermostat as ComponentFn],
+              '/thermostat/:cmd': [Thermostat as ComponentFn],
             },
             <NotMatch />,
           )}
