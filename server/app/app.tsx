@@ -3,15 +3,17 @@ import type { index } from '../../template/index.html'
 import { loadTemplate } from '../template.js'
 import express from 'express'
 import type { ExpressContext, WsContext } from './context'
-import type { Node, Element } from './jsx/types'
+import type { Element } from './jsx/types'
 import { nodeToHTML } from './jsx/html.js'
 import { sendHTML } from './express.js'
-import { getContext } from './context.js'
-import { attrs } from './jsx/types'
 import { Switch } from './components/router.js'
-import { Fragment, mapArray } from './components/fragment.js'
+import { mapArray } from './components/fragment.js'
 import { OnWsMessage } from '../ws/wss.js'
 import { dispatchUpdate } from './jsx/dispatch.js'
+import { Home } from './pages/home.js'
+import { About } from './pages/about.js'
+import { NotMatch } from './pages/not-match.js'
+import { Link } from './components/router.js'
 
 let template = loadTemplate<index>('index')
 
@@ -28,9 +30,7 @@ export function App(): Element {
             ['/', '/home', '/about', '/some/page/that/does-not/exist'],
             link => (
               <li>
-                <a href={link} onclick="emitHref(this)">
-                  {link}
-                </a>
+                <Link href={link}>{link}</Link>
               </li>
             ),
           )}
@@ -49,35 +49,6 @@ export function App(): Element {
       </>,
     ],
   ]
-}
-
-function Home() {
-  return (
-    <div id="home">
-      <h2>Home Page</h2>
-    </div>
-  )
-}
-
-function About() {
-  return (
-    <div id="about">
-      <h2>About Page</h2>
-    </div>
-  )
-}
-
-function NotMatch(attrs: attrs) {
-  let context = getContext(attrs)
-  let url = context.url
-  return (
-    <div id="not-match">
-      <h2>404 Page Not Found</h2>
-      <p>
-        url: <code>{url}</code>
-      </p>
-    </div>
-  )
 }
 
 export let expressRouter = express.Router()
