@@ -7,7 +7,7 @@ log.enabled = true
 
 export function listenWSS<ClientEvent = any, ServerEvent = any>(options: {
   wss: Server
-  attachWS: (ws: ManagedWebsocket) => void
+  onConnection: (ws: ManagedWebsocket) => void
   onClose: (ws: ManagedWebsocket, code?: number, reason?: string) => void
   onMessage: OnWsMessage
 }) {
@@ -36,6 +36,6 @@ export function listenWSS<ClientEvent = any, ServerEvent = any>(options: {
     })
 
     const managedWS: ManagedWebsocket = { ws, send, close }
-    options.attachWS(managedWS)
+    options.onConnection(managedWS)
   })
 }
