@@ -67,7 +67,9 @@ function applySelector(e: Element, selector: string) {
   for (let classMatch of selector.matchAll(classListRegex)) {
     classList.push(classMatch[1])
   }
-  e.className = classList.join(' ')
+  if (classList.length > 0 && e.className) {
+    e.className = classList.join(' ')
+  }
 }
 
 function applyAttrs(e: Element, attrs: attrs) {
