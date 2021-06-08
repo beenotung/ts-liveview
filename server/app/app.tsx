@@ -14,6 +14,7 @@ import { Home } from './pages/home.js'
 import { About } from './pages/about.js'
 import { NotMatch } from './pages/not-match.js'
 import { Link } from './components/router.js'
+import { Thermostat } from './pages/thermostat.js'
 
 let template = loadTemplate<index>('index')
 
@@ -27,7 +28,13 @@ export function App(): Element {
         <p>This page is powered by Server-Side-Rendered JSX Components</p>
         <ul id="menu">
           {mapArray(
-            ['/', '/home', '/about', '/some/page/that/does-not/exist'],
+            [
+              '/',
+              '/home',
+              '/about',
+              '/some/page/that/does-not/exist',
+              '/thermostat',
+            ],
             link => (
               <li>
                 <Link href={link}>{link}</Link>
@@ -42,6 +49,8 @@ export function App(): Element {
               '/': [Home],
               '/home': [Home],
               '/about': [About],
+              '/thermostat': [Thermostat],
+              '/thermostat/:cmd': [Thermostat],
             },
             <NotMatch />,
           )}

@@ -5,16 +5,26 @@ import { Router as UrlRouter } from 'url-router.ts'
 import { Fragment } from './fragment.js'
 
 export type LinkAttrs = {
+  'no-history'?: boolean
   href: string
   onclick?: never
-  [name: string]: string | undefined
+  [name: string]: any
 }
 
 export function Link(attrs: LinkAttrs, children: any[]) {
-  console.log('Link', { attrs, children })
+  const { 'no-history': quiet, ...aAttrs } = attrs
+  let onclick = quiet ? `emitHref(this,'q')` : `emitHref(this)`
   return (
-    <a onclick="emitHref(this)" {...attrs}>
+    <a onclick={onclick} {...aAttrs}>
       {Fragment(children)}
+    </a>
+  )
+}
+
+export function Redirect(href: string) {
+  return (
+    <a href={href} data-live="redirect">
+      Redirect to {href}
     </a>
   )
 }

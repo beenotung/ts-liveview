@@ -21,10 +21,12 @@ connectWS<ServerMessage>({
         window.event.preventDefault()
       }
     } as (...args: any[]) => void
-    function emitHref(a: HTMLAnchorElement) {
+    function emitHref(a: HTMLAnchorElement, flag?: 'q') {
       let url = a.getAttribute('href')
-      let title = a.getAttribute('title') || document.title
-      history.pushState(null, title, url)
+      if (flag !== 'q') {
+        let title = a.getAttribute('title') || document.title
+        history.pushState(null, title, url)
+      }
       emit(url)
     }
     window.onpopstate = (event: PopStateEvent) => {

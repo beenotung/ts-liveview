@@ -1,5 +1,14 @@
 import { Fragment, Raw, VNode, attrs, VElement, VNodeList } from './types'
 
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('a[data-live=redirect]').forEach(e => {
+    let a = e as HTMLAnchorElement
+    let title = a.title || document.title
+    history.replaceState(null, title, a.href)
+    a.remove()
+  })
+})
+
 export function updateElement(element: VElement) {
   let selector = element[0]
   let e = document.querySelector(selector)
@@ -32,8 +41,22 @@ function mountElement(e: Element, element: VElement) {
   }
 }
 
-function createElement(element: VElement): Element {
+function createElement(element: VElement): Element | null {
   let [selector, attrs, children] = element
+  if (attrs) {
+    let cmd = attrs['data-live']
+    switch (cmd) {
+      case undefined:
+        break
+      case 'redirect': {
+        let title = attrs.title || document.title
+        history.replaceState(null, title, attrs.href)
+        return null
+      }
+      default:
+        console.debug('unhandled liveview command:', cmd)
+    }
+  }
   let e = createElementBySelector(selector)
   if (attrs) applyAttrs(e, attrs)
   if (children) {
@@ -110,5 +133,8 @@ function createChild(e: Element, node: VNode) {
   }
 
   node = node as VElement
-  e.appendChild(createElement(node))
+  let element = createElement(node)
+  if (element) {
+    e.appendChild(element)
+  }
 }
