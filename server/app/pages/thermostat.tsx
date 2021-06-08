@@ -1,6 +1,7 @@
 import { Redirect, Link } from '../components/router.js'
 import { Style } from '../components/style.js'
 import { getContext } from '../context.js'
+import { Message } from '../helpers.js'
 import JSX from '../jsx/jsx.js'
 import { attrs } from '../jsx/types.js'
 
@@ -20,6 +21,10 @@ export function Thermostat(attrs: attrs) {
     default:
       unknownCmd = true
       break
+  }
+  if (context.type === 'ws' && context.url.startsWith('/thermostat')) {
+    // TODO detect if the client is already on this page before using this update-shortcut
+    // throw new Message(['update-in', '#thermostat #count', count])
   }
   return (
     <div id="thermostat">
