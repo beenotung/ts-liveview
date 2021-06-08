@@ -22,6 +22,19 @@ export function updateElement(element: VElement) {
   mountElement(e, element)
 }
 
+export function updateNode(selector: string, node: VNode) {
+  let e = document.querySelector(selector)
+  if (!e) {
+    console.error(
+      'Failed to query selector when updateNode, selector:',
+      selector,
+    )
+    throw new Error('Failed to query selector when updateNode')
+  }
+  e.innerHTML = ''
+  createChildren(e, [node])
+}
+
 function mountElement(e: Element, element: VElement) {
   let [selector, attrs, children] = element
   applySelector(e, selector)

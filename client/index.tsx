@@ -1,6 +1,6 @@
-import type { VElement } from './app/types'
-import { updateElement } from './app/dom.js'
-import { connectWS } from './ws-reliable.js'
+import type { selector, VElement, VNode } from './app/types'
+import { updateElement, updateNode } from './app/dom.js'
+import { connectWS } from './ws-lite.js'
 
 let wsUrl = location.origin.replace('http', 'ws')
 connectWS<ServerMessage>({
@@ -53,14 +53,17 @@ connectWS<ServerMessage>({
   },
 })
 
-export type ServerMessage = ['update', VElement]
+export type ServerMessage =
+  | ['update', VElement]
+  | ['update-in', selector, VNode]
 
 function onServerMessage(message: ServerMessage) {
-  let [type, value] = message as ServerMessage
-  switch (type) {
+  switch (message[0]) {
     case 'update':
-      updateElement(value)
+      updateElement(message[1])
       break
+    case 'update-in':
+      updateNode(message[1], message[2])
     default:
       console.log('message:', message)
   }
