@@ -1,7 +1,7 @@
 import type { ServerMessage } from '../../../client'
 import type { VElement } from '../../../client/app/types'
 import type { WsContext } from '../context'
-import { Message } from '../helpers.js'
+import { EarlyTerminate, Message } from '../helpers.js'
 import type { Element, Component } from './types'
 import { nodeToVNode } from './vnode.js'
 
@@ -15,10 +15,13 @@ export function dispatchUpdate(node: Component | Element, context: WsContext) {
     let message: ServerMessage = ['update', vElement]
     context.ws.send(message)
   } catch (error) {
+    if (error === EarlyTerminate) {
+      return
+    }
     if (error instanceof Message) {
       context.ws.send(error.message)
-    } else {
-      console.error('Failed to dispatch update:', error)
+      return
     }
+    console.error('Failed to dispatch update:', error)
   }
 }

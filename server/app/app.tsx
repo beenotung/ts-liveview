@@ -15,9 +15,10 @@ import { Home } from './pages/home.js'
 import { About } from './pages/about.js'
 import { NotMatch } from './pages/not-match.js'
 import { Link } from './components/router.js'
-import { Thermostat } from './pages/thermostat.js'
+import Thermostat from './pages/thermostat.js'
 import { Style } from './components/style.js'
 import { DemoForm } from './pages/demo-form.js'
+import { EarlyTerminate } from './helpers.js'
 
 let template = loadTemplate<index>('index')
 
@@ -80,8 +81,9 @@ export function App(): Element {
               '/': [Home],
               '/home': [Home],
               '/about': [About],
-              '/thermostat': [Thermostat as ComponentFn],
-              '/thermostat/:cmd': [Thermostat as ComponentFn],
+              '/thermostat/inc': [Thermostat.inc],
+              '/thermostat/dec': [Thermostat.dec],
+              '/thermostat': [Thermostat.index],
               '/form': [DemoForm as ComponentFn],
               '/form/:key': [DemoForm as ComponentFn],
             },
@@ -102,15 +104,30 @@ expressRouter.use((req, res, next) => {
     next,
     url: req.url,
   }
-  let page = req.url.split('/')[1] || 'Home Page'
-  page = page[0].toUpperCase() + page.slice(1)
+  let app: string
+  let description = 'TODO'
+  try {
+    app = nodeToHTML(<App />, context)
+  } catch (error) {
+    if (error === EarlyTerminate) {
+      return
+    }
+    console.error('Failed to render App:', error)
+    res.status(500)
+    app = 'Internal Error: ' + error.message
+  }
+  let page = capitalize(req.url.split('/')[1]) || 'Home Page'
   let html = template({
     title: `${page} - LiveView Demo`,
-    description: 'TODO',
-    app: nodeToHTML(<App />, context),
+    description,
+    app,
   })
   sendHTML(res, html)
 })
+
+function capitalize(text: string) {
+  return text[0].toLocaleUpperCase() + text.substring(1)
+}
 
 export let onWsMessage: OnWsMessage = (event, ws, wss) => {
   console.log('ws message:', event)
