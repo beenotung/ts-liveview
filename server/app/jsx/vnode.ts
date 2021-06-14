@@ -54,6 +54,9 @@ export function nodeToVNode(node: Node, context: Context): VNode {
 
 function elementToVElement(element: Element, context: Context): VElement {
   let [selector, attrs, children] = element
+  if (attrs && 'class' in attrs && !attrs.class) {
+    delete attrs.class
+  }
   if (!children) {
     if (!attrs) {
       return [selector]
