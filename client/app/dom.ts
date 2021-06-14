@@ -39,18 +39,23 @@ function mountElement(e: Element, element: VElement) {
   let [selector, attrs, children] = element
   applySelector(e, selector)
   if (attrs) applyAttrs(e, attrs)
+  let jsonSize = JSON.stringify(element).length
+  let htmlSize: number
   if (children) {
     e.innerHTML = ''
     createChildren(e, children)
-    let jsonSize = JSON.stringify(element).length
-    let htmlSize = e.outerHTML.length
-    console.debug({ jsonSize, htmlSize })
+    htmlSize = e.outerHTML.length
+  } else {
+    htmlSize = e.outerHTML.length - e.innerHTML.length
+  }
+  console.debug({ jsonSize, htmlSize })
+  if (jsonSize < htmlSize) {
     console.debug('saved:', ((jsonSize / htmlSize) * 100).toFixed(2) + '%')
   } else {
-    let jsonSize = JSON.stringify(element).length
-    let htmlSize = e.outerHTML.length - e.innerHTML.length
-    console.debug({ jsonSize, htmlSize })
-    console.debug('saved:', ((jsonSize / htmlSize) * 100).toFixed(2) + '%')
+    console.debug(
+      'wasted:',
+      (((jsonSize - htmlSize) / htmlSize) * 100).toFixed(2) + '%',
+    )
   }
 }
 
