@@ -116,7 +116,7 @@ expressRouter.use((req, res, next) => {
     res.status(500)
     app = 'Internal Error: ' + error.message
   }
-  let page = capitalize(req.url.split('/')[1]) || 'Home Page'
+  let page = capitalize(req.url.split('/')[1] || 'Home Page')
   let html = template({
     title: `${page} - LiveView Demo`,
     description,
