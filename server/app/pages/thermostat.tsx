@@ -1,26 +1,24 @@
-import { Redirect, Link } from '../components/router.js'
+import { Link } from '../components/router.js'
 import { Style } from '../components/style.js'
 import JSX from '../jsx/jsx.js'
 import type { ComponentFn } from '../jsx/types'
+import { Update } from '../components/update.js'
 
 let current = 0
 
 export function inc() {
   current++
-  return redirect()
+  return updateCount()
 }
 
 export function dec() {
   current--
-  return redirect()
+  return updateCount()
 }
 
-function redirect() {
+function updateCount() {
   return (
-    <>
-      <Redirect href="/thermostat" />
-      <Thermostat />
-    </>
+    <Update to="/thermostat" selector="#thermostat #count" content={current} />
   )
 }
 
