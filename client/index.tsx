@@ -56,6 +56,7 @@ connectWS<ServerMessage>({
 export type ServerMessage =
   | ['update', VElement]
   | ['update-in', selector, VNode]
+  | ['batch', ServerMessage[]]
 
 function onServerMessage(message: ServerMessage) {
   switch (message[0]) {
@@ -64,6 +65,9 @@ function onServerMessage(message: ServerMessage) {
       break
     case 'update-in':
       updateNode(message[1], message[2])
+      break
+    case 'batch':
+      message[1].forEach(onServerMessage)
       break
     default:
       console.log('unknown server message:', message)

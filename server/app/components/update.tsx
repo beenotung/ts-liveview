@@ -1,6 +1,6 @@
 import type { VNode } from '../../../client/app/types'
 import { getContext } from '../context.js'
-import { EarlyTerminate, toAbsoluteHref } from '../helpers.js'
+import { EarlyTerminate, toAbsoluteHref, setNoCache } from '../helpers.js'
 
 export function Update(
   attrs: {
@@ -31,7 +31,9 @@ export function Update(
     }
     href += 'time=' + Date.now()
     href = toAbsoluteHref(context.req, href)
-    context.res.redirect(303, href)
+    const res = context.res
+    setNoCache(res)
+    res.redirect(303, href)
   }
   throw EarlyTerminate
 }

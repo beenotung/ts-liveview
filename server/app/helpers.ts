@@ -29,3 +29,14 @@ export function toAbsoluteHref(req: express.Request, href: string): string {
   }
   return req.protocol + '://' + req.headers.host + href
 }
+
+export function setNoCache(res: express.Response) {
+  res.removeHeader('ETag')
+  res.setHeader(
+    'Cache-Control',
+    'no-store, no-cache, must-revalidate, proxy-revalidate, post-check=0, pre-check=0',
+  )
+  res.setHeader('Pragma', 'no-cache')
+  res.setHeader('Expires', '0')
+  res.setHeader('Surrogate-Control', 'no-store')
+}
