@@ -3,6 +3,10 @@ import { Style } from '../components/style.js'
 import JSX from '../jsx/jsx.js'
 import type { ComponentFn } from '../jsx/types'
 import { Update } from '../components/update.js'
+import type { attrs } from '../jsx/types'
+import { getContext } from '../context.js'
+import type { ManagedWebsocket } from '../../ws/wss'
+import type { ServerMessage } from '../../../client/index'
 
 let current = 0
 
@@ -16,13 +20,22 @@ export function dec() {
   return updateCount()
 }
 
+// TODO find a better way to get list of related client
+let wsList: ManagedWebsocket<ServerMessage>[] = []
 function updateCount() {
+  wsList.forEach(ws => ws.send(['update-in', '#thermostat #count', current]))
   return (
     <Update to="/thermostat" selector="#thermostat #count" content={current} />
   )
 }
 
-export function Thermostat() {
+export function Thermostat(attrs: attrs) {
+  let context = getContext(attrs)
+  if (context.type === 'ws') {
+    const ws = context.ws
+    wsList.push(ws)
+    ws.ws.once('close', () => wsList.splice(wsList.indexOf(ws)))
+  }
   return (
     <div id="thermostat">
       {Style(`
