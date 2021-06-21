@@ -47,16 +47,18 @@ export function Menu(attrs: attrs) {
             '/form',
           ],
           link => (
-            <Link
-              href={link}
-              class={flagsToClassName({
-                selected:
-                  context.url.startsWith(link) ||
-                  (context.url === '/' && link === '/home'),
-              })}
-            >
-              {link.substr(1)}
-            </Link>
+            <>
+              <Link
+                href={link}
+                class={flagsToClassName({
+                  selected:
+                    context.url.startsWith(link) ||
+                    (context.url === '/' && link === '/home'),
+                })}
+              >
+                {link.substr(1)}
+              </Link>{' '}
+            </>
           ),
         )}
       </div>
