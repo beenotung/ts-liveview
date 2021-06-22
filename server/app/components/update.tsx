@@ -1,7 +1,7 @@
 import type { VNode } from '../../../client/app/types'
 import { getContext } from '../context.js'
 import { EarlyTerminate, toAbsoluteHref, setNoCache } from '../helpers.js'
-import { sessionUrl } from '../session.js'
+import { setSessionUrl } from '../session.js'
 
 export function Update(
   attrs: {
@@ -23,7 +23,7 @@ export function Update(
   if (context.type === 'ws') {
     const content = 'render' in attrs ? attrs.render() : attrs.content
     context.ws.send(['update-in', attrs.selector, content])
-    sessionUrl.set(context.ws, attrs.to)
+    setSessionUrl(context.ws, attrs.to)
   } else {
     let href = attrs.to
     if (href.includes('?')) {

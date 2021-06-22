@@ -3,11 +3,7 @@ import { Style } from '../components/style.js'
 import JSX from '../jsx/jsx.js'
 import type { ComponentFn } from '../jsx/types'
 import { Update } from '../components/update.js'
-import type { attrs } from '../jsx/types'
-import { getContext } from '../context.js'
-import type { ManagedWebsocket } from '../../ws/wss'
-import type { ServerMessage } from '../../../client/index'
-import { sessionUrl, allWS } from '../session.js'
+import { sessions } from '../session.js'
 import { EarlyTerminate } from '../helpers.js'
 
 let current = 0
@@ -25,11 +21,10 @@ export function dec() {
 function updateCount() {
   // wsList.forEach(ws => ws.send(['update-in', '#thermostat #count', current]))
   if ('live') {
-    allWS.forEach(ws => {
-      let url = sessionUrl.get(ws)
-      if (url?.startsWith('/thermostat')) {
-        sessionUrl.set(ws, '/thermostat')
-        ws.send(['update-in', '#thermostat #count', current])
+    sessions.forEach(session => {
+      if (session.url?.startsWith('/thermostat')) {
+        session.ws.send(['update-in', '#thermostat #count', current])
+        session.url = '/thermostat'
       }
     })
     throw EarlyTerminate

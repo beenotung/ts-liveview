@@ -1,14 +1,27 @@
 import { ServerMessage } from '../../client'
 import type { ManagedWebsocket } from '../ws/wss'
 
-export let allWS: ManagedWebsocket<ServerMessage>[] = []
+export type Session = {
+  ws: ManagedWebsocket<ServerMessage>
+  url?: string
+}
+
+export let sessions = new Map<ManagedWebsocket<ServerMessage>, Session>()
 
 export function startSession(ws: ManagedWebsocket<ServerMessage>) {
-  allWS.push(ws)
+  // TODO init session with url
+  sessions.set(ws, { ws })
 }
 
 export function closeSession(ws: ManagedWebsocket<ServerMessage>) {
-  allWS.splice(allWS.indexOf(ws))
+  sessions.delete(ws)
 }
 
-export let sessionUrl = new WeakMap<ManagedWebsocket<ServerMessage>, string>()
+export function setSessionUrl(ws: ManagedWebsocket, url: string) {
+  let session = sessions.get(ws)
+  if (session) {
+    session.url = url
+  } else {
+    sessions.set(ws, { ws, url })
+  }
+}

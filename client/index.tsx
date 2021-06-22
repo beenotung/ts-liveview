@@ -16,8 +16,8 @@ connectWS<ServerMessage>({
 
     let emit = function emit() {
       ws.send(Array.from(arguments))
-      if (window.event) {
-        console.debug('preventDefault')
+      if (window.event && !(window.event.target instanceof WebSocket)) {
+        console.debug('preventDefault', window.event)
         window.event.preventDefault()
       }
     } as (...args: any[]) => void
@@ -36,6 +36,10 @@ connectWS<ServerMessage>({
     let win = window as any
     win.emit = emit
     win.emitHref = emitHref
+
+    ws.ws.addEventListener('open', () => {
+      emit('mount', location.href.replace(location.origin, ''))
+    })
 
     const status = document.querySelector('#ws_status')
     if (status) {

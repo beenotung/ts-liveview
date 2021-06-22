@@ -19,7 +19,8 @@ import Thermostat from './pages/thermostat.js'
 import { Style } from './components/style.js'
 import { DemoForm } from './pages/demo-form.js'
 import { EarlyTerminate } from './helpers.js'
-import { sessionUrl } from './session.js'
+import { setSessionUrl } from './session.js'
+import { startSession } from './session'
 
 let template = loadTemplate<index>('index')
 
@@ -135,17 +136,28 @@ function capitalize(text: string) {
 export let onWsMessage: OnWsMessage = (event, ws, wss) => {
   console.log('ws message:', event)
   // TODO handle case where event[0] is not url
-  let [url, ...args] = event
+  let url: string
+  let args: any[] | undefined
+  let eventType: string | undefined
+  if (event[0] === 'mount') {
+    url = event[1]
+    eventType = 'mount'
+  } else if (event[0][0] === '/') {
+    url = event[0]
+    args = event.slice(1)
+    eventType = 'route'
+  } else {
+    console.log('unknown type of ws message:', event)
+    return
+  }
   let context: WsContext = {
     type: 'ws',
     ws,
     wss,
     url,
     args,
+    event: eventType,
   }
-  if (url[0] !== '/') {
-    context.event = url
-  }
-  sessionUrl.set(ws, url)
+  setSessionUrl(ws, url)
   dispatchUpdate(<App />, context)
 }
