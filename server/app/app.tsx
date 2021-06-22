@@ -19,6 +19,7 @@ import Thermostat from './pages/thermostat.js'
 import { Style } from './components/style.js'
 import { DemoForm } from './pages/demo-form.js'
 import { EarlyTerminate } from './helpers.js'
+import { sessionUrl } from './session.js'
 
 let template = loadTemplate<index>('index')
 
@@ -145,5 +146,6 @@ export let onWsMessage: OnWsMessage = (event, ws, wss) => {
   if (url[0] !== '/') {
     context.event = url
   }
+  sessionUrl.set(ws, url)
   dispatchUpdate(<App />, context)
 }

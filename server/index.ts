@@ -7,6 +7,7 @@ import compression from 'compression'
 import { debugLog } from './debug.js'
 import { listenWSS } from './ws/wss-lite.js'
 import { expressRouter, onWsMessage } from './app/app.js'
+import { startSession, closeSession } from './app/session.js'
 
 config()
 let log = debugLog('index.ts')
@@ -19,9 +20,11 @@ listenWSS({
   wss,
   onConnection: ws => {
     log('attach ws:', ws.ws.protocol)
+    startSession(ws)
   },
   onClose: (ws, code, reason) => {
     log('close ws:', ws.ws.protocol, code, reason)
+    closeSession(ws)
   },
   onMessage: onWsMessage,
 })
