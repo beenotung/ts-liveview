@@ -54,5 +54,5 @@ export function Thermostat() {
 export default {
   inc,
   dec,
-  index: Thermostat as ComponentFn,
+  index: Thermostat,
 }
