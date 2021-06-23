@@ -2,7 +2,7 @@ import JSX from './jsx/jsx.js'
 import type { index } from '../../template/index.html'
 import { loadTemplate } from '../template.js'
 import express from 'express'
-import { getContext } from './context.js'
+import { getRouterContext } from './context.js'
 import type { ExpressContext, WsContext } from './context.js'
 import type { attrs, ComponentFn, Element } from './jsx/types'
 import { flagsToClassName, nodeToHTML } from './jsx/html.js'
@@ -24,7 +24,7 @@ import { setSessionUrl } from './session.js'
 let template = loadTemplate<index>('index')
 
 export function Menu(attrs: attrs) {
-  let context = getContext(attrs)
+  let context = getRouterContext(attrs)
   return (
     <>
       {Style(`
@@ -81,8 +81,8 @@ export function App(): Element {
           <legend>Router Demo</legend>
           {Switch(
             {
-              '/': [Home],
-              '/home': [Home],
+              '/': Home,
+              '/home': Home,
               '/about': [About],
               '/thermostat/inc': [Thermostat.inc],
               '/thermostat/dec': [Thermostat.dec],

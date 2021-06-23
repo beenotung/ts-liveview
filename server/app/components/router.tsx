@@ -1,5 +1,5 @@
 import JSX from '../jsx/jsx.js'
-import { getContext } from '../context.js'
+import { getContext, getRouterContext } from '../context.js'
 import type { Node } from '../jsx/types'
 import { Router as UrlRouter } from 'url-router.ts'
 import { Fragment } from './fragment.js'
@@ -12,12 +12,15 @@ export type LinkAttrs = {
   [name: string]: any
 }
 
-export function Link(attrs: LinkAttrs, children: any[]) {
+export function Link(attrs: LinkAttrs, children?: any[]) {
   const { 'no-history': quiet, ...aAttrs } = attrs
   const onclick = quiet ? `emitHref(this,'q')` : `emitHref(this)`
+  if (!children) {
+    console.warn(new Error('Link with empty content'))
+  }
   return (
     <a onclick={onclick} {...aAttrs}>
-      {Fragment(children)}
+      {children ? Fragment(children) : null}
     </a>
   )
 }
@@ -46,7 +49,7 @@ export function Router(attrs: { routes: Route[]; defaultNode?: Node }): Node {
   attrs.routes.forEach(([url, node]) => {
     router.add(url, node)
   })
-  const context = getContext(attrs)
+  const context = getRouterContext(attrs)
   const match = router.route(context.url)
   if (!match) return attrs.defaultNode
   context.routerMatch = match

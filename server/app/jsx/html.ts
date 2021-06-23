@@ -13,6 +13,11 @@ import type {
   Element,
 } from './types'
 
+export function prerender(node: Node): Raw {
+  let html = nodeToHTML(node, { type: 'static' })
+  return ['raw', html]
+}
+
 export function nodeToHTML(node: Node, context: Context): html {
   switch (node) {
     case null:
