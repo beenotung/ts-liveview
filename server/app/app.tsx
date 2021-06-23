@@ -20,7 +20,6 @@ import { Style } from './components/style.js'
 import { DemoForm } from './pages/demo-form.js'
 import { EarlyTerminate } from './helpers.js'
 import { setSessionUrl } from './session.js'
-import { startSession } from './session'
 
 let template = loadTemplate<index>('index')
 

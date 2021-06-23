@@ -2,9 +2,8 @@ import { Link } from '../components/router.js'
 import { Style } from '../components/style.js'
 import JSX from '../jsx/jsx.js'
 import type { ComponentFn } from '../jsx/types'
-import { Update } from '../components/update.js'
 import { sessions } from '../session.js'
-import { EarlyTerminate } from '../helpers.js'
+import { UpdateIn } from '../components/update.js'
 
 let current = 0
 
@@ -19,18 +18,18 @@ export function dec() {
 }
 
 function updateCount() {
-  // wsList.forEach(ws => ws.send(['update-in', '#thermostat #count', current]))
-  if ('live') {
-    sessions.forEach(session => {
-      if (session.url?.startsWith('/thermostat')) {
-        session.ws.send(['update-in', '#thermostat #count', current])
-        session.url = '/thermostat'
-      }
-    })
-    throw EarlyTerminate
-  }
+  sessions.forEach(session => {
+    if (session.url === '/thermostat') {
+      session.ws.send(['update-in', '#thermostat #count', current])
+      session.url = '/thermostat'
+    }
+  })
   return (
-    <Update to="/thermostat" selector="#thermostat #count" content={current} />
+    <UpdateIn
+      to="/thermostat"
+      selector="#thermostat #count"
+      content={current}
+    />
   )
 }
 
