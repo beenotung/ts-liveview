@@ -124,3 +124,26 @@ export function flagsToClassName(flags: Record<string, any>): string {
   })
   return classes.join(' ')
 }
+
+// omit style-name conversion, use it as-is
+export function inlineStyle(styles: Record<string, string | number>): string {
+  return Object.entries(styles)
+    .map(([name, value]) => name + ':' + value)
+    .join(';')
+}
+
+// compatible with React-style camelCase object
+export function inlineCamelCaseStyle(
+  styles: Record<string, string | number>,
+): string {
+  return Object.entries(styles)
+    .map(([name, value]) => toStyleName(name) + ':' + value)
+    .join(';')
+}
+
+function toStyleName(name: string): string {
+  name.match(/[A-Z]/g)?.forEach(char => {
+    name = name.replace(char, '-' + char.toLowerCase())
+  })
+  return name
+}

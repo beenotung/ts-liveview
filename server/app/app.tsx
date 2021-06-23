@@ -2,7 +2,7 @@ import JSX from './jsx/jsx.js'
 import type { index } from '../../template/index.html'
 import { loadTemplate } from '../template.js'
 import express from 'express'
-import { getRouterContext } from './context.js'
+import { getContextUrl } from './context.js'
 import type { ExpressContext, WsContext } from './context.js'
 import type { attrs, ComponentFn, Element } from './jsx/types'
 import { flagsToClassName, nodeToHTML } from './jsx/html.js'
@@ -24,7 +24,7 @@ import { setSessionUrl } from './session.js'
 let template = loadTemplate<index>('index')
 
 export function Menu(attrs: attrs) {
-  let context = getRouterContext(attrs)
+  let url = getContextUrl(attrs)
   return (
     <>
       {Style(`
@@ -43,23 +43,20 @@ export function Menu(attrs: attrs) {
             '/',
             '/home',
             '/about',
-            '/some/page/that/does-not/exist',
             '/thermostat',
             '/form',
+            '/some/page/that/does-not/exist',
           ],
           link => (
-            <>
-              <Link
-                href={link}
-                class={flagsToClassName({
-                  selected:
-                    context.url.startsWith(link) ||
-                    (context.url === '/' && link === '/home'),
-                })}
-              >
-                {link.substr(1)}
-              </Link>{' '}
-            </>
+            <Link
+              href={link}
+              class={flagsToClassName({
+                selected:
+                  url.startsWith(link) || (url === '/' && link === '/home'),
+              })}
+            >
+              {link.substr(1)}
+            </Link>
           ),
         )}
       </div>
@@ -83,10 +80,11 @@ export function App(): Element {
             {
               '/': Home,
               '/home': Home,
-              '/about': [About],
+              '/about': About,
+              '/about/:mode': About,
+              '/thermostat': [Thermostat.index],
               '/thermostat/inc': [Thermostat.inc],
               '/thermostat/dec': [Thermostat.dec],
-              '/thermostat': [Thermostat.index],
               '/form': [DemoForm as ComponentFn],
               '/form/:key': [DemoForm as ComponentFn],
             },
