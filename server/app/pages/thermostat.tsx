@@ -3,7 +3,8 @@ import { Style } from '../components/style.js'
 import JSX from '../jsx/jsx.js'
 import type { ComponentFn } from '../jsx/types'
 import { sessions } from '../session.js'
-import { UpdateIn } from '../components/update.js'
+import { Update, UpdateIn } from '../components/update.js'
+import { ServerMessage } from '../../../client/index.js'
 
 let current = 0
 
@@ -18,19 +19,13 @@ export function dec() {
 }
 
 function updateCount() {
+  let message: ServerMessage = ['update-in', '#thermostat #count', current]
   sessions.forEach(session => {
     if (session.url === '/thermostat') {
-      session.ws.send(['update-in', '#thermostat #count', current])
-      session.url = '/thermostat'
+      session.ws.send(message)
     }
   })
-  return (
-    <UpdateIn
-      to="/thermostat"
-      selector="#thermostat #count"
-      content={current}
-    />
-  )
+  return <Update to="/thermostat" message={message} />
 }
 
 export function Thermostat() {
