@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs'
-import { writeFileSync } from 'node:fs'
+import { writeFileSync } from 'fs'
 import { join, basename, extname } from 'path'
+import { inspect } from 'util'
 
 export function toTemplateFile(page: string) {
   return join('template', page + '.html')
@@ -43,10 +44,10 @@ export function genTemplateType(
 ) {
   let text = readFileSync(file).toString()
   let params = extractParams(text)
-  let keys = params.map(name => JSON.stringify(name)).join(' | ')
+  let keys = params.map(name => inspect(name)).join(' | ')
   let code = `
 export type ${name}_key = ${keys}
 export type ${name} = Record<${name}_key, string | number>
 `.trim()
-  writeFileSync(file + '.ts', code)
+  writeFileSync(file + '.ts', code + '\n')
 }
