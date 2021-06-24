@@ -33,7 +33,7 @@ let code = /* html */ `
 
 export function DemoForm(attrs: attrs) {
   const context = getContext(attrs)
-  if (context.type === 'ws') {
+  if (context.type === 'ws' && context.args) {
     const match = context.routerMatch!
     const key = match.params.key
     const value = context.args![0]
