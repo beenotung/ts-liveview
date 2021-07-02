@@ -1,5 +1,5 @@
 {
-  "name": "ast-liveview",
+  "name": "ts-liveview",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -14,8 +14,12 @@
     "watch:js": "nodemon --ignore public/js dist/server/index.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "Beeno Tung",
+    "email": "aabbcc1241@yahoo.com.hk",
+    "url": "https://beeno-tung.surge.sh"
+  },
+  "license": "BSD-2-Clause",
   "dependencies": {
     "compression": "^1.7.4",
     "debug": "^4.3.1",
