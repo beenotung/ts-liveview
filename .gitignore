@@ -12,3 +12,6 @@ dist/
 
 # lighthouse report
 localhost_*.report.html
+
+# config
+.env
