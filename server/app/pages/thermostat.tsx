@@ -1,9 +1,8 @@
 import { Link } from '../components/router.js'
 import { Style } from '../components/style.js'
 import JSX from '../jsx/jsx.js'
-import type { ComponentFn } from '../jsx/types'
 import { sessions } from '../session.js'
-import { Update, UpdateIn } from '../components/update.js'
+import { Update } from '../components/update.js'
 import { ServerMessage } from '../../../client/index.js'
 
 let current = 0

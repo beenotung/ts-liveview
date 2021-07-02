@@ -1,4 +1,3 @@
-import { selector } from './../../../client/dom'
 import escapeHTML from 'escape-html'
 import type { Context } from '../context'
 import { ContextSymbol } from '../context.js'
