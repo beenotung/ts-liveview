@@ -115,7 +115,11 @@ expressRouter.use((req, res, next) => {
     }
     console.error('Failed to render App:', error)
     res.status(500)
-    app = 'Internal Error: ' + error.message
+    if (error instanceof Error) {
+      app = 'Internal Error: ' + error.message
+    } else {
+      app = 'Unknown Error'
+    }
   }
   let page = capitalize(req.url.split('/')[1] || 'Home Page')
   let html = template({
