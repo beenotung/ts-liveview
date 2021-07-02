@@ -47,5 +47,6 @@ With the template string based approach, html injection _could be_ avoided when 
 Inspired from https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript
 
 ## License
+
 This is free and open-source software (FOSS) with
 [BSD-2-Clause License](./LICENSE)
