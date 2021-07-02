@@ -1,6 +1,11 @@
 import type { ServerMessage } from '../../../client'
-import type { VNode } from '../../../client/app/types'
-import { getRouterContext } from '../context.js'
+import type { VNode, attrs } from '../../../client/app/types'
+import {
+  Context,
+  ExpressContext,
+  getContext,
+  getRouterContext,
+} from '../context.js'
 import { EarlyTerminate, toAbsoluteHref, setNoCache } from '../helpers.js'
 import { setSessionUrl } from '../session.js'
 
@@ -16,17 +21,7 @@ export function Update(attrs: {
     context.ws.send(attrs.message)
     setSessionUrl(context.ws, attrs.to)
   } else {
-    let href = attrs.to
-    if (href.includes('?')) {
-      href += '&'
-    } else {
-      href += '?'
-    }
-    href += 'time=' + Date.now()
-    href = toAbsoluteHref(context.req, href)
-    const res = context.res
-    setNoCache(res)
-    res.redirect(303, href)
+    forceRedirectExpressSession(context, attrs.to)
   }
   throw EarlyTerminate
 }
@@ -53,17 +48,34 @@ export function UpdateIn(
     context.ws.send(['update-in', attrs.selector, content])
     setSessionUrl(context.ws, attrs.to)
   } else {
-    let href = attrs.to
-    if (href.includes('?')) {
-      href += '&'
-    } else {
-      href += '?'
-    }
-    href += 'time=' + Date.now()
-    href = toAbsoluteHref(context.req, href)
-    const res = context.res
-    setNoCache(res)
-    res.redirect(303, href)
+    forceRedirectExpressSession(context, attrs.to)
   }
   throw EarlyTerminate
+}
+
+export function UpdateUrl(attrs: { href: string; status?: number }): VNode {
+  const context = getContext(attrs)
+  if (context.type === 'ws') {
+    setSessionUrl(context.ws, attrs.href)
+  } else if (context.type === 'express') {
+    forceRedirectExpressSession(context, attrs.href)
+  }
+  throw EarlyTerminate
+}
+
+export function forceRedirectExpressSession(
+  context: ExpressContext,
+  href: string,
+  status?: number,
+) {
+  if (href.includes('?')) {
+    href += '&'
+  } else {
+    href += '?'
+  }
+  href += 'time=' + Date.now()
+  href = toAbsoluteHref(context.req, href)
+  const res = context.res
+  setNoCache(res)
+  res.redirect(status || 303, href)
 }

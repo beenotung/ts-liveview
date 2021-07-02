@@ -38,7 +38,7 @@ With the template string based approach, html injection _could be_ avoided when 
 
 ## Demo
 
-- [ ] Thermostat
+- [x] Thermostat
 - [ ] Image Editor
 - [ ] Autocomplete Searching
 - [ ] Form Validations

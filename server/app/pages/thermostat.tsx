@@ -2,23 +2,81 @@ import { Link } from '../components/router.js'
 import { Style } from '../components/style.js'
 import JSX from '../jsx/jsx.js'
 import { sessions } from '../session.js'
-import { Update } from '../components/update.js'
+import { Update, UpdateIn } from '../components/update.js'
 import { ServerMessage } from '../../../client/index.js'
+import { attrs } from '../jsx/types.js'
 
-let current = 0
+const UpdateInterval = 1000
+type Status = 'cooling' | 'heating' | 'idle'
+class State {
+  private _current = 27
+  private _target = 25.5
+  private _status: Status = 'idle'
+  get current() {
+    return this._current
+  }
+  get target() {
+    return this._target
+  }
+  get status() {
+    return this._status
+  }
+  private tick = () => {
+    this.timer = setTimeout(this.tick, UpdateInterval)
+    if (this.current > this.target) {
+      this.status = 'cooling'
+      this.current -= 0.5
+      return
+    }
+    if (this.current < this.target) {
+      this.status = 'heating'
+      this.current += 0.5
+      return
+    }
+    this.status = 'idle'
+  }
+  private timer = setTimeout(this.tick)
+  set status(value: Status) {
+    if (this._status === value) return
+    this._status = value
+    update(['update-in', '#thermostat #status', value])
+  }
+  set target(value: number) {
+    if (this._target === value) return
+    this._target = value
+    update(['update-in', '#thermostat #target', value.toFixed(1)])
+  }
+  set current(value: number) {
+    if (this._current === value) return
+    this._current = value
+    update(['update-in', '#thermostat #current', value.toFixed(1)])
+  }
+}
+const state = new State()
 
 export function inc() {
-  current++
-  return updateCount()
+  state.target += 0.5
+  return (
+    <UpdateIn
+      to="/thermostat"
+      selector="#thermostat #target"
+      content={state.target.toFixed(1)}
+    />
+  )
 }
 
 export function dec() {
-  current--
-  return updateCount()
+  state.target -= 0.5
+  return (
+    <UpdateIn
+      to="/thermostat"
+      selector="#thermostat #target"
+      content={state.target.toFixed(1)}
+    />
+  )
 }
 
-function updateCount() {
-  let message: ServerMessage = ['update-in', '#thermostat #count', current]
+function update(message: ServerMessage) {
   sessions.forEach(session => {
     if (session.url === '/thermostat') {
       session.ws.send(message)
@@ -38,13 +96,28 @@ export function Thermostat() {
         #thermostat [data-live=redirect] {
             display: block;
         }
+        #thermostat label {
+            display: block;
+            text-transform: capitalize;
+            margin-top: 0.5em;
+            margin-bottom: 0.25em;
+            font-weight: bold;
+        }
+        #thermostat label::after {
+            content: ":";
+        }
         `)}
-      <Link href="/thermostat/inc" no-history>
-        <button>+</button>
-      </Link>
-      <span id="count">{current}</span>
+      <label for="status">status</label>
+      <span id="status">{state.status}</span>
+      <label for="current">current</label>
+      <span id="current">{state.current}</span>
+      <label for="target">target</label>
       <Link href="/thermostat/dec" no-history>
         <button>-</button>
+      </Link>
+      <span id="target">{state.target}</span>
+      <Link href="/thermostat/inc" no-history>
+        <button>+</button>
       </Link>
     </div>
   )

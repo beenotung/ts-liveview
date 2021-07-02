@@ -4,6 +4,7 @@ import type { Node } from '../jsx/types'
 import { Router as UrlRouter } from 'url-router.ts'
 import { Fragment } from './fragment.js'
 import { EarlyTerminate } from '../helpers.js'
+import { setSessionUrl } from '../session.js'
 
 export type LinkAttrs = {
   'no-history'?: boolean
@@ -32,6 +33,9 @@ export function Redirect(attrs: { href: string; status?: number }) {
     const status = attrs.status || 303
     context.res.redirect(status, href)
     throw EarlyTerminate
+  }
+  if (context.type === 'ws') {
+    setSessionUrl(context.ws, attrs.href)
   }
   return (
     <a href={href} data-live="redirect">
