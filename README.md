@@ -38,10 +38,10 @@ With the template string based approach, html injection _could be_ avoided when 
 
 ## Demo
 
-- [x] Thermostat
-- [x] Image Editor
-- [x] Autocomplete Searching
-- [ ] Form Validations
+- [x] [Thermostat](./server/app/pages/thermostat.tsx)
+- [x] [Image Editor](./server/app/pages/editor.tsx)
+- [x] [Autocomplete Searching](./server/app/pages/auto-complete-demo.tsx)
+- [x] [Form and Sanitizing user-generated content](./server/app/pages/demo-form.tsx) (prevent XSS attack by default)
 - [ ] Snake Game
 
 Inspired from https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript
