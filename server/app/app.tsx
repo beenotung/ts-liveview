@@ -20,6 +20,8 @@ import { Style } from './components/style.js'
 import { DemoForm } from './pages/demo-form.js'
 import { EarlyTerminate } from './helpers.js'
 import { setSessionUrl } from './session.js'
+import Editor from './pages/editor.js'
+import { capitalize } from './string.js'
 
 let template = loadTemplate<index>('index')
 
@@ -44,20 +46,27 @@ export function Menu(attrs: attrs) {
             '/home',
             '/about',
             '/thermostat',
+            '/editor',
             '/form',
             '/some/page/that/does-not/exist',
           ],
-          link => (
-            <Link
-              href={link}
-              class={flagsToClassName({
-                selected:
-                  url.startsWith(link) || (url === '/' && link === '/home'),
-              })}
-            >
-              {link.substr(1)}
-            </Link>
-          ),
+          link => {
+            let text = link.substr(1)
+            if (!text.includes('/')) {
+              text = capitalize(text)
+            }
+            return (
+              <Link
+                href={link}
+                class={flagsToClassName({
+                  selected:
+                    url.startsWith(link) || (url === '/' && link === '/home'),
+                })}
+              >
+                {text}
+              </Link>
+            )
+          },
         )}
       </div>
     </>
@@ -85,6 +94,7 @@ export function App(): Element {
               '/thermostat': [Thermostat.index],
               '/thermostat/inc': [Thermostat.inc],
               '/thermostat/dec': [Thermostat.dec],
+              '/editor': <Editor.index />,
               '/form': [DemoForm as ComponentFn],
               '/form/:key': [DemoForm as ComponentFn],
             },
@@ -129,10 +139,6 @@ expressRouter.use((req, res, next) => {
   })
   sendHTML(res, html)
 })
-
-function capitalize(text: string) {
-  return text[0].toLocaleUpperCase() + text.substring(1)
-}
 
 export let onWsMessage: OnWsMessage = (event, ws, wss) => {
   console.log('ws message:', event)
