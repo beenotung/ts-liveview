@@ -1,5 +1,5 @@
 import JSX from '../jsx/jsx.js'
-import { getContext, getContextUrl } from '../context.js'
+import { getContext } from '../context.js'
 import { attrs } from '../jsx/types.js'
 import { existsSync, readdirSync, readFileSync } from 'fs'
 import { join } from 'path'
