@@ -110,6 +110,12 @@ export function Thermostat() {
             content: ":";
         }
         `)}
+      <h2>Realtime Thermostat Demo</h2>
+      <p>This demo illustrates how to do cross-browser realtime update.</p>
+      <p>
+        The state is globally shared (for all connections) and the logic are
+        maintained on the server.
+      </p>
       <label for="status">status</label>
       <span id="status">{state.status}</span>
       <label for="current">current</label>
