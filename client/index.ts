@@ -1,5 +1,10 @@
-import type { attrs, selector, VElement, VNode } from './jsx/types'
-import { updateElement, updateNode } from './jsx/dom.js'
+import type { attrs, props, selector, VElement, VNode } from './jsx/types'
+import {
+  updateAttrs,
+  updateElement,
+  updateNode,
+  updateProps,
+} from './jsx/dom.js'
 import { connectWS } from './ws/ws-lite.js'
 
 let wsUrl = location.origin.replace('http', 'ws')
@@ -66,6 +71,7 @@ export type ServerMessage =
   | ['update', VElement]
   | ['update-in', selector, VNode]
   | ['update-attrs', selector, attrs]
+  | ['update-props', selector, props]
   | ['batch', ServerMessage[]]
 
 function onServerMessage(message: ServerMessage) {
@@ -75,6 +81,12 @@ function onServerMessage(message: ServerMessage) {
       break
     case 'update-in':
       updateNode(message[1], message[2])
+      break
+    case 'update-attrs':
+      updateAttrs(message[1], message[2])
+      break
+    case 'update-props':
+      updateProps(message[1], message[2])
       break
     case 'batch':
       message[1].forEach(onServerMessage)

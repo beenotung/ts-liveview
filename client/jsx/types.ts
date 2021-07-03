@@ -7,5 +7,6 @@ export type Fragment = [VNodeList]
 
 export type selector = string
 export type attrs = Record<string, string>
+export type props = Record<string, string | number | boolean>
 
 export type html = string

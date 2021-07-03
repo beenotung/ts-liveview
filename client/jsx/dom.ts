@@ -1,4 +1,12 @@
-import { Fragment, Raw, VNode, attrs, VElement, VNodeList } from './types'
+import {
+  Fragment,
+  Raw,
+  VNode,
+  attrs,
+  VElement,
+  VNodeList,
+  props,
+} from './types'
 
 window.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('a[data-live=redirect]').forEach(e => {
@@ -33,6 +41,30 @@ export function updateNode(selector: string, node: VNode) {
   }
   e.innerHTML = ''
   createChildren(e, [node])
+}
+
+export function updateAttrs(selector: string, attrs: attrs) {
+  let e = document.querySelector(selector)
+  if (!e) {
+    console.error(
+      'Failed to query selector when updateAttrs, selector:',
+      selector,
+    )
+    throw new Error('Failed to query selector when updateAttrs')
+  }
+  applyAttrs(e, attrs)
+}
+
+export function updateProps(selector: string, props: props) {
+  let e = document.querySelector(selector)
+  if (!e) {
+    console.error(
+      'Failed to query selector when updateProps, selector:',
+      selector,
+    )
+    throw new Error('Failed to query selector when updateProps')
+  }
+  applyProps(e, props)
 }
 
 function mountElement(e: Element, element: VElement) {
@@ -116,6 +148,18 @@ function applySelector(e: Element, selector: string) {
 function applyAttrs(e: Element, attrs: attrs) {
   Object.entries(attrs).forEach(entry => {
     e.setAttribute(entry[0], entry[1])
+  })
+  let input = e as HTMLInputElement
+  if (input.tagName === 'INPUT' && input.type === 'radio') {
+    if ('checked' in attrs) {
+      input.checked = !!attrs.checked
+    }
+  }
+}
+
+function applyProps(e: Element, props: props) {
+  Object.entries(props).forEach(entry => {
+    ;(e as any)[entry[0]] = entry[1]
   })
 }
 
