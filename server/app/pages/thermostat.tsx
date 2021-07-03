@@ -4,7 +4,6 @@ import JSX from '../jsx/jsx.js'
 import { sessions } from '../session.js'
 import { Update, UpdateIn } from '../components/update.js'
 import { ServerMessage } from '../../../client/index.js'
-import { attrs } from '../jsx/types.js'
 
 const UpdateInterval = 1000
 type Status = 'cooling' | 'heating' | 'idle'
