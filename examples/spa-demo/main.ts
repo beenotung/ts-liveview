@@ -59,7 +59,7 @@ async function attach(o: {
     ...o,
     ...options,
     // inline and minify primus.js at the end of body to avoid separate request
-    client_script: minifyJS(
+    client_script: await minifyJS(
       minifyHTML(
         genInlinePrimusScript(o.primus) + '\n' + (await genClientCode()),
       ),

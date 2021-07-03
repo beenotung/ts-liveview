@@ -106,6 +106,6 @@ export function minifyHTML(html: string): string {
 
 export let minify = minifyHTML
 
-export function minifyJS(code: string): string {
+export function minifyJS(code: string): Promise<string> {
   return require('minify/lib/js')(code)
 }
