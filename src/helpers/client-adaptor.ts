@@ -22,7 +22,7 @@ function getClientFile() {
 export function genClientCode() {
   const b = browserify()
   b.add(getClientFile())
-  return new Promise((resolve, reject) => {
+  return new Promise<string>((resolve, reject) => {
     b.bundle((err, src) => {
       if (err) {
         console.error('failed to bundle client code:', err)
