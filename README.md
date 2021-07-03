@@ -40,7 +40,7 @@ With the template string based approach, html injection _could be_ avoided when 
 
 - [x] Thermostat
 - [x] Image Editor
-- [ ] Autocomplete Searching
+- [x] Autocomplete Searching
 - [ ] Form Validations
 - [ ] Snake Game
 

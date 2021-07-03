@@ -22,6 +22,7 @@ import { EarlyTerminate } from './helpers.js'
 import { setSessionUrl } from './session.js'
 import Editor from './pages/editor.js'
 import { capitalize } from './string.js'
+import AutoCompleteDemo from './pages/auto-complete-demo.js'
 
 let template = loadTemplate<index>('index')
 
@@ -47,6 +48,7 @@ export function Menu(attrs: attrs) {
             '/about',
             '/thermostat',
             '/editor',
+            '/auto-complete',
             '/form',
             '/some/page/that/does-not/exist',
           ],
@@ -95,6 +97,7 @@ export function App(): Element {
               '/thermostat/inc': [Thermostat.inc],
               '/thermostat/dec': [Thermostat.dec],
               '/editor': <Editor.index />,
+              '/auto-complete': <AutoCompleteDemo />,
               '/form': [DemoForm as ComponentFn],
               '/form/:key': [DemoForm as ComponentFn],
             },
