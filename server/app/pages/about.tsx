@@ -53,9 +53,9 @@ export let About = (
         <Menu />
       </legend>
       {Switch({
+        '/about': html,
         '/about/html': html,
         '/about/markdown': markdown,
-        '/about': html,
       })}
     </fieldset>
   </div>
