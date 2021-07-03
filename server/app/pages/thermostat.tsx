@@ -22,20 +22,21 @@ class State {
     return this._status
   }
   private tick = () => {
-    this.timer = setTimeout(this.tick, UpdateInterval)
+    if (this.current === this.target) {
+      this.status = 'idle'
+      this.timer = null
+      return
+    }
     if (this.current > this.target) {
       this.status = 'cooling'
       this.current -= 0.5
-      return
-    }
-    if (this.current < this.target) {
+    } else if (this.current < this.target) {
       this.status = 'heating'
       this.current += 0.5
-      return
     }
-    this.status = 'idle'
+    this.timer = setTimeout(this.tick, UpdateInterval)
   }
-  private timer = setTimeout(this.tick)
+  private timer: any = setTimeout(this.tick)
   set status(value: Status) {
     if (this._status === value) return
     this._status = value
@@ -45,6 +46,9 @@ class State {
     if (this._target === value) return
     this._target = value
     update(['update-in', '#thermostat #target', value.toFixed(1)])
+    if (!this.timer) {
+      this.timer = setTimeout(this.tick)
+    }
   }
   set current(value: number) {
     if (this._current === value) return
