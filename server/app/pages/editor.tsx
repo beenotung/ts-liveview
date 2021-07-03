@@ -46,14 +46,14 @@ export function Editor(attrs: attrs) {
         '#image-editor #output-image',
         { style: `background-color: ${state.color}` },
       ])
+      Colors.forEach(color =>
+        messages.push([
+          'update-props',
+          `#image-editor #image-color_${color}`,
+          { checked: color === state!.color },
+        ]),
+      )
     }
-    Colors.forEach(color =>
-      messages.push([
-        'update-props',
-        `#image-editor #image-color_${color}`,
-        { checked: color === state!.color },
-      ]),
-    )
     if (messages.length > 0) {
       ws.send(['batch', messages])
       throw EarlyTerminate
@@ -65,9 +65,10 @@ export function Editor(attrs: attrs) {
     <div id="image-editor">
       <h2>Image Editor Demo</h2>
       <p>
-        This demo illustrate how low-latency can it be even when the state and
+        This demo illustrates how low-latency can it be even when the state and
         logic are maintained on the server.
       </p>
+      <p>The state is managed per-connection (not globally shared).</p>
       <input
         id="image-width"
         title="control image width"
