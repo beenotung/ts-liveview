@@ -1,6 +1,17 @@
 # Default Group
 User-agent: *
+
+## TODO auto generate from routes with meta data?
 Allow: /
+Allow: /home
+Allow: /about
+Allow: /about/html
+Allow: /about/markdown
+Allow: /thermostat
+Disallow: /thermostat/inc
+Disallow: /thermostat/dec
+Allow: /form
+Disallow: /form/*
 
 # Sitemap: http://localhost:8100/sitemap.xml
 # Reference: https://www.xml-sitemaps.com
