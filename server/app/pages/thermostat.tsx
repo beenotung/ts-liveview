@@ -22,7 +22,7 @@ color: white;
 `,
   idle: `
 background: #eef;
-background: radial-gradient(180deg, #eef 0%, #cce 100%);
+background: radial-gradient(#fff 0%, #eef 100%);
 color: black;
 `,
 }
