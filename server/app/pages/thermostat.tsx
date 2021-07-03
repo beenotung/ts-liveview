@@ -6,7 +6,27 @@ import { Update, UpdateIn } from '../components/update.js'
 import type { ServerMessage } from '../../../client'
 
 const UpdateInterval = 1000
+
 type Status = 'cooling' | 'heating' | 'idle'
+
+const StatusStyles: Record<Status, string> = {
+  heating: `
+background: #f83;
+background: linear-gradient(180deg, #f83 0%, #f54 100%);
+color: white;
+`,
+  cooling: `
+background: #6ae;
+background: linear-gradient(180deg, #6ae 0%, #17d 100%);
+color: white;
+`,
+  idle: `
+background: #eef;
+background: radial-gradient(180deg, #eef 0%, #cce 100%);
+color: black;
+`,
+}
+
 class State {
   private _current = 27
   private _target = 25.5
@@ -39,7 +59,17 @@ class State {
   set status(value: Status) {
     if (this._status === value) return
     this._status = value
-    update(['update-in', '#thermostat #status', value])
+    let messages: ServerMessage[] = [
+      ['update-in', '#thermostat #status', value],
+      [
+        'update-attrs',
+        '#thermostat .outer.circle',
+        {
+          style: StatusStyles[value],
+        },
+      ],
+    ]
+    update(['batch', messages])
   }
   set target(value: number) {
     if (this._target === value) return
@@ -91,7 +121,7 @@ function update(message: ServerMessage) {
 export function Thermostat() {
   return (
     <div id="thermostat">
-      {Style(`
+      {Style(/* css */ `
         #thermostat button {
             margin: 0.25em;
             font-size: larger;
@@ -99,35 +129,121 @@ export function Thermostat() {
         #thermostat [data-live=redirect] {
             display: block;
         }
-        #thermostat label {
-            display: block;
-            text-transform: capitalize;
-            margin-top: 0.5em;
-            margin-bottom: 0.25em;
-            font-weight: bold;
+        #thermostat .title {
+          width: min(72vw,72vh);
+          text-align: center;
         }
-        #thermostat label::after {
-            content: ":";
+        #thermostat .circle.outer {
+          --size: min(72vw,72vh);
+          background-color: #eef;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+        #thermostat .circle.outer > div {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+        }
+        #thermostat .circle.outer > .text-container {
+          font-size: 1.25em;
+          padding: min(3vw,3vh);
+        }
+        #thermostat .circle.middle {
+          --size: min(48vw,48vh);
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          background-color: #eee;
+          color: black;
+        }
+        #thermostat .circle.middle > div {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+        #thermostat .circle.middle button {
+          border: none;
+          width: min(12vw,12vh);
+          height: min(12vw,12vh);
+          margin: 0;
+          background-color: transparent;
+          font-size: 2em;
+          cursor: pointer;
+        }
+        #thermostat .circle.middle button:hover {
+          outline: 1px solid gray;
+        }
+        #thermostat .circle.inner {
+         --size: min(24vw,24vh);
+          background-color: white;
+          display: flex;
+          flex-direction: column;
+          text-align: center;
+          justify-content: center;
+          font-size: 1.6em;
+        }
+        #thermostat .circle {
+          border-radius: 100%;
+          border: 1px solid black;
+          width: var(--size);
+          height: var(--size);
         }
         `)}
-      <h2>Realtime Thermostat Demo</h2>
+      <h2>Thermostat Demo</h2>
       <p>This demo illustrates how to do cross-browser realtime update.</p>
       <p>
         The state is globally shared (for all connections) and the logic are
         maintained on the server.
       </p>
-      <label for="status">status</label>
-      <span id="status">{state.status}</span>
-      <label for="current">current</label>
-      <span id="current">{state.current}</span>
-      <label for="target">target</label>
-      <Link href="/thermostat/dec" no-history>
-        <button>-</button>
-      </Link>
-      <span id="target">{state.target}</span>
-      <Link href="/thermostat/inc" no-history>
-        <button>+</button>
-      </Link>
+      <h3 class="title">Interactive UIs</h3>
+      <div class="outer circle">
+        <div class="text-container">
+          Target:&nbsp;
+          <span title="Target temperature in celsius degree">
+            <span id="target">{state.target.toFixed(1)}</span>&deg;
+          </span>
+        </div>
+        <div>
+          <div class="middle circle">
+            <div>
+              <Link
+                href="/thermostat/dec"
+                no-history
+                title="Reduce target temperature by 0.5 celsius degree"
+              >
+                <button>-</button>
+              </Link>
+            </div>
+            <div>
+              <div class="inner circle">
+                <span title="Current temperature in celsius degree">
+                  <span id="current">{state.current.toFixed(1)}</span>&deg;
+                </span>
+              </div>
+            </div>
+            <div>
+              <Link
+                href="/thermostat/inc"
+                no-history
+                title="Increase target temperature by 0.5 celsius degree"
+              >
+                <button>+</button>
+              </Link>
+            </div>
+          </div>
+        </div>
+        <div class="text-container">
+          <span id="status" title="Current status">
+            {state.status}
+          </span>
+        </div>
+      </div>
+      <p>
+        <a href="https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript">
+          Layout reference
+        </a>
+      </p>
     </div>
   )
 }
