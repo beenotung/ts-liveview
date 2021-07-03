@@ -7,7 +7,7 @@ import {
   RequestResend,
   Send,
   WsMessage,
-} from '../../client/ws-reliable.js'
+} from '../../client/ws/ws-reliable.js'
 import { debugLog } from '../debug.js'
 import type { ManagedWebsocket, OnWsMessage } from './wss.js'
 

@@ -1,6 +1,6 @@
-import type { selector, VElement, VNode } from './app/types'
-import { updateElement, updateNode } from './app/dom.js'
-import { connectWS } from './ws-lite.js'
+import type { attrs, selector, VElement, VNode } from './jsx/types'
+import { updateElement, updateNode } from './jsx/dom.js'
+import { connectWS } from './ws/ws-lite.js'
 
 let wsUrl = location.origin.replace('http', 'ws')
 connectWS<ServerMessage>({
@@ -16,9 +16,14 @@ connectWS<ServerMessage>({
 
     let emit = function emit() {
       ws.send(Array.from(arguments))
-      if (window.event && !(window.event.target instanceof WebSocket)) {
-        console.debug('preventDefault', window.event)
-        window.event.preventDefault()
+      let event = window.event
+      if (
+        event &&
+        (event.target instanceof HTMLAnchorElement ||
+          event.target instanceof HTMLButtonElement)
+      ) {
+        console.debug('preventDefault', event)
+        event.preventDefault()
       }
     } as (...args: any[]) => void
     function emitHref(a: HTMLAnchorElement, flag?: 'q') {
@@ -60,6 +65,7 @@ connectWS<ServerMessage>({
 export type ServerMessage =
   | ['update', VElement]
   | ['update-in', selector, VNode]
+  | ['update-attrs', selector, attrs]
   | ['batch', ServerMessage[]]
 
 function onServerMessage(message: ServerMessage) {

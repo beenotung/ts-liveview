@@ -1,5 +1,5 @@
 import type { ServerMessage } from '../../../client'
-import type { VNode, attrs } from '../../../client/app/types'
+import type { VNode, attrs } from '../../../client/jsx/types'
 import {
   Context,
   ExpressContext,

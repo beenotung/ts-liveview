@@ -1,5 +1,5 @@
 import type { Server } from 'ws'
-import { Ping, Pong, Send } from '../../client/ws-lite.js'
+import { Ping, Pong, Send } from '../../client/ws/ws-lite.js'
 import { debugLog } from '../debug.js'
 import type { ManagedWebsocket, OnWsMessage } from './wss'
 

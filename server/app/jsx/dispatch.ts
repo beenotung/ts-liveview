@@ -1,5 +1,5 @@
 import type { ServerMessage } from '../../../client'
-import type { VElement } from '../../../client/app/types'
+import type { VElement } from '../../../client/jsx/types'
 import type { WsContext } from '../context'
 import { EarlyTerminate, Message } from '../helpers.js'
 import type { Element, Component } from './types'

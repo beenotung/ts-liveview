@@ -1,6 +1,6 @@
 /* for client side dynamic rendering */
 
-import type { VElement, VNode, VNodeList } from '../../../client/app/types'
+import type { VElement, VNode, VNodeList } from '../../../client/jsx/types'
 import type { Context } from '../context'
 import { ContextSymbol } from '../context.js'
 import type {
