@@ -6,6 +6,8 @@ LiveView enables rich, real-time user experiences with server-rendered HTML.
 
 Just like [Phoenix LiveView](https://github.com/phoenixframework/phoenix_live_view) but in Typescript!
 
+**(On-going development happens on the branch [v2-rc3-jsx-with-context](https://github.com/beenotung/ts-liveview/tree/v2-rc3-jsx-with-context))**
+
 #### Examples
 
 - [x] Single-Page Application (SPA):
