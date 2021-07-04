@@ -8,6 +8,8 @@ import { debugLog } from './debug.js'
 import { listenWSS } from './ws/wss-lite.js'
 import { expressRouter, onWsMessage } from './app/app.js'
 import { startSession, closeSession } from './app/session.js'
+import { readFileSync, writeFileSync } from 'fs';
+import open from 'open'
 
 config()
 let log = debugLog('index.ts')
@@ -38,4 +40,11 @@ app.use(expressRouter)
 let PORT = +process.env.PORT! || 8100
 server.listen(PORT, () => {
   log(`listening on http://localhost:${PORT}`)
+  if (process.env.NODE_ENV === 'dev') {
+    let startTime = new Date(readFileSync('.open').toString()).getTime()
+    if (startTime) {
+      writeFileSync('.open', 'done')
+      open(`http://localhost:${PORT}`)
+    }
+  }
 })

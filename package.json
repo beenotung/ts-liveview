@@ -8,7 +8,8 @@
     "format": "prettier --write . && format-json-cli",
     "build": "tsc -p .",
     "start": "node dist/server/index.js",
-    "dev": "run-s build watch",
+    "dev": "NODE_ENV=dev run-s build reset-open watch",
+    "reset-open": "node scripts/reset-open.js",
     "watch": "run-p watch:*",
     "watch:ts": "tsc -p . -w",
     "watch:js": "nodemon --ignore public/js dist/server/index.js"
@@ -29,6 +30,7 @@
     "fastest-levenshtein": "^1.0.12",
     "marked": "^2.1.3",
     "minify": "^7.0.2",
+    "open": "^8.2.1",
     "sanitize-html": "^2.4.0",
     "url-router.ts": "^0.2.3",
     "ws": "^7.5.1"
