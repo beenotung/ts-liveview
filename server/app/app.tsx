@@ -11,18 +11,18 @@ import { Switch } from './components/router.js'
 import { mapArray } from './components/fragment.js'
 import { OnWsMessage } from '../ws/wss.js'
 import { dispatchUpdate } from './jsx/dispatch.js'
-import { Home } from './pages/home.js'
-import { About } from './pages/about.js'
-import { NotMatch } from './pages/not-match.js'
 import { Link } from './components/router.js'
-import Thermostat from './pages/thermostat.js'
 import { Style } from './components/style.js'
-import { DemoForm } from './pages/demo-form.js'
 import { EarlyTerminate } from './helpers.js'
 import { setSessionUrl } from './session.js'
-import Editor from './pages/editor.js'
 import { capitalize } from './string.js'
+import NotMatch from './pages/not-match.js'
+import Home from './pages/home.js'
+import About from './pages/about.js'
+import Thermostat from './pages/thermostat.js'
+import Editor from './pages/editor.js'
 import AutoCompleteDemo from './pages/auto-complete-demo.js'
+import DemoForm from './pages/demo-form.js'
 
 let template = loadTemplate<index>('index')
 
@@ -96,7 +96,7 @@ export function App(): Element {
               '/thermostat': [Thermostat.index],
               '/thermostat/inc': [Thermostat.inc],
               '/thermostat/dec': [Thermostat.dec],
-              '/editor': <Editor.index />,
+              '/editor': <Editor />,
               '/auto-complete': <AutoCompleteDemo />,
               '/form': [DemoForm as ComponentFn],
               '/form/:key': [DemoForm as ComponentFn],

@@ -13,3 +13,5 @@ export function NotMatch(attrs: attrs) {
     </div>
   )
 }
+
+export default NotMatch

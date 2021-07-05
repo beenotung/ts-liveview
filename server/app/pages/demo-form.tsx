@@ -119,3 +119,5 @@ label::after {
     </>
   )
 }
+
+export default DemoForm

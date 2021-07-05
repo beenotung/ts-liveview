@@ -10,9 +10,13 @@ type State = {
   width: number
   color: string
 }
+
 const DefaultState: State = { width: 150, color: 'white' }
+
 const sessions = new WeakMap<ManagedWebsocket, State>()
+
 const Colors = ['white', 'black', 'blue']
+
 export function Editor(attrs: attrs) {
   const context = getContext(attrs)
   function getState(): State {
@@ -127,4 +131,5 @@ export function Editor(attrs: attrs) {
     </div>
   )
 }
-export default { index: Editor }
+
+export default Editor

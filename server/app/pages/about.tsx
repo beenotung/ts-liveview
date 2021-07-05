@@ -60,3 +60,5 @@ export let About = (
     </fieldset>
   </div>
 )
+
+export default About
