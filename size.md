@@ -8,6 +8,10 @@
 | primus.js       |  97K |    32K |        11K |
 | socket.io.js    | 181K |    64K |        15K |
 
+**Remark**: `ws-lite` is ready for usage; `ws-reliable` is still WIP.
+
+Details refers to [client/ws/readme.md](./client/ws/readme.md)
+
 ### Reference
 
 source: https://bundlephobia.com/
