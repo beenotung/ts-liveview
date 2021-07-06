@@ -1,6 +1,7 @@
 import escapeHTML from 'escape-html'
 import type { Context } from '../context'
 import { ContextSymbol } from '../context.js'
+import debug from 'debug'
 import type {
   html,
   Node,
@@ -11,6 +12,9 @@ import type {
   Component,
   Element,
 } from './types'
+
+const log = debug('html.ts')
+log.enabled = true
 
 export function prerender(node: Node): Raw {
   let html = nodeToHTML(node, { type: 'static' })

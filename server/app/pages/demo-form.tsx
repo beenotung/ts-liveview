@@ -6,6 +6,10 @@ import JSX from '../jsx/jsx.js'
 import { attrs } from '../jsx/types.js'
 import sanitizeHTML from 'sanitize-html'
 import { Script } from '../components/script.js'
+import debug from 'debug'
+
+const log = debug('demo-form.tsx')
+log.enabled = true
 
 function sanitize(html: string) {
   return sanitizeHTML(html, {
@@ -61,7 +65,7 @@ label::after {
 }
 `)
 
-export function DemoForm(attrs: attrs) {
+export function set(attrs: attrs) {
   const context = getContext(attrs)
   if (context.type === 'ws' && context.args) {
     const match = context.routerMatch!
@@ -79,28 +83,48 @@ export function DemoForm(attrs: attrs) {
             ['update-in', '#preview-out', Raw(sanitize(value))],
           ],
         ])
-      case 'submit':
-        console.log('submit:', value)
-        return (
-          <p>
-            Received:{' '}
-            <pre>
-              <code>{Raw(JSON.stringify(value, null, 2))}</code>
-            </pre>
-          </p>
-        )
       default:
         console.log('unknown key in DemoForm, key:', key)
         break
     }
   }
+  return DemoForm()
+}
 
+export function submit(attrs: attrs) {
+  const context = getContext(attrs)
+  function getValue() {
+    if (context.type === 'ws') {
+      const value = context.args![0]
+      log('ws submit:', value)
+      return value
+    }
+    if (context.type === 'express') {
+      const value = context.req.body
+      log('req submit:', value)
+      return value
+    }
+  }
+  const value = getValue()
+  if (!value) {
+    return DemoForm()
+  }
+  return (
+    <p>
+      Received:{' '}
+      <pre>
+        <code>{JSON.stringify(value, null, 2)}</code>
+      </pre>
+    </p>
+  )
+}
+
+export function DemoForm() {
   return (
     <>
       <h2>Login Form</h2>
-      <form action="/form/submit" onsubmit="emitForm(event)">
+      <form method="POST" action="/form/submit" onsubmit="emitForm(event)">
         {style}
-        {['a', { href: '#' }, ['hash link']]}
         <div>
           <label for="username" class="inline">
             username
@@ -111,7 +135,7 @@ export function DemoForm(attrs: attrs) {
           type="text"
           name="username"
           id="username"
-          oninput="emit('/form/username',this.value)"
+          oninput="emit('/form/live/username',this.value)"
         />
         <div title="Tips to try html-injection">
           Hint: Try <code>Bob</code> and <code>{'<b>o</b>'}</code>
@@ -182,12 +206,35 @@ export function DemoForm(attrs: attrs) {
       <textarea
         id="html-input"
         style="width:37em;height:10em;"
-        oninput="emit('/form/code',this.value)"
+        oninput="emit('/form/live/code',this.value)"
       >
         {code}
       </textarea>
+
+      <h2>Syntax of ts-liveview</h2>
+      <p>
+        You can either write in JSX or AST
+        <fieldset>
+          <legend>JSX Example</legend>
+          <code>{`<a href='#'>hash link</a>`}</code>
+        </fieldset>
+        <fieldset>
+          <legend>AST Example</legend>
+          {`{['a', { href: '#' }, ['hash link']]}`}
+        </fieldset>
+        <fieldset>
+          <legend>HTML output</legend>
+          <code>
+            <a href="#">hash link</a>
+          </code>
+        </fieldset>
+      </p>
     </>
   )
 }
 
-export default DemoForm
+export default {
+  index: DemoForm,
+  submit,
+  set,
+}

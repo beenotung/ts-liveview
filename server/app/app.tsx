@@ -98,8 +98,9 @@ export function App(): Element {
               '/thermostat/dec': [Thermostat.dec],
               '/editor': <Editor />,
               '/auto-complete': <AutoCompleteDemo />,
-              '/form': [DemoForm as ComponentFn],
-              '/form/:key': [DemoForm as ComponentFn],
+              '/form': <DemoForm.index />,
+              '/form/submit': <DemoForm.submit />,
+              '/form/live/:key': <DemoForm.set />,
             },
             <NotMatch />,
           )}

@@ -35,6 +35,9 @@ app.use(compression())
 app.use(express.static('public'))
 app.use(express.static(join('dist', 'client')))
 
+app.use(express.json())
+app.use(express.urlencoded())
+
 app.use(expressRouter)
 
 let PORT = +process.env.PORT! || 8100
