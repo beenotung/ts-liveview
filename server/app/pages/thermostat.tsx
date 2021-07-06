@@ -14,17 +14,17 @@ const StatusStyles: Record<Status, string> = {
 background: #f83;
 background: linear-gradient(180deg, #f83 0%, #f54 100%);
 color: white;
-`,
+`.replace(/\n/g, ' '),
   cooling: `
 background: #6ae;
 background: linear-gradient(180deg, #6ae 0%, #17d 100%);
 color: white;
-`,
+`.replace(/\n/g, ' '),
   idle: `
 background: #eef;
 background: radial-gradient(#fff 0%, #eef 100%);
 color: black;
-`,
+`.replace(/\n/g, ' '),
 }
 
 class State {
@@ -197,7 +197,7 @@ export function Thermostat() {
         maintained on the server.
       </p>
       <h3 class="title">Interactive UIs</h3>
-      <div class="outer circle">
+      <div class="outer circle" style={StatusStyles[state.status]}>
         <div class="text-container">
           Target:&nbsp;
           <span title="Target temperature in celsius degree">
