@@ -1,22 +1,15 @@
-# ts-liveview v3?
+# ts-liveview v3
 
-The successor to ts-liveview.
+The successor to [ts-liveview v1](https://github.com/beenotung/ts-liveview/tree/v1).
 
-Like ts-liveview, ? helps to deliver fast and interactive user interface that normally require javascript (MBs of js to be downloaded and executed on the client side) directly from the server.
+Like the Phoenix LiveView, ts-liveview helps to deliver fast and interactive user interface that normally require javascript (MBs of js to be downloaded and executed on the client side) directly from the server.
 
 JSX is supported but Virtual DOM is not required.
-
-## Why the rename?
-
-I chose to rename the project for a few reasons:
-
-- I wanted the freedom to clean up mistakes and remove ideas that hadn't worked out as cleanly as I wanted
--
 
 ## Inspired from:
 
 - [Phoenix LiveView](https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript)
-- [ts-liveview](https://github.com/beenotung/ts-liveview/tree/25f5476) (Typescript clone of Phoenix LiveView)
+- [ts-liveview v1](https://github.com/beenotung/ts-liveview/tree/25f5476) (Typescript clone of Phoenix LiveView)
 - [htmx](https://htmx.org) (Derived from [intercooler.js](https://intercoolerjs.org))
 - JSX in [Surplus](https://github.com/adamhaile/surplus), [Stencil](https://stenciljs.com/docs/templating-jsx), and [React](https://reactjs.org/docs/react-without-jsx.html)
 
@@ -69,6 +62,17 @@ The application can be built on of reactive model powered by [S.js](https://gith
 - [ ] Snake Game
 
 Inspired from https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript
+
+## Get Started
+
+```bash
+npm init ts-liveview my-app
+cd my-app
+pnpm install	# or `yarn install` or `npm install`
+pnpm dev    	# or `yarn dev`     or `npm run dev`
+```
+
+Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liveview)
 
 ## License
 
