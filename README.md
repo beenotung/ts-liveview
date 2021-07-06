@@ -24,10 +24,11 @@ I chose to rename the project for a few reasons:
 
 - [x] Response contentful html page directly to GET request
 - [x] Enable interactive UI with minimal amount of javascript to be downloaded
-- [x] Realtime-update with server events
-- [x] JSX support
+- [x] Realtime-update UI from events triggered by server or other clients
+- [x] Functional when javascript is disabled on client device (for screen-reader, text-based browser, and people tried with privacy invading scripts)
+- [x] Support to dev with JSX, AST, or html template
 - [x] Efficient wire format
-- [x] Lightweight WebSocket [(1.9K minified, 30x smaller than socket.io)](./size.md)
+- [x] Lightweight WebSocket-based protocol [(1.9K minified, 30x smaller than socket.io)](./size.md)
 - [ ] Reliable connection (Auto send accumulated messages when network resume)
 
 ## Why JSX?
