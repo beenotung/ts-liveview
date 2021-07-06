@@ -1,4 +1,4 @@
-# ts-liveview v3
+# ts-liveview v2-rc3
 
 The successor to [ts-liveview v1](https://github.com/beenotung/ts-liveview/tree/v1).
 
