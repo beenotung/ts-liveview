@@ -21,31 +21,39 @@ connectWS<ServerMessage>({
 
     let emit = function emit() {
       ws.send(Array.from(arguments))
-      let event = window.event
-      if (
-        event &&
-        (event.target instanceof HTMLAnchorElement ||
-          event.target instanceof HTMLButtonElement)
-      ) {
-        console.debug('preventDefault', event)
-        event.preventDefault()
-      }
     } as (...args: any[]) => void
-    function emitHref(a: HTMLAnchorElement, flag?: 'q') {
+
+    function emitHref(event: Event, flag?: 'q') {
+      let a = event.currentTarget as HTMLAnchorElement
       let url = a.getAttribute('href')
       if (flag !== 'q') {
         let title = a.getAttribute('title') || document.title
         history.pushState(null, title, url)
       }
       emit(url)
+      event.preventDefault()
     }
+
+    function emitForm(event: Event) {
+      let form = event.target as HTMLFormElement
+      let data = {} as any
+      new FormData(form).forEach((value, key) => {
+        data[key] = value
+      })
+      let url = form.getAttribute('action')
+      emit(url, data)
+      event.preventDefault()
+    }
+
     window.onpopstate = (event: PopStateEvent) => {
       let url = location.href.replace(location.origin, '')
       emit(url)
     }
+
     let win = window as any
     win.emit = emit
     win.emitHref = emitHref
+    win.emitForm = emitForm
 
     ws.ws.addEventListener('open', () => {
       emit('mount', location.href.replace(location.origin, ''))

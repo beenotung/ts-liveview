@@ -5,6 +5,7 @@ import { Message } from '../helpers.js'
 import JSX from '../jsx/jsx.js'
 import { attrs } from '../jsx/types.js'
 import sanitizeHTML from 'sanitize-html'
+import { Script } from '../components/script.js'
 
 function sanitize(html: string) {
   return sanitizeHTML(html, {
@@ -21,7 +22,6 @@ function sanitize(html: string) {
 }
 
 let username = ''
-let password = ''
 let code = /* html */ `
 <p>
   <i>Live</i> <b>Rich-Text</b> Editor
@@ -30,6 +30,36 @@ let code = /* html */ `
   </span>
 </p>
 `
+
+const style = Style(/* css */ `
+form > label {
+  color: green;
+}
+label {
+  margin-top: 1rem;
+  display: block;
+  text-transform: capitalize;
+}
+label.inline, .radio-group label {
+  display: inline;
+}
+label::after {
+  content: ": ";
+}
+.btn-group input {
+  border-radius: 0.25em;
+  padding: 0.3em;
+  margin: 0.3em;
+}
+[type=reset] {
+  background-color: lightcoral;
+  color: darkred;
+}
+[type=submit] {
+  background-color: lightgreen;
+  color: darkgreen;
+}
+`)
 
 export function DemoForm(attrs: attrs) {
   const context = getContext(attrs)
@@ -41,9 +71,6 @@ export function DemoForm(attrs: attrs) {
       case 'username':
         username = value
         throw new Message(['update-in', '#username-out', username])
-      case 'password':
-        password = value
-        throw new Message(['update-in', '#password-out', password])
       case 'code':
         throw new Message([
           'batch',
@@ -52,6 +79,16 @@ export function DemoForm(attrs: attrs) {
             ['update-in', '#preview-out', Raw(sanitize(value))],
           ],
         ])
+      case 'submit':
+        console.log('submit:', value)
+        return (
+          <p>
+            Received:{' '}
+            <pre>
+              <code>{Raw(JSON.stringify(value, null, 2))}</code>
+            </pre>
+          </p>
+        )
       default:
         console.log('unknown key in DemoForm, key:', key)
         break
@@ -61,22 +98,15 @@ export function DemoForm(attrs: attrs) {
   return (
     <>
       <h2>Login Form</h2>
-      <form>
+      <form action="/form/submit" onsubmit="emitForm(event)">
+        {style}
         {['a', { href: '#' }, ['hash link']]}
-        {Style(`
-form > label {
-  color: green;
-}
-label {
-  margin-top: 1rem;
-  display: block;
-  text-tranform: capitalize;
-}
-label::after {
-  content: ":";
-}
-`)}
-        <label for="username">username</label>
+        <div>
+          <label for="username" class="inline">
+            username
+          </label>
+          <span id="username-out" title="Live preview of username" />
+        </div>
         <input
           type="text"
           name="username"
@@ -84,33 +114,73 @@ label::after {
           oninput="emit('/form/username',this.value)"
         />
         <div title="Tips to try html-injection">
-          Try <code>Bob</code> and <code>{'<b>o</b>'}</code>
+          Hint: Try <code>Bob</code> and <code>{'<b>o</b>'}</code>
         </div>
+
         <label for="password">password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          oninput="emit('/form/password',this.value)"
-        />
-        <br />
-        <br />
-        <input type="submit" value="Login" />
+        <input type="password" name="password" id="password" />
+
+        <h3>Demo more input types</h3>
+
+        <label for="level">level</label>
+        <input type="number" name="level" id="level" min="1" />
+        {Script(`level.defaultValue=1`)}
+
+        <label for="gender">gender</label>
+        <select name="gender" id="gender">
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+          <option value="rainbow">Non-binary</option>
+          <option value="na">Prefer not to say</option>
+        </select>
+
+        <label for="color">color</label>
+        <input name="color" id="color" type="color" />
+
+        <div>
+          <label for="happy" class="inline">
+            happy?
+          </label>
+          <input name="happy" id="happy" type="checkbox" />
+        </div>
+
+        <div class="radio-group">
+          <p>Most often on:</p>
+          <label for="tel">tel</label>
+          <input name="contact" id="tel" type="radio" value="tel" />
+          <label for="text">text</label>
+          <input name="contact" id="text" type="radio" value="text" />
+          <label for="video">video</label>
+          <input name="contact" id="video" type="radio" value="video" />
+          <label for="face">face</label>
+          <input name="contact" id="face" type="radio" value="face" />
+        </div>
+
+        <div class="btn-group">
+          <input type="reset" value="Reset" />
+          <input type="submit" value="Submit" />
+        </div>
       </form>
-      <h2>Live Preview</h2>
-      <div>
-        username: <span id="username-out" />
-        <br />
-        password: <span id="password-out" />
-      </div>
+
       <h2>Code Snippet</h2>
+
       <p>HTML code is escaped by default</p>
-      <pre>
-        <code id="code-out">{code}</code>
-      </pre>
+      <fieldset>
+        <legend>HTML Code</legend>
+        <pre>
+          <code id="code-out">{code.trim()}</code>
+        </pre>
+      </fieldset>
+
       <p>But it is possible to display sanitized HTML</p>
-      <div id="preview-out">{Raw(sanitize(code))}</div>
+      <fieldset>
+        <legend>HTML Preview</legend>
+        <div id="preview-out">{Raw(sanitize(code))}</div>
+      </fieldset>
+
+      <label for="html-input">HTML Input</label>
       <textarea
+        id="html-input"
         style="width:37em;height:10em;"
         oninput="emit('/form/code',this.value)"
       >

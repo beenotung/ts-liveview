@@ -15,7 +15,7 @@ export type LinkAttrs = {
 
 export function Link(attrs: LinkAttrs, children?: any[]) {
   const { 'no-history': quiet, ...aAttrs } = attrs
-  const onclick = quiet ? `emitHref(this,'q')` : `emitHref(this)`
+  const onclick = quiet ? `emitHref(event,'q')` : `emitHref(event)`
   if (!children) {
     console.warn(new Error('Link with empty content'))
   }
