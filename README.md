@@ -22,14 +22,30 @@ I chose to rename the project for a few reasons:
 
 ## Features
 
-- [x] Response contentful html page directly to GET request
+- [x] Support hybrid rendering mode
+  - [x] Boot-time pre-rendering
+  - [x] Request-time server-rendering [[1]](#1)
+  - [x] Run-time live update [[2]](#2)
 - [x] Enable interactive UI with minimal amount of javascript to be downloaded
-- [x] Realtime-update UI from events triggered by server or other clients
-- [x] Functional when javascript is disabled on client device (for screen-reader, text-based browser, and people tried with privacy invading scripts)
+- [x] Functional when javascript is disabled on client device [[3]](#3)
 - [x] Support to dev with JSX, AST, or html template
 - [x] Efficient wire format
 - [x] Lightweight WebSocket-based protocol [(1.9K minified, 30x smaller than socket.io)](./size.md)
 - [ ] Reliable connection (Auto send accumulated messages when network resume)
+
+**Remarks**:
+
+###### [1]
+
+Response contentful html page directly to GET request
+
+###### [2]
+
+Triggered by events from server or other clients
+
+###### [3]
+
+For screen-reader, text-based browser, and people tried with privacy invading scripts
 
 ## Why JSX?
 
@@ -37,12 +53,19 @@ Previous versions of ts-liveview use [template string](https://github.com/beenot
 
 With the template string based approach, html injection _could be_ avoided when explicitly using helper function to sanitize the dynamic content. However it requires the developer to be careful which could be bug-prone.
 
+## Why no virtual-dom diff?
+
+Current version updates the DOM using document query selector, this reduce the memory requirement on the server to supports simultaneous connections.
+
+The application can be built on of reactive model powered by [S.js](https://github.com/adamhaile/S), [RxJS](https://github.com/ReactiveX/rxjs), or OOP with [getter and setter](https://vuejs.org/v2/guide/reactivity.html)
+
 ## Demo
 
 - [x] [Thermostat](./server/app/pages/thermostat.tsx)
 - [x] [Image Editor](./server/app/pages/editor.tsx)
 - [x] [Autocomplete Searching](./server/app/pages/auto-complete-demo.tsx)
 - [x] [Form and Sanitizing user-generated content](./server/app/pages/demo-form.tsx) (prevent XSS attack by default)
+- [x] [Pre-rendered Page](./server/app/pages/home.tsx)
 - [ ] Snake Game
 
 Inspired from https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript
