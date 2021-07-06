@@ -8,7 +8,7 @@ import { debugLog } from './debug.js'
 import { listenWSS } from './ws/wss-lite.js'
 import { expressRouter, onWsMessage } from './app/app.js'
 import { startSession, closeSession } from './app/session.js'
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs'
 import open from 'open'
 
 config()
