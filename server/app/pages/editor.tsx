@@ -5,6 +5,7 @@ import { ManagedWebsocket } from '../../ws/wss.js'
 import { EarlyTerminate } from '../helpers.js'
 import { ServerMessage } from '../../../client'
 import { onWsSessionClose } from '../session.js'
+import { Script } from '../components/script.js'
 
 type State = {
   width: number
@@ -73,41 +74,71 @@ export function Editor(attrs: attrs) {
         logic are maintained on the server.
       </p>
       <p>The state is managed per-connection (not globally shared).</p>
-      <input
-        id="image-width"
-        title="control image width"
-        type="range"
-        oninput="emit('/editor?width='+this.value)"
-        min="100"
-        max="500"
-        value={state.width}
-      />
-      <label for="image-width">
-        <span id="output-width">{state.width}</span>px
-      </label>
-      <div>
-        {[
-          Colors.map(color => {
-            let id = `image-color_${color}`
-            let attrs: attrs = {}
-            if (state.color === color) {
-              attrs.checked = 'checked'
-            }
-            return (
-              <div style="display: inline-block">
-                <input
-                  type="radio"
-                  id={id}
-                  value={color}
-                  {...attrs}
-                  onchange="emit('/editor?color='+this.value)"
-                />
-                <label for={id}>{color}</label>
-              </div>
-            )
-          }),
-        ]}
-      </div>
+      <form>
+        <div id="image_control_no_js">
+          <label for="image_width_no_js">Size: </label>
+          <input
+            name="width"
+            id="image_width_no_js"
+            type="number"
+            min="100"
+            max="500"
+            value={state.width}
+          />
+        </div>
+        <div id="image_control_js" hidden>
+          <label for="image_width">Size: </label>
+          <input
+            id="image_width"
+            name="image_width"
+            title="control image width"
+            type="range"
+            oninput="emit('/editor?width='+this.value)"
+            min="100"
+            max="500"
+            value={state.width}
+          />
+          <label for="image_width">
+            <span id="output-width">{state.width}</span>px
+          </label>
+        </div>
+        {Script(`
+      image_control_no_js.remove();
+      image_control_js.hidden = false;
+      `)}
+
+        <div>
+          <label>Color: </label>
+          {[
+            Colors.map(color => {
+              let id = `image_color_${color}`
+              let attrs: attrs = {}
+              if (state.color === color) {
+                attrs.checked = 'checked'
+              }
+              let href = `/editor?color=${color}&width=${state.width}`
+              return (
+                <div style="display: inline-block; padding: 0.5em">
+                  <div href={href}>
+                    <input
+                      type="radio"
+                      id={id}
+                      name="color"
+                      value={color}
+                      {...attrs}
+                      onchange={`emit('/editor?color='+this.value)`}
+                    />
+                    <label for={id}>{color}</label>
+                  </div>
+                </div>
+              )
+            }),
+          ]}
+        </div>
+        <input id="image_control_submit_no_js" type="submit" value="Update" />
+        {Script(`image_control_submit_no_js.remove()`)}
+      </form>
+
       <img
         alt="output image from editor"
         id="output-image"
