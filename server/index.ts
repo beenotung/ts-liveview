@@ -4,6 +4,7 @@ import ws from 'ws'
 import { config } from 'dotenv'
 import { join } from 'path'
 import compression from 'compression'
+import cookieParser from 'cookie-parser'
 import { debugLog } from './debug.js'
 import { listenWSS } from './ws/wss-lite.js'
 import { expressRouter, onWsMessage } from './app/app.js'
@@ -12,12 +13,12 @@ import { readFileSync, writeFileSync } from 'fs'
 import open from 'open'
 
 config()
-let log = debugLog('index.ts')
+const log = debugLog('index.ts')
 log.enabled = true
 
-let app = express()
-let server = new HttpServer(app)
-let wss = new ws.Server({ server })
+const app = express()
+const server = new HttpServer(app)
+const wss = new ws.Server({ server })
 listenWSS({
   wss,
   onConnection: ws => {
@@ -37,14 +38,15 @@ app.use(express.static(join('dist', 'client')))
 
 app.use(express.json())
 app.use(express.urlencoded())
+app.use(cookieParser())
 
 app.use(expressRouter)
 
-let PORT = +process.env.PORT! || 8100
+const PORT = +process.env.PORT! || 8100
 server.listen(PORT, () => {
   log(`listening on http://localhost:${PORT}`)
   if (process.env.NODE_ENV === 'dev') {
-    let startTime = new Date(readFileSync('.open').toString()).getTime()
+    const startTime = new Date(readFileSync('.open').toString()).getTime()
     if (startTime) {
       writeFileSync('.open', 'done')
       open(`http://localhost:${PORT}`)

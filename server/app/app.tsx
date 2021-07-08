@@ -23,6 +23,7 @@ import Thermostat from './pages/thermostat.js'
 import Editor from './pages/editor.js'
 import AutoCompleteDemo from './pages/auto-complete-demo.js'
 import DemoForm from './pages/demo-form.js'
+import DemoCookieSession from './pages/demo-cookie-session.js'
 
 let template = loadTemplate<index>('index')
 
@@ -50,12 +51,13 @@ export function Menu(attrs: attrs) {
             '/editor',
             '/auto-complete',
             '/form',
+            '/cookie-session',
             '/some/page/that/does-not/exist',
           ],
           link => {
             let text = link.substr(1)
             if (!text.includes('/')) {
-              text = capitalize(text)
+              text = text.split('-').map(capitalize).join('-')
             }
             return (
               <Link
@@ -89,18 +91,22 @@ export function App(): Element {
           <legend>Router Demo</legend>
           {Switch(
             {
+              // jsx node can be used directly
               '/': Home,
               '/home': Home,
               '/about': About,
               '/about/:mode': About,
+              // invoke functional component with square bracket
               '/thermostat': [Thermostat.index],
               '/thermostat/inc': [Thermostat.inc],
               '/thermostat/dec': [Thermostat.dec],
+              // or invoke functional component with x-html tag
               '/editor': <Editor />,
               '/auto-complete': <AutoCompleteDemo />,
               '/form': <DemoForm.index />,
               '/form/submit': <DemoForm.submit />,
               '/form/live/:key': <DemoForm.set />,
+              '/cookie-session': <DemoCookieSession />,
             },
             <NotMatch />,
           )}
