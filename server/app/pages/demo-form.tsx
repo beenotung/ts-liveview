@@ -44,8 +44,20 @@ label {
   display: block;
   text-transform: capitalize;
 }
-label.inline, .radio-group label {
+.inline-label-container,
+.radio-group
+{
+  margin-top: 1rem;
+}
+.inline-label-container label,
+.radio-group label
+{
   display: inline;
+}
+.radio-group label::before {
+  width: 1.5em;
+  display: inline-block;
+  content: "";
 }
 label::after {
   content: ": ";
@@ -125,10 +137,8 @@ export function DemoForm() {
       <h2>Login Form</h2>
       <form method="POST" action="/form/submit" onsubmit="emitForm(event)">
         {style}
-        <div>
-          <label for="username" class="inline">
-            username
-          </label>
+        <div class="inline-label-container">
+          <label for="username">username</label>
           <span id="username-out" title="Live preview of username" />
         </div>
         <input
@@ -161,15 +171,13 @@ export function DemoForm() {
         <label for="color">color</label>
         <input name="color" id="color" type="color" />
 
-        <div>
-          <label for="happy" class="inline">
-            happy?
-          </label>
+        <div class="inline-label-container">
+          <label for="happy">happy?</label>
           <input name="happy" id="happy" type="checkbox" />
         </div>
 
         <div class="radio-group">
-          <p>Most often on:</p>
+          <div style="margin-bottom:0.5em">Most often on:</div>
           <label for="tel">tel</label>
           <input name="contact" id="tel" type="radio" value="tel" />
           <label for="text">text</label>
