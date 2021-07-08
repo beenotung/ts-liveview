@@ -137,7 +137,7 @@ export function submit(attrs: attrs) {
 export function DemoForm() {
   return (
     <>
-      <h2>Login Form</h2>
+      <h2>Demo Form</h2>
       <form method="POST" action="/form/submit" onsubmit="emitForm(event)">
         {style}
         <div class="inline-label-container">
@@ -154,10 +154,10 @@ export function DemoForm() {
           Hint: Try <code>Bob</code> and <code>{'<b>o</b>'}</code>
         </div>
 
+        <h3>Demo more input types</h3>
+
         <label for="password">password</label>
         <input type="password" name="password" id="password" />
-
-        <h3>Demo more input types</h3>
 
         <label for="level">level</label>
         <input type="number" name="level" id="level" min="1" />
