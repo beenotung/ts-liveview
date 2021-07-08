@@ -4,13 +4,14 @@ import ws from 'ws'
 import { config } from 'dotenv'
 import { join } from 'path'
 import compression from 'compression'
-import cookieParser from 'cookie-parser'
 import { debugLog } from './debug.js'
-import { listenWSS } from './ws/wss-lite.js'
+import { listenWSSConnection } from './ws/wss-lite.js'
 import { expressRouter, onWsMessage } from './app/app.js'
-import { startSession, closeSession } from './app/session.js'
+import { startSession, closeSession, getWSSession } from './app/session.js'
 import { readFileSync, writeFileSync } from 'fs'
 import open from 'open'
+import { cookieMiddleware } from './app/cookie.js'
+import { listenWSSCookie } from './app/cookie.js'
 
 config()
 const log = debugLog('index.ts')
@@ -19,7 +20,8 @@ log.enabled = true
 const app = express()
 const server = new HttpServer(app)
 const wss = new ws.Server({ server })
-listenWSS({
+listenWSSCookie(wss)
+listenWSSConnection({
   wss,
   onConnection: ws => {
     log('attach ws:', ws.ws.protocol)
@@ -38,7 +40,7 @@ app.use(express.static(join('dist', 'client')))
 
 app.use(express.json())
 app.use(express.urlencoded())
-app.use(cookieParser())
+app.use(cookieMiddleware)
 
 app.use(expressRouter)
 

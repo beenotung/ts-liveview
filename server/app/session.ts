@@ -1,5 +1,9 @@
-import { ServerMessage } from '../../client'
+import type { ServerMessage } from '../../client'
 import type { ManagedWebsocket } from '../ws/wss'
+import { debugLog } from '../debug.js'
+
+const log = debugLog('session.ts')
+log.enabled = true
 
 export type Session = {
   ws: ManagedWebsocket<ServerMessage>

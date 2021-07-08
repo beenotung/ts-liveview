@@ -6,7 +6,10 @@ import type { ManagedWebsocket, OnWsMessage } from './wss'
 let log = debugLog('wss-lite.ts')
 log.enabled = true
 
-export function listenWSS<ClientEvent = any, ServerEvent = any>(options: {
+export function listenWSSConnection<
+  ClientEvent = any,
+  ServerEvent = any,
+>(options: {
   wss: Server
   onConnection: (ws: ManagedWebsocket) => void
   onClose: (ws: ManagedWebsocket, code?: number, reason?: string) => void
