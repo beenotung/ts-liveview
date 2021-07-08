@@ -122,12 +122,15 @@ export function submit(attrs: attrs) {
     return DemoForm()
   }
   return (
-    <p>
-      Received:{' '}
-      <pre>
-        <code>{JSON.stringify(value, null, 2)}</code>
-      </pre>
-    </p>
+    <>
+      <p>
+        Received:{' '}
+        <pre>
+          <code>{JSON.stringify(value, null, 2)}</code>
+        </pre>
+      </p>
+      <p>(The content is not saved on server)</p>
+    </>
   )
 }
 
