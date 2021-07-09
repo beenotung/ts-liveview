@@ -7,6 +7,7 @@ import {
 } from './jsx/dom.js'
 import { connectWS } from './ws/ws-lite.js'
 
+let win = window as any
 let wsUrl = location.origin.replace('http', 'ws')
 connectWS<ServerMessage>({
   createWS(protocol) {
@@ -50,7 +51,6 @@ connectWS<ServerMessage>({
       emit(url)
     }
 
-    let win = window as any
     win.emit = emit
     win.emitHref = emitHref
     win.emitForm = emitForm
@@ -103,3 +103,12 @@ function onServerMessage(message: ServerMessage) {
       console.log('unknown server message:', message)
   }
 }
+
+function get(url: string) {
+  return fetch(url)
+}
+win.get = get
+function del(url: string) {
+  return fetch(url, { method: 'DELETE' })
+}
+win.del = del

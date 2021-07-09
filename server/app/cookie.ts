@@ -4,6 +4,7 @@ import type ws from 'ws'
 import type express from 'express'
 import { debugLog } from '../debug.js'
 import { EarlyTerminate } from './helpers.js'
+import { Context } from './context.js'
 
 const log = debugLog('cookie.ts')
 
@@ -43,4 +44,14 @@ export function getWsCookie(ws: WebSocket): Cookie {
     throw new Error('no ws cookies')
   }
   return cookies
+}
+
+export function getContextCookie(context: Context): Cookie | null {
+  if (context.type === 'express') {
+    return getSecureCookie(context.req, context.res)
+  }
+  if (context.type === 'ws') {
+    return getWsCookie(context.ws.ws)
+  }
+  return null
 }

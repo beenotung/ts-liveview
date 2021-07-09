@@ -7,7 +7,7 @@ import compression from 'compression'
 import { debugLog } from './debug.js'
 import { listenWSSConnection } from './ws/wss-lite.js'
 import { expressRouter, onWsMessage } from './app/app.js'
-import { startSession, closeSession, getWSSession } from './app/session.js'
+import { startSession, closeSession } from './app/session.js'
 import { readFileSync, writeFileSync } from 'fs'
 import open from 'open'
 import { cookieMiddleware } from './app/cookie.js'
@@ -40,6 +40,7 @@ app.use(express.static(join('dist', 'client')))
 
 app.use(express.json())
 app.use(express.urlencoded())
+
 app.use(cookieMiddleware)
 
 app.use(expressRouter)

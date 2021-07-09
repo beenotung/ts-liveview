@@ -4,7 +4,7 @@ import { loadTemplate } from '../template.js'
 import express from 'express'
 import { getContextUrl } from './context.js'
 import type { ExpressContext, WsContext } from './context.js'
-import type { attrs, ComponentFn, Element } from './jsx/types'
+import type { attrs, Element } from './jsx/types'
 import { flagsToClassName, nodeToHTML } from './jsx/html.js'
 import { sendHTML } from './express.js'
 import { Switch } from './components/router.js'
@@ -106,7 +106,8 @@ export function App(): Element {
               '/form': <DemoForm.index />,
               '/form/submit': <DemoForm.submit />,
               '/form/live/:key': <DemoForm.set />,
-              '/cookie-session': <DemoCookieSession />,
+              '/cookie-session': <DemoCookieSession.index />,
+              '/cookie-session/token': <DemoCookieSession.Token />,
             },
             <NotMatch />,
           )}
