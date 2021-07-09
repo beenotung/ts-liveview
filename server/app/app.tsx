@@ -7,7 +7,7 @@ import type { ExpressContext, WsContext } from './context.js'
 import type { attrs, Element } from './jsx/types'
 import { flagsToClassName, nodeToHTML } from './jsx/html.js'
 import { sendHTML } from './express.js'
-import { Switch } from './components/router.js'
+import { Redirect, Switch } from './components/router.js'
 import { mapArray } from './components/fragment.js'
 import { OnWsMessage } from '../ws/wss.js'
 import { dispatchUpdate } from './jsx/dispatch.js'
@@ -18,7 +18,7 @@ import { setSessionUrl } from './session.js'
 import { capitalize } from './string.js'
 import NotMatch from './pages/not-match.js'
 import Home from './pages/home.js'
-import About from './pages/about.js'
+import About, { License } from './pages/about.js'
 import Thermostat from './pages/thermostat.js'
 import Editor from './pages/editor.js'
 import AutoCompleteDemo from './pages/auto-complete-demo.js'
@@ -110,6 +110,17 @@ export function App(): Element {
               '/form/live/:key': <DemoForm.set />,
               '/cookie-session': <DemoCookieSession.index />,
               '/cookie-session/token': <DemoCookieSession.Token />,
+              // patch routes for links in README.md
+              '/LICENSE': License,
+              '/server/app/pages/thermostat.tsx': (
+                <Redirect href="/thermostat" />
+              ),
+              '/server/app/pages/editor.tsx': <Redirect href="/editor" />,
+              '/server/app/pages/auto-complete-demo.tsx': (
+                <Redirect href="/auto-complete" />
+              ),
+              '/server/app/pages/demo-form.tsx': <Redirect href="/form" />,
+              '/server/app/pages/home.tsx': <Redirect href="/home" />,
             },
             <NotMatch />,
           )}

@@ -5,7 +5,7 @@ import marked from 'marked'
 import { Raw } from '../components/raw.js'
 import { attrs } from '../jsx/types'
 import { getContextUrl } from '../context.js'
-import { flagsToClassName } from '../jsx/html.js'
+import { flagsToClassName, prerender } from '../jsx/html.js'
 
 let text = readFileSync('README.md').toString()
 
@@ -17,10 +17,8 @@ function Menu(attrs: attrs) {
   return (
     <div id="menu">
       <Link
-        href="/about/html"
-        class={flagsToClassName({
-          selected: url === '/about/html' || url === '/about',
-        })}
+        href="/about"
+        class={flagsToClassName({ selected: url === '/about' })}
       >
         Rendered HTML
       </Link>
@@ -54,11 +52,14 @@ export let About = (
       </legend>
       {Switch({
         '/about': html,
-        '/about/html': html,
         '/about/markdown': markdown,
       })}
     </fieldset>
   </div>
+)
+
+export const License = prerender(
+  <p style="white-space:pre-wrap">{readFileSync('LICENSE').toString()}</p>,
 )
 
 export default About
