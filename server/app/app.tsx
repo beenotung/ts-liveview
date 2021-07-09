@@ -78,10 +78,12 @@ export function Menu(attrs: attrs) {
 }
 
 export function App(): Element {
+  // you can write the AST direct for more compact wire-format
   return [
     'div.app',
     {},
     [
+      // or you can write in JSX for better developer-experience (if you're coming from React)
       <>
         <h1>ts-liveview Demo</h1>
         <p>This page is powered by Server-Side-Rendered JSX Components</p>
