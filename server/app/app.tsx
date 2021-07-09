@@ -24,57 +24,16 @@ import Editor from './pages/editor.js'
 import AutoCompleteDemo from './pages/auto-complete-demo.js'
 import DemoForm from './pages/demo-form.js'
 import DemoCookieSession from './pages/demo-cookie-session.js'
+import { Menu } from './components/menu.js'
 
 let template = loadTemplate<index>('index')
 
-export function Menu(attrs: attrs) {
-  let url = getContextUrl(attrs)
-  return (
-    <>
-      {Style(`
-        #menu > a {
-          margin: 0.25em;
-          text-decoration: none;
-          border-bottom: 1px solid black;
-        }
-        #menu > a.selected {
-          border-bottom: 2px solid black;
-        }
-    `)}
-      <div id="menu">
-        {mapArray(
-          [
-            '/',
-            '/home',
-            '/about',
-            '/thermostat',
-            '/editor',
-            '/auto-complete',
-            '/form',
-            '/cookie-session',
-            '/some/page/that/does-not/exist',
-          ],
-          link => {
-            let text = link.substr(1)
-            if (!text.includes('/')) {
-              text = text.split('-').map(capitalize).join('-')
-            }
-            return (
-              <Link
-                href={link}
-                class={flagsToClassName({
-                  selected:
-                    url.startsWith(link) || (url === '/' && link === '/home'),
-                })}
-              >
-                {text}
-              </Link>
-            )
-          },
-        )}
-      </div>
-    </>
-  )
+function formatMenuText(href: string): string {
+  let text = href.substring(1)
+  if (!text.includes('/')) {
+    text = text.split('-').map(capitalize).join('-')
+  }
+  return text
 }
 
 export function App(): Element {
@@ -87,8 +46,21 @@ export function App(): Element {
       <>
         <h1>ts-liveview Demo</h1>
         <p>This page is powered by Server-Side-Rendered JSX Components</p>
-        <Menu />
-
+        <Menu
+          matchPrefix
+          routes={[
+            ['/home', 'Home', '/'],
+            ...[
+              '/about',
+              '/thermostat',
+              '/editor',
+              '/auto-complete',
+              '/form',
+              '/cookie-session',
+              '/some/page/that/does-not/exist',
+            ].map(href => [href, formatMenuText(href)] as [string, string]),
+          ]}
+        />
         <fieldset>
           <legend>Router Demo</legend>
           {Switch(

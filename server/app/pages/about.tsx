@@ -1,37 +1,15 @@
 import JSX from '../jsx/jsx.js'
 import { readFileSync } from 'fs'
-import { Link, Switch } from '../components/router.js'
+import { Switch } from '../components/router.js'
 import marked from 'marked'
 import { Raw } from '../components/raw.js'
-import { attrs } from '../jsx/types'
-import { getContextUrl } from '../context.js'
-import { flagsToClassName, prerender } from '../jsx/html.js'
+import { prerender } from '../jsx/html.js'
+import { Menu } from '../components/menu.js'
 
 let text = readFileSync('README.md').toString()
 
 let html = Raw(marked(text))
 let markdown = <pre style="white-space: break-spaces">{text}</pre>
-
-function Menu(attrs: attrs) {
-  let url = getContextUrl(attrs)
-  return (
-    <div id="menu">
-      <Link
-        href="/about"
-        class={flagsToClassName({ selected: url === '/about' })}
-      >
-        Rendered HTML
-      </Link>
-      {' / '}
-      <Link
-        href="/about/markdown"
-        class={flagsToClassName({ selected: url === '/about/markdown' })}
-      >
-        Source Markdown
-      </Link>
-    </div>
-  )
-}
 
 // The JSX expression don't need to be re-built on every render
 export let About = (
@@ -48,7 +26,13 @@ export let About = (
     <p>This page also demonstrate nested routes.</p>
     <fieldset>
       <legend>
-        <Menu />
+        <Menu
+          routes={[
+            ['/about', 'Rendered HTML'],
+            ['/about/markdown', 'Source Markdown'],
+          ]}
+          separator=" / "
+        />
       </legend>
       {Switch({
         '/about': html,
