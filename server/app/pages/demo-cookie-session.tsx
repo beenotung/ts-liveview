@@ -53,6 +53,9 @@ export function DemoCookieSession(attrs: attrs) {
       #demo-cookie-session .buttons {
         margin: 1em 0;
       }
+      #demo-cookie-session button {
+        margin: 0 0.5em;
+      }
       `)}
       <h2>Demo Cookie-based Session</h2>
       <div class="buttons">
