@@ -12,7 +12,7 @@
     "reset-open": "node scripts/reset-open.js",
     "watch": "run-p watch:*",
     "watch:ts": "tsc -p . -w",
-    "watch:js": "nodemon --ignore public/js dist/server/index.js"
+    "watch:js": "nodemon --ignore dist/client dist/server/index.js"
   },
   "keywords": [],
   "author": {
