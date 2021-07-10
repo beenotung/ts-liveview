@@ -8,11 +8,8 @@ import type { attrs, Element } from './jsx/types'
 import { flagsToClassName, nodeToHTML } from './jsx/html.js'
 import { sendHTML } from './express.js'
 import { Redirect, Switch } from './components/router.js'
-import { mapArray } from './components/fragment.js'
 import { OnWsMessage } from '../ws/wss.js'
 import { dispatchUpdate } from './jsx/dispatch.js'
-import { Link } from './components/router.js'
-import { Style } from './components/style.js'
 import { EarlyTerminate } from './helpers.js'
 import { setSessionUrl } from './session.js'
 import { capitalize } from './string.js'
@@ -47,6 +44,7 @@ export function App(): Element {
         <h1>ts-liveview Demo</h1>
         <p>This page is powered by Server-Side-Rendered JSX Components</p>
         <Menu
+          attrs={{ style: 'margin: 1em 0' }}
           matchPrefix
           routes={[
             ['/home', 'Home', '/'],

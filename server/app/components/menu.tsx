@@ -5,6 +5,7 @@ import { mapArray } from './fragment.js'
 import { Link } from './router.js'
 import { Style } from './style.js'
 import { getContextUrl } from '../context.js'
+import { attrs } from '../jsx/types'
 
 export type MenuRoutes = Array<[url: string, text: string, alias?: string]>
 
@@ -12,6 +13,7 @@ export function Menu(attrs: {
   routes: MenuRoutes
   matchPrefix?: boolean
   separator?: Node
+  attrs?: attrs
 }) {
   const currentUrl = getContextUrl(attrs)
   return (
@@ -26,7 +28,7 @@ export function Menu(attrs: {
           border-bottom: 2px solid black;
         }
 	`)}
-      <div class="menu">
+      <div class="menu" {...attrs.attrs}>
         {mapArray(
           attrs.routes,
           ([href, text, alias]) => (
