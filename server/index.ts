@@ -39,7 +39,7 @@ app.use(express.static('public'))
 app.use(express.static(join('dist', 'client')))
 
 app.use(express.json())
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: true }))
 
 app.use(cookieMiddleware)
 
