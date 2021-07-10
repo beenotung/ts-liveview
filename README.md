@@ -28,17 +28,11 @@ JSX is supported but Virtual DOM is not required.
 
 **Remarks**:
 
-###### [1]
+<span id='1'>[1]</span> Response contentful html page directly to GET request
 
-Response contentful html page directly to GET request
+<span id='2'>[2]</span> Triggered by events from server or other clients
 
-###### [2]
-
-Triggered by events from server or other clients
-
-###### [3]
-
-For screen-reader, text-based browser, and people tried with privacy invading scripts
+<span id='3'>[3]</span> For screen-reader, text-based browser, and people tried with privacy invading scripts
 
 ## Why JSX?
 
