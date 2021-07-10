@@ -7,12 +7,16 @@ import { EarlyTerminate } from './helpers.js'
 import { Context } from './context.js'
 
 const log = debugLog('cookie.ts')
+log.enabled = true
 
 export const cookieMiddleware = cookieParser()
 
 export const secure = process.env.NODE_ENV === 'production'
 
 export function getSecureCookie(req: express.Request, res: express.Response) {
+  if (process.env.BEHIND_HTTPS_PROXY === 'true') {
+    return req.cookies
+  }
   if (secure && !req.secure) {
     const protocol = req.protocol === 'ws' ? 'wss' : 'https'
     const to = `${protocol}://${req.headers.host}${req.originalUrl}`
@@ -41,6 +45,7 @@ export function listenWSSCookie(wss: ws.Server) {
 export function getWsCookie(ws: WebSocket): Cookie {
   const cookies = ws_cookies.get(ws)
   if (!cookies) {
+    log('no ws cookies')
     throw new Error('no ws cookies')
   }
   return cookies
