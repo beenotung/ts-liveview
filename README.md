@@ -53,6 +53,7 @@ The application can be built on of reactive model powered by [S.js](https://gith
 - [x] [Autocomplete Searching](./server/app/pages/auto-complete-demo.tsx)
 - [x] [Form and Sanitizing user-generated content](./server/app/pages/demo-form.tsx) (prevent XSS attack by default)
 - [x] [Pre-rendered Page](./server/app/pages/home.tsx)
+- [x] [SPA with routing](./server/app/app.tsx)
 - [ ] Snake Game
 
 Inspired from https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript
