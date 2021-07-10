@@ -1,5 +1,5 @@
 import JSX from '../jsx/jsx.js'
-import type { attrs, Node } from '../jsx/types'
+import type { attrs } from '../jsx/types'
 import { getContext } from '../context.js'
 import { ManagedWebsocket } from '../../ws/wss.js'
 import { EarlyTerminate } from '../helpers.js'
