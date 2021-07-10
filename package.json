@@ -7,7 +7,7 @@
   "scripts": {
     "format": "prettier --write . && format-json-cli",
     "build": "tsc -p .",
-    "start": "node dist/server/index.js",
+    "start": "NODE_ENV=production node dist/server/index.js",
     "dev": "NODE_ENV=dev run-s build reset-open watch",
     "reset-open": "node scripts/reset-open.js",
     "watch": "run-p watch:*",
