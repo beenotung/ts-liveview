@@ -41,7 +41,9 @@ connectWS<ServerMessage>({
       new FormData(form).forEach((value, key) => {
         data[key] = value
       })
-      let url = form.getAttribute('action')
+      let url =
+        form.getAttribute('action') ||
+        location.href.replace(location.origin, '')
       emit(url, data)
       event.preventDefault()
     }
