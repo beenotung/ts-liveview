@@ -18,7 +18,6 @@ let log = debug('fix-esm-import-path')
 log.enabled = true
 
 function findNodeModuleDir(srcFile, name) {
-  log(`[findNodeModuleDir]:`, { srcFile, name })
   let dir = path.dirname(srcFile)
   for (;;) {
     let files = fs.readdirSync(dir)
