@@ -109,33 +109,7 @@ function scanImport({ srcFile, importCode, name }) {
     return scanModule({ srcFile, importCode, name })
   }
   let importFile = resolveImportFile(importName)
-  if (
-    importName.includes('types') &&
-    importCode.includes('attrs') &&
-    srcFile.includes('menu')
-  ) {
-    log('[scanImport] TODO add type', {
-      srcFile,
-      importCode,
-      name,
-      importName,
-      importFile,
-    })
-    process.exit(1)
-  }
-  if (importFile && !importName.endsWith('.js') && importFile.endsWith('.js')) {
-    log('[scanImport] TODO add js', {
-      srcFile,
-      importCode,
-      name,
-      importName,
-      importFile,
-    })
-    process.exit(1)
-  }
   if (!importFile) {
-    for (let ext of ['.js', '.jsx', '.ts', '.tsx']) {
-    }
     console.error(`[scanImport] File not found:`, {
       srcFile,
       importName,
