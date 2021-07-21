@@ -18,6 +18,7 @@ let log = debug('fix-esm-import-path')
 log.enabled = true
 
 function findNodeModuleDir(srcFile, name) {
+  log(`[findNodeModuleDir]:`, { srcFile, name })
   let dir = path.dirname(srcFile)
   for (;;) {
     let files = fs.readdirSync(dir)
@@ -45,6 +46,18 @@ function getModuleEntryFile(dir) {
   return path.join(dir, entryFile)
 }
 
+function fixImport({ srcFile, importCode, from, to }) {
+  let newImportCode = importCode.replace(from, to)
+  log(`[fixImport]`, { srcFile, importCode, from, to })
+  let code = fs.readFileSync(srcFile).toString()
+  code = code.replace(importCode, newImportCode)
+  fs.writeFileSync(srcFile, code)
+}
+
+function scanModuleMainFile({ file }) {
+  log(`[scanModuleMainFile] TODO`, { file })
+}
+
 function scanModule({ srcFile, importCode, name }) {
   let numOfDirInName = name.split('/').length - 1
   if (name.includes('@')) {
@@ -54,13 +67,23 @@ function scanModule({ srcFile, importCode, name }) {
     return
   }
   let dir = findNodeModuleDir(srcFile, name)
-  if (!dir) {
-    console.error(`Error: cannot resolve module`, { name, srcFile, importCode })
+  if (dir) {
+    let mainFile = isFileExists(dir) ? dir : getModuleEntryFile(dir)
+    return scanModuleMainFile({ file: mainFile })
+  }
+
+  let jsName = name + '.js'
+  let jsFile = findNodeModuleDir(srcFile, jsName)
+  if (!jsFile) {
+    console.error(`Error: cannot resolve module`, {
+      name,
+      srcFile,
+      importCode,
+    })
     process.exit(1)
   }
-  let mainFile = getModuleEntryFile(dir)
-  log('[scanModule] TODO', { name, mainFile })
-  process.exit(1)
+  fixImport({ srcFile, importCode, from: name, to: jsName })
+  scanModuleMainFile({ file: jsFile })
 }
 
 function resolveImportName({ srcFile, name }) {
@@ -166,7 +189,10 @@ function resolveImportFile(file) {
   return null
 }
 
+let visit_file_set = new Set()
 function scanFile({ srcFile }) {
+  if (visit_file_set.has(srcFile)) return
+  visit_file_set.add(srcFile)
   log('scanFile:', srcFile)
   let code = fs.readFileSync(srcFile).toString()
   for (let regex of [
