@@ -26,7 +26,7 @@
   },
   "license": "BSD-2-Clause",
   "dependencies": {
-    "@beenotung/tslib": "link:/zfs-home/beenotung/workspace/github.com/beenotung/tslib/dist/esm",
+    "@beenotung/tslib": "^17.6.0",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.5",
     "debug": "^4.3.1",
