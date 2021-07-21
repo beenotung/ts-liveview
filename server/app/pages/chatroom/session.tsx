@@ -2,9 +2,9 @@ import { ManagedWebsocket } from '../../../ws/wss.js'
 import JSX from '../../jsx/jsx.js'
 import { Component, NodeList } from '../../jsx/types.js'
 import { onWsSessionClose } from '../../session.js'
-import { remove } from '@beenotung/tslib/array'
-import { allNames } from '@beenotung/tslib/constant/character-name'
-import { Random } from '@beenotung/tslib/random'
+import { remove } from '@beenotung/tslib/array.js'
+import { allNames } from '@beenotung/tslib/constant/character-name.js'
+import { Random } from '@beenotung/tslib/random.js'
 
 export type ChatSession = {
   nickname: string
