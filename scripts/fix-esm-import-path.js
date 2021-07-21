@@ -118,8 +118,12 @@ function scanImport({ srcFile, importCode, name }) {
     })
     process.exit(1)
   }
-  if (!importFile.startsWith(importName + '/index')) {
-    for (let ext of ['.js', '.jsx', '.ts', 'tsx']) {
+  let ext_list = ['.js', '.jsx', '.ts', 'tsx']
+  if (
+    !importFile.startsWith(importName + '/index') &&
+    !ext_list.some(ext => importName.endsWith(ext))
+  ) {
+    for (let ext of ext_list) {
       if (!importName.endsWith('.js') && importFile.endsWith(ext)) {
         log(`[scanImport] fix import:`, {
           srcFile,
@@ -130,10 +134,9 @@ function scanImport({ srcFile, importCode, name }) {
         importCode = fixImport({
           srcFile,
           importCode,
-          from: importName,
-          to: importName + '.js',
+          from: name,
+          to: name + '.js',
         })
-        importName += '.js'
         break
       }
     }
