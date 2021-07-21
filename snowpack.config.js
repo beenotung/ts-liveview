@@ -10,7 +10,7 @@ export default {
     splitting: false,
     treeshake: true,
     sourcemap: 'external',
-    entrypoints: ['dist/client/index.js']
+    entrypoints: ['dist/client/index.js'],
   },
   mount: {
     'dist/client': '/',
