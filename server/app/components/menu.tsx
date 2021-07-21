@@ -1,11 +1,10 @@
 import { flagsToClassName } from '../jsx/html.js'
 import JSX from '../jsx/jsx.js'
-import { Node } from '../jsx/types.js'
+import type { attrs, Node } from '../jsx/types'
 import { mapArray } from './fragment.js'
 import { Link } from './router.js'
 import { Style } from './style.js'
 import { getContextUrl } from '../context.js'
-import { attrs } from '../jsx/types'
 
 export type MenuRoutes = Array<[url: string, text: string, alias?: string]>
 

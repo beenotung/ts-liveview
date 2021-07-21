@@ -1,4 +1,4 @@
-import { Node, Fragment, NodeList } from '../jsx/types'
+import type { Node, Fragment, NodeList } from '../jsx/types'
 
 export function Fragment(nodeList: NodeList): Fragment {
   return [nodeList]

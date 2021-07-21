@@ -1,4 +1,4 @@
-import { JSXFragment, Element, NodeList, attrs } from './types'
+import type { JSXFragment, Element, NodeList, attrs } from './types'
 
 export const JSX = {
   createElement(
