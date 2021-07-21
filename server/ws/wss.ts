@@ -1,8 +1,9 @@
 import WebSocket, { Server } from 'ws'
+import { ServerMessage } from '../../client'
 
-export type ManagedWebsocket<ServerEvent = any> = {
+export type ManagedWebsocket<Event extends ServerMessage = any> = {
   ws: WebSocket
-  send(event: ServerEvent): void
+  send(event: Event): void
   close(code?: number, reason?: string): void
 }
 

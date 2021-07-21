@@ -20,6 +20,7 @@ import Editor from './pages/editor.js'
 import AutoCompleteDemo from './pages/auto-complete-demo.js'
 import DemoForm from './pages/demo-form.js'
 import DemoCookieSession from './pages/demo-cookie-session.js'
+import Chatroom from './pages/chatroom.js'
 import { Menu } from './components/menu.js'
 
 let template = loadTemplate<index>('index')
@@ -54,6 +55,7 @@ export function App(): Element {
               '/auto-complete',
               '/form',
               '/cookie-session',
+              '/chatroom',
               '/some/page/that/does-not/exist',
             ].map(href => [href, formatMenuText(href)] as [string, string]),
           ]}
@@ -79,6 +81,7 @@ export function App(): Element {
               '/form/live/:key': <DemoForm.set />,
               '/cookie-session': <DemoCookieSession.index />,
               '/cookie-session/token': <DemoCookieSession.Token />,
+              '/chatroom': <Chatroom />,
               // patch routes for links in README.md
               '/LICENSE': License,
               '/server/app/pages/thermostat.tsx': (
