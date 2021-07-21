@@ -6,6 +6,9 @@
   "type": "module",
   "scripts": {
     "format": "prettier --write . && format-json-cli",
+    "fix": "run-p fix:*",
+    "fix:server": "fix-esm-import-path server/index.ts",
+    "fix:client": "fix-esm-import-path client/index.ts",
     "build": "tsc -p .",
     "size": "run-s build size:*",
     "size:bundle": "snowpack build",
@@ -52,6 +55,7 @@
     "@types/node": "^14.17.4",
     "@types/sanitize-html": "^2.3.1",
     "@types/ws": "^7.4.5",
+    "fix-esm-import-path": "^1.0.0",
     "format-json-cli": "^0.1.2",
     "nodemon": "^2.0.9",
     "npm-run-all": "^4.1.5",
