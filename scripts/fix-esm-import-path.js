@@ -52,6 +52,7 @@ function fixImport({ srcFile, importCode, from, to }) {
   let code = fs.readFileSync(srcFile).toString()
   code = code.replace(importCode, newImportCode)
   fs.writeFileSync(srcFile, code)
+  return newImportCode
 }
 
 function scanModuleMainFile({ file }) {
@@ -118,17 +119,19 @@ function scanImport({ srcFile, importCode, name }) {
     })
     process.exit(1)
   }
-
-  if (isFileExists(importFile)) {
-    return scanFile({ srcFile: importFile })
+  for (let ext of ['.js', '.jsx', '.ts', 'tsx']) {
+    if (!importName.endsWith('.js') && importFile.endsWith(ext)) {
+      importCode = fixImport({
+        srcFile,
+        importCode,
+        from: importName,
+        to: importName + '.js',
+      })
+      importName += '.js'
+      break
+    }
   }
-  log('[scanImport] TODO', {
-    srcFile,
-    importCode,
-    name,
-    resolvedName: importName,
-  })
-  process.exit(1)
+  return scanFile({ srcFile: importFile })
 }
 
 function isFileExists(file) {
@@ -182,3 +185,5 @@ function scanFile({ srcFile }) {
 }
 
 scanFile({ srcFile: entryFile })
+
+console.log('done.')
