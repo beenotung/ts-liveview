@@ -15,10 +15,18 @@ export const JSX = {
       if (!props) {
         return [tagName]
       }
-      return [tagName, props]
+      return [tagName, fixProps(props)]
     }
-    return [tagName, props || {}, children]
+    return [tagName, props ? fixProps(props) : {}, children]
   },
+}
+
+function fixProps(props: attrs) {
+  if ('className' in props && !('class' in props)) {
+    props.class = props.className
+    delete props.className
+  }
+  return props
 }
 
 export default JSX
