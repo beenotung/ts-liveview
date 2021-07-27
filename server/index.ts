@@ -8,7 +8,7 @@ import { debugLog } from './debug.js'
 import { listenWSSConnection } from './ws/wss-lite.js'
 import { expressRouter, onWsMessage } from './app/app.js'
 import { startSession, closeSession } from './app/session.js'
-import { readFileSync, writeFileSync } from 'fs'
+import { existsSync, unlinkSync } from 'fs'
 import open from 'open'
 import { cookieMiddleware } from './app/cookie.js'
 import { listenWSSCookie } from './app/cookie.js'
@@ -47,11 +47,8 @@ app.use(expressRouter)
 const PORT = config.port
 server.listen(PORT, () => {
   log(`listening on http://localhost:${PORT}`)
-  if (config.development) {
-    const startTime = new Date(readFileSync('.open').toString()).getTime()
-    if (startTime) {
-      writeFileSync('.open', 'done')
-      open(`http://localhost:${PORT}`)
-    }
+  if (config.development && existsSync('.open')) {
+    open(`http://localhost:${PORT}`)
+    unlinkSync('.open')
   }
 })
