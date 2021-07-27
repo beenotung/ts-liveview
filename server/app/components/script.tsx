@@ -1,3 +1,4 @@
+import { config } from '../../config.js'
 import JSX from '../jsx/jsx.js'
 import { Raw } from './raw.js'
 import minify from 'minify'
@@ -8,7 +9,7 @@ export function Script(js: string) {
   if ('not fixed') {
     return node
   }
-  if (process.env.NODE_ENV === 'production') {
+  if (config.production) {
     // FIXME need to explicitly allow script tag
     const html = nodeToHTML(node, { type: 'static' })
     return (minify as any).html(html)

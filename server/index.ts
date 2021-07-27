@@ -1,7 +1,7 @@
 import express from 'express'
 import { Server as HttpServer } from 'http'
 import ws from 'ws'
-import { config } from 'dotenv'
+import { config } from './config.js'
 import { join } from 'path'
 import compression from 'compression'
 import { debugLog } from './debug.js'
@@ -13,7 +13,6 @@ import open from 'open'
 import { cookieMiddleware } from './app/cookie.js'
 import { listenWSSCookie } from './app/cookie.js'
 
-config()
 const log = debugLog('index.ts')
 log.enabled = true
 
@@ -45,10 +44,10 @@ app.use(cookieMiddleware)
 
 app.use(expressRouter)
 
-const PORT = +process.env.PORT! || 8100
+const PORT = config.port
 server.listen(PORT, () => {
   log(`listening on http://localhost:${PORT}`)
-  if (process.env.NODE_ENV === 'dev') {
+  if (config.development) {
     const startTime = new Date(readFileSync('.open').toString()).getTime()
     if (startTime) {
       writeFileSync('.open', 'done')

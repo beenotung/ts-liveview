@@ -14,12 +14,12 @@
     "size:bundle": "snowpack build",
     "size:compress": "gzip -kf build/index.js",
     "size:report": "ls -l build/index.*",
-    "start": "NODE_ENV=production node dist/server/index.js",
-    "dev": "NODE_ENV=dev run-s build reset-open watch",
+    "start": "node dist/server/index.js -- --prod",
+    "dev": "run-s build reset-open watch",
     "reset-open": "node scripts/reset-open.js",
     "watch": "run-p watch:*",
     "watch:ts": "tsc -p . -w",
-    "watch:js": "nodemon --ignore dist/client dist/server/index.js"
+    "watch:js": "nodemon --ignore dist/client dist/server/index.js -- --dev"
   },
   "keywords": [],
   "author": {

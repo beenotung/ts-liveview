@@ -2,6 +2,7 @@ import cookieParser from 'cookie-parser'
 import type WebSocket from 'ws'
 import type ws from 'ws'
 import type express from 'express'
+import { config } from '../config.js'
 import { debugLog } from '../debug.js'
 import { EarlyTerminate } from './helpers.js'
 import { Context } from './context.js'
@@ -11,10 +12,10 @@ log.enabled = true
 
 export const cookieMiddleware = cookieParser()
 
-export const secure = process.env.NODE_ENV === 'production'
+export const secure = config.production
 
 export function getSecureCookie(req: express.Request, res: express.Response) {
-  if (process.env.BEHIND_HTTPS_PROXY === 'true') {
+  if (!config.require_https) {
     return req.cookies
   }
   if (secure && !req.secure) {
