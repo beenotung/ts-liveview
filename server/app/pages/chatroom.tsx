@@ -47,10 +47,14 @@ const style = Style(/* css */ `
 `)
 
 const typing_timeout = 2000
+type NameSpan = ['span', {}, [name: string]]
+const NameNode = {
+  name: 2 as const,
+}
 class ChatroomState {
   msg_list: Node[] = []
-  online_list: [string, {}, string[]][] = []
-  typing_list: [string, {}, string[]][] = []
+  online_span_list: NameSpan[] = []
+  typing_span_list: NameSpan[] = []
 
   addMessage(nickname: string, message: string) {
     let now = new Date()
@@ -67,10 +71,35 @@ class ChatroomState {
     this.msg_list.push(li)
   }
   addTyping(nickname: string) {
-    this.typing_list.push(['span', {}, [nickname]])
+    const span: NameSpan = ['span', {}, [nickname]]
+    this.typing_span_list.push(span)
+    const remove = () => {
+      const idx = this.typing_span_list.indexOf(span)
+      if (idx !== 1) this.typing_span_list.splice(idx, 1)
+    }
+    setTimeout(remove, typing_timeout)
+    return remove
   }
   addOnline(nickname: string) {
-    this.online_list.push(['span', {}, [nickname]])
+    const span: NameSpan = ['span', {}, [nickname]]
+    this.online_span_list.push(span)
+    const remove = () => {
+      const idx = this.online_span_list.indexOf(span)
+      if (idx !== 1) this.online_span_list.splice(idx, 1)
+    }
+    return { remove, span }
+  }
+  rename(from: string, to: string) {
+    // TODO notice all clients to update
+    ;[this.online_span_list, this.typing_span_list].forEach(list => {
+      list.find(node => {
+        const nameList = node[NameNode.name]
+        if (nameList[0] === from) {
+          nameList[0] = to
+          return
+        }
+      })
+    })
   }
 }
 let state = new ChatroomState()
@@ -108,10 +137,10 @@ export function Chatroom(attrs: attrs) {
           <input type="submit" value="Send" />
         </form>
         <p class="name-list" style="color: green">
-          Online: {[state.online_list]}
+          Online: {[state.online_span_list]}
         </p>
         <p class="name-list" style={`color: grey; opacity: ${1}`}>
-          Typing: {[state.typing_list]}
+          Typing: {[state.typing_span_list]}
         </p>
         <p>Number of messages: {state.msg_list.length}</p>
         <ol class="chat-list">{[state.msg_list]}</ol>
