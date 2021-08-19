@@ -40,6 +40,9 @@ export function listenWSSCookie(wss: ws.Server) {
       const cookies = getSecureCookie(req, res)
       ws_cookies.set(ws, cookies)
     })
+    ws.on('close', () => {
+      ws_cookies.delete(ws)
+    })
   })
 }
 
