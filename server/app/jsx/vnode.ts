@@ -12,14 +12,58 @@ import type {
   NodeList,
   Raw,
 } from './types'
+import { nodeToHTML } from './html.js'
 
-export function nodeToVNode(node: Node, context: Context): VNode {
+export function nodeToVElementOptimized(
+  node: Element | Component,
+  context: Context,
+): VElement {
+  if (
+    !(
+      Array.isArray(node) &&
+      (typeof node[0] === 'string' || typeof node[0] === 'function')
+    )
+  ) {
+    throw new TypeError('expect Element or Component, got Node')
+  }
+  while (typeof node[0] === 'function') {
+    node = componentToNode(node as Component, context) as Element | Component
+    if (
+      !(
+        Array.isArray(node) &&
+        (typeof node[0] === 'string' || typeof node[0] === 'function')
+      )
+    ) {
+      throw new TypeError('expect Element or Component, got Node')
+    }
+  }
+  node = node as Element
+  const children = node[2]
+  if (!children || children.length === 0) {
+    // no children
+    return nodeToVNode(node, context)
+  }
+  const vElement: VElement = nodeToVNode(node, context)
+  const childrenHTML = children.map(node => nodeToHTML(node, context)).join('')
+  const childrenRaw: Raw = ['raw', childrenHTML]
+  const vElementWithRaw: VElement = [vElement[0], vElement[1], [childrenRaw]]
+  const vElementSize = JSON.stringify(vElement).length
+  const vElementWithRawSize = JSON.stringify(vElementWithRaw).length
+  if (vElementSize > vElementWithRawSize) {
+    return vElementWithRaw
+  }
+  return vElement
+}
+
+function nodeToVNode(node: Element, context: Context): VElement
+function nodeToVNode(node: Node, context: Context): VNode
+function nodeToVNode(node: Node, context: Context): VNode {
   switch (node) {
     case null:
     case undefined:
-    case false:
-    case true:
       return node
+    case false:
+      return null
   }
   switch (typeof node) {
     case 'string':
@@ -40,16 +84,19 @@ export function nodeToVNode(node: Node, context: Context): VNode {
   }
 
   if (typeof node[0] === 'function') {
-    node = node as Component
-    let attrs = {
-      [ContextSymbol]: context,
-      ...node[1],
-    }
-    node = node[0](attrs, node[2])
+    node = componentToNode(node, context)
     return nodeToVNode(node, context)
   }
 
   return elementToVElement(node, context)
+}
+
+function componentToNode(component: Component, context: Context): Node {
+  const attrs = {
+    [ContextSymbol]: context,
+    ...component[1],
+  }
+  return component[0](attrs, component[2])
 }
 
 function elementToVElement(element: Element, context: Context): VElement {

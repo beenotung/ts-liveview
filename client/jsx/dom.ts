@@ -8,13 +8,17 @@ import {
   props,
 } from './types'
 
-window.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('a[data-live=redirect]').forEach(e => {
+function findAndApplyRedirect(root: ParentNode) {
+  root.querySelectorAll('a[data-live=redirect]').forEach(e => {
     let a = e as HTMLAnchorElement
     let title = a.title || document.title
     history.replaceState(null, title, a.href)
     a.remove()
   })
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  findAndApplyRedirect(document)
 })
 
 export function updateElement(element: VElement) {
@@ -185,7 +189,9 @@ function createChild(e: Element, node: VNode) {
   }
   if (node[0] === 'raw') {
     node = node as Raw
-    e.appendChild(document.createRange().createContextualFragment(node[1]))
+    const fragment = document.createRange().createContextualFragment(node[1])
+    e.appendChild(fragment)
+    findAndApplyRedirect(fragment)
     return
   }
   if (Array.isArray(node[0])) {
