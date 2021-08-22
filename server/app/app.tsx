@@ -97,6 +97,8 @@ export function App(): Element {
               ),
               '/server/app/pages/demo-form.tsx': <Redirect href="/form" />,
               '/server/app/pages/home.tsx': <Redirect href="/home" />,
+              '/server/app/app.tsx': <Redirect href="/about/markdown" />,
+              '/server/app/pages/chatroom.tsx': <Redirect href="/chatroom" />,
             },
             <NotMatch />,
           )}
