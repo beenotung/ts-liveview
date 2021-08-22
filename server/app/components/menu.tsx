@@ -17,7 +17,7 @@ export function Menu(attrs: {
   const currentUrl = getContextUrl(attrs)
   return (
     <>
-      {Style(`
+      {Style(/* css */ `
         .menu > a {
           margin: 0.25em;
           text-decoration: none;
