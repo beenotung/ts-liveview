@@ -140,7 +140,7 @@ function mountElement(e: Element, element: VElement) {
     console.debug('saved:', ((jsonSize / htmlSize) * 100).toFixed(2) + '%')
   } else {
     console.debug(
-      'wasted:',
+      'json overhead:',
       (((jsonSize - htmlSize) / htmlSize) * 100).toFixed(2) + '%',
     )
   }
