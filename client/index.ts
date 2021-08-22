@@ -1,9 +1,14 @@
 import type { attrs, props, selector, VElement, VNode } from './jsx/types'
 import {
+  appendNode,
+  removeNode,
+  updateAllText,
   updateAttrs,
   updateElement,
   updateNode,
   updateProps,
+  updateText,
+  setValue,
 } from './jsx/dom.js'
 import { connectWS } from './ws/ws-lite.js'
 
@@ -58,7 +63,14 @@ connectWS<ServerMessage>({
     win.emitForm = emitForm
 
     ws.ws.addEventListener('open', () => {
-      emit('mount', location.href.replace(location.origin, ''))
+      let locale =
+        navigator && navigator.language ? navigator.language : undefined
+      let url = location.href.replace(location.origin, '')
+      let timezone = Intl
+        ? Intl.DateTimeFormat().resolvedOptions().timeZone
+        : undefined
+      let message: ClientMessage = ['mount', url, locale, timezone]
+      ws.send(message)
     })
 
     const status = document.querySelector('#ws_status')
@@ -77,12 +89,27 @@ connectWS<ServerMessage>({
   },
 })
 
+export type ClientMessage =
+  | [
+      type: 'mount',
+      url: string,
+      locale: string | undefined,
+      timezone: string | undefined,
+    ]
+  | [url: string, data?: any]
+
 export type ServerMessage =
   | ['update', VElement]
   | ['update-in', selector, VNode]
+  | ['append', selector, VNode]
+  | ['remove', selector]
+  | ['update-text', selector, string]
+  | ['update-all-text', selector, string]
   | ['update-attrs', selector, attrs]
   | ['update-props', selector, props]
+  | ['set-value', selector, string | number]
   | ['batch', ServerMessage[]]
+  | ['set-cookie', string]
 
 function onServerMessage(message: ServerMessage) {
   switch (message[0]) {
@@ -92,14 +119,32 @@ function onServerMessage(message: ServerMessage) {
     case 'update-in':
       updateNode(message[1], message[2])
       break
+    case 'append':
+      appendNode(message[1], message[2])
+      break
+    case 'remove':
+      removeNode(message[1])
+      break
+    case 'update-text':
+      updateText(message[1], message[2])
+      break
+    case 'update-all-text':
+      updateAllText(message[1], message[2])
+      break
     case 'update-attrs':
       updateAttrs(message[1], message[2])
       break
     case 'update-props':
       updateProps(message[1], message[2])
       break
+    case 'set-value':
+      setValue(message[1], message[2])
+      break
     case 'batch':
       message[1].forEach(onServerMessage)
+      break
+    case 'set-cookie':
+      document.cookie = message[1]
       break
     default:
       console.log('unknown server message:', message)

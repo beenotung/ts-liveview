@@ -10,7 +10,7 @@ import { Redirect, Switch } from './components/router.js'
 import { OnWsMessage } from '../ws/wss.js'
 import { dispatchUpdate } from './jsx/dispatch.js'
 import { EarlyTerminate } from './helpers.js'
-import { setSessionUrl } from './session.js'
+import { getWSSession } from './session.js'
 import { capitalize } from './string.js'
 import NotMatch from './pages/not-match.js'
 import Home from './pages/home.js'
@@ -22,6 +22,7 @@ import DemoForm from './pages/demo-form.js'
 import DemoCookieSession from './pages/demo-cookie-session.js'
 import Chatroom from './pages/chatroom.js'
 import { Menu } from './components/menu.js'
+import type { ClientMessage } from '../../client/index'
 
 let template = loadTemplate<index>('index')
 
@@ -81,7 +82,10 @@ export function App(): Element {
               '/form/live/:key': <DemoForm.set />,
               '/cookie-session': <DemoCookieSession.index />,
               '/cookie-session/token': <DemoCookieSession.Token />,
-              '/chatroom': <Chatroom />,
+              '/chatroom': <Chatroom.index />,
+              '/chatroom/typing': <Chatroom.typing />,
+              '/chatroom/rename': <Chatroom.rename />,
+              '/chatroom/send': <Chatroom.send />,
               // patch routes for links in README.md
               '/LICENSE': License,
               '/server/app/pages/thermostat.tsx': (
@@ -136,19 +140,23 @@ expressRouter.use((req, res, next) => {
   sendHTML(res, html)
 })
 
-export let onWsMessage: OnWsMessage = (event, ws, wss) => {
+export let onWsMessage: OnWsMessage<ClientMessage> = (event, ws, wss) => {
   console.log('ws message:', event)
   // TODO handle case where event[0] is not url
+  let eventType: string | undefined
   let url: string
   let args: any[] | undefined
-  let eventType: string | undefined
+  let locale: string | undefined
+  let timeZone: string | undefined
   if (event[0] === 'mount') {
-    url = event[1]
     eventType = 'mount'
+    url = event[1]
+    locale = event[2]
+    timeZone = event[3]
   } else if (event[0][0] === '/') {
+    eventType = 'route'
     url = event[0]
     args = event.slice(1)
-    eventType = 'route'
   } else {
     console.log('unknown type of ws message:', event)
     return
@@ -161,6 +169,13 @@ export let onWsMessage: OnWsMessage = (event, ws, wss) => {
     args,
     event: eventType,
   }
-  setSessionUrl(ws, url)
+  let session = getWSSession(ws)
+  session.url = url
+  if (locale) {
+    session.locales = locale
+  }
+  if (timeZone) {
+    session.timeZone = timeZone
+  }
   dispatchUpdate(<App />, context)
 }

@@ -7,8 +7,8 @@ export type ManagedWebsocket<Event extends ServerMessage = any> = {
   close(code?: number, reason?: string): void
 }
 
-export type OnWsMessage<ClientEvent = any> = (
-  event: ClientEvent,
+export type OnWsMessage<ClientMessage = any> = (
+  event: ClientMessage,
   ws: ManagedWebsocket,
   wss: Server,
 ) => void

@@ -6,6 +6,8 @@ log.enabled = true
 
 export type Session = {
   ws: ManagedWebsocket
+  locales?: string
+  timeZone?: string
   url?: string
   onCloseListeners: Array<(session: Session) => void>
 }

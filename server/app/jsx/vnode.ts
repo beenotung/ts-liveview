@@ -55,9 +55,9 @@ export function nodeToVElementOptimized(
   return vElement
 }
 
-function nodeToVNode(node: Element, context: Context): VElement
-function nodeToVNode(node: Node, context: Context): VNode
-function nodeToVNode(node: Node, context: Context): VNode {
+export function nodeToVNode(node: Element, context: Context): VElement
+export function nodeToVNode(node: Node, context: Context): VNode
+export function nodeToVNode(node: Node, context: Context): VNode {
   switch (node) {
     case null:
     case undefined:

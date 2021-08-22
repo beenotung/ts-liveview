@@ -44,7 +44,49 @@ export function updateNode(selector: string, node: VNode) {
     throw new Error('Failed to query selector when updateNode')
   }
   e.innerHTML = ''
-  createChildren(e, [node])
+  createChild(e, node)
+}
+
+export function appendNode(selector: string, node: VNode) {
+  let e = document.querySelector(selector)
+  if (!e) {
+    console.error(
+      'Failed to query selector when appendNode, selector:',
+      selector,
+    )
+    throw new Error('Failed to query selector when appendNode')
+  }
+  createChild(e, node)
+}
+
+export function removeNode(selector: string) {
+  let e = document.querySelector(selector)
+  if (!e) {
+    console.error(
+      'Failed to query selector when removeNode, selector:',
+      selector,
+    )
+    throw new Error('Failed to query selector when removeNode')
+  }
+  e.remove()
+}
+
+export function updateText(selector: string, text: string) {
+  let e = document.querySelector(selector)
+  if (!e) {
+    console.error(
+      'Failed to query selector when updateText, selector:',
+      selector,
+    )
+    throw new Error('Failed to query selector when updateText')
+  }
+  e.textContent = text
+}
+
+export function updateAllText(selector: string, text: string) {
+  document.querySelectorAll(selector).forEach(e => {
+    e.textContent = text
+  })
 }
 
 export function updateAttrs(selector: string, attrs: attrs) {
@@ -69,6 +111,15 @@ export function updateProps(selector: string, props: props) {
     throw new Error('Failed to query selector when updateProps')
   }
   applyProps(e, props)
+}
+
+export function setValue(selector: string, value: string | number) {
+  let e = document.querySelector(selector) as HTMLInputElement
+  if (!e) {
+    console.error('Failed to query selector when setValue, selector:', selector)
+    throw new Error('Failed to query selector when setValue')
+  }
+  e.value = value as string
 }
 
 function mountElement(e: Element, element: VElement) {
@@ -103,8 +154,8 @@ function createElement(element: VElement): Element | null {
       case undefined:
         break
       case 'redirect': {
-        let title = attrs.title || document.title
-        history.replaceState(null, title, attrs.href)
+        let title = (attrs.title as string) || document.title
+        history.replaceState(null, title, attrs.href as string)
         return null
       }
       default:
@@ -151,7 +202,7 @@ function applySelector(e: Element, selector: string) {
 
 function applyAttrs(e: Element, attrs: attrs) {
   Object.entries(attrs).forEach(entry => {
-    e.setAttribute(entry[0], entry[1])
+    e.setAttribute(entry[0], entry[1] as string)
   })
   let input = e as HTMLInputElement
   if (input.tagName === 'INPUT' && input.type === 'radio') {
@@ -176,7 +227,7 @@ function createChild(e: Element, node: VNode) {
     case null:
     case undefined:
     case false:
-    case true:
+      // case true:
       return
   }
   switch (typeof node) {
