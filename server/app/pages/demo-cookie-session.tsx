@@ -56,6 +56,9 @@ export function DemoCookieSession(attrs: attrs) {
       #demo-cookie-session button {
         margin: 0 0.5em;
       }
+      #demo-cookie-session fieldset {
+        display: inline-block
+      }
       `)}
       <h2>Demo Cookie-based Session</h2>
       <div class="buttons">

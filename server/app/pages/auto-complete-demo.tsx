@@ -88,7 +88,7 @@ export function AutoCompleteDemo(attrs: attrs) {
         </a>
         ) to the browser.
       </p>
-      <fieldset>
+      <fieldset style="display: inline-block">
         <legend>Demo</legend>
         <p>
           Total number of matches:{' '}

@@ -75,6 +75,9 @@ label::after {
   background-color: lightgreen;
   color: darkgreen;
 }
+fieldset fieldset {
+  display: inline-block
+}
 `)
 
 export function set(attrs: attrs) {
@@ -229,10 +232,12 @@ export function DemoForm() {
           <legend>JSX Example</legend>
           <code>{`<a href='#'>hash link</a>`}</code>
         </fieldset>
+        <br/>
         <fieldset>
           <legend>AST Example</legend>
           {`{['a', { href: '#' }, ['hash link']]}`}
         </fieldset>
+        <br/>
         <fieldset>
           <legend>HTML output</legend>
           <code>
