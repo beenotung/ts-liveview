@@ -7,9 +7,9 @@ let content = (
   <div id="home">
     <h2>Home Page</h2>
     <p>
-      This website is a hybrid{' '}
+      This website is a{' '}
       <b>
-        <abbr title="Static Side Generation">SSG</abbr> and{' '}
+        hybrid <abbr title="Static Side Generation">SSG</abbr> and{' '}
         <abbr title="Server-Side Rendered">SSR</abbr> Realtime Web App
       </b>{' '}
       (also known as <b>SSR-SPA</b>).
