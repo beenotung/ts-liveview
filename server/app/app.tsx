@@ -43,7 +43,6 @@ export function App(): Element {
       // or you can write in JSX for better developer-experience (if you're coming from React)
       <>
         <h1>ts-liveview Demo</h1>
-        <p>This page is powered by Server-Side-Rendered JSX Components</p>
         <Menu
           attrs={{ style: 'margin: 1em 0' }}
           matchPrefix
