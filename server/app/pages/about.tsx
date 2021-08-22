@@ -21,7 +21,13 @@ export let About = (
     <p>
       The conversion is done on the server powered by{' '}
       <a href="https://www.npmjs.com/package/marked">marked</a>, a node.js
-      library. No need to ship javascript library to the client ;)
+      library, No need to ship javascript library to the client ;)
+    </p>
+    <p>
+      Also, the html is generated only once and cached in memory. This technique
+      is known as <abbr title="Static Site Generation">SSG</abbr>, which is more
+      efficient than <abbr title="Server-Side Rendering">SSR</abbr> for static
+      content (that doesn't change regarding on the request session).
     </p>
     <p>This page also demonstrate nested routes.</p>
     <fieldset>

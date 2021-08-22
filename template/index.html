@@ -32,6 +32,14 @@
         border: 1px solid black;
         border-radius: 0.2em;
       }
+      abbr[title]:after {
+        content: ' (' attr(title) ')';
+      }
+      @media screen and (min-width: 1025px) {
+        abbr[title]:after {
+          content: '';
+        }
+      }
       .dark-theme {
         filter: invert();
         background-color: black;
