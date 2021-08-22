@@ -9,3 +9,5 @@ export function Style(css: string) {
   }
   return <style>{Raw(css)}</style>
 }
+
+export default Style

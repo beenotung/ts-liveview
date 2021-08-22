@@ -1,6 +1,7 @@
 import { Link } from '../components/router.js'
 import JSX from '../jsx/jsx.js'
 import { prerender } from '../jsx/html.js'
+import Comment from '../components/comment.js'
 
 // The JSX expression don't need to be re-built on every render
 let content = (
@@ -37,6 +38,40 @@ let content = (
       worlds, balancing the developer experience (DX) and runtime efficient,
       which improve the user-experience (UX).
     </p>
+
+    <h2>ts-liveview code snippet</h2>
+    <p>You can either write in JSX or AST.</p>
+    {Comment(`using table to align 3 code blocks with the same width`)}
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <fieldset>
+              <legend>JSX Example</legend>
+              <code>{`<a href='#'>hash link</a>`}</code>
+            </fieldset>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <fieldset>
+              <legend>AST Example</legend>
+              <code>{`{['a', { href: '#' }, ['hash link']]}`}</code>
+            </fieldset>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <fieldset>
+              <legend>HTML output</legend>
+              <code>
+                <a href="#">hash link</a>
+              </code>
+            </fieldset>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     <p>
       Try some reactive demo: <Link href="/thermostat">Thermostat</Link>,{' '}
       <Link href="/form">Form Demo</Link>

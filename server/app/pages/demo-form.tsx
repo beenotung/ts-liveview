@@ -224,27 +224,6 @@ export function DemoForm() {
       >
         {code}
       </textarea>
-
-      <h2>Syntax of ts-liveview</h2>
-      <p>
-        You can either write in JSX or AST
-        <fieldset>
-          <legend>JSX Example</legend>
-          <code>{`<a href='#'>hash link</a>`}</code>
-        </fieldset>
-        <br/>
-        <fieldset>
-          <legend>AST Example</legend>
-          {`{['a', { href: '#' }, ['hash link']]}`}
-        </fieldset>
-        <br/>
-        <fieldset>
-          <legend>HTML output</legend>
-          <code>
-            <a href="#">hash link</a>
-          </code>
-        </fieldset>
-      </p>
     </>
   )
 }
