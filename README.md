@@ -1,12 +1,10 @@
-# ts-liveview v2-rc3
+# ts-liveview
 
-> ts-liveview helps to deliver fast and interactive user interface directly from the server.
->
-> _(Without MBs of javascript to be downloaded and executed on the client side)_
+ts-liveview helps to deliver fast and interactive user interface directly from the node.js server.
 
-TODO: add npm badge?
+_(Without MBs of javascript to be downloaded and executed on the client side)_
 
-JSX is supported but Virtual DOM is not required.
+ts-liveview supports `JSX` but it **doesn't rely on Virtual DOM**. Instead, precise DOM operations are derived from application-specific event handlers, and sent to the browser client for realtime UI update.
 
 ## Get Started
 
@@ -17,7 +15,7 @@ pnpm install	# or `yarn install` or `npm install`
 pnpm dev    	# or `yarn dev`     or `npm run dev`
 ```
 
-## Inspired from:
+## Inspired from
 
 - [Phoenix LiveView](https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript)
 - [ts-liveview v1](https://github.com/beenotung/ts-liveview/tree/v1) (Typescript clone of Phoenix LiveView with template-string based diff-patching and s-js powered state change detection)
@@ -31,8 +29,8 @@ pnpm dev    	# or `yarn dev`     or `npm run dev`
   - [x] Request-time server-rendering [[1]](#1)
   - [x] Run-time live update [[2]](#2)
 - [x] Enable interactive UI with minimal amount of javascript to be downloaded
-- [x] Functional when javascript is disabled on client device [[3]](#3)
-- [x] Support to dev with JSX, AST, or html template
+- [x] Still functional when javascript is disabled on client device [[3]](#3)
+- [x] Support to develop with JSX, AST, or html template
 - [x] Efficient wire format
 - [x] Lightweight WebSocket-based protocol [(1.9K minified, 30x smaller than socket.io)](./size.md)
 - [ ] Reliable connection (Auto send accumulated messages when network resume)
@@ -69,8 +67,6 @@ The application can be built on of reactive model powered by [S.js](https://gith
 - [ ] Snake Game
 
 Inspired from https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript
-
-
 
 Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liveview)
 
