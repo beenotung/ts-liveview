@@ -34,7 +34,7 @@ pnpm dev    	# or `yarn dev`     or `npm run dev`
 - [x] Still functional when javascript is disabled on client device [[3]](#3)
 - [x] Support to develop with JSX, AST, or html template
 - [x] Efficient wire format
-- [x] Lightweight WebSocket-based protocol [(1.9K minified, 30x smaller than socket.io)](./size.md)
+- [x] Lightweight WebSocket-based protocols [(0.5K to 1.9K minified, 128x to 33x smaller than socket.io)](./size.md)
 - [ ] Reliable connection (Auto send accumulated messages when network resume)
 
 **Remarks**:
