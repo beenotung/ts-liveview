@@ -4,6 +4,7 @@
     "jsx": "react",
     "reactNamespace": "JSX",
     "strict": true,
+    "incremental": true,
     "moduleResolution": "node",
     "target": "ES2015",
     "lib": [
