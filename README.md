@@ -27,7 +27,7 @@ pnpm dev    	# or `yarn dev`     or `npm run dev`
 ## Features
 
 - [x] Support hybrid rendering mode
-  - [x] Boot-time pre-rendering
+  - [x] Boot-time pre-rendering [[0]](#0)
   - [x] Request-time server-rendering [[1]](#1)
   - [x] Run-time live update [[2]](#2)
 - [x] Enable interactive UI with minimal amount of javascript to be downloaded
@@ -38,6 +38,8 @@ pnpm dev    	# or `yarn dev`     or `npm run dev`
 - [ ] Reliable connection (Auto send accumulated messages when network resume)
 
 **Remarks**:
+
+<span id='0'>[0]</span> Pay the AST-to-HTML conversion time-cost once at boot-time instead of at each request-time
 
 <span id='1'>[1]</span> Response contentful html page directly to GET request
 
