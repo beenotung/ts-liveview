@@ -42,8 +42,8 @@
     "minify": "^7.0.2",
     "open": "^8.2.1",
     "sanitize-html": "^2.5.0",
-    "url-router.ts": "^1.0.0",
-    "ws": "^8.2.2"
+    "typestub-ws": "^8.2.3",
+    "url-router.ts": "^1.0.0"
   },
   "devDependencies": {
     "@types/compression": "^1.7.2",
@@ -55,7 +55,6 @@
     "@types/minify": "^6.0.1",
     "@types/node": "^16.9.1",
     "@types/sanitize-html": "^2.3.2",
-    "@types/ws": "^7.4.7",
     "fix-esm-import-path": "^1.1.0",
     "format-json-cli": "^1.0.1",
     "nodemon": "^2.0.12",

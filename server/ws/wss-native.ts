@@ -1,4 +1,4 @@
-import type { Server } from 'ws'
+import type { Server } from 'typestub-ws'
 import { debugLog } from '../debug.js'
 import type { ManagedWebsocket, OnWsMessage } from './wss'
 
@@ -11,7 +11,7 @@ export function listenWSSConnection<
 >(options: {
   wss: Server
   onConnection: (ws: ManagedWebsocket) => void
-  onClose: (ws: ManagedWebsocket, code?: number, reason?: string) => void
+  onClose: (ws: ManagedWebsocket, code?: number, reason?: Buffer) => void
   onMessage: OnWsMessage
 }) {
   const { wss } = options
@@ -24,7 +24,7 @@ export function listenWSSConnection<
       options.onClose(managedWS, code, reason)
     })
 
-    function close(code?: number, reason?: string) {
+    function close(code?: number, reason?: Buffer) {
       ws.close(code, reason)
     }
 

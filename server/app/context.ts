@@ -1,5 +1,5 @@
 import type express from 'express'
-import type { Server } from 'ws'
+import type { Server } from 'typestub-ws'
 import type { ServerMessage } from '../../client'
 import type { ManagedWebsocket } from '../ws/wss'
 import type { RouteContext } from 'url-router.ts'
