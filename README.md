@@ -6,7 +6,7 @@ _(Without MBs of javascript to be downloaded and executed on the client side.)_
 
 The client-side runtime of ts-liveview is below 12KB (2.2KB bundled, minified and gzipped).
 
-ts-liveview supports `JSX` but it **doesn't rely on Virtual DOM**. Instead, precise DOM operations are derived from application-specific event handlers, and sent to the browser client for realtime UI update.
+ts-liveview supports `JSX` but it **doesn't rely on Virtual DOM**. Instead, precise DOM operations are derived from application-specific event handlers, and sent to the browser client(s) for realtime UI updates.
 
 ## Get Started
 
@@ -51,7 +51,7 @@ pnpm dev    	# or `yarn dev`     or `npm run dev`
 
 Previous versions of ts-liveview use [template string](https://github.com/beenotung/ts-liveview/blob/25f54760b378c0a0d8d2607bde4afa2878bb0ae6/test/demo-server-clock.ts#L11) to build html. It allows the engine to quickly construct the html output for [morphdom](https://github.com/patrick-steele-idem/morphdom) to patch the DOM.
 
-With the template string based approach, html injection _could be_ avoided when explicitly using helper function to sanitize the dynamic content. However it requires the developer to be careful which could be bug-prone.
+With the template string based approach, html injection _could be_ avoided when explicitly using helper function to sanitize the dynamic content. However it requires the developer to be careful, which could be bug-prone.
 
 ## Why no virtual-dom diff?
 
