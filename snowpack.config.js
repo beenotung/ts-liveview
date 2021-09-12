@@ -2,7 +2,7 @@
 // See all supported options: https://www.snowpack.dev/reference/configuration
 
 /** @type {import("snowpack").SnowpackUserConfig } */
-module.exports = {
+export default {
   optimize: {
     bundle: true,
     minify: true,

@@ -4,7 +4,7 @@ ts-liveview helps to deliver fast and interactive user interface directly from t
 
 _(Without MBs of javascript to be downloaded and executed on the client side.)_
 
-The client-side runtime of ts-liveview is below 13KB (2.5KB bundled, minified and gzipped).
+The client-side runtime of ts-liveview is below 12KB (2.2KB bundled, minified and gzipped).
 
 ts-liveview supports `JSX` but it **doesn't rely on Virtual DOM**. Instead, precise DOM operations are derived from application-specific event handlers, and sent to the browser client for realtime UI update.
 
