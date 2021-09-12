@@ -1,6 +1,6 @@
 # ts-liveview
 
-ts-liveview helps to deliver fast and interactive user interface directly from the node.js server.
+> ts-liveview helps to deliver fast and interactive user interface directly from the node.js server.
 
 _(Without MBs of javascript to be downloaded and executed on the client side.)_
 
@@ -17,12 +17,7 @@ pnpm install	# or `yarn install` or `npm install`
 pnpm dev    	# or `yarn dev`     or `npm run dev`
 ```
 
-## Inspired from
-
-- [Phoenix LiveView](https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript)
-- [ts-liveview v1](https://github.com/beenotung/ts-liveview/tree/v1) (Typescript clone of Phoenix LiveView with template-string based diff-patching and s-js powered state change detection)
-- [htmx](https://htmx.org) (Derived from [intercooler.js](https://intercoolerjs.org))
-- JSX in [Surplus](https://github.com/adamhaile/surplus), [Stencil](https://stenciljs.com/docs/templating-jsx), and [React](https://reactjs.org/docs/react-without-jsx.html)
+Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liveview)
 
 ## Features
 
@@ -57,9 +52,9 @@ With the template string based approach, html injection _could be_ avoided when 
 
 Current version updates the DOM using document query selector, this reduce the memory requirement on the server to supports simultaneous connections.
 
-The application can be built on of reactive model powered by [S.js](https://github.com/adamhaile/S), [RxJS](https://github.com/ReactiveX/rxjs), or OOP with [getter and setter](https://vuejs.org/v2/guide/reactivity.html)
+The application can be built on top of reactive model powered by [S.js](https://github.com/adamhaile/S), [RxJS](https://github.com/ReactiveX/rxjs), or OOP with [getter and setter](https://vuejs.org/v2/guide/reactivity.html). Example using _getter and setting_ see [thermostat.tsx](./server/app/pages/thermostat.tsx).
 
-## Demo
+## Examples / Demo
 
 - [x] [Thermostat](./server/app/pages/thermostat.tsx)
 - [x] [Image Editor](./server/app/pages/editor.tsx)
@@ -70,9 +65,12 @@ The application can be built on of reactive model powered by [S.js](https://gith
 - [x] [Chatroom](./server/app/pages/chatroom.tsx) with locales and timezone support
 - [ ] Snake Game
 
-Inspired from https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript
+## Inspired from
 
-Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liveview)
+- [Phoenix LiveView](https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript)
+- [ts-liveview v1](https://github.com/beenotung/ts-liveview/tree/v1) (Typescript clone of Phoenix LiveView with template-string based diff-patching and s-js powered state change detection)
+- [htmx](https://htmx.org) (Derived from [intercooler.js](https://intercoolerjs.org))
+- JSX in [Surplus](https://github.com/adamhaile/surplus), [Stencil](https://stenciljs.com/docs/templating-jsx), and [React](https://reactjs.org/docs/react-without-jsx.html)
 
 ## License
 
