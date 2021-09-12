@@ -23,7 +23,7 @@ export function DateTimeText(attrs: { time: number }) {
     try {
       return format_datetime(attrs.time, { locales, timeZone })
     } catch (error) {
-      let errorMessage = error.toString()
+      let errorMessage = (error as any).toString()
       if (errorMessage.includes('time zone')) {
         log('invalid timezone:', timeZone)
         timeZone = undefined
