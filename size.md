@@ -1,15 +1,15 @@
 ## Client js size
 
-| File                       | Size    |
-| -------------------------- | ------- |
-| _source files_             | -       |
-| client/jsx/dom.js          | 2.64 KB |
-| client/index.js            | 1.37 KB |
-| client/ws/ws-lite.js       | 851 B   |
-| client/ws/ws-config.js     | 58 B    |
-| _bundled + minified files_ | -       |
-| build/index.js             | 4.91 KB |
-| build/index.js.gz          | 1.92 KB |
+| File                       | Size   |
+| -------------------------- | ------ |
+| _source files_             | -      |
+| client/jsx/dom.js          | 6.5 KB |
+| client/index.js            | 3.8 KB |
+| client/ws/ws-lite.js       | 2.5 KB |
+| client/ws/ws-config.js     | 280 B  |
+| _bundled + minified files_ | -      |
+| build/index.js             | 6.2 KB |
+| build/index.js.gz          | 2.2 KB |
 
 ## WebSocket Client Size Comparison
 
