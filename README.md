@@ -63,6 +63,7 @@ The application can be built on top of reactive model powered by [S.js](https://
 - [x] [Pre-rendered Page](./server/app/pages/home.tsx)
 - [x] [SPA with routing](./server/app/app.tsx)
 - [x] [Chatroom](./server/app/pages/chatroom.tsx) with locales and timezone support
+- [x] [Realtime Collaborative Painting](https://github.com/beenotung/live-paint)
 - [ ] Snake Game
 
 ## Inspired from
