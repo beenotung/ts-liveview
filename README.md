@@ -22,25 +22,37 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
 ## Features
 
 - [x] Support hybrid rendering mode
-  - [x] Boot-time pre-rendering [[0]](#0)
-  - [x] Request-time server-rendering [[1]](#1)
-  - [x] Run-time live update [[2]](#2)
+  - [x] Boot-time pre-rendering [[1]](#feature-1)
+  - [x] Request-time server-rendering [[2]](#feature-2)
+  - [x] Run-time live update [[3]](#feature-3)
+- [x] Support url-based routing architectures
+  - [x] Multi-Page Application (MPA)
+  - [x] Single-Page Application (SPA)
+  - [x] Hybrid of SPA and MPA
 - [x] Enable interactive UI with minimal amount of javascript to be downloaded
-- [x] Still functional when javascript is disabled on client device [[3]](#3)
+- [x] Still functional when javascript is disabled on client device [[4]](#feature-4)
 - [x] Support to develop with JSX, AST, or html template
 - [x] Efficient wire format
-- [x] Lightweight WebSocket-based protocols [(0.5K to 1.9K minified, 128x to 33x smaller than socket.io)](./size.md)
-- [ ] Reliable connection (Auto send accumulated messages when network resume)
+- [x] Lightweight WebSocket-based protocols [[5]](#feature-5)
+- [ ] Reliable connection (Auto send accumulated messages when network resume) (WIP)
+- [x] Work well with express.js [[6]](#feature-6)
+- [x] Fully customizable [[7]](#feature-7)
 
 **Remarks**:
 
-<span id='0'>[0]</span> Pay the AST-to-HTML conversion time-cost once at boot-time instead of at each request-time
+<span id='feature-1'>[1]</span> Pay the AST-to-HTML conversion time-cost once at boot-time instead of at each request-time
 
-<span id='1'>[1]</span> Response contentful html page directly to GET request
+<span id='feature-2'>[2]</span> Response contentful html page directly to GET request
 
-<span id='2'>[2]</span> Triggered by events from server or other clients
+<span id='feature-3'>[3]</span> Updates can be triggered by (bi-directional) events from the server or other clients
 
-<span id='3'>[3]</span> For screen-reader, text-based browser, and people tried with privacy invading scripts
+<span id='feature-4'>[4]</span> For screen-reader, text-based browser, and people tried with privacy invading scripts
+
+<span id='feature-5'>[5]</span> The network client code is [0.5K to 1.9K minified, 128x to 33x smaller than socket.io](./size.md)
+
+<span id='feature-6'>[6]</span> The entry point of ts-liveview app can be wrapped as an express middleware
+
+<span id='feature-7'>[7]</span> ts-liveview is provided as a template (rather than a library), hence any part can be modified to suit your need
 
 ## Why JSX?
 
@@ -54,6 +66,14 @@ Current version updates the DOM using document query selector, this reduce the m
 
 The application can be built on top of reactive model powered by [S.js](https://github.com/adamhaile/S), [RxJS](https://github.com/ReactiveX/rxjs), or OOP with [getter and setter](https://vuejs.org/v2/guide/reactivity.html). Example using _getter and setting_ see [thermostat.tsx](./server/app/pages/thermostat.tsx).
 
+## Why server-rendered?
+
+- To deliver initial meaningful paint as soon as possible (response contentful HTML to HTTP GET request, not just skeleton demanding further script and ajax request)
+
+- To avoid over-bloating the amount of javascript needed to download and execute by the client browser
+
+- To allow 'over-the-air' updates of application state and deployment
+
 ## Examples / Demo
 
 - [x] [Thermostat](./server/app/pages/thermostat.tsx)
@@ -61,7 +81,7 @@ The application can be built on top of reactive model powered by [S.js](https://
 - [x] [Autocomplete Searching](./server/app/pages/auto-complete-demo.tsx)
 - [x] [Form and Sanitizing user-generated content](./server/app/pages/demo-form.tsx) (prevent XSS attack by default)
 - [x] [Pre-rendered Page](./server/app/pages/home.tsx)
-- [x] [SPA with routing](./server/app/app.tsx)
+- [x] [SPA with url-based routing](./server/app/app.tsx)
 - [x] [Chatroom](./server/app/pages/chatroom.tsx) with locales and timezone support
 - [x] [Realtime Collaborative Painting](https://github.com/beenotung/live-paint)
 - [ ] Snake Game
