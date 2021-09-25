@@ -13,7 +13,8 @@ import {
 import { connectWS } from './ws/ws-lite.js'
 
 let win = window as any
-let wsUrl = location.origin.replace('http', 'ws')
+let origin = location.origin
+let wsUrl = origin.replace('http', 'ws')
 connectWS<ServerMessage>({
   createWS(protocol) {
     let status = document.querySelector('#ws_status')
@@ -48,13 +49,13 @@ connectWS<ServerMessage>({
       })
       let url =
         form.getAttribute('action') ||
-        location.href.replace(location.origin, '')
+        location.href.replace(origin, '')
       emit(url, data)
       event.preventDefault()
     }
 
     window.onpopstate = (event: PopStateEvent) => {
-      let url = location.href.replace(location.origin, '')
+      let url = location.href.replace(origin, '')
       emit(url)
     }
 
@@ -65,7 +66,7 @@ connectWS<ServerMessage>({
     ws.ws.addEventListener('open', () => {
       let locale =
         navigator && navigator.language ? navigator.language : undefined
-      let url = location.href.replace(location.origin, '')
+      let url = location.href.replace(origin, '')
       let timezone = Intl
         ? Intl.DateTimeFormat().resolvedOptions().timeZone
         : undefined
