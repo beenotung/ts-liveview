@@ -27,16 +27,16 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
   - [x] Run-time live update [[3]](#feature-3)
 - [x] Support url-based routing architectures
   - [x] Multi-Page Application (MPA)
-  - [x] Single-Page Application (SPA)
+  - [x] Single-Page Application (SPA) [[4]](#feature-4)
   - [x] Hybrid of SPA and MPA
 - [x] Enable interactive UI with minimal amount of javascript to be downloaded
-- [x] Still functional when javascript is disabled on client device [[4]](#feature-4)
+- [x] Still functional when javascript is disabled on client device [[5]](#feature-5)
 - [x] Support to develop with JSX, AST, or html template
 - [x] Efficient wire format
-- [x] Lightweight WebSocket-based protocols [[5]](#feature-5)
+- [x] Lightweight WebSocket-based protocols [[6]](#feature-6)
 - [ ] Reliable connection (Auto send accumulated messages when network resume) (WIP)
-- [x] Work well with express.js [[6]](#feature-6)
-- [x] Fully customizable [[7]](#feature-7)
+- [x] Work well with express.js [[7]](#feature-7)
+- [x] Fully customizable [[8]](#feature-8)
 
 **Remarks**:
 
@@ -46,13 +46,15 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
 
 <span id='feature-3'>[3]</span> Updates can be triggered by (bi-directional) events from the server or other clients
 
-<span id='feature-4'>[4]</span> For screen-reader, text-based browser, and people tried with privacy invading scripts
+<span id='feature-4'>[4]</span> With `history.pushState()` and `PopStateEvent`
 
-<span id='feature-5'>[5]</span> The network client code is [0.5K to 1.9K minified, 128x to 33x smaller than socket.io](./size.md)
+<span id='feature-5'>[5]</span> For screen-reader, text-based browser, and people tried with privacy invading scripts
 
-<span id='feature-6'>[6]</span> The entry point of ts-liveview app can be wrapped as an express middleware
+<span id='feature-6'>[6]</span> The network client code is [0.5K to 1.9K minified, 128x to 33x smaller than socket.io](./size.md)
 
-<span id='feature-7'>[7]</span> ts-liveview is provided as a template (rather than a library), hence any part can be modified to suit your need
+<span id='feature-7'>[7]</span> The entry point of ts-liveview app can be wrapped as an express middleware
+
+<span id='feature-8'>[8]</span> ts-liveview is provided as a template (rather than a library), hence any part can be modified to suit your need
 
 ## Why JSX?
 
@@ -92,6 +94,24 @@ The application can be built on top of reactive model powered by [S.js](https://
 - [ts-liveview v1](https://github.com/beenotung/ts-liveview/tree/v1) (Typescript clone of Phoenix LiveView with template-string based diff-patching and s-js powered state change detection)
 - [htmx](https://htmx.org) (Derived from [intercooler.js](https://intercoolerjs.org))
 - JSX in [Surplus](https://github.com/adamhaile/surplus), [Stencil](https://stenciljs.com/docs/templating-jsx), and [React](https://reactjs.org/docs/react-without-jsx.html)
+
+## Releases
+
+[v2](https://github.com/beenotung/ts-liveview/tree/v2-rc3-jsx-with-context)
+
+- Removed dependency on s-js and morphdom
+- Switched content format from template-string to JSX/AST with out-of-the-box html-injection prorection
+- Switched DOM update approach from generic diff-based patching to application-specific dom updates
+
+[v1](https://github.com/beenotung/ts-liveview/tree/v1)
+
+- Made API more concise (especially for usage with s-js)
+- Support repeat components (e.g. map on array with shared template)
+
+[v0](https://github.com/beenotung/ts-liveview/tree/v0)
+
+- Support pre-rendering
+- Support live-update with diff-based patching with morphdom
 
 ## License
 
