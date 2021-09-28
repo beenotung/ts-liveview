@@ -31,12 +31,14 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
   - [x] Hybrid of SPA and MPA
 - [x] Enable interactive UI with minimal amount of javascript to be downloaded
 - [x] Still functional when javascript is disabled on client device [[5]](#feature-5)
-- [x] Support to develop with JSX, AST, or html template
+- [x] Support to develop with JSX[[6]](#feature-6), AST, or html template
 - [x] Efficient wire format
-- [x] Lightweight WebSocket-based protocols [[6]](#feature-6)
-- [ ] Reliable connection (Auto send accumulated messages when network resume) (WIP)
-- [x] Work well with express.js [[7]](#feature-7)
-- [x] Fully customizable [[8]](#feature-8)
+- [x] Lightweight WebSocket-based protocols [[7]](#feature-7)
+- [ ] Reliable connection
+  - [x] Auto reconnect when network resume
+  - [ ] Auto send accumulated offline messages when network resume (WIP)
+- [x] Work well with express.js [[8]](#feature-8)
+- [x] Fully customizable [[9]](#feature-9)
 
 **Remarks**:
 
@@ -50,11 +52,13 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
 
 <span id='feature-5'>[5]</span> For screen-reader, text-based browser, and people tried with privacy invading scripts
 
-<span id='feature-6'>[6]</span> The network client code is [0.5K to 1.9K minified, 128x to 33x smaller than socket.io](./size.md)
+<span id='feature-6'>[6]</span> Using JSX auto escape string values, which helps to prevent XSS from dynamic content
 
-<span id='feature-7'>[7]</span> The entry point of ts-liveview app can be wrapped as an express middleware
+<span id='feature-7'>[7]</span> The network client code is [0.5K to 1.9K minified, 128x to 33x smaller than socket.io](./size.md)
 
-<span id='feature-8'>[8]</span> ts-liveview is provided as a template (rather than a library), hence any part can be modified to suit your need
+<span id='feature-8'>[8]</span> The entry point of ts-liveview app can be wrapped as an express middleware
+
+<span id='feature-9'>[9]</span> ts-liveview is provided as a template (rather than a library), hence any part can be modified to suit your need
 
 ## Why JSX?
 
