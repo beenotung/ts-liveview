@@ -45,16 +45,19 @@ export function Redirect(attrs: { href: string; status?: number }) {
 }
 
 export function Switch(routes: Routes, defaultNode?: Node): Node {
-  return <Router routes={Object.entries(routes)} defaultNode={defaultNode} />
-}
-
-export function Router(attrs: { routes: Route[]; defaultNode?: Node }): Node {
   const router = new UrlRouter<Node>()
-  attrs.routes.forEach(([url, node]) => {
+  Object.entries(routes).forEach(([url, node]) => {
     router.add(url, node)
   })
+  return <Router router={router} defaultNode={defaultNode} />
+}
+
+export function Router(attrs: {
+  router: UrlRouter<Node>
+  defaultNode?: Node
+}): Node {
   const context = getRouterContext(attrs)
-  const match = router.route(context.url)
+  const match = attrs.router.route(context.url)
   if (!match) return attrs.defaultNode
   context.routerMatch = match
   return match.value
