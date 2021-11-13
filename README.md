@@ -82,7 +82,7 @@ Using JSX, the string values are auto escaped, which helps to prevent XSS from d
 
 The current implementation of ts-liveview updates the DOM using explicit document query selector, this reduce the memory requirement on the server to supports simultaneous connections.
 
-The application can be built on top of reactive model powered by [S.js](https://github.com/adamhaile/S), [RxJS](https://github.com/ReactiveX/rxjs), or OOP with [getter and setter](https://vuejs.org/v2/guide/reactivity.html). 
+The application can be built on top of reactive model powered by [S.js](https://github.com/adamhaile/S), [RxJS](https://github.com/ReactiveX/rxjs), or OOP with [getter and setter](https://vuejs.org/v2/guide/reactivity.html).
 
 Example using _getter and setting_ see [thermostat.tsx](./server/app/pages/thermostat.tsx)
 
