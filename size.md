@@ -1,22 +1,27 @@
 ## Client js size
 
-| File                       | Size   |
-| -------------------------- | ------ |
-| _source files_             | -      |
-| client/jsx/dom.js          | 6.5 KB |
-| client/index.js            | 3.8 KB |
-| client/ws/ws-lite.js       | 2.5 KB |
-| client/ws/ws-config.js     | 280 B  |
-| _bundled + minified files_ | -      |
-| build/index.js             | 6.2 KB |
-| build/index.js.gz          | 2.2 KB |
+### Bundled and Minified Size
+
+| File              | Size   |
+| ----------------- | ------ |
+| build/index.js    | 6.1 KB |
+| build/index.js.gz | 2.2 KB |
+
+### Source Files Size
+
+| File                   | Size   |
+| ---------------------- | ------ |
+| client/jsx/dom.js      | 6.0 KB |
+| client/index.js        | 3.2 KB |
+| client/ws/ws-lite.js   | 2.1 KB |
+| client/ws/ws-config.js | 277 B  |
 
 ## WebSocket Client Size Comparison
 
 | Name          |  .js | min.js | .min.js.gz |
 | ------------- | ---: | -----: | ---------: |
 | **ws-native** | 1.1K |   0.5K |       0.3K |
-| **ws-lite**   | 2.5K |   1.4K |       0.6K |
+| **ws-lite**   | 2.1K |   1.4K |       0.6K |
 | primus.js     |  97K |    32K |        11K |
 | socket.io.js  | 181K |    64K |        15K |
 
