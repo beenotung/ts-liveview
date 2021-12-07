@@ -29,6 +29,8 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
   - [x] Multi-Page Application (MPA)
   - [x] Single-Page Application (SPA) [[4]](#feature-4)
   - [x] Hybrid of SPA and MPA
+  - [x] Write UI and API routing once in one place
+  - [x] Nested routing
 - [x] Enable interactive UI with minimal amount of javascript to be downloaded
 - [x] Still functional when javascript is disabled on client device [[5]](#feature-5)
 - [x] Support to develop with [JSX](#jsx), AST, or html template
