@@ -66,6 +66,8 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
 
 - To avoid over-bloating the amount of javascript needed to download and execute by the client browser
 
+- Enable server-driven feature flags, the client only downloads relevant content of the current page
+
 - To allow 'over-the-air' updates of application state and deployment
 
 <span id='jsx'></span>
