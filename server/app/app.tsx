@@ -107,6 +107,8 @@ export function App(): Element {
   ]
 }
 
+const AppAST = App()
+
 export let expressRouter = express.Router()
 expressRouter.use((req, res, next) => {
   let context: ExpressContext = {
@@ -119,7 +121,11 @@ expressRouter.use((req, res, next) => {
   let app: string
   let description = 'TODO'
   try {
-    app = nodeToHTML(<App />, context)
+    /* calling <App/> will transform the JSX to AST for each rendering */
+    // app = nodeToHTML(<App />, context)
+
+    /* or you can reuse a pre-computed AST */
+    app = nodeToHTML(AppAST, context)
   } catch (error) {
     if (error === EarlyTerminate) {
       return
@@ -178,5 +184,5 @@ export let onWsMessage: OnWsMessage<ClientMessage> = (event, ws, wss) => {
   if (timeZone) {
     session.timeZone = timeZone
   }
-  dispatchUpdate(<App />, context)
+  dispatchUpdate(AppAST, context)
 }
