@@ -41,6 +41,7 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
   - [ ] Auto send accumulated offline messages when network resume (WIP)
 - [x] Work well with express.js [[7]](#feature-7)
 - [x] Fully customizable [[8]](#feature-8)
+- [ ] HTML Streaming (Coming soon)
 
 **Remarks**:
 
