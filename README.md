@@ -41,7 +41,7 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
   - [ ] Auto send accumulated offline messages when network resume (WIP)
 - [x] Work well with express.js [[7]](#feature-7)
 - [x] Fully customizable [[8]](#feature-8)
-- [ ] HTML Streaming (Coming soon)
+- [ ] HTML Streaming[[9] (Coming soon)
 
 **Remarks**:
 
@@ -60,6 +60,8 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
 <span id='feature-7'>[7]</span> The entry point of ts-liveview app can be wrapped as an express middleware
 
 <span id='feature-8'>[8]</span> ts-liveview is provided as a template (rather than a library), hence any part can be modified to suit your need
+
+<span id='feature-9'>[9]</span> Response html chunks as soon as possible
 
 ## Why server-rendered?
 
