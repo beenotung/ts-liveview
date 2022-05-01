@@ -12,68 +12,102 @@ import type {
   Component,
   Element,
 } from './types'
+import { HTMLStream, noop } from './stream.js'
+import { Flush } from '../components/flush.js'
 
 const log = debug('html.ts')
 log.enabled = true
+
+export function nodeToHTML(node: Node, context: Context): html {
+  let html = ''
+  let stream = {
+    write: (chunk: html) => (html += chunk),
+    flush: noop,
+  }
+  writeNode(stream, node, context)
+  return html
+}
+
+export function nodeListToHTML(nodeList: NodeList, context: Context): html {
+  let html = ''
+  let stream = {
+    write: (chunk: html) => (html += chunk),
+    flush: noop,
+  }
+  nodeList.forEach(node => writeNode(stream, node, context))
+  return html
+}
 
 export function prerender(node: Node): Raw {
   let html = nodeToHTML(node, { type: 'static' })
   return ['raw', html]
 }
 
-export function nodeToHTML(node: Node, context: Context): html {
+export function writeNode(
+  stream: HTMLStream,
+  node: Node,
+  context: Context,
+): void {
   switch (node) {
     case null:
     case undefined:
     case false:
     case true:
-      return ''
+      return
   }
   switch (typeof node) {
     case 'string':
-      return escapeHTML(node)
+      return stream.write(escapeHTML(node))
     case 'number':
-      return String(node)
+      return stream.write(String(node))
   }
   if (node[0] === 'raw') {
-    return (node as Raw)[1]
+    return stream.write((node as Raw)[1])
   }
   if (Array.isArray(node[0])) {
-    return nodeListToHTML((node as Fragment)[0], context)
+    return writeNodeList(stream, (node as Fragment)[0], context)
   }
 
   node = node as JSXFragment
   if (!node[0] && !node[1]) {
-    return nodeListToHTML(node[2], context)
+    return writeNodeList(stream, node[2], context)
   }
 
   if (typeof node[0] === 'function') {
     node = node as Component
+    let componentFn = node[0]
+    if (componentFn === Flush) {
+      stream.flush()
+      return
+    }
     let attrs = {
       [ContextSymbol]: context,
       ...node[1],
     }
-    node = node[0](attrs, node[2])
-    return nodeToHTML(node, context)
+    node = componentFn(attrs, node[2])
+    return writeNode(stream, node, context)
   }
 
-  return elementToHTML(node, context)
+  return writeElement(stream, node, context)
 }
 
-function nodeListToHTML(nodeList: NodeList, context: Context): html {
-  let html = ''
-  nodeList.forEach(node => (html += nodeToHTML(node, context)))
-  return html
+function writeNodeList(
+  stream: HTMLStream,
+  nodeList: NodeList,
+  context: Context,
+): void {
+  nodeList.forEach(node => writeNode(stream, node, context))
 }
 
 const tagNameRegex = /([\w-]+)/
 const idRegex = /#([\w-]+)/
 const classListRegex = /\.([\w-]+)/g
 
-function elementToHTML(
+function writeElement(
+  stream: HTMLStream,
   [selector, attrs, children]: Element,
   context: Context,
-): html {
+): void {
   let tagName = selector.match(tagNameRegex)![1]
   let html = `<${tagName}`
   let idMatch = selector.match(idRegex)
@@ -103,19 +137,19 @@ function elementToHTML(
     })
   }
   html += '>'
+  stream.write(html)
   switch (tagName) {
     case 'img':
     case 'input':
     case 'br':
     case 'hr':
     case 'meta':
-      return html
+      return
   }
   if (children) {
-    children.forEach(node => (html += nodeToHTML(node, context)))
+    writeNodeList(stream, children, context)
   }
-  html += `</${tagName}>`
-  return html
+  stream.write(`</${tagName}>`)
 }
 
 export function flagsToClassName(flags: Record<string, any>): string {

@@ -7,12 +7,13 @@ import type {
   Component,
   Element,
   Fragment,
+  html,
   JSXFragment,
   Node,
   NodeList,
   Raw,
 } from './types'
-import { nodeToHTML } from './html.js'
+import { nodeListToHTML } from './html.js'
 
 export function nodeToVElementOptimized(
   node: Element | Component,
@@ -44,7 +45,7 @@ export function nodeToVElementOptimized(
     return nodeToVNode(node, context)
   }
   const vElement: VElement = nodeToVNode(node, context)
-  const childrenHTML = children.map(node => nodeToHTML(node, context)).join('')
+  const childrenHTML: html = nodeListToHTML(children, context)
   const childrenRaw: Raw = ['raw', childrenHTML]
   const vElementWithRaw: VElement = [vElement[0], vElement[1], [childrenRaw]]
   const vElementSize = JSON.stringify(vElement).length

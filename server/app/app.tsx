@@ -4,8 +4,8 @@ import { loadTemplate } from '../template.js'
 import express from 'express'
 import type { ExpressContext, WsContext } from './context.js'
 import type { Element } from './jsx/types'
-import { nodeToHTML } from './jsx/html.js'
-import { sendHTML } from './express.js'
+import { writeNode } from './jsx/html.js'
+import { sendHTMLHeader } from './express.js'
 import { Redirect, Switch } from './components/router.js'
 import { OnWsMessage } from '../ws/wss.js'
 import { dispatchUpdate } from './jsx/dispatch.js'
@@ -23,6 +23,8 @@ import DemoCookieSession from './pages/demo-cookie-session.js'
 import Chatroom from './pages/chatroom.js'
 import { Menu } from './components/menu.js'
 import type { ClientMessage } from '../../client/index'
+import escapeHtml from 'escape-html'
+import { Flush } from './components/flush.js'
 
 let template = loadTemplate<index>('index')
 
@@ -102,15 +104,36 @@ export function App(): Element {
             <NotMatch />,
           )}
         </fieldset>
+        <Flush />
       </>,
     ],
   ]
 }
 
+/* calling <App/> will transform the JSX to AST for each rendering */
+/* or you can reuse a pre-computed AST as below */
 const AppAST = App()
 
-export let expressRouter = express.Router()
-expressRouter.use((req, res, next) => {
+export let appRouter = express.Router()
+appRouter.use((req, res, next) => {
+  sendHTMLHeader(res)
+
+  let page = capitalize(req.url.split('/')[1] || 'Home Page')
+  let description = 'TODO'
+  let appPlaceholder = '<!-- app -->'
+  let html = template({
+    title: `${page} - LiveView Demo`,
+    description,
+    app: appPlaceholder,
+  })
+  let idx = html.indexOf(appPlaceholder)
+
+  let beforeApp = html.slice(0, idx)
+  res.write(beforeApp)
+  res.flush()
+
+  let afterApp = html.slice(idx + appPlaceholder.length)
+
   let context: ExpressContext = {
     type: 'express',
     req,
@@ -118,14 +141,9 @@ expressRouter.use((req, res, next) => {
     next,
     url: req.url,
   }
-  let app: string
-  let description = 'TODO'
   try {
-    /* calling <App/> will transform the JSX to AST for each rendering */
-    // app = nodeToHTML(<App />, context)
-
-    /* or you can reuse a pre-computed AST */
-    app = nodeToHTML(AppAST, context)
+    // send the html chunks in streaming
+    writeNode(res, AppAST, context)
   } catch (error) {
     if (error === EarlyTerminate) {
       return
@@ -133,18 +151,14 @@ expressRouter.use((req, res, next) => {
     console.error('Failed to render App:', error)
     res.status(500)
     if (error instanceof Error) {
-      app = 'Internal Error: ' + error.message
+      res.write('Internal Error: ' + escapeHtml(error.message))
     } else {
-      app = 'Unknown Error'
+      res.write('Unknown Error: ' + escapeHtml(String(error)))
     }
   }
-  let page = capitalize(req.url.split('/')[1] || 'Home Page')
-  let html = template({
-    title: `${page} - LiveView Demo`,
-    description,
-    app,
-  })
-  sendHTML(res, html)
+
+  res.write(afterApp)
+  res.end()
 })
 
 export let onWsMessage: OnWsMessage<ClientMessage> = (event, ws, wss) => {

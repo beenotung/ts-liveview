@@ -6,7 +6,7 @@ import { join } from 'path'
 import compression from 'compression'
 import { debugLog } from './debug.js'
 import { listenWSSConnection } from './ws/wss-lite.js'
-import { expressRouter, onWsMessage } from './app/app.js'
+import { appRouter, onWsMessage } from './app/app.js'
 import { startSession, closeSession } from './app/session.js'
 import { existsSync, unlinkSync } from 'fs'
 import open from 'open'
@@ -42,7 +42,7 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(cookieMiddleware)
 
-app.use(expressRouter)
+app.use(appRouter)
 
 const PORT = config.port
 server.listen(PORT, () => {
