@@ -7,7 +7,7 @@ import { nodeToVElementOptimized } from './vnode.js'
 
 export function dispatchUpdate(node: Component | Element, context: WsContext) {
   console.log('dispatch update, node:')
-  console.dir(node, { depth: 20 })
+  console.dir(node, { depth: 1 })
   try {
     const vElement: VElement = nodeToVElementOptimized(node, context)
     const message: ServerMessage = ['update', vElement]
