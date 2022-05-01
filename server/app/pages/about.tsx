@@ -1,7 +1,7 @@
 import JSX from '../jsx/jsx.js'
 import { readFileSync } from 'fs'
 import { Switch } from '../components/router.js'
-import marked from 'marked'
+import { marked } from 'marked'
 import { Raw } from '../components/raw.js'
 import { prerender } from '../jsx/html.js'
 import { Menu } from '../components/menu.js'

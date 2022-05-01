@@ -12,6 +12,7 @@ export function Script(js: string) {
   if (config.production) {
     // FIXME need to explicitly allow script tag
     const html = nodeToHTML(node, { type: 'static' })
+    // TODO support async result
     return (minify as any).html(html)
   }
   return node
