@@ -40,7 +40,7 @@ export function Editor(attrs: attrs) {
       state.width = width
       messages.push(
         ['update-in', '#image-editor #output-width', width],
-        ['update-props', '#image-editor #output-image', { width }],
+        ['update-props', '#image-editor #output_image', { width }],
       )
     }
     let color = params.get('color')
@@ -48,7 +48,7 @@ export function Editor(attrs: attrs) {
       state.color = color
       messages.push([
         'update-attrs',
-        '#image-editor #output-image',
+        '#image-editor #output_image',
         { style: `background-color: ${state.color}` },
       ])
       Colors.forEach(color =>
@@ -73,7 +73,9 @@ export function Editor(attrs: attrs) {
         This demo illustrates how low-latency can it be even when the state and
         logic are maintained on the server.
       </p>
-      <p>The state is managed per-connection (not globally shared).</p>
+      <p>
+        The state of image size is managed per-connection (not globally shared).
+      </p>
       <form>
         <div id="image_control_no_js">
           <label for="image_width_no_js">Size: </label>
@@ -107,6 +109,10 @@ export function Editor(attrs: attrs) {
       image_control_js.hidden = false;
       `)}
 
+        <p>
+          The state of background color is managed locally (works without
+          network)
+        </p>
         <div>
           <label>Color: </label>
           {[
@@ -126,7 +132,7 @@ export function Editor(attrs: attrs) {
                       name="color"
                       value={color}
                       {...attrs}
-                      onchange={`emit('/editor?color='+this.value)`}
+                      onchange={`output_image.style.backgroundColor = this.value`}
                     />
                     <label for={id}>{color}</label>
                   </div>
@@ -141,7 +147,7 @@ export function Editor(attrs: attrs) {
 
       <img
         alt="output image from editor"
-        id="output-image"
+        id="output_image"
         width={state.width}
         style={`background-color: ${state.color}`}
         src="https://avatars0.githubusercontent.com/u/6510388"
