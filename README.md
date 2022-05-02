@@ -23,7 +23,7 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
 
 - [x] Support hybrid rendering mode
   - [x] Boot-time pre-rendering [[1]](#feature-1)
-  - [x] Request-time server-rendering [[2]](#feature-2)
+  - [x] Request-time server-rendering with HTML [streaming](#html-streaming) [[2]](#feature-2)
   - [x] Run-time live update [[3]](#feature-3)
 - [x] Support url-based routing architectures
   - [x] Multi-Page Application (MPA)
@@ -41,13 +41,12 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
   - [ ] Auto send accumulated offline messages when network resume (WIP)
 - [x] Work well with express.js [[7]](#feature-7)
 - [x] Fully customizable [[8]](#feature-8)
-- [ ] HTML Streaming[[9] (Coming soon)
 
 **Remarks**:
 
 <span id='feature-1'>[1]</span> Pay the AST-to-HTML conversion time-cost once at boot-time instead of at each request-time
 
-<span id='feature-2'>[2]</span> Response contentful html page directly to GET request
+<span id='feature-2'>[2]</span> Response contentful html page directly to GET request. Content chunk is streamed to clients as soon as it's ready, without waiting for client-side javascript bundles nor data requests to start rendering.
 
 <span id='feature-3'>[3]</span> Updates can be triggered by (bi-directional) events from the server or other clients
 
@@ -61,8 +60,6 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
 
 <span id='feature-8'>[8]</span> ts-liveview is provided as a template (rather than a library), hence any part can be modified to suit your need
 
-<span id='feature-9'>[9]</span> Response html chunks as soon as possible
-
 ## Why server-rendered?
 
 - To deliver initial meaningful paint as soon as possible (response contentful HTML to HTTP GET request, not just skeleton demanding further script and ajax request)
@@ -73,6 +70,28 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
 
 - To allow 'over-the-air' updates of application state and deployment
 
+<span id='html-streaming'></span>
+
+### Why HTML Streaming?
+
+HTML Streaming enables progressive rendering. The server sends html chunks as soon as they're ready. The browser, on the other side, progressively receives and renders the content. As a result, the content will be visible to users earlier.
+
+Below simulation from [marko](https://markojs.com) illustrates the visual difference with/without html streaming. In the example, both sides take the same amount of time to finish rendering. However, the right-hand-side example using html streaming shows the contents progressively, allowing the user to start reading earlier.
+
+<figure>
+  <p>
+    <img src="https://res.cloudinary.com/practicaldev/image/fetch/s--ZZf0krqi--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_66%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/strm6tlc0vcjc5xzwcbu.gif" alt="Buffered pages don’t show content as it loads, but Marko’s streaming pages show content incrementally." loading="lazy">
+  </p>
+  <figcaption>
+    <p>
+      Illustration captured by
+      <a href="https://dev.to/tigt/the-weirdly-obscure-art-of-streamed-html-4gc2">Taylor Hunt</a>
+      from
+      <a href="https://markojs.com/#streaming">markojs.com/#streaming</a>
+    </p>
+  </figcaption>
+</figure>
+
 <span id='jsx'></span>
 
 ## Why JSX?
@@ -81,17 +100,17 @@ Previous versions of ts-liveview use [template string](https://github.com/beenot
 
 With the template string based approach, html injection (XSS attack) _could be_ avoided when explicitly using helper function to sanitize the dynamic content. However it requires the developer to be careful, which could be bug-prone.
 
-Using JSX, the string values are auto escaped, which helps to prevent XSS from dynamic content
+Using JSX, the string values are auto escaped, which helps to prevent XSS from dynamic content.
 
 <span id="no-vdom-diff"></span>
 
 ## Why no virtual-dom diff?
 
-The current implementation of ts-liveview updates the DOM using explicit document query selector, this reduce the memory requirement on the server to supports simultaneous connections.
+The current implementation of ts-liveview updates the DOM using explicit css selector _(document querySelector)_. This design reduces the memory requirement on the server to supports simultaneous connections.
 
-The application can be built on top of reactive model powered by [S.js](https://github.com/adamhaile/S), [RxJS](https://github.com/ReactiveX/rxjs), or OOP with [getter and setter](https://vuejs.org/v2/guide/reactivity.html).
+The application can be built on top of reactive model powered by [S.js](https://github.com/adamhaile/S), [RxJS](https://github.com/ReactiveX/rxjs), or OOP with [getter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get) and [setter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/set).
 
-Example using _getter and setting_ see [thermostat.tsx](./server/app/pages/thermostat.tsx)
+Example using _getter and setter_ see [thermostat.tsx](./server/app/pages/thermostat.tsx)
 
 ## Examples / Demo
 
@@ -107,28 +126,30 @@ Example using _getter and setting_ see [thermostat.tsx](./server/app/pages/therm
 
 ## Inspired from
 
-- [Phoenix LiveView](https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript)
+- [Phoenix LiveView](https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript) for the idea of initial html response and realtime updates over websocket
 - [ts-liveview v1](https://github.com/beenotung/ts-liveview/tree/v1) (Typescript clone of Phoenix LiveView with template-string based diff-patching and s-js powered state change detection)
-- [htmx](https://htmx.org) (Derived from [intercooler.js](https://intercoolerjs.org))
+- attribute-based event handling in [htmx](https://htmx.org) (Derived from [intercooler.js](https://intercoolerjs.org))
 - JSX in [Surplus](https://github.com/adamhaile/surplus), [Stencil](https://stenciljs.com/docs/templating-jsx), and [React](https://reactjs.org/docs/react-without-jsx.html)
+- HTML Streaming motivation from [Ryan](https://dev.to/ryansolid)
 
 ## Releases
 
 [v2](https://github.com/beenotung/ts-liveview/tree/v2-rc3-jsx-with-context)
 
-- Removed dependency on s-js and morphdom
+- Removed dependency on s-js, morphdom, and primus
 - Switched content format from template-string to JSX/AST with out-of-the-box html-injection protection
-- Switched DOM update approach from generic template-string static-dynamic-diffing based patching to application-specific dom updates
+- Switched DOM update approach from generic template-string static-dynamic-diffing based patching to application-specific (direct) dom updates
+- Support html streaming for initial GET request
 
 [v1](https://github.com/beenotung/ts-liveview/tree/v1)
 
 - Made API more concise (especially for usage with s-js)
-- Support repeat components (e.g. map on array with shared template)
+- Support repeated components (e.g. map on array with shared template)
 
 [v0](https://github.com/beenotung/ts-liveview/tree/v0)
 
 - Support pre-rendering
-- Support live-update with diff-based patching with morphdom
+- Support live-update with diff-based patching with morphdom and primus
 
 ## License
 
