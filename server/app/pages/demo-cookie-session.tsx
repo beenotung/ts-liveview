@@ -10,6 +10,9 @@ import { EarlyTerminate } from '../helpers.js'
 const log = debugLog('demo-cookie-session.ts')
 log.enabled = true
 
+/** @description cannot call this when streaming html
+ *  because it need to set cookie in response header
+ * */
 export function Token(attrs: attrs) {
   const context = getContext(attrs)
   if (context.type !== 'express') {

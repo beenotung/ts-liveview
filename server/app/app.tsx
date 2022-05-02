@@ -4,7 +4,7 @@ import { loadTemplate } from '../template.js'
 import express from 'express'
 import type { ExpressContext, WsContext } from './context.js'
 import type { Element } from './jsx/types'
-import { writeNode } from './jsx/html.js'
+import { nodeToHTML, writeNode } from './jsx/html.js'
 import { sendHTMLHeader } from './express.js'
 import { Redirect, Switch } from './components/router.js'
 import { OnWsMessage } from '../ws/wss.js'
@@ -115,6 +115,28 @@ export function App(): Element {
 const AppAST = App()
 
 export let appRouter = express.Router()
+
+// non-streaming routes
+appRouter.use('/cookie-session/token', (req, res, next) => {
+  try {
+    let context: ExpressContext = {
+      type: 'express',
+      req,
+      res,
+      next,
+      url: req.url,
+    }
+    let html = nodeToHTML(<DemoCookieSession.Token />, context)
+    res.end(html)
+  } catch (error) {
+    if (error === EarlyTerminate) {
+      return
+    }
+    res.status(500).end(String(error))
+  }
+})
+
+// html-streaming routes
 appRouter.use((req, res, next) => {
   sendHTMLHeader(res)
 

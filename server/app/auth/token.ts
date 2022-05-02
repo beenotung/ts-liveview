@@ -61,7 +61,16 @@ export function tokenMiddleware(
   }
 }
 
+/**
+ * @description Doesn't work with html streaming
+ *
+ * When using html streaming, this must be called before the body starts streaming.
+ * Or re-organize the caller to be non-streaming express route.
+ * */
 export function setToken(req: Request, res: Response, token: string) {
+  if (res.headersSent) {
+    throw new Error('try to set cookie when body is already sent')
+  }
   req.cookies.token = token
   res.cookie('token', token, {
     httpOnly: true,
