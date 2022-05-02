@@ -180,8 +180,26 @@ appRouter.use((req, res, next) => {
   }
 
   res.write(afterApp)
-  res.end()
+
+  if ('skip streaming test') {
+    res.end()
+    return
+  }
+  testStreaming(res)
 })
+
+function testStreaming(res: express.Response) {
+  let i = 0
+  let timer = setInterval(() => {
+    i++
+    res.write(i + '\n')
+    res.flush()
+    if (i > 5) {
+      clearInterval(timer)
+      res.end()
+    }
+  }, 1000)
+}
 
 export let onWsMessage: OnWsMessage<ClientMessage> = (event, ws, wss) => {
   console.log('ws message:', event)
