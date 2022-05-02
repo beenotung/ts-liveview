@@ -18,15 +18,15 @@ export function Menu(attrs: {
   return (
     <>
       {Style(/* css */ `
-        .menu > a {
-          margin: 0.25em;
-          text-decoration: none;
-          border-bottom: 1px solid black;
-        }
-        .menu > a.selected {
-          border-bottom: 2px solid black;
-        }
-	`)}
+.menu > a {
+  margin: 0.25em;
+  text-decoration: none;
+  border-bottom: 1px solid black;
+}
+.menu > a.selected {
+ border-bottom: 2px solid black;
+}
+`)}
       <div class="menu" {...attrs.attrs}>
         {mapArray(
           attrs.routes,
