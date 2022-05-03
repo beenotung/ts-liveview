@@ -12,6 +12,7 @@ import { existsSync, unlinkSync } from 'fs'
 import open from 'open'
 import { cookieMiddleware } from './app/cookie.js'
 import { listenWSSCookie } from './app/cookie.js'
+import { print } from 'listening-on'
 
 const log = debugLog('index.ts')
 log.enabled = true
@@ -50,7 +51,7 @@ app.use(appRouter)
 
 const PORT = config.port
 server.listen(PORT, () => {
-  log(`listening on http://localhost:${PORT}`)
+  print(PORT)
   if (config.development && existsSync('.open')) {
     open(`http://localhost:${PORT}`)
     unlinkSync('.open')

@@ -42,6 +42,7 @@
     "escape-html": "^1.0.3",
     "express": "^4.18.1",
     "fastest-levenshtein": "^1.0.12",
+    "listening-on": "^2.0.5",
     "marked": "^4.0.14",
     "minify": "^8.0.4",
     "open": "^8.4.0",
