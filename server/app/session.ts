@@ -1,4 +1,8 @@
+import { debugLog } from '../debug.js'
 import type { ManagedWebsocket } from '../ws/wss'
+
+let log = debugLog('session.ts')
+log.enabled = true
 
 export type Session = {
   ws: ManagedWebsocket
