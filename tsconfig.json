@@ -16,6 +16,8 @@
     "outDir": "dist"
   },
   "exclude": [
-    "build"
+    "public",
+    "build",
+    "dist"
   ]
 }

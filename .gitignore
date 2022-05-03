@@ -6,7 +6,6 @@ pnpm-lock.yaml
 .idea/
 
 # built files
-public/js/bundle*
 build/
 dist/
 
