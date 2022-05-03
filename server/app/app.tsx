@@ -28,6 +28,7 @@ import escapeHtml from 'escape-html'
 import { Flush } from './components/flush.js'
 import { config } from '../config.js'
 import Style from './components/style.js'
+import Stats from './stats.js'
 
 let templateDev = loadTemplate<index_dev>('index_dev')
 let templateProd = loadTemplate<index_prod>('index_prod')
@@ -64,6 +65,7 @@ export function App(): Element {
           <a href="https://news.ycombinator.com/item?id=22830472">HN</a>{' '}
           <a href="https://github.com/beenotung/ts-liveview">git</a>
         </h1>
+        <Stats/>
         <Menu
           attrs={{ style: 'margin: 1em 0' }}
           matchPrefix
