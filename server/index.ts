@@ -34,12 +34,12 @@ listenWSSConnection({
 })
 
 app.use(compression())
-app.use(express.static('public'))
 if (config.development) {
   app.use('/js', express.static(join('dist', 'client')))
 } else {
   app.use('/js', express.static('build'))
 }
+app.use(express.static('public'))
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
