@@ -27,7 +27,9 @@ function loadNumber(file: string): number {
 
 function saveNumber(file: string, value: number) {
   writeFile(file, String(value), error => {
-    log('Failed to save number:', { file, value, error })
+    if (error) {
+      log('Failed to save number:', { file, value, error })
+    }
   })
 }
 
