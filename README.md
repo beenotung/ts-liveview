@@ -102,6 +102,17 @@ With the template string based approach, html injection (XSS attack) _could be_ 
 
 Using JSX, the string values are auto escaped, which helps to prevent XSS from dynamic content.
 
+### Why not using html-based template language?
+
+One may find it more productive to work with html-based template language like ember/angular/vue/svelte.
+However, interpreting/compiling a DSL with looping ability, conditional branching, scoped variables, reusability and testability into low-level code is rather complex.
+
+Instead, ts-liveview adopts a data structure DSL (dsDSL) built on the primitive data structures provided from the programming language, such as string, array, object and function.
+
+A thin abstraction layer is created to improve development experience (DX).
+
+This [article](https://www.toptal.com/software/declarative-programming) from Federico explains the pros and cons of declarative programming and dsDSL in detail.
+
 <span id="no-vdom-diff"></span>
 
 ## Why no virtual-dom diff?
