@@ -1,5 +1,6 @@
 import JSX from './jsx/jsx.js'
-import type { index } from '../../template/index.html'
+import type { index_dev } from '../../template/index_dev.html'
+import type { index_prod } from '../../template/index_prod.html'
 import { loadTemplate } from '../template.js'
 import express from 'express'
 import type { ExpressContext, WsContext } from './context.js'
@@ -25,8 +26,11 @@ import { Menu } from './components/menu.js'
 import type { ClientMessage } from '../../client/index'
 import escapeHtml from 'escape-html'
 import { Flush } from './components/flush.js'
+import { config } from '../config.js'
 
-let template = loadTemplate<index>('index')
+let templateDev = loadTemplate<index_dev>('index_dev')
+let templateProd = loadTemplate<index_prod>('index_prod')
+let template = config.development ? templateDev : templateProd
 
 function formatMenuText(href: string): string {
   let text = href.substring(1)
