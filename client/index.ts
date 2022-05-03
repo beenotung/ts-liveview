@@ -24,7 +24,7 @@ connectWS<ServerMessage>({
     return new WebSocket(wsUrl, [protocol])
   },
   attachWS(ws) {
-    console.log('attach ws')
+    console.debug('attach ws')
 
     let emit = function emit() {
       ws.send(Array.from(arguments))
@@ -83,7 +83,7 @@ connectWS<ServerMessage>({
     }
   },
   onMessage(event) {
-    console.log('on ws message:', event)
+    console.debug('on ws message:', event)
     onServerMessage(event)
   },
 })
@@ -146,7 +146,7 @@ function onServerMessage(message: ServerMessage) {
       document.cookie = message[1]
       break
     default:
-      console.log('unknown server message:', message)
+      console.error('unknown server message:', message)
   }
 }
 
