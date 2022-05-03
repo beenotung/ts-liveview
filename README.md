@@ -117,7 +117,7 @@ This [article](https://www.toptal.com/software/declarative-programming) from Fed
 
 ## Why no virtual-dom diff?
 
-The current implementation of ts-liveview updates the DOM using explicit css selector _(document querySelector)_. This design reduces the memory requirement on the server to supports simultaneous connections.
+The current implementation of ts-liveview updates the DOM using explicit css selector (aka document querySelector). This design reduces the memory requirement on the server to better support simultaneous connections.
 
 The application can be built on top of reactive model powered by [S.js](https://github.com/adamhaile/S), [RxJS](https://github.com/ReactiveX/rxjs), or OOP with [getter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get) and [setter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/set).
 
