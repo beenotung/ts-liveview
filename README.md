@@ -1,6 +1,6 @@
 # ts-liveview
 
-> ts-liveview helps to deliver fast and interactive user interface directly from the node.js server.
+> ts-liveview helps to deliver fast and interactive user interface directly from node.js server.
 
 _(Without MBs of javascript to be downloaded and executed on the client side.)_
 
