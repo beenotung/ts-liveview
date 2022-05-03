@@ -71,7 +71,7 @@ export function removeNode(selector: string) {
   e.remove()
 }
 
-export function updateText(selector: string, text: string) {
+export function updateText(selector: string, text: string | number) {
   let e = document.querySelector(selector)
   if (!e) {
     console.error(
@@ -80,7 +80,7 @@ export function updateText(selector: string, text: string) {
     )
     throw new Error('Failed to query selector when updateText')
   }
-  e.textContent = text
+  e.textContent = text as string
 }
 
 export function updateAllText(selector: string, text: string) {
