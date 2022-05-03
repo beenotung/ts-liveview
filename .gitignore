@@ -6,7 +6,7 @@ pnpm-lock.yaml
 .idea/
 
 # built files
-public/js/primus.*js
+public/js/bundle*
 build/
 dist/
 
