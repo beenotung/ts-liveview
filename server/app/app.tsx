@@ -27,6 +27,7 @@ import type { ClientMessage } from '../../client/index'
 import escapeHtml from 'escape-html'
 import { Flush } from './components/flush.js'
 import { config } from '../config.js'
+import Style from './components/style.js'
 
 let templateDev = loadTemplate<index_dev>('index_dev')
 let templateProd = loadTemplate<index_prod>('index_prod')
@@ -40,6 +41,15 @@ function formatMenuText(href: string): string {
   return text
 }
 
+let appStyle = Style(/* css */ `
+h1.title {
+  color: darkblue;
+}
+h1.title a {
+  font-size: 1rem;
+}
+`)
+
 export function App(): Element {
   // you can write the AST direct for more compact wire-format
   return [
@@ -48,7 +58,12 @@ export function App(): Element {
     [
       // or you can write in JSX for better developer-experience (if you're coming from React)
       <>
-        <h1>ts-liveview Demo</h1>
+        {appStyle}
+        <h1 class="title">
+          ts-liveview{' '}
+          <a href="https://news.ycombinator.com/item?id=22830472">HN</a>{' '}
+          <a href="https://github.com/beenotung/ts-liveview">git</a>
+        </h1>
         <Menu
           attrs={{ style: 'margin: 1em 0' }}
           matchPrefix
