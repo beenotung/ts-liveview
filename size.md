@@ -1,31 +1,44 @@
 ## Client js size
 
-### Bundled and Minified Size
+### Bundled File Size
 
-| File              | Size   |
-| ----------------- | ------ |
-| build/index.js    | 6.1 KB |
-| build/index.js.gz | 2.2 KB |
+| File                   | Size |
+| ---------------------- | ---- |
+| build/bundle.js        | 12K  |
+| build/bundle.min.js    | 6.1K |
+| build/bundle.min.js.gz | 2.2K |
 
 ### Source Files Size
 
-| File                   | Size   |
-| ---------------------- | ------ |
-| client/jsx/dom.js      | 6.0 KB |
-| client/index.js        | 3.2 KB |
-| client/ws/ws-lite.js   | 2.1 KB |
-| client/ws/ws-config.js | 277 B  |
+| File                   | Size |
+| ---------------------- | ---- |
+| client/jsx/dom.js      | 6.5K |
+| client/index.js        | 3.8K |
+| client/ws/ws-lite.js   | 2.5K |
+| client/ws/ws-config.js | 280B |
 
 ## WebSocket Client Size Comparison
 
-| Name          |  .js | min.js | .min.js.gz |
-| ------------- | ---: | -----: | ---------: |
-| **ws-native** | 1.1K |   0.5K |       0.3K |
-| **ws-lite**   | 2.1K |   1.4K |       0.6K |
-| primus.js     |  97K |    32K |        11K |
-| socket.io.js  | 181K |    64K |        15K |
+| Name          | bundled | + minified | + gzipped |
+| ------------- | ------: | ---------: | --------: |
+| **ws-native** |    0.9K |       0.4K |      0.3K |
+| **ws-lite**   |    2.3K |       0.9K |      0.5K |
+| primus.js     |   98.9K |      32.5K |     10.7K |
+| socket.io.js  |    104K |      40.8K |     12.4K |
 
-Details refers to [client/ws/readme.md](./client/ws/readme.md)
+Details of ws-\* refers to [client/ws/readme.md](./client/ws/readme.md)
+
+| WebSocket Client | Way to get websocket client file                |
+| ---------------- | ----------------------------------------------- |
+| primus.js        | fs.writeFileSync('primus.js', primus.library()) |
+| socket.io.js     | wget $origin/socket.io/socket.io.js             |
+
+| Size Type                        | Command                                                       |
+| -------------------------------- | ------------------------------------------------------------- |
+| bundled of ws-{native,lite}      | npx esbuild $file --bundle \| pv > /dev/null                  |
+| bundled of {primus,socket.io}.js | cat $file \| pv > /dev/null                                   |
+| + minified                       | npx esbuild $file --bundle --minify \| pv > /dev/null         |
+| + gzipped                        | npx esbuild $file --bundle --minify \| gzip \| pv > /dev/null |
 
 ### Reference
 

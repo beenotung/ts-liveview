@@ -54,7 +54,7 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
 
 <span id='feature-5'>[5]</span> For screen-reader, text-based browser, and people with slow or unstable network, or simply tried with privacy invading scripts
 
-<span id='feature-6'>[6]</span> The network client code is [0.5K to 1.9K minified, 128x to 33x smaller than socket.io](./size.md)
+<span id='feature-6'>[6]</span> The network client code is [0.4K to 0.9K minified, 102x to 45x smaller than socket.io.min.js](./size.md)
 
 <span id='feature-7'>[7]</span> The entry point of ts-liveview app can be wrapped as an express middleware
 
