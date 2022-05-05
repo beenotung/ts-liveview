@@ -80,7 +80,7 @@ Below simulation from [marko](https://markojs.com) illustrates the visual differ
 
 <figure>
   <p>
-    <img src="https://res.cloudinary.com/practicaldev/image/fetch/s--ZZf0krqi--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_66%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/strm6tlc0vcjc5xzwcbu.gif" alt="Buffered pages don’t show content as it loads, but Marko’s streaming pages show content incrementally." loading="lazy">
+    <img src="https://res.cloudinary.com/practicaldev/image/fetch/s--ZZf0krqi--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_66%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/strm6tlc0vcjc5xzwcbu.gif" alt="Buffered pages don’t show content as it loads, but streaming pages show content incrementally." loading="lazy">
   </p>
   <figcaption>
     <p>
