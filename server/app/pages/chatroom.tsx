@@ -1,5 +1,4 @@
 import { allNames } from '@beenotung/tslib/constant/character-name.js'
-import { format_datetime } from '@beenotung/tslib/format.js'
 import { Random } from '@beenotung/tslib/random.js'
 import { ServerMessage } from '../../../client/index.js'
 import { debugLog } from '../../debug.js'
