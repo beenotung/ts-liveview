@@ -101,6 +101,7 @@ function writeNodeList(
 
 const tagNameRegex = /([\w-]+)/
 const idRegex = /#([\w-]+)/
+const attrListRegex = /\[(.*?)\]/g
 const classListRegex = /\.([\w-]+)/g
 
 function writeElement(
@@ -114,6 +115,10 @@ function writeElement(
   if (idMatch) {
     selector = selector.replace(idMatch[0], '')
     html += ` id="${idMatch[1]}"`
+  }
+  for (let attrMatch of selector.matchAll(attrListRegex)) {
+    selector = selector.replace(attrMatch[0], '')
+    html += ` ${attrMatch[1]}`
   }
   let classList: string[] = []
   for (let classMatch of selector.matchAll(classListRegex)) {
