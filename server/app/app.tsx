@@ -249,6 +249,7 @@ export let onWsMessage: OnWsMessage<ClientMessage> = (event, ws, wss) => {
     console.log('unknown type of ws message:', event)
     return
   }
+  session.url = url
   let context: WsContext = {
     type: 'ws',
     ws,
@@ -256,7 +257,7 @@ export let onWsMessage: OnWsMessage<ClientMessage> = (event, ws, wss) => {
     url,
     args,
     event: eventType,
+    session,
   }
-  session.url = url
   dispatchUpdate(AppAST, context)
 }

@@ -17,7 +17,7 @@ export function DateTimeText(attrs: { time: number }) {
       ?.split(',')[0]
       .replace('_', '-')
   } else if (context.type === 'ws') {
-    let session = getWSSession(context.ws)
+    let session = context.session
     locales = session.locales
     timeZone = session.timeZone
     timezoneOffset = session.timezoneOffset
