@@ -8,6 +8,7 @@ export type Session = {
   ws: ManagedWebsocket
   locales?: string
   timeZone?: string
+  timezoneOffset?: number
   url?: string
   onCloseListeners: Array<(session: Session) => void>
 }

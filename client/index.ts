@@ -65,10 +65,17 @@ connectWS<ServerMessage>({
       let locale =
         navigator && navigator.language ? navigator.language : undefined
       let url = location.href.replace(origin, '')
-      let timezone = Intl
+      let timeZone = Intl
         ? Intl.DateTimeFormat().resolvedOptions().timeZone
         : undefined
-      let message: ClientMessage = ['mount', url, locale, timezone]
+      let timezoneOffset = new Date().getTimezoneOffset()
+      let message: ClientMessage = [
+        'mount',
+        url,
+        locale,
+        timeZone,
+        timezoneOffset,
+      ]
       ws.send(message)
     })
 
@@ -93,7 +100,8 @@ export type ClientMessage =
       type: 'mount',
       url: string,
       locale: string | undefined,
-      timezone: string | undefined,
+      timeZone: string | undefined,
+      timezoneOffset: number,
     ]
   | [url: string, data?: any]
 

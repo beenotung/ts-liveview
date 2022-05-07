@@ -46,6 +46,7 @@
     "minify": "^8.0.4",
     "open": "^8.4.0",
     "sanitize-html": "^2.7.0",
+    "timezone-date.ts": "^2.0.1",
     "typestub-ws": "^8.2.3",
     "url-router.ts": "^1.0.1"
   },
