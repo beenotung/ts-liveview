@@ -1,6 +1,5 @@
 import JSX from './jsx/jsx.js'
-import type { index_dev } from '../../template/index_dev.html'
-import type { index_prod } from '../../template/index_prod.html'
+import type { index } from '../../template/index.html'
 import { loadTemplate } from '../template.js'
 import express from 'express'
 import type { ExpressContext, WsContext } from './context.js'
@@ -29,10 +28,18 @@ import { Flush } from './components/flush.js'
 import { config } from '../config.js'
 import Style from './components/style.js'
 import Stats from './stats.js'
+import { MuteConsole } from './components/script.js'
 
-let templateDev = loadTemplate<index_dev>('index_dev')
-let templateProd = loadTemplate<index_prod>('index_prod')
-let template = config.development ? templateDev : templateProd
+let template = loadTemplate<index>('index')
+
+let scripts = config.development ? (
+  <script src="/js/index.js" type="module" defer></script>
+) : (
+  <>
+    <MuteConsole />
+    <script src="/js/bundle.min.js" type="module" defer></script>
+  </>
+)
 
 function formatMenuText(href: string): string {
   let text = href.substring(1)
@@ -42,15 +49,6 @@ function formatMenuText(href: string): string {
   return text
 }
 
-let appStyle = Style(/* css */ `
-h1.title {
-  color: darkblue;
-}
-h1.title a {
-  font-size: 1rem;
-}
-`)
-
 export function App(): Element {
   // you can write the AST direct for more compact wire-format
   return [
@@ -59,13 +57,21 @@ export function App(): Element {
     [
       // or you can write in JSX for better developer-experience (if you're coming from React)
       <>
-        {appStyle}
+        {Style(/* css */ `
+h1.title {
+  color: darkblue;
+}
+h1.title a {
+  font-size: 1rem;
+}
+`)}
         <h1 class="title">
           ts-liveview{' '}
           <a href="https://news.ycombinator.com/item?id=22830472">HN</a>{' '}
           <a href="https://github.com/beenotung/ts-liveview">git</a>
         </h1>
-        <Stats/>
+        {scripts}
+        <Stats />
         <Menu
           attrs={{ style: 'margin: 1em 0' }}
           matchPrefix
@@ -162,7 +168,7 @@ appRouter.use((req, res, next) => {
   sendHTMLHeader(res)
 
   let page = capitalize(req.url.split('/')[1] || 'Home Page')
-  let description = 'TODO'
+  let description = 'Demo website of ts-liveview'
   let appPlaceholder = '<!-- app -->'
   let html = template({
     title: `${page} - LiveView Demo`,

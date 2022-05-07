@@ -11,7 +11,7 @@
     <meta name="description" content="{description}" />
   </head>
   <body>
-    <div id="noscript">
+    <div id="noscript" aria-hidden="true">
       <style>
         #noscript {
           margin: 1em;
@@ -45,12 +45,11 @@
         background-color: black;
       }
     </style>
-    <div id="ws_status" hidden>loading...</div>
+    <div id="ws_status" hidden role="none">loading...</div>
     <script>
       document.getElementById('noscript').remove()
       document.getElementById('ws_status').removeAttribute('hidden')
     </script>
-    <script src="/js/index.js" type="module" defer></script>
     {app}
   </body>
 </html>

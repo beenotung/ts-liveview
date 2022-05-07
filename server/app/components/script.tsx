@@ -17,3 +17,18 @@ export function Script(js: string) {
   }
   return node
 }
+
+/** @description semi-colon is mandatory */
+export function aggressivelyTrimInlineScript(html: string): string {
+  return html.replace(/ /g, '').replace(/\n/g, '')
+}
+
+export function MuteConsole() {
+  let html = aggressivelyTrimInlineScript(/* html */ `
+<script>
+  console.original_debug = console.debug;
+  console.debug = () => {}
+</script>
+`)
+  return Raw(html)
+}
