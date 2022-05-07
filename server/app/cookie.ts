@@ -10,7 +10,7 @@ import { Context } from './context.js'
 const log = debugLog('cookie.ts')
 log.enabled = true
 
-export const cookieMiddleware = cookieParser()
+export const cookieMiddleware = cookieParser(config.cookie_secret)
 
 export const secure = config.production
 
