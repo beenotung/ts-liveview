@@ -188,7 +188,6 @@ function createElementBySelector(selector: string): Element {
 function applySelector(e: Element, selector: string) {
   let idMatch = selector.match(idRegex)
   if (idMatch) {
-    selector = selector.replace(idMatch[0], '')
     e.id = idMatch[1]
   }
   let classList: string[] = []
