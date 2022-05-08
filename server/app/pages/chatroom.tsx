@@ -1,13 +1,6 @@
 import { allNames } from '@beenotung/tslib/constant/character-name.js'
 import { Random } from '@beenotung/tslib/random.js'
-import {
-  DAY,
-  HOUR,
-  MINUTE,
-  MONTH,
-  SECOND,
-  YEAR,
-} from '@beenotung/tslib/time.js'
+import { YEAR } from '@beenotung/tslib/time.js'
 import { ServerMessage } from '../../../client/index.js'
 import { debugLog } from '../../debug.js'
 import { Style } from '../components/style.js'
