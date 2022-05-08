@@ -53,7 +53,7 @@ export function listenWSSConnection<
       log('received unknown ws message:', data)
     })
 
-    const managedWS: ManagedWebsocket = { ws, send, close }
+    const managedWS: ManagedWebsocket = { ws, wss, send, close }
     options.onConnection(managedWS)
   })
 }

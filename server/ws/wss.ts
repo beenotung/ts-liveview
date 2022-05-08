@@ -3,6 +3,7 @@ import { ServerMessage } from '../../client'
 
 export type ManagedWebsocket<Event extends ServerMessage = any> = {
   ws: WebSocket
+  wss: Server
   send(event: Event): void
   close(code?: number, reason?: Buffer): void
 }

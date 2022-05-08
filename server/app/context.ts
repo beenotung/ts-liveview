@@ -21,7 +21,6 @@ export type ExpressContext = {
 export type WsContext = {
   type: 'ws'
   ws: ManagedWebsocket<ServerMessage>
-  wss: Server
   event?: string
   args?: any[]
   session: Session
