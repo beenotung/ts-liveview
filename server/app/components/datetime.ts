@@ -1,6 +1,5 @@
 import { format_datetime } from '@beenotung/tslib/format.js'
 import { getContext } from '../context.js'
-import { getWSSession } from '../session.js'
 import { debugLog } from '../../debug.js'
 import { TimezoneDate } from 'timezone-date.ts'
 
