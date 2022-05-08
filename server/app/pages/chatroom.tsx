@@ -19,11 +19,10 @@ import { onWsSessionClose, Session, sessions } from '../session.js'
 import { ManagedWebsocket } from '../../ws/wss.js'
 import { EarlyTerminate } from '../helpers.js'
 import DateTimeText, {
-  formatDateTimeText,
+  createRelativeTimer,
   toLocaleDateTimeString,
 } from '../components/datetime.js'
 import { nodeToVNode } from '../jsx/vnode.js'
-import { format_relative_time } from '@beenotung/tslib/format.js'
 
 let log = debugLog('chatroom.tsx')
 log.enabled = true
@@ -387,55 +386,10 @@ export function Chatroom(attrs: attrs) {
   )
 }
 
-let timerMessages = new Set<string>()
-let timerSessions = new Set<Session>()
-
-function startMessageTimer(attrs: MessageItemAttrs) {
-  let diff = Date.now() - attrs.time
-  if (diff >= YEAR) {
-    sessions.forEach(session => {
-      if (!session.url?.startsWith('/chatroom')) return
-    })
-    return
-  }
-  let interval =
-    diff < MINUTE
-      ? SECOND
-      : diff < HOUR
-      ? MINUTE / 2
-      : diff < DAY
-      ? HOUR / 2
-      : diff < MONTH
-      ? DAY / 2
-      : diff < YEAR
-      ? MONTH / 2
-      : YEAR
-  setTimeout(tickMessageTimer, interval, attrs)
+function sessionFilter(session: Session): boolean {
+  return !!session.url?.startsWith('/chatroom')
 }
-
-function tickMessageTimer(attrs: MessageItemAttrs) {
-  timerSessions.forEach(session => {
-    let url = session.url
-    if (!url?.startsWith('/chatroom')) {
-      timerSessions.delete(session)
-      return
-    }
-    let ws = session.ws
-    let context: WsContext = {
-      type: 'ws',
-      ws,
-      session,
-      url: url!,
-    }
-    let message: ServerMessage = [
-      'update-text',
-      `#${attrs.id} .chat-time`,
-      format_relative_time(attrs.time - Date.now(), 0),
-    ]
-    ws.send(message)
-  })
-  startMessageTimer(attrs)
-}
+const { startRelativeTimer } = createRelativeTimer({ sessionFilter })
 
 type MessageItemAttrs = {
   id: string
@@ -448,13 +402,7 @@ type MessageItemAttrs = {
 function MessageItem(attrs: MessageItemAttrs) {
   let context = getContext(attrs)
   let time = attrs.time
-  if (Date.now() - time < YEAR && !timerMessages.has(attrs.id)) {
-    timerMessages.add(attrs.id)
-    startMessageTimer(attrs)
-  }
-  if (context.type === 'ws') {
-    timerSessions.add(context.session)
-  }
+  startRelativeTimer({ time, selector: `#${attrs.id} .chat-time` }, context)
   return (
     <li class="chat-record" id={attrs.id}>
       <time
