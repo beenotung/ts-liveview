@@ -13,18 +13,27 @@ export function DateTimeText(attrs: {
   time: number
   relativeTimeThreshold?: number
 }) {
+  let context = getContext(attrs)
+  return formatDateTimeText(attrs, context)
+}
+
+export function formatDateTimeText(
+  attrs: {
+    time: number
+    relativeTimeThreshold?: number
+  },
+  context: Context,
+): string {
   if (attrs.relativeTimeThreshold !== undefined) {
     let diff = attrs.time - Date.now()
     if (Math.abs(diff) < attrs.relativeTimeThreshold) {
-      return format_relative_time(round_time_diff(diff))
+      return format_relative_time(diff, 0)
     }
   }
-
-  let context = getContext(attrs)
   return toLocaleDateTimeString(attrs.time, context)
 }
 
-export function toLocaleDateTimeString(time: number, context: Context) {
+export function toLocaleDateTimeString(time: number, context: Context): string {
   let locales: string | undefined
   let timeZone: string | undefined
   let timezoneOffset: number | undefined

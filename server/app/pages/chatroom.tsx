@@ -1,5 +1,13 @@
 import { allNames } from '@beenotung/tslib/constant/character-name.js'
 import { Random } from '@beenotung/tslib/random.js'
+import {
+  DAY,
+  HOUR,
+  MINUTE,
+  MONTH,
+  SECOND,
+  YEAR,
+} from '@beenotung/tslib/time.js'
 import { ServerMessage } from '../../../client/index.js'
 import { debugLog } from '../../debug.js'
 import { Style } from '../components/style.js'
@@ -7,11 +15,15 @@ import { getContext, WsContext } from '../context.js'
 import { getContextCookie } from '../cookie.js'
 import JSX from '../jsx/jsx.js'
 import { attrs, Node } from '../jsx/types.js'
-import { onWsSessionClose, sessions } from '../session.js'
+import { onWsSessionClose, Session, sessions } from '../session.js'
 import { ManagedWebsocket } from '../../ws/wss.js'
 import { EarlyTerminate } from '../helpers.js'
-import DateTimeText from '../components/datetime.js'
+import DateTimeText, {
+  formatDateTimeText,
+  toLocaleDateTimeString,
+} from '../components/datetime.js'
 import { nodeToVNode } from '../jsx/vnode.js'
+import { format_relative_time } from '@beenotung/tslib/format.js'
 
 let log = debugLog('chatroom.tsx')
 log.enabled = true
@@ -32,6 +44,12 @@ const style = Style(/* css */ `
 }
 #chatroom .chat-time {
   font-size: small;
+}
+#chatroom .chat-time::before {
+  content: "[";
+}
+#chatroom .chat-time::after {
+  content: "]";
 }
 #chatroom .chat-author {
   font-weight: bold;
@@ -65,15 +83,6 @@ function sendMessage(message: ServerMessage) {
   })
 }
 
-function sendCustomMessage(fn: (ws: ManagedWebsocket) => ServerMessage) {
-  sessions.forEach(session => {
-    if (session.url?.startsWith('/chatroom')) {
-      let ws = session.ws
-      ws.send(fn(ws))
-    }
-  })
-}
-
 function remove<T>(array: T[], item: T, onRemove: () => void) {
   let index = array.indexOf(item)
   if (index === -1) return
@@ -89,23 +98,28 @@ class ChatroomState {
   typing_timeout_map = new Map<NameSpan, NodeJS.Timeout>()
 
   addMessage(nickname: string, message: string) {
-    let now = new Date()
-    let time = now.getTime()
-    let li = (
-      <li class="chat-record">
-        <time class="chat-time" datetime={now.toISOString()}>
-          [<DateTimeText time={time} />]
-        </time>{' '}
-        <br />
-        <span class="chat-author">{nickname}</span>
-        <span class="chat-message">{message}</span>
-      </li>
-    )
+    let date = new Date()
+    let time = date.getTime()
+    let attrs = {
+      nickname: nickname,
+      message: message,
+      timeISOString: date.toISOString(),
+      time: time,
+      id: 'msg-' + (this.msg_list.length + 1),
+    }
+    let li = <MessageItem {...attrs} />
     this.msg_list.push(li)
-    sendCustomMessage(ws => {
-      let context: WsContext = { type: 'ws', ws } as any
+    sessions.forEach(session => {
+      if (!session.url?.startsWith('/chatroom')) return
+      let context: WsContext = {
+        type: 'ws',
+        ws: session.ws,
+        session,
+        url: session.url!,
+      }
       let node = nodeToVNode(li, context)
-      return ['append', '#chatroom .msg-list', node]
+      let message: ServerMessage = ['append', '#chatroom .msg-list', node]
+      session.ws.send(message)
     })
   }
   addTyping(span: NameSpan) {
@@ -372,6 +386,91 @@ export function Chatroom(attrs: attrs) {
     </>
   )
 }
+
+let timerMessages = new Set<string>()
+let timerSessions = new Set<Session>()
+
+function startMessageTimer(attrs: MessageItemAttrs) {
+  let diff = Date.now() - attrs.time
+  if (diff >= YEAR) {
+    sessions.forEach(session => {
+      if (!session.url?.startsWith('/chatroom')) return
+    })
+    return
+  }
+  let interval =
+    diff < MINUTE
+      ? SECOND
+      : diff < HOUR
+      ? MINUTE / 2
+      : diff < DAY
+      ? HOUR / 2
+      : diff < MONTH
+      ? DAY / 2
+      : diff < YEAR
+      ? MONTH / 2
+      : YEAR
+  setTimeout(tickMessageTimer, interval, attrs)
+}
+
+function tickMessageTimer(attrs: MessageItemAttrs) {
+  timerSessions.forEach(session => {
+    let url = session.url
+    if (!url?.startsWith('/chatroom')) {
+      timerSessions.delete(session)
+      return
+    }
+    let ws = session.ws
+    let context: WsContext = {
+      type: 'ws',
+      ws,
+      session,
+      url: url!,
+    }
+    let message: ServerMessage = [
+      'update-text',
+      `#${attrs.id} .chat-time`,
+      format_relative_time(attrs.time - Date.now(), 0),
+    ]
+    ws.send(message)
+  })
+  startMessageTimer(attrs)
+}
+
+type MessageItemAttrs = {
+  id: string
+  nickname: string
+  message: string
+  timeISOString: string
+  time: number
+}
+
+function MessageItem(attrs: MessageItemAttrs) {
+  let context = getContext(attrs)
+  let time = attrs.time
+  if (Date.now() - time < YEAR && !timerMessages.has(attrs.id)) {
+    timerMessages.add(attrs.id)
+    startMessageTimer(attrs)
+  }
+  if (context.type === 'ws') {
+    timerSessions.add(context.session)
+  }
+  return (
+    <li class="chat-record" id={attrs.id}>
+      <time
+        class="chat-time"
+        datetime={attrs.timeISOString}
+        title={toLocaleDateTimeString(time, context)}
+      >
+        <DateTimeText time={time} relativeTimeThreshold={YEAR} />
+      </time>{' '}
+      <br />
+      <span class="chat-author">{attrs.nickname}</span>
+      <span class="chat-message">{attrs.message}</span>
+    </li>
+  )
+}
+
 export default {
   index: Chatroom,
   typing,
