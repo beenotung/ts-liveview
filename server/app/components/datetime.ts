@@ -3,7 +3,7 @@ import { getContext } from '../context.js'
 import { debugLog } from '../../debug.js'
 import { TimezoneDate } from 'timezone-date.ts'
 
-let log = debugLog('datetime.tsx')
+let log = debugLog('datetime.ts')
 log.enabled = true
 
 export function DateTimeText(attrs: { time: number }) {
