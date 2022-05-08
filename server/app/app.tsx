@@ -239,7 +239,10 @@ export let onWsMessage: OnWsMessage<ClientMessage> = (event, ws, wss) => {
     eventType = 'mount'
     url = event[1]
     session.locales = event[2]
-    session.timeZone = event[3]
+    let timeZone = event[3]
+    if (timeZone && timeZone !== 'null') {
+      session.timeZone = timeZone
+    }
     session.timezoneOffset = event[4]
   } else if (event[0][0] === '/') {
     eventType = 'route'
