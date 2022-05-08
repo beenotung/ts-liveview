@@ -2,7 +2,7 @@ import {
   format_relative_time,
   round_time_diff,
 } from '@beenotung/tslib/format.js'
-import { getContext } from '../context.js'
+import { Context, getContext } from '../context.js'
 import { debugLog } from '../../debug.js'
 import { TimezoneDate } from 'timezone-date.ts'
 
@@ -21,6 +21,10 @@ export function DateTimeText(attrs: {
   }
 
   let context = getContext(attrs)
+  return toLocaleDateTimeString(attrs.time, context)
+}
+
+export function toLocaleDateTimeString(time: number, context: Context) {
   let locales: string | undefined
   let timeZone: string | undefined
   let timezoneOffset: number | undefined
@@ -36,7 +40,7 @@ export function DateTimeText(attrs: {
   }
   for (;;) {
     try {
-      let date = new TimezoneDate(attrs.time)
+      let date = new TimezoneDate(time)
       if (timezoneOffset !== undefined) {
         date.setTimezoneOffset(timezoneOffset)
       }
