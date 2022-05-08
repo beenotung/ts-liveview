@@ -135,6 +135,7 @@ Example using _getter and setter_ see [thermostat.tsx](./server/app/pages/thermo
 - [x] [SPA with url-based routing](./server/app/app.tsx)
 - [x] [Chatroom](./server/app/pages/chatroom.tsx) with locales and timezone support
 - [x] [Realtime Collaborative Painting](https://github.com/beenotung/live-paint)
+- [x] [Hacker News Clone](https://github.com/beenotung/liveview-hn)
 - [ ] Snake Game
 
 ## Inspired from
