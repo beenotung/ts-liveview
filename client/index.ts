@@ -111,7 +111,7 @@ export type ServerMessage =
   | ['append', selector, VNode]
   | ['remove', selector]
   | ['update-text', selector, string | number]
-  | ['update-all-text', selector, string]
+  | ['update-all-text', selector, string | number]
   | ['update-attrs', selector, attrs]
   | ['update-props', selector, props]
   | ['set-value', selector, string | number]

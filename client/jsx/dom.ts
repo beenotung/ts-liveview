@@ -83,9 +83,9 @@ export function updateText(selector: string, text: string | number) {
   e.textContent = text as string
 }
 
-export function updateAllText(selector: string, text: string) {
+export function updateAllText(selector: string, text: string | number) {
   document.querySelectorAll(selector).forEach(e => {
-    e.textContent = text
+    e.textContent = text as string
   })
 }
 
