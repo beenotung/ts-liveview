@@ -3,7 +3,9 @@ import JSX from '../jsx/jsx.js'
 import { prerender } from '../jsx/html.js'
 import Comment from '../components/comment.js'
 
-// The JSX expression don't need to be re-built on every render
+// The JSX expression don't need to be re-built on every render.
+// You can reuse JSX expression.
+// It is not mandatory to be wrapped by a function if it's static.
 let content = (
   <div id="home">
     <h2>Home Page</h2>
