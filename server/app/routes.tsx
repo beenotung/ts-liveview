@@ -23,6 +23,7 @@ export type PageRouteMatch = {
   node: Node
   description?: string
   menuText?: string
+  menuUrl?: string // optional, default to be same as PageRoute.url
 }
 
 export type PageRoute = {
@@ -101,9 +102,15 @@ pageRoutes.push({
   node: <DemoForm.index />,
 })
 
-let routes: Record<string, PageRouteMatch> = {
+// jsx node can be used directly, e.g. `Home`
+// invoke functional component with square bracket, e.g. `[Editor]`
+// or invoke functional component with x-html tag, e.g. `<Editor/>
+
+let routeDict: Record<string, PageRouteMatch> = {
   '/': {
     title: title('Home'),
+    menuText: 'Home',
+    menuUrl: '/home',
     node: Home,
   },
   '/home': {
@@ -111,15 +118,29 @@ let routes: Record<string, PageRouteMatch> = {
     menuText: 'Home',
     node: Home,
   },
-  '/about': {
+  '/about/:mode?': {
     title: title('About'),
     menuText: 'About',
-    node: Home,
+    menuUrl: '/about',
+    node: About,
   },
-  '/about/:mode': {
-    title: title('About'),
-    menuText: 'About',
-    node: Home,
+  '/thermostat': {
+    title: title('Thermostat'),
+    menuText: 'Thermostat',
+    node: [Thermostat.index],
+  },
+  '/thermostat/inc': {
+    title: title('Thermostat'),
+    node: [Thermostat.inc],
+  },
+  '/thermostat/dec': {
+    title: title('Thermostat'),
+    node: [Thermostat.dec],
+  },
+  '/editor': {
+    title: title('Image Editor'),
+    menuText: 'Editor',
+    node: <Editor />,
   },
 }
 
