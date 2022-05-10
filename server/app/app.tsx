@@ -11,7 +11,6 @@ import { OnWsMessage } from '../ws/wss.js'
 import { dispatchUpdate } from './jsx/dispatch.js'
 import { EarlyTerminate } from './helpers.js'
 import { getWSSession } from './session.js'
-import { capitalize } from './string.js'
 import NotMatch from './pages/not-match.js'
 import Home from './pages/home.js'
 import About, { License } from './pages/about.js'
@@ -21,7 +20,7 @@ import AutoCompleteDemo from './pages/auto-complete-demo.js'
 import DemoForm from './pages/demo-form.js'
 import DemoCookieSession from './pages/demo-cookie-session.js'
 import Chatroom from './pages/chatroom.js'
-import { Menu } from './components/menu.js'
+import { formatMenuText, Menu } from './components/menu.js'
 import type { ClientMessage } from '../../client/index'
 import escapeHtml from 'escape-html'
 import { Flush } from './components/flush.js'
@@ -41,13 +40,14 @@ let scripts = config.development ? (
   </>
 )
 
-function formatMenuText(href: string): string {
-  let text = href.substring(1)
-  if (!text.includes('/')) {
-    text = text.split('-').map(capitalize).join('-')
-  }
-  return text
+let style = Style(/* css */ `
+h1.title {
+  color: darkblue;
 }
+h1.title a {
+  font-size: 1rem;
+}
+`)
 
 export function App(): Element {
   // you can write the AST direct for more compact wire-format
@@ -57,14 +57,7 @@ export function App(): Element {
     [
       // or you can write in JSX for better developer-experience (if you're coming from React)
       <>
-        {Style(/* css */ `
-h1.title {
-  color: darkblue;
-}
-h1.title a {
-  font-size: 1rem;
-}
-`)}
+        {style}
         <h1 class="title">
           ts-liveview{' '}
           <a href="https://news.ycombinator.com/item?id=22830472">HN</a>{' '}
@@ -116,6 +109,7 @@ h1.title a {
               '/chatroom/send': <Chatroom.send />,
               // patch routes for links in README.md
               '/LICENSE': License,
+              // redirect examples
               '/server/app/pages/thermostat.tsx': (
                 <Redirect href="/thermostat" />
               ),
@@ -167,11 +161,22 @@ appRouter.use('/cookie-session/token', (req, res, next) => {
 appRouter.use((req, res, next) => {
   sendHTMLHeader(res)
 
-  let page = capitalize(req.url.split('/')[1] || 'Home Page')
-  let description = 'Demo website of ts-liveview'
+  let context: ExpressContext = {
+    type: 'express',
+    req,
+    res,
+    next,
+    url: req.url,
+  }
+
+  let route = matchRoute(context)
+
+  let title: string = route.title
+  let description: string = route.description || 'Demo website of ts-liveview'
+
   let appPlaceholder = '<!-- app -->'
   let html = template({
-    title: `${page} - LiveView Demo`,
+    title,
     description,
     app: appPlaceholder,
   })
@@ -183,16 +188,9 @@ appRouter.use((req, res, next) => {
 
   let afterApp = html.slice(idx + appPlaceholder.length)
 
-  let context: ExpressContext = {
-    type: 'express',
-    req,
-    res,
-    next,
-    url: req.url,
-  }
   try {
     // send the html chunks in streaming
-    writeNode(res, AppAST, context)
+    writeNode(res, App(route.node), context)
   } catch (error) {
     if (error === EarlyTerminate) {
       return
@@ -261,5 +259,7 @@ export let onWsMessage: OnWsMessage<ClientMessage> = (event, ws, wss) => {
     event: eventType,
     session,
   }
-  dispatchUpdate(AppAST, context)
+  let route = matchRoute(context)
+  let node = App(route.node)
+  dispatchUpdate(context, node, route.title)
 }
