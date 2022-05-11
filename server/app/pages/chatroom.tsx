@@ -223,13 +223,13 @@ function getChatSession(attrs: attrs) {
   }
 }
 
-export function typing(attrs: attrs) {
+function typing(attrs: attrs) {
   let { session } = getChatSession(attrs)
   session.markTyping()
   throw EarlyTerminate
 }
 
-export function rename(attrs: attrs) {
+function rename(attrs: attrs) {
   let { session, context } = getChatSession(attrs)
   let newNickname = context.args?.[0]
   if (!newNickname) {
@@ -239,7 +239,7 @@ export function rename(attrs: attrs) {
   throw EarlyTerminate
 }
 
-export function send(attrs: attrs) {
+function send(attrs: attrs) {
   let context = getContext(attrs)
   if (context.type === 'express') {
     const { req, res } = context
@@ -278,7 +278,7 @@ export function send(attrs: attrs) {
   throw new Error('unknown context type:' + context.type)
 }
 
-export function Chatroom(attrs: attrs) {
+function Chatroom(attrs: attrs) {
   let context = getContext(attrs)
   let cookies = getContextCookie(context)
   let nickname = cookies?.nickname || ''

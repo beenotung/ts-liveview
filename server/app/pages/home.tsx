@@ -85,6 +85,6 @@ let content = (
 )
 
 // And it can be pre-rendered into html as well
-export let Home = prerender(content)
+let Home = prerender(content)
 
 export default Home
