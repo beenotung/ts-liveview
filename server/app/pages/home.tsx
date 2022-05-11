@@ -3,9 +3,12 @@ import JSX from '../jsx/jsx.js'
 import { prerender } from '../jsx/html.js'
 import Comment from '../components/comment.js'
 
-// The JSX expression don't need to be re-built on every render.
-// You can reuse JSX expression.
-// It is not mandatory to be wrapped by a function if it's static.
+// Calling <Component/> will transform the JSX into AST for each rendering.
+// You can reuse a pre-compute AST like `let component = <Component/>`.
+
+// If the expression is static (not depending on the render Context),
+// you don't have to wrap it by a function at all.
+
 let content = (
   <div id="home">
     <h2>Home Page</h2>
