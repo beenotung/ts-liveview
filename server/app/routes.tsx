@@ -50,22 +50,29 @@ function title(page: string) {
 let routeDict: Record<string, PageRouteMatch> = {
   '/': {
     title: title('Home'),
+    description:
+      'Getting Started with ts-liveview - a server-side rendering realtime webapp framework with progressive enhancement',
     menuText: 'Home',
     menuUrl: '/home',
     node: Home,
   },
   '/home': {
     title: title('Home'),
+    description:
+      'Getting Started with ts-liveview - a server-side rendering realtime webapp framework with progressive enhancement',
     node: Home,
   },
   '/about/:mode?': {
     title: title('About'),
+    description:
+      'About ts-liveview - a server-side rendering realtime webapp framework with progressive enhancement',
     menuText: 'About',
     menuUrl: '/about',
     node: About,
   },
   '/thermostat': {
     title: title('Thermostat'),
+    description: 'A realtime updated thermostat demo application',
     menuText: 'Thermostat',
     node: [Thermostat.index],
   },
@@ -79,16 +86,20 @@ let routeDict: Record<string, PageRouteMatch> = {
   },
   '/editor': {
     title: title('Image Editor'),
+    description:
+      'Image Editor that works without javascript, with progress enhancement when javascript and websocket are available',
     menuText: 'Editor',
     node: <Editor />,
   },
   '/auto-complete': {
     title: title('Auto Complete'),
+    description: 'Server-driven auto-complete input box demo',
     menuText: 'Auto Complete',
     node: <AutoCompleteDemo />,
   },
   '/form': {
     title: title('Form'),
+    description: 'Demonstrate form handling with ts-liveview',
     menuText: 'Form',
     node: <DemoForm.index />,
   },
@@ -99,6 +110,7 @@ let routeDict: Record<string, PageRouteMatch> = {
   '/form/live/:key': { node: <DemoForm.set /> },
   '/cookie-session': {
     title: title('Cookie-based Session'),
+    description: 'Demonstrate accessing cookie with ts-liveview',
     menuText: 'Cookie Session',
     node: <DemoCookieSession.index />,
   },
@@ -108,13 +120,19 @@ let routeDict: Record<string, PageRouteMatch> = {
   },
   '/chatroom': {
     title: title('Chatroom'),
+    description: 'Live chatroom with realtime-update powered by websocket',
     menuText: 'Chatroom',
     node: <Chatroom.index />,
   },
   '/chatroom/typing': { node: <Chatroom.typing /> },
   '/chatroom/rename': { node: <Chatroom.rename /> },
   '/chatroom/send': { node: <Chatroom.send /> },
-  '/LICENSE': { node: License },
+  '/LICENSE': {
+    title: 'BSD 2-Clause License of ts-liveview',
+    description:
+      'ts-liveview is a free open source project licensed under the BSD 2-Clause License',
+    node: License,
+  },
 }
 
 let redirectDict: Record<string, string> = {
