@@ -3,23 +3,14 @@ import type { index } from '../../template/index.html'
 import { loadTemplate } from '../template.js'
 import express from 'express'
 import type { ExpressContext, WsContext } from './context.js'
-import type { Element } from './jsx/types'
+import type { Element, Node } from './jsx/types'
 import { nodeToHTML, writeNode } from './jsx/html.js'
 import { sendHTMLHeader } from './express.js'
-import { Redirect, Switch } from './components/router.js'
 import { OnWsMessage } from '../ws/wss.js'
 import { dispatchUpdate } from './jsx/dispatch.js'
 import { EarlyTerminate } from './helpers.js'
 import { getWSSession } from './session.js'
-import NotMatch from './pages/not-match.js'
-import Home from './pages/home.js'
-import About, { License } from './pages/about.js'
-import Thermostat from './pages/thermostat.js'
-import Editor from './pages/editor.js'
-import AutoCompleteDemo from './pages/auto-complete-demo.js'
-import DemoForm from './pages/demo-form.js'
 import DemoCookieSession from './pages/demo-cookie-session.js'
-import Chatroom from './pages/chatroom.js'
 import { formatMenuText, Menu } from './components/menu.js'
 import type { ClientMessage } from '../../client/index'
 import escapeHtml from 'escape-html'
@@ -28,6 +19,8 @@ import { config } from '../config.js'
 import Style from './components/style.js'
 import Stats from './stats.js'
 import { MuteConsole } from './components/script.js'
+import { matchRoute } from './routes.js'
+import { topMenu } from './components/top-menu.js'
 
 let template = loadTemplate<index>('index')
 
@@ -49,7 +42,7 @@ h1.title a {
 }
 `)
 
-export function App(): Element {
+export function App(main: Node): Element {
   // you can write the AST direct for more compact wire-format
   return [
     'div.app',
@@ -65,75 +58,16 @@ export function App(): Element {
         </h1>
         {scripts}
         <Stats />
-        <Menu
-          attrs={{ style: 'margin: 1em 0' }}
-          matchPrefix
-          routes={[
-            ['/home', 'Home', '/'],
-            ...[
-              '/about',
-              '/thermostat',
-              '/editor',
-              '/auto-complete',
-              '/form',
-              '/cookie-session',
-              '/chatroom',
-              '/some/page/that/does-not/exist',
-            ].map(href => [href, formatMenuText(href)] as [string, string]),
-          ]}
-        />
+        {topMenu}
         <fieldset>
           <legend>Router Demo</legend>
-          {Switch(
-            {
-              // jsx node can be used directly
-              '/': Home,
-              '/home': Home,
-              '/about': About,
-              '/about/:mode': About,
-              // invoke functional component with square bracket
-              '/thermostat': [Thermostat.index],
-              '/thermostat/inc': [Thermostat.inc],
-              '/thermostat/dec': [Thermostat.dec],
-              // or invoke functional component with x-html tag
-              '/editor': <Editor />,
-              '/auto-complete': <AutoCompleteDemo />,
-              '/form': <DemoForm.index />,
-              '/form/submit': <DemoForm.submit />,
-              '/form/live/:key': <DemoForm.set />,
-              '/cookie-session': <DemoCookieSession.index />,
-              '/cookie-session/token': <DemoCookieSession.Token />,
-              '/chatroom': <Chatroom.index />,
-              '/chatroom/typing': <Chatroom.typing />,
-              '/chatroom/rename': <Chatroom.rename />,
-              '/chatroom/send': <Chatroom.send />,
-              // patch routes for links in README.md
-              '/LICENSE': License,
-              // redirect examples
-              '/server/app/pages/thermostat.tsx': (
-                <Redirect href="/thermostat" />
-              ),
-              '/server/app/pages/editor.tsx': <Redirect href="/editor" />,
-              '/server/app/pages/auto-complete-demo.tsx': (
-                <Redirect href="/auto-complete" />
-              ),
-              '/server/app/pages/demo-form.tsx': <Redirect href="/form" />,
-              '/server/app/pages/home.tsx': <Redirect href="/home" />,
-              '/server/app/app.tsx': <Redirect href="/about/markdown" />,
-              '/server/app/pages/chatroom.tsx': <Redirect href="/chatroom" />,
-            },
-            <NotMatch />,
-          )}
+          {main}
         </fieldset>
         <Flush />
       </>,
     ],
   ]
 }
-
-/* calling <App/> will transform the JSX to AST for each rendering */
-/* or you can reuse a pre-computed AST as below */
-const AppAST = App()
 
 export let appRouter = express.Router()
 
@@ -171,13 +105,10 @@ appRouter.use((req, res, next) => {
 
   let route = matchRoute(context)
 
-  let title: string = route.title
-  let description: string = route.description || 'Demo website of ts-liveview'
-
   let appPlaceholder = '<!-- app -->'
   let html = template({
-    title,
-    description,
+    title: route.title || config.site_name,
+    description: route.description || config.site_description,
     app: appPlaceholder,
   })
   let idx = html.indexOf(appPlaceholder)
