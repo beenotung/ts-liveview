@@ -127,15 +127,15 @@ Example using _getter and setter_ see [thermostat.tsx](./server/app/pages/thermo
 
 ## Examples / Demo
 
-- [x] [Thermostat](./server/app/pages/thermostat.tsx)
-- [x] [Image Editor](./server/app/pages/editor.tsx)
-- [x] [Autocomplete Searching](./server/app/pages/auto-complete-demo.tsx)
-- [x] [Form and Sanitizing user-generated content](./server/app/pages/demo-form.tsx) (prevent XSS attack by default)
-- [x] [Pre-rendered Page](./server/app/pages/home.tsx)
-- [x] [SPA with url-based routing](./server/app/app.tsx)
-- [x] [Chatroom](./server/app/pages/chatroom.tsx) with locales and timezone support
-- [x] [Realtime Collaborative Painting](https://github.com/beenotung/live-paint)
-- [x] [Hacker News Clone](https://github.com/beenotung/liveview-hn)
+- [x] Thermostat [[source](./server/app/pages/thermostat.tsx) | [demo](https://liveviews.cc/thermostat)]
+- [x] Image Editor [[source](./server/app/pages/editor.tsx) | [demo](https://liveviews.cc/editor)]
+- [x] Autocomplete Searching [[source](./server/app/pages/auto-complete-demo.tsx) | [demo](https://liveviews.cc/auto-complete)]
+- [x] Form and Sanitizing user-generated content (prevent XSS attack by default) [[source](./server/app/pages/demo-form.tsx) | [demo](https://liveviews.cc/form)]
+- [x] Pre-rendered Page [[source](./server/app/pages/home.tsx) | [demo](https://liveviews.cc/home)]
+- [x] SPA with url-based routing [source: [app.tsx](./server/app/app.tsx), [routes.tsx](./server/app/routes.tsx), [menu.tsx](./server/app/menu.tsx) | [demo](https://liveviews.cc/)]
+- [x] Chatroom with locales and timezone support [[source](./server/app/pages/chatroom.tsx) | [demo](https://liveviews.cc/chatroom)]
+- [x] Realtime Collaborative Painting [[source](https://github.com/beenotung/live-paint) | [demo](https://paint.liveviews.cc)]
+- [x] Hacker News Clone [[source](https://github.com/beenotung/liveview-hn) | [demo](https://hn.liveviews.cc)]
 - [ ] Snake Game
 
 ## Inspired from
