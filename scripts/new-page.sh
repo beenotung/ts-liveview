@@ -9,7 +9,7 @@ else
 fi
 echo "import JSX from '../jsx/jsx.js'
 
-export function $name() {
+function $name() {
   return <div id='$name page'>
     <h2>$name</h2>
   </div>
