@@ -7,6 +7,7 @@ import JSX from './jsx/jsx.js'
 import type { Node } from './jsx/types'
 import About, { License } from './pages/about.js'
 import AutoCompleteDemo from './pages/auto-complete-demo.js'
+import Calculator from './pages/calculator.js'
 import Chatroom from './pages/chatroom.js'
 import DemoCookieSession from './pages/demo-cookie-session.js'
 import DemoForm from './pages/demo-form.js'
@@ -127,6 +128,12 @@ let routeDict: Record<string, PageRouteMatch> = {
   '/chatroom/typing': { node: <Chatroom.typing /> },
   '/chatroom/rename': { node: <Chatroom.rename /> },
   '/chatroom/send': { node: <Chatroom.send /> },
+  '/calculator': {
+    title: title('Calculator'),
+    description: 'A simple stateful component demo',
+    menuText:'Calculator',
+    node: <Calculator />,
+  },
   '/LICENSE': {
     title: 'BSD 2-Clause License of ts-liveview',
     description:
