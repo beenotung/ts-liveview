@@ -13,7 +13,7 @@ log.enabled = true
 /** @description cannot call this when streaming html
  *  because it need to set cookie in response header
  * */
-export function Token(attrs: attrs) {
+function Token(attrs: attrs) {
   const context = getContext(attrs)
   if (context.type !== 'express') {
     return <p>This route is only supported as ajax</p>
@@ -34,7 +34,7 @@ export function Token(attrs: attrs) {
   return 'done'
 }
 
-export function DemoCookieSession(attrs: attrs) {
+function DemoCookieSession(attrs: attrs) {
   const context = getContext(attrs)
   const cookies = getContextCookie(context)
   if (!cookies) {

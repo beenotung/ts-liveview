@@ -6,6 +6,7 @@ import {
   VElement,
   VNodeList,
   props,
+  title,
 } from './types'
 
 function findAndApplyRedirect(root: ParentNode) {
@@ -21,7 +22,10 @@ window.addEventListener('DOMContentLoaded', () => {
   findAndApplyRedirect(document)
 })
 
-export function updateElement(element: VElement) {
+export function updateElement(element: VElement, title: title | undefined) {
+  if (title) {
+    document.title = title
+  }
   let selector = element[0]
   let e = document.querySelector(selector)
   if (!e) {

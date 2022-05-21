@@ -1,4 +1,11 @@
-import type { attrs, props, selector, VElement, VNode } from './jsx/types'
+import type {
+  attrs,
+  props,
+  selector,
+  title,
+  VElement,
+  VNode,
+} from './jsx/types'
 import {
   appendNode,
   removeNode,
@@ -106,7 +113,7 @@ export type ClientMessage =
   | [url: string, data?: any]
 
 export type ServerMessage =
-  | ['update', VElement]
+  | ['update', VElement, title?]
   | ['update-in', selector, VNode]
   | ['append', selector, VNode]
   | ['remove', selector]
@@ -121,7 +128,7 @@ export type ServerMessage =
 function onServerMessage(message: ServerMessage) {
   switch (message[0]) {
     case 'update':
-      updateElement(message[1])
+      updateElement(message[1], message[2])
       break
     case 'update-in':
       updateNode(message[1], message[2])

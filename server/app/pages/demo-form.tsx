@@ -80,7 +80,7 @@ fieldset fieldset {
 }
 `)
 
-export function set(attrs: attrs) {
+function set(attrs: attrs) {
   const context = getContext(attrs)
   if (context.type === 'ws' && context.args) {
     const match = context.routerMatch!
@@ -106,7 +106,7 @@ export function set(attrs: attrs) {
   return DemoForm()
 }
 
-export function submit(attrs: attrs) {
+function submit(attrs: attrs) {
   const context = getContext(attrs)
   function getValue() {
     if (context.type === 'ws') {
@@ -137,7 +137,7 @@ export function submit(attrs: attrs) {
   )
 }
 
-export function DemoForm() {
+function DemoForm() {
   return (
     <>
       <h2>Demo Form</h2>

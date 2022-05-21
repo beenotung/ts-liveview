@@ -5,6 +5,7 @@ import { mapArray } from './fragment.js'
 import { Link } from './router.js'
 import { Style } from './style.js'
 import { getContextUrl } from '../context.js'
+import { capitalize } from '@beenotung/tslib/string.js'
 
 export type MenuRoutes = Array<[url: string, text: string, alias?: string]>
 
@@ -50,3 +51,13 @@ export function Menu(attrs: {
     </>
   )
 }
+
+export function formatMenuText(href: string): string {
+  let text = href.substring(1)
+  if (!text.includes('/')) {
+    text = text.split('-').map(capitalize).join(' ')
+  }
+  return text
+}
+
+export default Menu

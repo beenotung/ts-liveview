@@ -87,7 +87,7 @@ class State {
 }
 const state = new State()
 
-export function inc() {
+function inc() {
   state.target += 0.5
   return (
     <UpdateIn
@@ -98,7 +98,7 @@ export function inc() {
   )
 }
 
-export function dec() {
+function dec() {
   state.target -= 0.5
   return (
     <UpdateIn
@@ -118,7 +118,7 @@ function update(message: ServerMessage) {
   return <Update to="/thermostat" message={message} />
 }
 
-export function Thermostat() {
+function Thermostat() {
   return (
     <div id="thermostat">
       {Style(/* css */ `

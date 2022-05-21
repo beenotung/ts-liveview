@@ -1,5 +1,5 @@
 import express from 'express'
-import { html } from './types'
+import type { html } from './types'
 import type from 'compression'
 
 if (!express.response.flush) {
