@@ -10,7 +10,7 @@ fi
 echo "import JSX from '../jsx/jsx.js'
 
 function $name() {
-  return <div id='$name page'>
+  return <div id='$name'>
     <h2>$name</h2>
   </div>
 }
