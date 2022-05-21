@@ -124,6 +124,7 @@ export type ServerMessage =
   | ['set-value', selector, string | number]
   | ['batch', ServerMessage[]]
   | ['set-cookie', string]
+  | ['set-title', title]
 
 function onServerMessage(message: ServerMessage) {
   switch (message[0]) {
@@ -159,6 +160,9 @@ function onServerMessage(message: ServerMessage) {
       break
     case 'set-cookie':
       document.cookie = message[1]
+      break
+    case 'set-title':
+      document.title = message[1]
       break
     default:
       console.error('unknown server message:', message)
