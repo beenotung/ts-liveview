@@ -62,7 +62,24 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
 
 <span id='feature-8'>[8]</span> ts-liveview is provided as a template (rather than a library), hence any part can be modified to suit your need
 
-## Why server-rendered?
+## Size Comparison with other tools
+
+| Tools             | Runtime Code Size (minified)               |
+| ----------------- | ------------------------------------------ |
+| Vanilla           | 0.3K                                       |
+| **ts-liveview 2** | **6.3K** (Optional) + Same size as vanilla |
+| Stencil 2.0.1     | 13.7K                                      |
+| Svelte 3.0.0      | 17.4K                                      |
+| Vue 3.2.33        | 49.3K                                      |
+| React 17.0.2      | 144.6K                                     |
+| Angular 13.3.0    | 155.8K                                     |
+
+Remark:
+Size of other tools taking reference from https://github.com/beenotung/spa-state-demo
+
+## Q & A
+
+### Why server-rendered?
 
 - To deliver initial meaningful paint as soon as possible (response contentful HTML to HTTP GET request, not just skeleton demanding further script and ajax request)
 
@@ -74,7 +91,7 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
 
 <span id='html-streaming'></span>
 
-### Why HTML Streaming?
+#### Why HTML Streaming?
 
 HTML Streaming enables progressive rendering. The server sends html chunks as soon as they're ready. The browser, on the other side, progressively receives and renders the content. As a result, the content will be visible to users earlier.
 
@@ -96,7 +113,7 @@ Below simulation from [marko](https://markojs.com) illustrates the visual differ
 
 <span id='jsx'></span>
 
-## Why JSX?
+### Why JSX?
 
 Previous versions of ts-liveview use [template string](https://github.com/beenotung/ts-liveview/blob/25f54760b378c0a0d8d2607bde4afa2878bb0ae6/test/demo-server-clock.ts#L11) to build html. It allows the engine to quickly construct the html output for [morphdom](https://github.com/patrick-steele-idem/morphdom) to patch the DOM.
 
@@ -117,7 +134,7 @@ This [article](https://www.toptal.com/software/declarative-programming) from Fed
 
 <span id="no-vdom-diff"></span>
 
-## Why no virtual-dom diff?
+### Why no virtual-dom diff?
 
 The current implementation of ts-liveview updates the DOM using explicit css selector (aka document querySelector). This design reduces the memory requirement on the server to better support simultaneous connections.
 
