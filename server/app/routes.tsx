@@ -131,7 +131,7 @@ let routeDict: Record<string, PageRouteMatch> = {
   '/calculator': {
     title: title('Calculator'),
     description: 'A simple stateful component demo',
-    menuText:'Calculator',
+    menuText: 'Calculator',
     node: <Calculator />,
   },
   '/LICENSE': {
