@@ -1,6 +1,6 @@
 # Changelog
 
-## [v2](https://github.com/beenotung/ts-liveview/tree/v2-rc3-jsx-with-context)
+## [v2](https://github.com/beenotung/ts-liveview/tree/v2)
 
 2021 - Present (2022)
 
@@ -8,6 +8,7 @@
 - Switched content format from template-string to JSX/AST with out-of-the-box html-injection protection
 - Switched DOM update approach from generic template-string static-dynamic-diffing based patching to application-specific (direct) dom updates
 - Support html streaming for initial GET request
+- Support setting document title via websocket events
 
 ## [v1](https://github.com/beenotung/ts-liveview/tree/v1)
 
