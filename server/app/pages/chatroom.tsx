@@ -16,6 +16,7 @@ import DateTimeText, {
   toLocaleDateTimeString,
 } from '../components/datetime.js'
 import { nodeToVNode } from '../jsx/vnode.js'
+import { Request, Response, NextFunction } from 'express'
 
 let log = debugLog('chatroom.tsx')
 log.enabled = true
@@ -278,6 +279,15 @@ function send(attrs: attrs) {
   throw new Error('unknown context type:' + context.type)
 }
 
+let nicknameMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  if (!req.cookies.nickname) {
+    let nickname = randomName()
+    req.cookies.nickname = nickname
+    res.cookie('nickname', nickname, { sameSite: 'lax' })
+  }
+  next()
+}
+
 function Chatroom(attrs: attrs) {
   let context = getContext(attrs)
   let cookies = getContextCookie(context)
@@ -295,11 +305,6 @@ function Chatroom(attrs: attrs) {
         if (message) {
           room.addMessage(nickname, message)
         }
-        break
-      }
-      if (req.method === 'GET' && !nickname) {
-        nickname = randomName()
-        res.cookie('nickname', nickname, { sameSite: 'lax' })
         break
       }
       break
@@ -417,4 +422,5 @@ export default {
   typing,
   rename,
   send,
+  nicknameMiddleware,
 }

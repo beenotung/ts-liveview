@@ -20,6 +20,7 @@ import Stats from './stats.js'
 import { MuteConsole } from './components/script.js'
 import { matchRoute } from './routes.js'
 import { topMenu } from './components/top-menu.js'
+import Chatroom from './pages/chatroom.js'
 
 let template = loadTemplate<index>('index')
 
@@ -89,6 +90,7 @@ appRouter.use('/cookie-session/token', (req, res, next) => {
     res.status(500).end(String(error))
   }
 })
+appRouter.get('/chatroom', Chatroom.nicknameMiddleware)
 
 // html-streaming routes
 appRouter.use((req, res, next) => {
