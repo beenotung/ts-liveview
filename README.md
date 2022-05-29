@@ -151,6 +151,7 @@ Example using _getter and setter_ see [thermostat.tsx](./server/app/pages/thermo
 - [x] Pre-rendered Page [[source](./server/app/pages/home.tsx) | [demo](https://liveviews.cc/home)]
 - [x] SPA with url-based routing [source: [app.tsx](./server/app/app.tsx), [routes.tsx](./server/app/routes.tsx), [menu.tsx](./server/app/menu.tsx) | [demo](https://liveviews.cc/)]
 - [x] Chatroom with locales and timezone support [[source](./server/app/pages/chatroom.tsx) | [demo](https://liveviews.cc/chatroom)]
+- [x] User Agents from sqlite3 database [[source](./server/app/pages/user-agents.tsx) | [demo](https://liveviews.cc/user-agents)]
 - [x] Realtime Collaborative Painting [[source](https://github.com/beenotung/live-paint) | [demo](https://paint.liveviews.cc)]
 - [x] Hacker News Clone [[source](https://github.com/beenotung/liveview-hn) | [demo](https://hn.liveviews.cc)]
 - [ ] Snake Game

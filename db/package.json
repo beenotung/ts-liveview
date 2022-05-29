@@ -1,0 +1,22 @@
+{
+  "name": "db",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "description": "",
+  "keywords": [],
+  "author": "Beeno Tung",
+  "license": "BSD-2-Clause",
+  "main": "index.js",
+  "scripts": {},
+  "dependencies": {
+    "better-sqlite3-proxy": "^1.3.1",
+    "better-sqlite3-schema": "^2.3.3",
+    "knex": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/integer": "^4.0.1",
+    "quick-erd": "^2.2.3",
+    "ts-node": "^10.8.0",
+    "typescript": "^4.7.2"
+  }
+}

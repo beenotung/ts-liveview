@@ -1,0 +1,42 @@
+# Visualize on https://erd.surge.sh
+# or https://quick-erd.surge.sh
+#
+# Relationship Types
+#  -    - one to one
+#  -<   - one to many
+#  >-   - many to one
+#  >-<  - many to many
+#  -0   - one to zero or one
+#  0-   - zero or one to one
+#  0-0  - zero or one to zero or one
+#  -0<  - one to zero or many
+#  >0-  - zero or many to one
+#
+////////////////////////////////////
+
+
+request_log
+-----------
+id integer PK
+method_id integer FK >- method.id
+url_id integer FK >- url.id
+user_agent_id integer NULL FK >- user_agent.id
+timestamp integer
+
+
+method
+------
+id integer PK
+method text unique
+
+
+url
+---
+id integer PK
+url text unique
+
+
+user_agent
+----------
+id integer PK
+user_agent text unique

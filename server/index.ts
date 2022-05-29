@@ -13,6 +13,7 @@ import open from 'open'
 import { cookieMiddleware } from './app/cookie.js'
 import { listenWSSCookie } from './app/cookie.js'
 import { print } from 'listening-on'
+import { storeRequestLog } from '../db/store.js'
 
 const log = debugLog('index.ts')
 log.enabled = true
@@ -32,6 +33,15 @@ listenWSSConnection({
     closeSession(ws)
   },
   onMessage: onWsMessage,
+})
+
+app.use((req, res, next) => {
+  storeRequestLog({
+    method: req.method,
+    url: req.url,
+    user_agent: req.headers['user-agent'] || null,
+  })
+  next()
 })
 
 app.use(compression())

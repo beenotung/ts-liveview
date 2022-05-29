@@ -8,6 +8,7 @@ import type { Node } from './jsx/types'
 import About, { License } from './pages/about.js'
 import AutoCompleteDemo from './pages/auto-complete-demo.js'
 import Calculator from './pages/calculator.js'
+import UserAgents from './pages/user-agents.js'
 import Chatroom from './pages/chatroom.js'
 import DemoCookieSession from './pages/demo-cookie-session.js'
 import DemoForm from './pages/demo-form.js'
@@ -133,6 +134,12 @@ let routeDict: Record<string, PageRouteMatch> = {
     description: 'A simple stateful component demo',
     menuText: 'Calculator',
     node: <Calculator />,
+  },
+  '/user-agents': {
+    title: 'User Agents of Visitors',
+    description: "User agents of this site's visitors",
+    menuText: 'User Agents',
+    node: UserAgents,
   },
   '/LICENSE': {
     title: 'BSD 2-Clause License of ts-liveview',
