@@ -179,7 +179,6 @@ function streamHTML(
       return
     }
     console.error('Failed to render App:', error)
-    res.status(500)
     if (error instanceof Error) {
       res.write('Internal Error: ' + escapeHtml(error.message))
     } else {
