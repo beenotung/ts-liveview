@@ -21,6 +21,7 @@ import { MuteConsole } from './components/script.js'
 import { matchRoute } from './routes.js'
 import { topMenu } from './components/top-menu.js'
 import Chatroom from './pages/chatroom.js'
+import { redirectDict } from './routes.js'
 
 let template = loadTemplate<index>('index')
 
@@ -91,6 +92,9 @@ appRouter.use('/cookie-session/token', (req, res, next) => {
   }
 })
 appRouter.get('/chatroom', Chatroom.nicknameMiddleware)
+Object.entries(redirectDict).forEach(([from, to]) =>
+  appRouter.use(from, (_req, res) => res.redirect(to)),
+)
 
 // html-streaming routes
 appRouter.use((req, res, next) => {

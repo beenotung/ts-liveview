@@ -8,8 +8,8 @@ import { setSessionUrl } from '../session.js'
 
 export type LinkAttrs = {
   'no-history'?: boolean
-  'href': string
-  'onclick'?: never
+  href: string
+  onclick?: never
   [name: string]: any
 }
 
@@ -30,8 +30,13 @@ export function Redirect(attrs: { href: string; status?: number }) {
   const href = attrs.href
   const context = getContext(attrs)
   if (context.type === 'express') {
-    const status = attrs.status || 303
-    context.res.redirect(status, href)
+    const res = context.res
+    if (res.headersSent) {
+      res.send(renderRedirect(href))
+    } else {
+      const status = attrs.status || 303
+      res.redirect(status, href)
+    }
     throw EarlyTerminate
   }
   if (context.type === 'ws') {
@@ -42,6 +47,15 @@ export function Redirect(attrs: { href: string; status?: number }) {
       Redirect to {href}
     </a>
   )
+}
+
+export function renderRedirect(href: string): string {
+  return /* html */ `
+<p>Redirect to <a href="${href}">${href}</a></p>
+<script>
+  location.href = "${href}"
+</script>
+`
 }
 
 export function Switch(routes: Routes, defaultNode?: Node): Node {

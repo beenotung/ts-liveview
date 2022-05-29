@@ -149,7 +149,7 @@ let routeDict: Record<string, PageRouteMatch> = {
   },
 }
 
-let redirectDict: Record<string, string> = {
+export let redirectDict: Record<string, string> = {
   '/server/app/pages/thermostat.tsx': '/thermostat',
   '/server/app/pages/editor.tsx': '/editor',
   '/server/app/pages/auto-complete-demo.tsx': '/auto-complete',

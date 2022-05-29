@@ -3,6 +3,7 @@ import type { VNode } from '../../../client/jsx/types'
 import { ExpressContext, getContext, getRouterContext } from '../context.js'
 import { EarlyTerminate, toAbsoluteHref, setNoCache } from '../helpers.js'
 import { setSessionUrl } from '../session.js'
+import { renderRedirect } from './router.js'
 
 export function Update(attrs: {
   // to redirect static html client
@@ -71,6 +72,10 @@ export function forceRedirectExpressSession(
   href += 'time=' + Date.now()
   href = toAbsoluteHref(context.req, href)
   const res = context.res
-  setNoCache(res)
-  res.redirect(status || 303, href)
+  if (res.headersSent) {
+    res.end(renderRedirect(href))
+  } else {
+    setNoCache(res)
+    res.redirect(status || 303, href)
+  }
 }
