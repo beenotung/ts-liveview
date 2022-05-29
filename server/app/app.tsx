@@ -1,7 +1,7 @@
 import JSX from './jsx/jsx.js'
 import type { index } from '../../template/index.html'
 import { loadTemplate } from '../template.js'
-import express from 'express'
+import express, { Response } from 'express'
 import type { ExpressContext, WsContext } from './context.js'
 import type { Element, Node } from './jsx/types'
 import { nodeToHTML, writeNode } from './jsx/html.js'
@@ -18,7 +18,7 @@ import { config } from '../config.js'
 import Style from './components/style.js'
 import Stats from './stats.js'
 import { MuteConsole } from './components/script.js'
-import { matchRoute } from './routes.js'
+import { matchRoute, PageRouteMatch } from './routes.js'
 import { topMenu } from './components/top-menu.js'
 import Chatroom from './pages/chatroom.js'
 import { redirectDict } from './routes.js'
@@ -110,10 +110,53 @@ appRouter.use((req, res, next) => {
   }
 
   let route = matchRoute(context)
+
   if (route.node === NotMatch) {
     res.status(404)
   }
 
+  if (route.streaming === false) {
+    responseHTML(res, context, route)
+  } else {
+    streamHTML(res, context, route)
+  }
+})
+
+function responseHTML(
+  res: Response,
+  context: ExpressContext,
+  route: PageRouteMatch,
+) {
+  let app: string
+  try {
+    app = nodeToHTML(App(route.node), context)
+  } catch (error) {
+    if (error === EarlyTerminate) {
+      return
+    }
+    console.error('Failed to render App:', error)
+    res.status(500)
+    if (error instanceof Error) {
+      app = 'Internal Error: ' + escapeHtml(error.message)
+    } else {
+      app = 'Unknown Error: ' + escapeHtml(String(error))
+    }
+  }
+
+  let html = template({
+    title: route.title || config.site_name,
+    description: route.description || config.site_description,
+    app,
+  })
+
+  res.end(html)
+}
+
+function streamHTML(
+  res: Response,
+  context: ExpressContext,
+  route: PageRouteMatch,
+) {
   let appPlaceholder = '<!-- app -->'
   let html = template({
     title: route.title || config.site_name,
@@ -146,24 +189,7 @@ appRouter.use((req, res, next) => {
 
   res.write(afterApp)
 
-  if ('skip streaming test') {
-    res.end()
-    return
-  }
-  testStreaming(res)
-})
-
-function testStreaming(res: express.Response) {
-  let i = 0
-  let timer = setInterval(() => {
-    i++
-    res.write(i + '\n')
-    res.flush()
-    if (i > 5) {
-      clearInterval(timer)
-      res.end()
-    }
-  }, 1000)
+  res.end()
 }
 
 export let onWsMessage: OnWsMessage<ClientMessage> = (event, ws, wss) => {

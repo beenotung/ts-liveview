@@ -24,10 +24,16 @@ export function getTitle(url: string): string {
   return title
 }
 
+const StreamingByDefault = true
+
 export type PageRouteMatch = {
   title?: string
   node: Node
   description?: string
+  // streaming is enabled by default
+  // HTTP headers cannot be set  when streaming
+  // If you need to set cookies or apply redirection, you may use an express middleware before the generic app route
+  streaming?: boolean
 } & Partial<MenuRoute>
 
 export type MenuRoute = {
@@ -71,6 +77,7 @@ let routeDict: Record<string, PageRouteMatch> = {
     menuText: 'About',
     menuUrl: '/about',
     node: About,
+    streaming: true,
   },
   '/thermostat': {
     title: title('Thermostat'),
@@ -180,11 +187,15 @@ Object.entries(redirectDict).forEach(([url, href]) =>
 
 export function matchRoute(context: RouterContext): PageRouteMatch {
   let match = pageRouter.route(context.url)
+  if (match && match.value.streaming === undefined) {
+    match.value.streaming = StreamingByDefault
+  }
   context.routerMatch = match
   return match
     ? match.value
     : {
         title: title('Page Not Found'),
         node: NotMatch,
+        streaming: StreamingByDefault,
       }
 }
