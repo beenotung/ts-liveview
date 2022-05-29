@@ -8,8 +8,8 @@ import { setSessionUrl } from '../session.js'
 
 export type LinkAttrs = {
   'no-history'?: boolean
-  href: string
-  onclick?: never
+  'href': string
+  'onclick'?: never
   [name: string]: any
 }
 
