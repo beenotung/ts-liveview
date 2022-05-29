@@ -185,6 +185,6 @@ export function matchRoute(context: RouterContext): PageRouteMatch {
     ? match.value
     : {
         title: title('Page Not Found'),
-        node: <NotMatch />,
+        node: NotMatch,
       }
 }

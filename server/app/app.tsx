@@ -22,6 +22,7 @@ import { matchRoute } from './routes.js'
 import { topMenu } from './components/top-menu.js'
 import Chatroom from './pages/chatroom.js'
 import { redirectDict } from './routes.js'
+import NotMatch from './pages/not-match.js'
 
 let template = loadTemplate<index>('index')
 
@@ -109,6 +110,9 @@ appRouter.use((req, res, next) => {
   }
 
   let route = matchRoute(context)
+  if (route.node === NotMatch) {
+    res.status(404)
+  }
 
   let appPlaceholder = '<!-- app -->'
   let html = template({
