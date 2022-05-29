@@ -9,12 +9,17 @@ import {
   title,
 } from './types'
 
+const win: any = window
+const origin = location.origin
+
 function findAndApplyRedirect(root: ParentNode) {
   root.querySelectorAll('a[data-live=redirect]').forEach(e => {
     let a = e as HTMLAnchorElement
     let title = a.title || document.title
-    history.replaceState(null, title, a.href)
+    const href = a.href.replace(origin, '')
+    history.replaceState(null, title, href)
     a.remove()
+    win.emit(href)
   })
 }
 
@@ -254,8 +259,8 @@ function createChild(e: Element, node: VNode) {
   if (node[0] === 'raw') {
     node = node as Raw
     const fragment = document.createRange().createContextualFragment(node[1])
-    e.appendChild(fragment)
     findAndApplyRedirect(fragment)
+    e.appendChild(fragment)
     return
   }
   if (Array.isArray(node[0])) {
