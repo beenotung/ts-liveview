@@ -74,24 +74,7 @@ export function App(main: Node): Element {
 export let appRouter = express.Router()
 
 // non-streaming routes
-appRouter.use('/cookie-session/token', (req, res, next) => {
-  try {
-    let context: ExpressContext = {
-      type: 'express',
-      req,
-      res,
-      next,
-      url: req.url,
-    }
-    let html = nodeToHTML(<DemoCookieSession.Token />, context)
-    res.end(html)
-  } catch (error) {
-    if (error === EarlyTerminate) {
-      return
-    }
-    res.status(500).end(String(error))
-  }
-})
+appRouter.use('/cookie-session/token', DemoCookieSession.tokenHandler)
 appRouter.get('/chatroom', Chatroom.nicknameMiddleware)
 Object.entries(redirectDict).forEach(([from, to]) =>
   appRouter.use(from, (_req, res) => res.redirect(to)),

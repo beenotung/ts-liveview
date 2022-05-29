@@ -6,6 +6,7 @@ import { Style } from '../components/style.js'
 import { getContextCookie } from '../cookie.js'
 import { getOrSetTokenSync } from '../auth/token.js'
 import { EarlyTerminate } from '../helpers.js'
+import type { Request, Response } from 'express'
 
 const log = debugLog('demo-cookie-session.ts')
 log.enabled = true
@@ -13,25 +14,27 @@ log.enabled = true
 /** @description cannot call this when streaming html
  *  because it need to set cookie in response header
  * */
-function Token(attrs: attrs) {
-  const context = getContext(attrs)
-  if (context.type !== 'express') {
-    return <p>This route is only supported as ajax</p>
+function tokenHandler(req: Request, res: Response) {
+  try {
+    switch (req.method) {
+      case 'GET':
+        getOrSetTokenSync(req, res)
+        break
+      case 'DELETE':
+        res.clearCookie('token')
+        break
+      default:
+        log(req.method, req.url)
+        res.status(405).end('method not allowed')
+        return
+    }
+    res.end('done')
+  } catch (error) {
+    if (error === EarlyTerminate) {
+      return
+    }
+    res.status(500).end(String(error))
   }
-  const { req, res } = context
-  switch (req.method) {
-    case 'GET':
-      getOrSetTokenSync(req, res)
-      break
-    case 'DELETE':
-      res.clearCookie('token')
-      break
-    default:
-      log(req.method, req.url)
-      res.status(405).end('method not allowed')
-      throw EarlyTerminate
-  }
-  return 'done'
 }
 
 function DemoCookieSession(attrs: attrs) {
@@ -93,5 +96,5 @@ function DemoCookieSession(attrs: attrs) {
 
 export default {
   index: DemoCookieSession,
-  Token,
+  tokenHandler,
 }
