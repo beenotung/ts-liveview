@@ -61,13 +61,7 @@ let routeDict: Record<string, PageRouteMatch> = {
     description:
       'Getting Started with ts-liveview - a server-side rendering realtime webapp framework with progressive enhancement',
     menuText: 'Home',
-    menuUrl: '/home',
-    node: Home,
-  },
-  '/home': {
-    title: title('Home'),
-    description:
-      'Getting Started with ts-liveview - a server-side rendering realtime webapp framework with progressive enhancement',
+    menuUrl: '/',
     node: Home,
   },
   '/about/:mode?': {
