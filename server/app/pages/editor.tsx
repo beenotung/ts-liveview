@@ -162,8 +162,9 @@ export function Editor(attrs: attrs) {
       </p>
       <div>Screencast from the blog:</div>
       <img
-        src="https://i.imgur.com/DYIv3ut.gif"
+        src="/editor.gif"
         alt="original image editor demo with Phoenix LiveView"
+        title="original image editor demo with Phoenix LiveView | image source: https://i.imgur.com/DYIv3ut.gif "
       />
     </div>
   )
