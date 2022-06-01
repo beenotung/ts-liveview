@@ -6,6 +6,7 @@ import { EarlyTerminate } from '../helpers.js'
 import { ServerMessage } from '../../../client'
 import { onWsSessionClose } from '../session.js'
 import { Script } from '../components/script.js'
+import Style from '../components/style.js'
 
 type State = {
   width: number
@@ -17,6 +18,16 @@ const DefaultState: State = { width: 150, color: 'white' }
 const sessions = new WeakMap<ManagedWebsocket, State>()
 
 const Colors = ['white', 'black', 'blue']
+
+const style = Style(/* css */ `
+#image-editor figure {
+  margin: 0;
+  width: min-content;
+}
+#image-editor figcaption {
+  text-align: center;
+}
+`)
 
 export function Editor(attrs: attrs) {
   const context = getContext(attrs)
@@ -68,6 +79,7 @@ export function Editor(attrs: attrs) {
   let state = getState()
   return (
     <div id="image-editor">
+      {style}
       <h2>Image Editor Demo</h2>
       <p>
         This demo illustrates how low-latency can it be even when the state and
@@ -161,11 +173,20 @@ export function Editor(attrs: attrs) {
         </a>
       </p>
       <div>Screencast from the blog:</div>
-      <img
-        src="/editor.gif"
-        alt="original image editor demo with Phoenix LiveView"
-        title="original image editor demo with Phoenix LiveView | image source: https://i.imgur.com/DYIv3ut.gif "
-      />
+      <figure>
+        <video
+          src="/editor.mp4"
+          alt="original image editor demo with Phoenix LiveView"
+          muted
+          autoplay
+          loop
+        ></video>
+        <figcaption>
+          original image editor demo with Phoenix LiveView
+          <br />
+          image source: https://i.imgur.com/DYIv3ut.gif
+        </figcaption>
+      </figure>
     </div>
   )
 }
