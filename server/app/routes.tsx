@@ -155,7 +155,7 @@ export let redirectDict: Record<string, string> = {
   '/server/app/pages/editor.tsx': '/editor',
   '/server/app/pages/auto-complete-demo.tsx': '/auto-complete',
   '/server/app/pages/demo-form.tsx': '/form',
-  '/server/app/pages/home.tsx': '/home',
+  '/server/app/pages/home.tsx': '/',
   '/server/app/app.tsx': '/about/markdown',
   '/server/app/pages/chatroom.tsx': '/chatroom',
 }

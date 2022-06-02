@@ -148,7 +148,7 @@ Example using _getter and setter_ see [thermostat.tsx](./server/app/pages/thermo
 - [x] Image Editor [[source](./server/app/pages/editor.tsx) | [demo](https://liveviews.cc/editor)]
 - [x] Autocomplete Searching [[source](./server/app/pages/auto-complete-demo.tsx) | [demo](https://liveviews.cc/auto-complete)]
 - [x] Form and Sanitizing user-generated content (prevent XSS attack by default) [[source](./server/app/pages/demo-form.tsx) | [demo](https://liveviews.cc/form)]
-- [x] Pre-rendered Page [[source](./server/app/pages/home.tsx) | [demo](https://liveviews.cc/home)]
+- [x] Pre-rendered Page [[source](./server/app/pages/home.tsx) | [demo](https://liveviews.cc/)]
 - [x] SPA with url-based routing [source: [app.tsx](./server/app/app.tsx), [routes.tsx](./server/app/routes.tsx), [menu.tsx](./server/app/menu.tsx) | [demo](https://liveviews.cc/)]
 - [x] Chatroom with locales and timezone support [[source](./server/app/pages/chatroom.tsx) | [demo](https://liveviews.cc/chatroom)]
 - [x] User Agents from sqlite3 database [[source](./server/app/pages/user-agents.tsx) | [demo](https://liveviews.cc/user-agents)]
