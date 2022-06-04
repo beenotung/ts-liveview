@@ -16,6 +16,7 @@
     "outDir": "dist"
   },
   "exclude": [
+    "experiment",
     "public",
     "build",
     "dist"
