@@ -54,61 +54,6 @@ inner join request_log on request_log.user_agent_id = user_agent.id
 group by user_agent.id
 `)
 
-export function getUserAgents() {
-  let Android = 0
-  let iPhone = 0
-  let iPad = 0
-  let MacOS = 0
-  let Windows = 0
-  let Linux = 0
-  let Kindle = 0
-  let curl = 0
-  let Wget = 0
-  let Links = 0
-  let Lynx = 0
-  let Other = 0
-  let otherSet = new Set<string>()
-  select_user_agent.all().forEach(({ user_agent, count }) => {
-    if (user_agent.includes('iPhone')) {
-      iPhone += count
-    } else if (user_agent.includes('iPad')) {
-      iPad += count
-    } else if (user_agent.includes('Macintosh')) {
-      MacOS += count
-    } else if (user_agent.includes('KFAPWI')) {
-      Kindle += count
-    } else if (user_agent.includes('curl')) {
-      curl += count
-    } else if (user_agent.includes('Wget')) {
-      Wget += count
-    } else if (user_agent.includes('Lynx')) {
-      Lynx += count
-    } else if (user_agent.includes('Links')) {
-      Links += count
-    } else if (user_agent.includes('Android') || user_agent.includes('Nokia')) {
-      Android += count
-    } else if (user_agent.includes('Windows')) {
-      Windows += count
-    } else if (user_agent.includes('Linux')) {
-      Linux += count
-    } else {
-      Other += count
-      otherSet.add(user_agent)
-    }
-  })
-  return {
-    Android,
-    iPhone,
-    iPad,
-    MacOS,
-    Windows,
-    Linux,
-    Kindle,
-    curl,
-    Wget,
-    Links,
-    Lynx,
-    Other,
-    otherSet,
-  }
+export function getUserAgents(): Array<{ user_agent: string; count: number }> {
+  return select_user_agent.all()
 }
