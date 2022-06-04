@@ -1,33 +1,58 @@
 import { getUserAgents } from '../../../db/store.js'
 import Style from '../components/style.js'
 import JSX from '../jsx/jsx.js'
+import type { Node } from '../jsx/types.js'
 
-function Rows() {
+function Tables() {
   let { otherSet, ...agents } = getUserAgents()
-  let rows = Object.entries(agents)
-    .filter(entry => entry[1] > 0)
-    .sort((a, b) => b[1] - a[1])
-    .map(entry => (
-      <tr>
-        <td>{entry[0]}</td>
-        <td>{entry[1]}</td>
-      </tr>
-    ))
-  if (otherSet.size > 0) {
+  let mainTable = (
+    <table>
+      <thead>
+        <tr>
+          <th>User Agent</th>
+          <th>Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        {[
+          Object.entries(agents)
+            .filter(entry => entry[1] > 0)
+            .sort((a, b) => b[1] - a[1])
+            .map(entry => (
+              <tr>
+                <td>{entry[0]}</td>
+                <td>{entry[1]}</td>
+              </tr>
+            )),
+        ]}
+      </tbody>
+    </table>
+  )
+  if (otherSet.size === 0) {
+    return mainTable
+  }
+  let rows: Node[] = []
+  otherSet.forEach(name =>
     rows.push(
       <tr>
-        <th colspan="2">Other Agents</th>
+        <td>{name}</td>
       </tr>,
-    )
-    otherSet.forEach(name =>
-      rows.push(
-        <tr>
-          <td colspan="2">{name}</td>
-        </tr>,
-      ),
-    )
-  }
-  return [rows]
+    ),
+  )
+  let otherTable = (
+    <table>
+      <thead>
+        <th>Other User Agents</th>
+      </thead>
+      <tbody>{[rows]}</tbody>
+    </table>
+  )
+  return (
+    <>
+      {mainTable}
+      {otherTable}
+    </>
+  )
 }
 
 let UserAgents = (
@@ -36,6 +61,8 @@ let UserAgents = (
     {Style(/* css */ `
 #user-agents table {
   border-collapse: collapse;
+  margin: 1rem;
+  display: inline;
 }
 #user-agents th,
 #user-agents td {
@@ -47,17 +74,7 @@ let UserAgents = (
     <p>
       Below list of user agents are collected from the visitor's HTTP header.
     </p>
-    <table>
-      <thead>
-        <tr>
-          <th>User Agent</th>
-          <th>Count</th>
-        </tr>
-      </thead>
-      <tbody>
-        <Rows />
-      </tbody>
-    </table>
+    <Tables />
   </div>
 )
 
