@@ -7,6 +7,7 @@ import { ServerMessage } from '../../../client'
 import { onWsSessionClose } from '../session.js'
 import { Script } from '../components/script.js'
 import Style from '../components/style.js'
+import SourceCode from '../components/source-code.js'
 
 type State = {
   width: number
@@ -164,6 +165,7 @@ export function Editor(attrs: attrs) {
         style={`background-color: ${state.color}`}
         src="https://avatars0.githubusercontent.com/u/6510388"
       />
+      <SourceCode page="editor.tsx" />
       <hr />
       <p>
         Reference:{' '}

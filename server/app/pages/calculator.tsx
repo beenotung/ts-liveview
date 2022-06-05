@@ -1,5 +1,6 @@
 import { Style } from '../components/style.js'
 import JSX from '../jsx/jsx.js'
+import SourceCode from '../components/source-code.js'
 
 let update = `c.textContent = a.valueAsNumber + b.valueAsNumber`
 
@@ -24,6 +25,7 @@ function Calculator() {
       <span class="answer" id="c">
         2
       </span>
+      <SourceCode page="calculator.tsx" />
     </div>
   )
 }

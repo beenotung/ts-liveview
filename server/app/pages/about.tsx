@@ -5,11 +5,17 @@ import { marked } from 'marked'
 import { Raw } from '../components/raw.js'
 import { prerender } from '../jsx/html.js'
 import { Menu } from '../components/menu.js'
+import SourceCode from '../components/source-code.js'
 
 let text = readFileSync('README.md').toString()
 
 let html = Raw(marked(text))
 let markdown = <pre style="white-space: break-spaces">{text}</pre>
+markdown = (
+  <pre>
+    <code class="language-markdown">{text}</code>
+  </pre>
+)
 
 // The JSX expression don't need to be re-built on every render
 export let About = (
@@ -29,6 +35,7 @@ export let About = (
       efficient than <abbr title="Server-Side Rendering">SSR</abbr> for static
       content (that doesn't change regarding on the request session).
     </p>
+    <SourceCode page="about.tsx" />
     <p>This page also demonstrate nested routes.</p>
     <fieldset>
       <legend>

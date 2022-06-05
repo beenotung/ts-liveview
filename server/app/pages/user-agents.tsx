@@ -1,4 +1,5 @@
 import { getUserAgents } from '../../../db/store.js'
+import SourceCode from '../components/source-code.js'
 import Style from '../components/style.js'
 import JSX from '../jsx/jsx.js'
 import type { Node } from '../jsx/types.js'
@@ -202,6 +203,7 @@ let UserAgents = (
       Below list of user agents are collected from the visitor's HTTP header.
     </p>
     <Tables />
+    <SourceCode page="user-agents.tsx" />
   </div>
 )
 

@@ -2,6 +2,7 @@ import { Link } from '../components/router.js'
 import JSX from '../jsx/jsx.js'
 import { prerender } from '../jsx/html.js'
 import Comment from '../components/comment.js'
+import SourceCode from '../components/source-code.js'
 
 // Calling <Component/> will transform the JSX into AST for each rendering.
 // You can reuse a pre-compute AST like `let component = <Component/>`.
@@ -81,6 +82,7 @@ let content = (
       Try some reactive demo: <Link href="/thermostat">Thermostat</Link>,{' '}
       <Link href="/form">Form Demo</Link>
     </p>
+    <SourceCode page="home.tsx" />
   </div>
 )
 

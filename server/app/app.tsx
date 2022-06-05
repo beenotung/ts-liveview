@@ -42,6 +42,12 @@ h1.title {
 h1.title a {
   font-size: 1rem;
 }
+pre[class*="language-"],
+code[class*="language-"] {
+  white-space: pre-wrap !important;
+  display: inline-block !important;
+  max-width: 90vw;
+}
 `)
 
 export function App(main: Node): Element {

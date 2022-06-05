@@ -7,6 +7,7 @@ import { attrs } from '../jsx/types.js'
 import sanitizeHTML from 'sanitize-html'
 import { Script } from '../components/script.js'
 import debug from 'debug'
+import SourceCode from '../components/source-code.js'
 
 const log = debug('demo-form.tsx')
 log.enabled = true
@@ -224,6 +225,7 @@ function DemoForm() {
       >
         {code}
       </textarea>
+      <SourceCode page="demo-form.tsx" />
     </>
   )
 }

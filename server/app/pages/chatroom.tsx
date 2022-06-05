@@ -17,6 +17,7 @@ import DateTimeText, {
 } from '../components/datetime.js'
 import { nodeToVNode } from '../jsx/vnode.js'
 import { Request, Response, NextFunction } from 'express'
+import SourceCode from '../components/source-code.js'
 
 let log = debugLog('chatroom.tsx')
 log.enabled = true
@@ -379,6 +380,7 @@ function Chatroom(attrs: attrs) {
         </p>
         <p>Number of messages: {room.msg_list.length}</p>
         <ol class="msg-list">{[room.msg_list]}</ol>
+        <SourceCode page="chatroom.tsx" />
       </div>
     </>
   )

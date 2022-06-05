@@ -6,6 +6,7 @@ import { join } from 'path'
 import { Update } from '../components/update.js'
 import 'fastest-levenshtein'
 import { distance } from 'fastest-levenshtein'
+import SourceCode from '../components/source-code.js'
 
 const wordSet = new Set<string>()
 const dictDir = '/usr/share/dict'
@@ -105,6 +106,7 @@ export function AutoCompleteDemo(attrs: attrs) {
         />
         <datalist id="package-list"></datalist>
       </fieldset>
+      <SourceCode page="auto-complete-demo.tsx" />
     </div>
   )
 }

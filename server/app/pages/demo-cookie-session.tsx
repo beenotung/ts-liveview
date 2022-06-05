@@ -7,6 +7,7 @@ import { getContextCookie } from '../cookie.js'
 import { getOrSetTokenSync } from '../auth/token.js'
 import { EarlyTerminate } from '../helpers.js'
 import type { Request, Response } from 'express'
+import SourceCode from '../components/source-code.js'
 
 const log = debugLog('demo-cookie-session.ts')
 log.enabled = true
@@ -90,6 +91,7 @@ function DemoCookieSession(attrs: attrs) {
           </code>
         </pre>
       </fieldset>
+      <SourceCode page="demo-cookie-session.tsx" />
     </div>
   )
 }

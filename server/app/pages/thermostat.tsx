@@ -4,6 +4,7 @@ import JSX from '../jsx/jsx.js'
 import { sessions } from '../session.js'
 import { Update, UpdateIn } from '../components/update.js'
 import type { ServerMessage } from '../../../client'
+import SourceCode from '../components/source-code.js'
 
 const UpdateInterval = 1000
 
@@ -239,6 +240,7 @@ function Thermostat() {
           </span>
         </div>
       </div>
+      <SourceCode page="thermostat.tsx" />
       <p>
         <a href="https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript">
           Layout reference
