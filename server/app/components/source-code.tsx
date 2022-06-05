@@ -13,6 +13,9 @@ details.source-code details summary {
   margin-top: 0.5rem;
   margin-inline-start: 1rem;
 }
+.source-code summary {
+  cursor: pointer;
+}
 `
 
 function SourceCode(attrs: { page: string }) {
