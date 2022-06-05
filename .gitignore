@@ -16,3 +16,5 @@ localhost_*.report.html
 .env
 .open
 data/
+*.cert
+*.key
