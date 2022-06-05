@@ -4,7 +4,6 @@ import { attrs } from '../jsx/types.js'
 import { existsSync, readdirSync, readFileSync } from 'fs'
 import { join } from 'path'
 import { Update } from '../components/update.js'
-import 'fastest-levenshtein'
 import { distance } from 'fastest-levenshtein'
 import SourceCode from '../components/source-code.js'
 
