@@ -52,7 +52,7 @@ export type MenuRoute = {
 
 export type PageRouteMatch = PageRouteOptions & StaticPageRoute
 
-function title(page: string) {
+export function title(page: string) {
   return page + ' | ' + config.site_name
 }
 
@@ -80,10 +80,8 @@ let routeDict: Record<string, PageRoute> = {
     streaming: true,
   },
   '/thermostat': {
-    title: title('Thermostat'),
-    description: 'A realtime updated thermostat demo application',
+    resolve: Thermostat.index,
     menuText: 'Thermostat',
-    node: [Thermostat.index],
   },
   '/thermostat/inc': {
     title: title('Thermostat'),

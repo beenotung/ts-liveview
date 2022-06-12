@@ -111,6 +111,8 @@ Below simulation from [marko](https://markojs.com) illustrates the visual differ
   </figcaption>
 </figure>
 
+Despite the response body is sent with streaming, the document title and meta description can be generated dynamically according to routing result. Details see the Thermostat and routing [demo](#examples--demo).
+
 <span id='jsx'></span>
 
 ### Why JSX?
