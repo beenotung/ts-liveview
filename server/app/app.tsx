@@ -96,8 +96,8 @@ appRouter.use((req, res, next) => {
 
   let route = matchRoute(context)
 
-  if (route.node === NotMatch) {
-    res.status(404)
+  if (route.status) {
+    res.status(route.status)
   }
 
   if (route.streaming === false) {

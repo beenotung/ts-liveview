@@ -39,6 +39,7 @@ export type StaticPageRoute = {
   title: string
   node: Node
   description: string
+  status?: number
 }
 export type DynamicPageRoute = {
   resolve: (routeMatch: PageRoute) => StaticPageRoute
@@ -213,6 +214,7 @@ export function matchRoute(context: RouterContext): PageRouteMatch {
         title: title('Page Not Found'),
         description: 'This page is not found. Probably due to outdated menu.',
         node: NotMatch,
+        status: 404,
       }
   if (route.streaming === undefined) {
     route.streaming = StreamingByDefault
