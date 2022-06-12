@@ -29,6 +29,8 @@ export function UpdateIn(
 
     // to update live websocket client
     selector: string
+
+    title?: string
   } & (
     | {
         content: VNode
@@ -41,7 +43,11 @@ export function UpdateIn(
   const context = getRouterContext(attrs)
   if (context.type === 'ws') {
     const content = 'render' in attrs ? attrs.render() : attrs.content
-    context.ws.send(['update-in', attrs.selector, content])
+    if (attrs.title) {
+      context.ws.send(['update-in', attrs.selector, content, attrs.title])
+    } else {
+      context.ws.send(['update-in', attrs.selector, content])
+    }
     setSessionUrl(context.ws, attrs.to)
   } else {
     forceRedirectExpressSession(context, attrs.to)
