@@ -129,7 +129,10 @@ export type ServerMessage =
 function onServerMessage(message: ServerMessage) {
   switch (message[0]) {
     case 'update':
-      updateElement(message[1], message[2])
+      if (message[2]) {
+        document.title = message[2]
+      }
+      updateElement(message[1])
       break
     case 'update-in':
       if (message[3]) {
