@@ -8,7 +8,12 @@ import { getContext, WsContext } from '../context.js'
 import { getContextCookie } from '../cookie.js'
 import JSX from '../jsx/jsx.js'
 import { attrs, Node } from '../jsx/types.js'
-import { onWsSessionClose, Session, sessions } from '../session.js'
+import {
+  onWsSessionClose,
+  Session,
+  sessions,
+  sessionToContext,
+} from '../session.js'
 import { ManagedWebsocket } from '../../ws/wss.js'
 import { EarlyTerminate } from '../helpers.js'
 import DateTimeText, {
@@ -18,7 +23,6 @@ import DateTimeText, {
 import { nodeToVNode } from '../jsx/vnode.js'
 import { Request, Response, NextFunction } from 'express'
 import SourceCode from '../components/source-code.js'
-import { sessionToContext } from '../session'
 
 let log = debugLog('chatroom.tsx')
 log.enabled = true
