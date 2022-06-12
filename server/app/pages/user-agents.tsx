@@ -194,7 +194,7 @@ let UserAgents = (
 }
 #user-agents th,
 #user-agents td {
-  border: 1px solid black;
+  border: 1px solid var(--text-color, black);
   padding: 0.25rem 0.5rem;
 }
 `)}
