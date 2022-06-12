@@ -4,11 +4,13 @@ import type { ManagedWebsocket } from '../ws/wss'
 import type { RouteContext } from 'url-router.ts'
 import type { Session } from './session'
 
-export type Context = StaticContext | ExpressContext | WsContext
+export type Context = StaticContext | DynamicContext
 
 export type StaticContext = {
   type: 'static'
 }
+
+export type DynamicContext = ExpressContext | WsContext
 
 export type ExpressContext = {
   type: 'express'
