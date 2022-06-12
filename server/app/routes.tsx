@@ -2,7 +2,7 @@ import { capitalize } from '@beenotung/tslib/string.js'
 import { Router } from 'url-router.ts'
 import { config } from '../config.js'
 import { Redirect } from './components/router.js'
-import { RouterContext } from './context.js'
+import type { ExpressContext, RouterContext, WsContext } from './context.js'
 import JSX from './jsx/jsx.js'
 import type { Node } from './jsx/types'
 import About, { License } from './pages/about.js'
@@ -26,15 +26,23 @@ export function getTitle(url: string): string {
 
 const StreamingByDefault = true
 
-export type PageRouteMatch = {
-  title?: string
-  node: Node
-  description?: string
+export type PageRoute = PageRouteOptions & (StaticPageRoute | DynamicPageRoute)
+
+export type PageRouteOptions = {
   // streaming is enabled by default
-  // HTTP headers cannot be set  when streaming
+  // HTTP headers cannot be set when streaming
   // If you need to set cookies or apply redirection, you may use an express middleware before the generic app route
   streaming?: boolean
 } & Partial<MenuRoute>
+
+export type StaticPageRoute = {
+  title: string
+  node: Node
+  description: string
+}
+export type DynamicPageRoute = {
+  resolve: (routeMatch: PageRoute) => StaticPageRoute
+}
 
 export type MenuRoute = {
   url: string
@@ -42,9 +50,7 @@ export type MenuRoute = {
   menuUrl: string // optional, default to be same as PageRoute.url
 }
 
-export type PageRoute = {
-  url: string
-} & PageRouteMatch
+export type PageRouteMatch = PageRouteOptions & StaticPageRoute
 
 function title(page: string) {
   return page + ' | ' + config.site_name
@@ -55,7 +61,7 @@ function title(page: string) {
 // or invoke functional component with x-html tag, e.g. `<Editor/>
 
 // TODO direct support alternative urls instead of having to repeat the entry
-let routeDict: Record<string, PageRouteMatch> = {
+let routeDict: Record<string, PageRoute> = {
   '/': {
     title: title('Home'),
     description:
@@ -81,10 +87,14 @@ let routeDict: Record<string, PageRouteMatch> = {
   },
   '/thermostat/inc': {
     title: title('Thermostat'),
+    description:
+      'API endpoint to increase target temperature of the demo thermostat',
     node: [Thermostat.inc],
   },
   '/thermostat/dec': {
     title: title('Thermostat'),
+    description:
+      'API endpoint to decrease target temperature of the demo thermostat',
     node: [Thermostat.dec],
   },
   '/editor': {
@@ -108,17 +118,18 @@ let routeDict: Record<string, PageRouteMatch> = {
   },
   '/form/submit': {
     title: title('Form Submission'),
+    description: 'API endpoint to submit demo form',
     node: <DemoForm.submit />,
   },
-  '/form/live/:key': { node: <DemoForm.set /> },
+  '/form/live/:key': {
+    title: title('Set Form Key'),
+    description: 'API endpoint to set form field in realtime',
+    node: <DemoForm.set />,
+  },
   '/cookie-session': {
     title: title('Cookie-based Session'),
     description: 'Demonstrate accessing cookie with ts-liveview',
     menuText: 'Cookie Session',
-    node: <DemoCookieSession.index />,
-  },
-  '/cookie-session/token': {
-    title: title('Token in Session'),
     node: <DemoCookieSession.index />,
   },
   '/chatroom': {
@@ -127,9 +138,21 @@ let routeDict: Record<string, PageRouteMatch> = {
     menuText: 'Chatroom',
     node: <Chatroom.index />,
   },
-  '/chatroom/typing': { node: <Chatroom.typing /> },
-  '/chatroom/rename': { node: <Chatroom.rename /> },
-  '/chatroom/send': { node: <Chatroom.send /> },
+  '/chatroom/typing': {
+    title: title('Chatroom Typing'),
+    description: 'API endpoint to declare typing status in chatroom',
+    node: <Chatroom.typing />,
+  },
+  '/chatroom/rename': {
+    title: title('Chatroom Rename'),
+    description: 'API endpoint to rename user in chatroom',
+    node: <Chatroom.rename />,
+  },
+  '/chatroom/send': {
+    title: title('Chatroom: send message'),
+    description: 'API endpoint to send message in chatroom',
+    node: <Chatroom.send />,
+  },
   '/calculator': {
     title: title('Calculator'),
     description: 'A simple stateful component demo',
@@ -176,20 +199,34 @@ Object.entries(routeDict).forEach(([url, route]) => {
 })
 
 Object.entries(redirectDict).forEach(([url, href]) =>
-  pageRouter.add(url, { url, node: <Redirect href={href} /> }),
+  pageRouter.add(url, {
+    url,
+    title: title('Redirection Page'),
+    description: 'Redirect to ' + url,
+    node: <Redirect href={href} />,
+  }),
 )
 
 export function matchRoute(context: RouterContext): PageRouteMatch {
   let match = pageRouter.route(context.url)
-  if (match && match.value.streaming === undefined) {
-    match.value.streaming = StreamingByDefault
-  }
-  context.routerMatch = match
-  return match
+  let route: PageRoute = match
     ? match.value
     : {
         title: title('Page Not Found'),
+        description: 'This page is not found. Probably due to outdated menu.',
         node: NotMatch,
-        streaming: StreamingByDefault,
       }
+  if (route.streaming === undefined) {
+    route.streaming = StreamingByDefault
+  }
+  if ('resolve' in route) {
+    return Object.assign(route, route.resolve(route))
+  }
+  return route
+}
+
+export function getContextSearchParams(context: ExpressContext | WsContext) {
+  return new URLSearchParams(
+    context.routerMatch?.search || context.url.split('?').pop(),
+  )
 }
