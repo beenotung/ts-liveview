@@ -56,6 +56,9 @@ export function toLocaleDateTimeString(time: number, context: Context): string {
     timeZone = session.timeZone
     timezoneOffset = session.timezoneOffset
   }
+  if (locales === '*') {
+    locales = undefined
+  }
   for (;;) {
     try {
       let date = new TimezoneDate(time)
@@ -80,7 +83,7 @@ export function toLocaleDateTimeString(time: number, context: Context): string {
         continue
       }
       if (errorMessage.includes('locale')) {
-        log('invalid locale', locales)
+        log('invalid locale:', locales)
         locales = undefined
         continue
       }
