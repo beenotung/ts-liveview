@@ -18,6 +18,7 @@ import DateTimeText, {
 import { nodeToVNode } from '../jsx/vnode.js'
 import { Request, Response, NextFunction } from 'express'
 import SourceCode from '../components/source-code.js'
+import { sessionToContext } from '../session'
 
 let log = debugLog('chatroom.tsx')
 log.enabled = true
@@ -105,12 +106,7 @@ class ChatroomState {
     this.msg_list.push(li)
     sessions.forEach(session => {
       if (!session.url?.startsWith('/chatroom')) return
-      let context: WsContext = {
-        type: 'ws',
-        ws: session.ws,
-        session,
-        url: session.url!,
-      }
+      let context = sessionToContext(session, session.url)
       let node = nodeToVNode(li, context)
       let message: ServerMessage = ['append', '#chatroom .msg-list', node]
       session.ws.send(message)

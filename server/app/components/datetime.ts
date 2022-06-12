@@ -2,7 +2,7 @@ import { format_relative_time } from '@beenotung/tslib/format.js'
 import { Context, getContext, WsContext } from '../context.js'
 import { debugLog } from '../../debug.js'
 import { TimezoneDate } from 'timezone-date.ts'
-import { Session } from '../session.js'
+import { Session, sessionToContext } from '../session.js'
 import {
   DAY,
   HOUR,
@@ -137,12 +137,7 @@ export function createRelativeTimer(options: CreateRelativeTimerOptions) {
           timerSessions.delete(session)
           return
         }
-        let context: WsContext = {
-          type: 'ws',
-          session,
-          ws: session.ws,
-          url: session.url!,
-        }
+        let context = sessionToContext(session, session.url!)
         let text = toLocaleDateTimeString(options.time, context)
         let message: ServerMessage = [msgType, options.selector, text]
         session.ws.send(message)

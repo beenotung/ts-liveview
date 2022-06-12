@@ -1,5 +1,6 @@
 import { debugLog } from '../debug.js'
 import type { ManagedWebsocket } from '../ws/wss'
+import { WsContext } from './context.js'
 
 let log = debugLog('session.ts')
 log.enabled = true
@@ -11,6 +12,18 @@ export type Session = {
   timezoneOffset?: number
   url?: string
   onCloseListeners: Array<(session: Session) => void>
+}
+
+export function sessionToContext(
+  session: Session,
+  currentUrl: string,
+): WsContext {
+  return {
+    type: 'ws',
+    ws: session.ws,
+    session,
+    url: currentUrl,
+  }
 }
 
 export let sessions = new Map<ManagedWebsocket, Session>()
