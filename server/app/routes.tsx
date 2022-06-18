@@ -208,6 +208,7 @@ Object.entries(redirectDict).forEach(([url, href]) =>
     title: title('Redirection Page'),
     description: 'Redirect to ' + url,
     node: <Redirect href={href} />,
+    status: 302
   }),
 )
 
