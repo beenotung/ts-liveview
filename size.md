@@ -4,16 +4,16 @@
 
 | File                   | Size |
 | ---------------------- | ---- |
-| build/bundle.js        | 12K  |
-| build/bundle.min.js    | 6.1K |
-| build/bundle.min.js.gz | 2.2K |
+| build/bundle.js        | 13K  |
+| build/bundle.min.js    | 6.5K |
+| build/bundle.min.js.gz | 2.3K |
 
 ### Source Files Size
 
 | File                   | Size |
 | ---------------------- | ---- |
-| client/jsx/dom.js      | 6.5K |
-| client/index.js        | 3.8K |
+| client/index.js        | 4.2K |
+| client/jsx/dom.js      | 6.9K |
 | client/ws/ws-lite.js   | 2.5K |
 | client/ws/ws-config.js | 280B |
 
@@ -21,7 +21,7 @@
 
 | Name          | bundled | + minified | + gzipped |
 | ------------- | ------: | ---------: | --------: |
-| **ws-native** |    0.9K |       0.4K |      0.3K |
+| **ws-native** |    1.0K |       0.4K |      0.3K |
 | **ws-lite**   |    2.3K |       0.9K |      0.5K |
 | primus.js     |   98.9K |      32.5K |     10.7K |
 | socket.io.js  |    104K |      40.8K |     12.4K |

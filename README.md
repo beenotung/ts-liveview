@@ -6,7 +6,7 @@
 
 _(Without MBs of javascript to be downloaded and executed on the client side.)_
 
-The client-side runtime of ts-liveview is below 12KB (2.2KB bundled, minified and gzipped).
+The client-side runtime of ts-liveview is below 13KB (2.3KB bundled, minified and gzipped).
 
 ts-liveview supports [`JSX`](#jsx) but it **[doesn't rely on Virtual DOM](#no-vdom-diff)**. Instead, precise DOM operations are derived from application-specific event handlers, and sent to the browser client(s) for realtime UI updates.
 
@@ -67,15 +67,15 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
 
 ## Size Comparison with other tools
 
-| Tools             | Runtime Code Size (minified)               |
-| ----------------- | ------------------------------------------ |
-| Vanilla           | 0.3K                                       |
-| **ts-liveview 2** | **6.3K** (Optional) + Same size as vanilla |
-| Stencil 2.0.1     | 13.7K                                      |
-| Svelte 3.0.0      | 17.4K                                      |
-| Vue 3.2.33        | 49.3K                                      |
-| React 17.0.2      | 144.6K                                     |
-| Angular 13.3.0    | 155.8K                                     |
+| Tools             | Runtime Code Size (minified)       |
+| ----------------- | -----------------------------------|
+| Vanilla           | 0.3K                               |
+| **ts-liveview 3** | **6.5K** *OR* same size as vanilla |
+| Stencil 2.0.1     | 13.7K                              |
+| Svelte 3.0.0      | 17.4K                              |
+| Vue 3.2.33        | 49.3K                              |
+| React 17.0.2      | 144.6K                             |
+| Angular 13.3.0    | 155.8K                             |
 
 Remark:
 Size of other tools taking reference from https://github.com/beenotung/spa-state-demo
