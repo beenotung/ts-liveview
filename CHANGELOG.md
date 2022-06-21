@@ -1,8 +1,17 @@
 # Changelog
 
+## [v3](https://github.com/beenotung/ts-liveview/tree/v3)
+
+2022 - Present
+- Setup eslint
+- Harden type definition and usage on Context (e.g. avoid non-null assertions and explicit-any)
+- Move 3rd party libraries from `/public` to `/public/lib`
+- Move ServerMessage and ClientMessage from `/client/index.ts` to `/client/types.ts`
+- Remove generic types extending to ServerMessage and ClientMessage, refer to the exact type instead
+
 ## [v2](https://github.com/beenotung/ts-liveview/tree/v2)
 
-2021 - Present (2022)
+2021 - 2022
 
 - Removed dependency on s-js, morphdom, and primus
 - Switched content format from template-string to JSX/AST with out-of-the-box html-injection protection
