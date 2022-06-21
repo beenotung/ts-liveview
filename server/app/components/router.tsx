@@ -10,10 +10,10 @@ export type LinkAttrs = {
   'no-history'?: boolean
   'href': string
   'onclick'?: never
-  [name: string]: any
+  [name: string]: unknown
 }
 
-export function Link(attrs: LinkAttrs, children?: any[]) {
+export function Link(attrs: LinkAttrs, children?: Node[]) {
   const { 'no-history': quiet, ...aAttrs } = attrs
   const onclick = quiet ? `emitHref(event,'q')` : `emitHref(event)`
   if (!children) {

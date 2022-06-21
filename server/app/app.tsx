@@ -11,7 +11,6 @@ import { dispatchUpdate } from './jsx/dispatch.js'
 import { EarlyTerminate } from './helpers.js'
 import { getWSSession } from './session.js'
 import DemoCookieSession from './pages/demo-cookie-session.js'
-import type { ClientMessage } from '../../client/index'
 import escapeHtml from 'escape-html'
 import { Flush } from './components/flush.js'
 import { config } from '../config.js'
@@ -22,8 +21,8 @@ import { matchRoute, PageRouteMatch } from './routes.js'
 import { topMenu } from './components/top-menu.js'
 import Chatroom from './pages/chatroom.js'
 import { redirectDict } from './routes.js'
-import NotMatch from './pages/not-match.js'
 import { SourceCodeStyle } from './components/source-code.js'
+import type { ClientMountMessage, ClientRouteMessage } from '../../client/types'
 
 let template = loadTemplate<index>('index')
 
@@ -176,14 +175,15 @@ function streamHTML(
   res.end()
 }
 
-export let onWsMessage: OnWsMessage<ClientMessage> = (event, ws, wss) => {
+export let onWsMessage: OnWsMessage = (event, ws, _wss) => {
   console.log('ws message:', event)
   // TODO handle case where event[0] is not url
   let eventType: string | undefined
   let url: string
-  let args: any[] | undefined
+  let args: unknown[] | undefined
   let session = getWSSession(ws)
   if (event[0] === 'mount') {
+    event = event as ClientMountMessage
     eventType = 'mount'
     url = event[1]
     session.locales = event[2]
@@ -193,6 +193,7 @@ export let onWsMessage: OnWsMessage<ClientMessage> = (event, ws, wss) => {
     }
     session.timezoneOffset = event[4]
   } else if (event[0][0] === '/') {
+    event = event as ClientRouteMessage
     eventType = 'route'
     url = event[0]
     args = event.slice(1)

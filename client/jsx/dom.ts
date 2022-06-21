@@ -1,3 +1,4 @@
+import { WindowStub } from '../internal'
 import type {
   Fragment,
   Raw,
@@ -8,7 +9,7 @@ import type {
   props,
 } from './types'
 
-const win: any = window
+let win = window as unknown as WindowStub
 const origin = location.origin
 
 function findAndApplyRedirect(root: ParentNode) {
@@ -228,7 +229,7 @@ function applyAttrs(e: Element, attrs: attrs) {
 
 function applyProps(e: Element, props: props) {
   Object.entries(props).forEach(entry => {
-    ;(e as any)[entry[0]] = entry[1]
+    ;(e as unknown as props)[entry[0]] = entry[1]
   })
 }
 

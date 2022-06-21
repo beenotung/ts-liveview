@@ -3,11 +3,12 @@ import type { attrs } from '../jsx/types'
 import { getContext } from '../context.js'
 import { ManagedWebsocket } from '../../ws/wss.js'
 import { EarlyTerminate } from '../helpers.js'
-import { ServerMessage } from '../../../client'
+import type { ServerMessage } from '../../../client/types'
 import { onWsSessionClose } from '../session.js'
 import { Script } from '../components/script.js'
 import Style from '../components/style.js'
 import SourceCode from '../components/source-code.js'
+import { getContextSearchParams } from '../routes.js'
 
 type State = {
   width: number
@@ -46,8 +47,8 @@ export function Editor(attrs: attrs) {
       onWsSessionClose(ws, () => sessions.delete(ws))
     }
     let messages: ServerMessage[] = []
-    let params = new URLSearchParams(context.routerMatch!.search)
-    let width = +params.get('width')!
+    let params = getContextSearchParams(context)
+    let width = +(params.get('width') as string)
     if (width) {
       state.width = width
       messages.push(
@@ -55,9 +56,9 @@ export function Editor(attrs: attrs) {
         ['update-props', '#image-editor #output_image', { width }],
       )
     }
-    let color = params.get('color')
-    if (color) {
-      state.color = color
+    let colorParam = params.get('color')
+    if (colorParam) {
+      state.color = colorParam
       messages.push([
         'update-attrs',
         '#image-editor #output_image',
@@ -67,7 +68,7 @@ export function Editor(attrs: attrs) {
         messages.push([
           'update-props',
           `#image-editor #image-color_${color}`,
-          { checked: color === state!.color },
+          { checked: color === colorParam },
         ]),
       )
     }

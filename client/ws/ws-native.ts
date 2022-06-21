@@ -1,13 +1,14 @@
 import type { ManagedWebsocket } from './ws'
+import type { ServerMessage, ClientMessage } from '../types'
 
 const defaultReconnectInterval = 250
 const maxReconnectInterval = 10 * 1000
 let reconnectInterval = defaultReconnectInterval
 
-export function connectWS<ServerEvent = any, ClientEvent = any>(options: {
+export function connectWS(options: {
   createWS: (protocol: string) => WebSocket
   attachWS: (ws: ManagedWebsocket) => void
-  onMessage: (data: ServerEvent) => void
+  onMessage: (data: ServerMessage) => void
 }) {
   const ws = options.createWS('ws-native')
 
@@ -29,7 +30,7 @@ export function connectWS<ServerEvent = any, ClientEvent = any>(options: {
     ws.close(code, reason)
   }
 
-  function send(event: ClientEvent) {
+  function send(event: ClientMessage) {
     let data = JSON.stringify(event)
     ws.send(data)
   }

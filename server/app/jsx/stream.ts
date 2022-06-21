@@ -1,6 +1,6 @@
 import express from 'express'
 import type { html } from './types'
-import type from 'compression'
+import type {} from 'compression' // for express.response.flush()
 
 if (!express.response.flush) {
   express.response.flush = noop

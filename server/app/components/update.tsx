@@ -1,4 +1,4 @@
-import type { ServerMessage } from '../../../client'
+import type { ServerMessage } from '../../../client/types'
 import type { VNode } from '../../../client/jsx/types'
 import { ExpressContext, getContext, getRouterContext } from '../context.js'
 import { EarlyTerminate, toAbsoluteHref, setNoCache } from '../helpers.js'

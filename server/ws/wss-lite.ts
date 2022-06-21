@@ -2,18 +2,16 @@ import type { Server } from 'typestub-ws'
 import { Ping, Pong, Send } from '../../client/ws/ws-lite.js'
 import { debugLog } from '../debug.js'
 import type { ManagedWebsocket, OnWsMessage } from './wss'
+import type { ServerMessage } from '../../client/types'
 
 let log = debugLog('wss-lite.ts')
 log.enabled = true
 
-export function listenWSSConnection<
-  ClientEvent = any,
-  ServerEvent = any,
->(options: {
+export function listenWSSConnection(options: {
   wss: Server
   onConnection: (ws: ManagedWebsocket) => void
   onClose: (ws: ManagedWebsocket, code?: number, reason?: Buffer) => void
-  onMessage: OnWsMessage<ClientEvent>
+  onMessage: OnWsMessage
 }) {
   const { wss } = options
   wss.on('connection', ws => {
@@ -29,7 +27,7 @@ export function listenWSSConnection<
       ws.close(code, reason)
     }
 
-    function send(event: ServerEvent) {
+    function send(event: ServerMessage) {
       let data = Send + JSON.stringify(event)
       ws.send(data)
     }

@@ -3,7 +3,7 @@ import { Style } from '../components/style.js'
 import JSX from '../jsx/jsx.js'
 import { sessions } from '../session.js'
 import { Update, UpdateIn } from '../components/update.js'
-import type { ServerMessage } from '../../../client'
+import type { ServerMessage } from '../../../client/types'
 import SourceCode from '../components/source-code.js'
 import { StaticPageRoute, title } from '../routes.js'
 import { Node } from '../jsx/types.js'
@@ -34,15 +34,6 @@ class State {
   private _current = 27
   private _target = 25.5
   private _status: Status = 'idle'
-  get current() {
-    return this._current
-  }
-  get target() {
-    return this._target
-  }
-  get status() {
-    return this._status
-  }
   private tick = () => {
     if (this.current === this.target) {
       this.status = 'idle'
@@ -58,7 +49,10 @@ class State {
     }
     this.timer = setTimeout(this.tick, UpdateInterval)
   }
-  private timer: any = setTimeout(this.tick)
+  private timer: NodeJS.Timeout | null = setTimeout(this.tick)
+  get status() {
+    return this._status
+  }
   set status(value: Status) {
     if (this._status === value) return
     this._status = value
@@ -74,6 +68,9 @@ class State {
     ]
     update(['batch', messages])
   }
+  get target() {
+    return this._target
+  }
   set target(value: number) {
     if (this._target === value) return
     this._target = value
@@ -81,6 +78,9 @@ class State {
     if (!this.timer) {
       this.timer = setTimeout(this.tick)
     }
+  }
+  get current() {
+    return this._current
   }
   set current(value: number) {
     if (this._current === value) return

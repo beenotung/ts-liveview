@@ -3,9 +3,15 @@ import { Raw } from './raw.js'
 import JSX from '../jsx/jsx.js'
 import * as minify from 'minify'
 
+type MinifyType = {
+  minify: {
+    css(code: string): string
+  }
+}
+
 export function Style(css: string) {
   if (config.production) {
-    css = (minify as any).minify.css(css)
+    css = (minify as unknown as MinifyType).minify.css(css)
   }
   return <style>{Raw(css)}</style>
 }

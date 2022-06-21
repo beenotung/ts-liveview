@@ -109,7 +109,11 @@ function writeElement(
   [selector, attrs, children]: Element,
   context: Context,
 ): void {
-  let tagName = selector.match(tagNameRegex)![1]
+  let tagNameMatch = selector.match(tagNameRegex)
+  if (!tagNameMatch) {
+    throw new TypeError('failed to parse tag name, selector: ' + selector)
+  }
+  let tagName: string = tagNameMatch[1]
   let html = `<${tagName}`
   let idMatch = selector.match(idRegex)
   if (idMatch) {
@@ -157,7 +161,7 @@ function writeElement(
   stream.write(`</${tagName}>`)
 }
 
-export function flagsToClassName(flags: Record<string, any>): string {
+export function flagsToClassName(flags: Record<string, boolean>): string {
   let classes: string[] = []
   Object.entries(flags).forEach(([name, value]) => {
     if (value) {

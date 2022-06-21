@@ -1,10 +1,10 @@
 import { allNames } from '@beenotung/tslib/constant/character-name.js'
 import { Random } from '@beenotung/tslib/random.js'
 import { YEAR } from '@beenotung/tslib/time.js'
-import { ServerMessage } from '../../../client/index.js'
+import type { ServerMessage } from '../../../client/types'
 import { debugLog } from '../../debug.js'
 import { Style } from '../components/style.js'
-import { getContext, WsContext } from '../context.js'
+import { getContext } from '../context.js'
 import { getContextCookie } from '../cookie.js'
 import JSX from '../jsx/jsx.js'
 import { attrs, Node } from '../jsx/types.js'
@@ -237,10 +237,17 @@ function rename(attrs: attrs) {
   if (!newNickname) {
     throw new Error('missing nickname in args')
   }
+  if (typeof newNickname !== 'string') {
+    throw new TypeError('newNickname must be a string')
+  }
   session.rename(newNickname)
   throw EarlyTerminate
 }
 
+type PostBody = {
+  nickname?: string
+  message?: string
+}
 function send(attrs: attrs) {
   let context = getContext(attrs)
   if (context.type === 'express') {
@@ -267,7 +274,7 @@ function send(attrs: attrs) {
     if (!body) {
       throw new Error('Missing form body in args')
     }
-    let { nickname, message } = body
+    let { nickname, message } = body as PostBody
     if (!message) {
       throw new Error('Missing message in args')
     }
@@ -312,7 +319,7 @@ function Chatroom(attrs: attrs) {
     }
     case 'ws': {
       let ws = context.ws
-      let body = context.args?.[0]
+      let body = context.args?.[0] as PostBody | undefined
       if (body) {
         nickname = body.nickname || nickname
       }

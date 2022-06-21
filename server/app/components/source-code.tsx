@@ -34,8 +34,8 @@ function SourceCode(attrs: { page: string }) {
           Source Code of <code>{attrs.page}</code>
         </b>
       </summary>
-      <link rel="stylesheet" href="/prism/prism.css" />
-      <script src="/prism/prism.js"></script>
+      <link rel="stylesheet" href="/lib/prism/prism.css" />
+      <script src="/lib/prism/prism.js"></script>
       {importPart ? (
         <>
           <details>

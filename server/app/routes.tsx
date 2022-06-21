@@ -2,12 +2,7 @@ import { capitalize } from '@beenotung/tslib/string.js'
 import { Router } from 'url-router.ts'
 import { config } from '../config.js'
 import { Redirect } from './components/router.js'
-import type {
-  DynamicContext,
-  ExpressContext,
-  RouterContext,
-  WsContext,
-} from './context.js'
+import type { DynamicContext } from './context.js'
 import JSX from './jsx/jsx.js'
 import type { Node } from './jsx/types'
 import About, { License } from './pages/about.js'
@@ -208,7 +203,7 @@ Object.entries(redirectDict).forEach(([url, href]) =>
     title: title('Redirection Page'),
     description: 'Redirect to ' + url,
     node: <Redirect href={href} />,
-    status: 302
+    status: 302,
   }),
 )
 

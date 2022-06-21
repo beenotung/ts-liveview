@@ -1,11 +1,3 @@
-import type {
-  attrs,
-  props,
-  selector,
-  title,
-  VElement,
-  VNode,
-} from './jsx/types'
 import {
   appendNode,
   removeNode,
@@ -18,11 +10,13 @@ import {
   setValue,
 } from './jsx/dom.js'
 import { connectWS } from './ws/ws-lite.js'
+import { WindowStub } from './internal'
+import { ClientMessage, ServerMessage } from './types.js'
 
-let win = window as any
+let win = window as unknown as WindowStub
 let origin = location.origin
 let wsUrl = origin.replace('http', 'ws')
-connectWS<ServerMessage>({
+connectWS({
   createWS(protocol) {
     let status = document.querySelector('#ws_status')
     if (status) {
@@ -33,9 +27,9 @@ connectWS<ServerMessage>({
   attachWS(ws) {
     console.debug('attach ws')
 
-    let emit = function emit() {
+    let emit: WindowStub['emit'] = function emit() {
       ws.send(Array.from(arguments))
-    } as (...args: any[]) => void
+    }
 
     function emitHref(event: Event, flag?: 'q') {
       let a = event.currentTarget as HTMLAnchorElement
@@ -50,7 +44,7 @@ connectWS<ServerMessage>({
 
     function emitForm(event: Event) {
       let form = event.target as HTMLFormElement
-      let data = {} as any
+      let data = {} as Record<string, FormDataEntryValue>
       new FormData(form).forEach((value, key) => {
         data[key] = value
       })
@@ -59,7 +53,7 @@ connectWS<ServerMessage>({
       event.preventDefault()
     }
 
-    window.onpopstate = (event: PopStateEvent) => {
+    window.onpopstate = (_event: PopStateEvent) => {
       let url = location.href.replace(origin, '')
       emit(url)
     }
@@ -101,30 +95,6 @@ connectWS<ServerMessage>({
     onServerMessage(event)
   },
 })
-
-export type ClientMessage =
-  | [
-      type: 'mount',
-      url: string,
-      locale: string | undefined,
-      timeZone: string | undefined,
-      timezoneOffset: number,
-    ]
-  | [url: string, data?: any]
-
-export type ServerMessage =
-  | ['update', VElement, title?]
-  | ['update-in', selector, VNode, title?]
-  | ['append', selector, VNode]
-  | ['remove', selector]
-  | ['update-text', selector, string | number]
-  | ['update-all-text', selector, string | number]
-  | ['update-attrs', selector, attrs]
-  | ['update-props', selector, props]
-  | ['set-value', selector, string | number]
-  | ['batch', ServerMessage[]]
-  | ['set-cookie', string]
-  | ['set-title', title]
 
 function onServerMessage(message: ServerMessage) {
   switch (message[0]) {

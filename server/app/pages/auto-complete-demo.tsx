@@ -6,6 +6,7 @@ import { join } from 'path'
 import { Update } from '../components/update.js'
 import { distance } from 'fastest-levenshtein'
 import SourceCode from '../components/source-code.js'
+import { getContextSearchParams } from '../routes.js'
 
 const wordSet = new Set<string>()
 const dictDir = '/usr/share/dict'
@@ -36,7 +37,7 @@ const TopN = 20
 export function AutoCompleteDemo(attrs: attrs) {
   const context = getContext(attrs)
   if (context.type === 'ws') {
-    const input = new URLSearchParams(context.routerMatch!.search).get('input')
+    const input = getContextSearchParams(context).get('input')
     if (input) {
       const allMatches = words.filter(word => word.includes(input))
       const topMatches = allMatches

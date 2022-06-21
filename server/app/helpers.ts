@@ -1,4 +1,4 @@
-import type { ServerMessage } from '../../client'
+import type { ServerMessage } from '../../client/types'
 import type express from 'express'
 
 export class Message {

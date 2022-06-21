@@ -82,11 +82,18 @@ fieldset fieldset {
 `)
 
 function set(attrs: attrs) {
+  type Params = {
+    key: string
+  }
   const context = getContext(attrs)
   if (context.type === 'ws' && context.args) {
-    const match = context.routerMatch!
-    const key = match.params.key
-    const value = context.args![0]
+    const match = context.routerMatch
+    if (!match) {
+      console.error('Assert Error: missing routerMatch in ws context')
+      return
+    }
+    const key = (match.params as Params).key
+    const value = context.args[0] as string
     switch (key) {
       case 'username':
         username = value
@@ -110,8 +117,8 @@ function set(attrs: attrs) {
 function submit(attrs: attrs) {
   const context = getContext(attrs)
   function getValue() {
-    if (context.type === 'ws') {
-      const value = context.args![0]
+    if (context.type === 'ws' && context.args) {
+      const value = context.args[0]
       log('ws submit:', value)
       return value
     }

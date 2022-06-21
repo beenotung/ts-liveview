@@ -11,6 +11,7 @@
   },
   "license": "BSD-2-Clause",
   "scripts": {
+    "lint": "eslint --fix .",
     "format": "prettier --write . && format-json-cli",
     "fix": "run-p fix:*",
     "fix:server": "fix-esm-import-path server/index.ts",
@@ -63,7 +64,10 @@
     "@types/minify": "^8.0.0",
     "@types/node": "^16.11.36",
     "@types/sanitize-html": "^2.6.2",
+    "@typescript-eslint/eslint-plugin": "^5.29.0",
+    "@typescript-eslint/parser": "^5.29.0",
     "esbuild": "^0.14.39",
+    "eslint": "^8.18.0",
     "fix-esm-import-path": "^1.2.1",
     "format-json-cli": "^1.0.1",
     "gen-env": "^1.0.1",

@@ -1,5 +1,5 @@
-import { ServerMessage } from '../../client/index.js'
-import { ManagedWebsocket } from '../ws/wss.js'
+import type { ServerMessage } from '../../client/types'
+import type { ManagedWebsocket } from '../ws/wss.js'
 import { getContext } from './context.js'
 import JSX from './jsx/jsx.js'
 import { onWsSessionClose, sessions } from './session.js'
@@ -65,7 +65,7 @@ export function Stats(props: {}) {
     )
     onWsSessionClose(ws, session => {
       let ws = session.ws
-      state.live.delete(ws!)
+      state.live.delete(ws)
       let message: ServerMessage = [
         'update-text',
         '#stats .live',
