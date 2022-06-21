@@ -14,9 +14,12 @@ ts-liveview supports [`JSX`](#jsx) but it **[doesn't rely on Virtual DOM](#no-vd
 
 ```bash
 npm init ts-liveview my-app
-cd my-app
-pnpm install	# or `yarn install` or `npm install`
-pnpm dev    	# or `yarn dev`     or `npm run dev`
+cd my-app/db
+pnpm install  # or `yarn install` or `npm install`
+pnpm migrate  # or `yarn migrate` or `npm run migrate`
+cd ..
+pnpm install  # or `yarn install` or `npm install`
+pnpm dev      # or `yarn dev`     or `npm run dev`
 ```
 
 Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liveview)
