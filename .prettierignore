@@ -4,6 +4,7 @@ pnpm-lock.yaml
 
 # built files
 dist/
+build/
 
 # lighthouse report
 localhost_*.report.html
