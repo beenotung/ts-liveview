@@ -28,7 +28,7 @@ connectWS({
     console.debug('attach ws')
 
     let emit: WindowStub['emit'] = function emit() {
-      ws.send(Array.from(arguments))
+      ws.send(Array.from(arguments) as ClientMessage)
     }
 
     function emitHref(event: Event, flag?: 'q') {
