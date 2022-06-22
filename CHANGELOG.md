@@ -3,6 +3,7 @@
 ## [v3](https://github.com/beenotung/ts-liveview/tree/v3)
 
 2022 - Present
+
 - Setup eslint
 - Harden type definition and usage on Context (e.g. avoid non-null assertions and explicit-any)
 - Move 3rd party libraries from `/public` to `/public/lib`

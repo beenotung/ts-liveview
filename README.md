@@ -68,9 +68,9 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
 ## Size Comparison with other tools
 
 | Tools             | Runtime Code Size (minified)       |
-| ----------------- | -----------------------------------|
+| ----------------- | ---------------------------------- |
 | Vanilla           | 0.3K                               |
-| **ts-liveview 3** | **6.5K** *OR* same size as vanilla |
+| **ts-liveview 3** | **6.5K** _OR_ same size as vanilla |
 | Stencil 2.0.1     | 13.7K                              |
 | Svelte 3.0.0      | 17.4K                              |
 | Vue 3.2.33        | 49.3K                              |

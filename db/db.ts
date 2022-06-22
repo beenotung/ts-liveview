@@ -7,5 +7,5 @@ export let db = newDB({
   path: dbFile,
   migrate: false,
   fileMustExist: true,
-  WAL: true
+  WAL: true,
 })
