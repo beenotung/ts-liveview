@@ -30,7 +30,7 @@ export function aggressivelyTrimInlineScript(html: string): string {
 }
 
 export function MuteConsole() {
-  let html = aggressivelyTrimInlineScript(/* html */ `
+  const html = aggressivelyTrimInlineScript(/* html */ `
 <script>
   console.original_debug = console.debug;
   console.debug = () => {}
