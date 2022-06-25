@@ -23,9 +23,11 @@ function classifyUserAgents(
   let DuckDuckGoBot = 0
   let TwitterBot = 0
   let TelegramBot = 0
+  let WhatsAppBot = 0
   let YandexBot = 0
   let MixrankBot = 0
   let PetalBot = 0
+  let QwantBot = 0
   let AhrefsBot = 0
   let DotBot = 0
   let CiscoAnyConnect = 0
@@ -40,6 +42,7 @@ function classifyUserAgents(
     let ua: string = row.user_agent
     let count: number = row.count
     if (ua.startsWith('TelegramBot')) TelegramBot += count
+    else if (ua.startsWith('WhatsApp')) WhatsAppBot += count
     else if (ua.startsWith('AnyConnect')) CiscoAnyConnect += count
     else if (ua.startsWith('python-requests')) PythonRequests += count
     else if (ua.includes('www.bing.com/bingbot')) BingBot += count
@@ -47,6 +50,7 @@ function classifyUserAgents(
     else if (ua.includes('https://nmap.org/book/nse.html')) Nmap += count
     else if (ua.includes('https://webmaster.petalsearch.com/site/petalbot'))
       PetalBot += count
+    else if (ua.includes('https://www.qwant.com/')) QwantBot += count
     else if (ua.includes('https://opensiteexplorer.org/dotbot')) DotBot += count
     else if (ua.includes('http://ahrefs.com/robot/')) AhrefsBot += count
     else if (ua.includes('http://www.google.com/bot.html')) GoogleBot += count
@@ -92,6 +96,8 @@ function classifyUserAgents(
       DuckDuckGoBot,
       TwitterBot,
       TelegramBot,
+      WhatsAppBot,
+      QwantBot,
       PetalBot,
       YandexBot,
       CiscoAnyConnect,
