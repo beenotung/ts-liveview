@@ -1,6 +1,6 @@
 import { o } from '../jsx/jsx.js'
 import { Context, getContextUrl } from '../context.js'
-import { attrs, Node } from '../jsx/types.js'
+import type { attrs, Node } from '../jsx/types'
 
 function Url(_attrs: attrs, context: Context) {
   let url = getContextUrl(context)

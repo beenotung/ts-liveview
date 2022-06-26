@@ -1,5 +1,5 @@
 import { o } from '../jsx/jsx.js'
-import type { attrs } from '../jsx/types.js'
+import type { attrs } from '../jsx/types'
 import { debugLog } from '../../debug.js'
 import { Style } from '../components/style.js'
 import { getContextCookie } from '../cookie.js'

@@ -6,7 +6,7 @@ import { debugLog } from '../../debug.js'
 import { Style } from '../components/style.js'
 import { getContextCookie } from '../cookie.js'
 import { o } from '../jsx/jsx.js'
-import { Node } from '../jsx/types.js'
+import type { Node } from '../jsx/types'
 import {
   onWsSessionClose,
   Session,

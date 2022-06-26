@@ -1,6 +1,6 @@
 import { o } from '../jsx/jsx.js'
 import { getContextUrl } from '../context.js'
-import { ComponentFn, Node } from '../jsx/types.js'
+import type { ComponentFn, Node } from '../jsx/types'
 import SourceCode from '../components/source-code.js'
 
 let Url: ComponentFn = (_attrs: {}, context) => {

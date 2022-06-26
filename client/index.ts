@@ -11,7 +11,7 @@ import {
 } from './jsx/dom.js'
 import { connectWS } from './ws/ws-lite.js'
 import { WindowStub } from './internal'
-import { ClientMessage, ServerMessage } from './types.js'
+import type { ClientMessage, ServerMessage } from './types'
 
 let win = window as unknown as WindowStub
 let origin = location.origin

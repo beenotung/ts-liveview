@@ -1,5 +1,5 @@
 import { o } from '../jsx/jsx.js'
-import { attrs } from '../jsx/types.js'
+import type { attrs } from '../jsx/types'
 import { existsSync, readdirSync, readFileSync } from 'fs'
 import { join } from 'path'
 import { Update } from '../components/update.js'
