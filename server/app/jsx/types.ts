@@ -12,7 +12,7 @@ export type Fragment = [NodeList]
 type CFAttrs = { children?: NodeList }
 
 /** similar to React.FC */
-export type ComponentFn<Attrs extends CFAttrs> = (
+export type ComponentFn<Attrs = CFAttrs> = (
   attrs: Attrs,
   context: Context,
 ) => Node
