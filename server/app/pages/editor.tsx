@@ -1,6 +1,5 @@
-import JSX from '../jsx/jsx.js'
+import { o } from '../jsx/jsx.js'
 import type { attrs } from '../jsx/types'
-import { getContext } from '../context.js'
 import { ManagedWebsocket } from '../../ws/wss.js'
 import { EarlyTerminate } from '../helpers.js'
 import type { ServerMessage } from '../../../client/types'
@@ -9,6 +8,7 @@ import { Script } from '../components/script.js'
 import Style from '../components/style.js'
 import SourceCode from '../components/source-code.js'
 import { getContextSearchParams } from '../routes.js'
+import type { Context } from '../context'
 
 type State = {
   width: number
@@ -31,8 +31,7 @@ const style = Style(/* css */ `
 }
 `)
 
-export function Editor(attrs: attrs) {
-  const context = getContext(attrs)
+export function Editor(_attrs: attrs, context: Context) {
   function getState(): State {
     if (context.type === 'static') return { ...DefaultState }
     if (context.type === 'express') {

@@ -1,6 +1,6 @@
 import { debugLog } from '../debug.js'
 import type { ManagedWebsocket } from '../ws/wss'
-import { WsContext } from './context.js'
+import type { WsContext } from './context'
 
 let log = debugLog('session.ts')
 log.enabled = true

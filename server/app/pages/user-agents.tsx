@@ -1,8 +1,7 @@
 import { getUserAgents } from '../../../db/store.js'
 import SourceCode from '../components/source-code.js'
 import Style from '../components/style.js'
-import JSX from '../jsx/jsx.js'
-import type { Node } from '../jsx/types.js'
+import { o } from '../jsx/jsx.js'
 
 function classifyUserAgents(
   rows: Array<{ user_agent: string; count: number }>,

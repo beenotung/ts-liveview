@@ -1,5 +1,4 @@
-import JSX from '../jsx/jsx.js'
-import { getContext } from '../context.js'
+import { o } from '../jsx/jsx.js'
 import { attrs } from '../jsx/types.js'
 import { existsSync, readdirSync, readFileSync } from 'fs'
 import { join } from 'path'
@@ -7,6 +6,7 @@ import { Update } from '../components/update.js'
 import { distance } from 'fastest-levenshtein'
 import SourceCode from '../components/source-code.js'
 import { getContextSearchParams } from '../routes.js'
+import type { Context } from '../context'
 
 const wordSet = new Set<string>()
 const dictDir = '/usr/share/dict'
@@ -34,8 +34,7 @@ const words = Array.from(wordSet)
 
 const TopN = 20
 
-export function AutoCompleteDemo(attrs: attrs) {
-  const context = getContext(attrs)
+export function AutoCompleteDemo(_attrs: attrs, context: Context) {
   if (context.type === 'ws') {
     const input = getContextSearchParams(context).get('input')
     if (input) {

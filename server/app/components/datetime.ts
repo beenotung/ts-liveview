@@ -1,5 +1,5 @@
 import { format_relative_time } from '@beenotung/tslib/format.js'
-import { Context, getContext } from '../context.js'
+import type { Context } from '../context'
 import { debugLog } from '../../debug.js'
 import { TimezoneDate } from 'timezone-date.ts'
 import { Session, sessionToContext } from '../session.js'
@@ -18,11 +18,13 @@ const { abs, floor } = Math
 let log = debugLog('datetime.ts')
 log.enabled = true
 
-export function DateTimeText(attrs: {
-  time: number
-  relativeTimeThreshold?: number
-}) {
-  let context = getContext(attrs)
+export function DateTimeText(
+  attrs: {
+    time: number
+    relativeTimeThreshold?: number
+  },
+  context: Context,
+) {
   return formatDateTimeText(attrs, context)
 }
 

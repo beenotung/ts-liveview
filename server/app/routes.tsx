@@ -2,8 +2,8 @@ import { capitalize } from '@beenotung/tslib/string.js'
 import { Router } from 'url-router.ts'
 import { config } from '../config.js'
 import { Redirect } from './components/router.js'
-import type { DynamicContext } from './context.js'
-import JSX from './jsx/jsx.js'
+import type { DynamicContext } from './context'
+import { o } from './jsx/jsx.js'
 import type { Node } from './jsx/types'
 import About, { License } from './pages/about.js'
 import AutoCompleteDemo from './pages/auto-complete-demo.js'
@@ -231,4 +231,10 @@ export function getContextSearchParams(context: DynamicContext) {
   return new URLSearchParams(
     context.routerMatch?.search || context.url.split('?').pop(),
   )
+}
+
+if (config.setup_robots_txt) {
+  setTimeout(() => {
+    console.log(Object.keys(routeDict).join('\n'))
+  }, 1000)
 }

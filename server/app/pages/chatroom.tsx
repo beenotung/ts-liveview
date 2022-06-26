@@ -4,10 +4,9 @@ import { YEAR } from '@beenotung/tslib/time.js'
 import type { ServerMessage } from '../../../client/types'
 import { debugLog } from '../../debug.js'
 import { Style } from '../components/style.js'
-import { getContext } from '../context.js'
 import { getContextCookie } from '../cookie.js'
-import JSX from '../jsx/jsx.js'
-import { attrs, Node } from '../jsx/types.js'
+import { o } from '../jsx/jsx.js'
+import { Node } from '../jsx/types.js'
 import {
   onWsSessionClose,
   Session,
@@ -23,6 +22,7 @@ import DateTimeText, {
 import { nodeToVNode } from '../jsx/vnode.js'
 import { Request, Response, NextFunction } from 'express'
 import SourceCode from '../components/source-code.js'
+import { Context } from '../context'
 
 let log = debugLog('chatroom.tsx')
 log.enabled = true
@@ -209,8 +209,7 @@ function randomName() {
   return name
 }
 
-function getChatSession(attrs: attrs) {
-  let context = getContext(attrs)
+function getChatSession(context: Context) {
   if (context.type !== 'ws') {
     throw new Error('this route is only for ws context')
   }
@@ -225,14 +224,14 @@ function getChatSession(attrs: attrs) {
   }
 }
 
-function typing(attrs: attrs) {
-  let { session } = getChatSession(attrs)
+function typing(_attrs: {}, context: Context) {
+  let { session } = getChatSession(context)
   session.markTyping()
   throw EarlyTerminate
 }
 
-function rename(attrs: attrs) {
-  let { session, context } = getChatSession(attrs)
+function rename(_attrs: {}, _context: Context) {
+  let { session, context } = getChatSession(_context)
   let newNickname = context.args?.[0]
   if (!newNickname) {
     throw new Error('missing nickname in args')
@@ -248,8 +247,7 @@ type PostBody = {
   nickname?: string
   message?: string
 }
-function send(attrs: attrs) {
-  let context = getContext(attrs)
+function send(_attrs: {}, context: Context) {
   if (context.type === 'express') {
     const { req, res } = context
     if (req.method !== 'POST') {
@@ -296,8 +294,7 @@ let nicknameMiddleware = (req: Request, res: Response, next: NextFunction) => {
   next()
 }
 
-function Chatroom(attrs: attrs) {
-  let context = getContext(attrs)
+function Chatroom(_attrs: {}, context: Context) {
   let cookies = getContextCookie(context)
   let nickname = cookies?.nickname || ''
   log({ type: context.type, cookies })
@@ -406,8 +403,7 @@ type MessageItemAttrs = {
   time: number
 }
 
-function MessageItem(attrs: MessageItemAttrs) {
-  let context = getContext(attrs)
+function MessageItem(attrs: MessageItemAttrs, context: Context) {
   let time = attrs.time
   startRelativeTimer({ time, selector: `#${attrs.id} .chat-time` }, context)
   return (

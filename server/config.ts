@@ -20,6 +20,7 @@ export let config = {
   cookie_secret: env.COOKIE_SECRET,
   site_name: 'ts-liveview Demo',
   site_description: 'Demo website of ts-liveview',
+  setup_robots_txt: false,
 }
 
 if (env.BEHIND_HTTPS_PROXY === 'true') {

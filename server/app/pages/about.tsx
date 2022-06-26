@@ -1,4 +1,4 @@
-import JSX from '../jsx/jsx.js'
+import { o } from '../jsx/jsx.js'
 import { readFileSync } from 'fs'
 import { Switch } from '../components/router.js'
 import { marked } from 'marked'

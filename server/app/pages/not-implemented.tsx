@@ -1,9 +1,9 @@
-import JSX from '../jsx/jsx.js'
-import { getContextUrl } from '../context.js'
+import { o } from '../jsx/jsx.js'
+import { Context, getContextUrl } from '../context.js'
 import { attrs, Node } from '../jsx/types.js'
 
-function Url(attrs: attrs) {
-  let url = getContextUrl(attrs)
+function Url(_attrs: attrs, context: Context) {
+  let url = getContextUrl(context)
   return url
 }
 

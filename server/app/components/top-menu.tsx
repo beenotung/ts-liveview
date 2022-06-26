@@ -1,4 +1,4 @@
-import JSX from '../jsx/jsx.js'
+import { o } from '../jsx/jsx.js'
 import { menuRoutes } from '../routes.js'
 import { Menu, MenuRoutes } from './menu.js'
 

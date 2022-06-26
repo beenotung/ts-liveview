@@ -1,6 +1,6 @@
 import { config } from '../../config.js'
 import { Raw } from './raw.js'
-import JSX from '../jsx/jsx.js'
+import { o } from '../jsx/jsx.js'
 import * as minify from 'minify'
 
 type MinifyType = {

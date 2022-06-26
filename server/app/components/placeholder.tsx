@@ -1,4 +1,4 @@
-import JSX from '../jsx/jsx.js'
+import { o } from '../jsx/jsx.js'
 
 export let avatar_url = 'https://www.w3schools.com/w3css/img_avatar.png'
 

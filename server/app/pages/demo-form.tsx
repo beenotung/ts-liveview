@@ -1,13 +1,13 @@
 import { Raw } from '../components/raw.js'
 import { Style } from '../components/style.js'
-import { getContext } from '../context.js'
 import { Message } from '../helpers.js'
-import JSX from '../jsx/jsx.js'
+import { o } from '../jsx/jsx.js'
 import { attrs } from '../jsx/types.js'
 import sanitizeHTML from 'sanitize-html'
 import { Script } from '../components/script.js'
 import debug from 'debug'
 import SourceCode from '../components/source-code.js'
+import type { Context } from '../context'
 
 const log = debug('demo-form.tsx')
 log.enabled = true
@@ -81,11 +81,10 @@ fieldset fieldset {
 }
 `)
 
-function set(attrs: attrs) {
+function set(_attrs: attrs, context: Context) {
   type Params = {
     key: string
   }
-  const context = getContext(attrs)
   if (context.type === 'ws' && context.args) {
     const match = context.routerMatch
     if (!match) {
@@ -114,8 +113,7 @@ function set(attrs: attrs) {
   return DemoForm()
 }
 
-function submit(attrs: attrs) {
-  const context = getContext(attrs)
+function submit(_attrs: attrs, context: Context) {
   function getValue() {
     if (context.type === 'ws' && context.args) {
       const value = context.args[0]

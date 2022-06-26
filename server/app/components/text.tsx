@@ -1,4 +1,4 @@
-import JSX from '../jsx/jsx.js'
+import { o } from '../jsx/jsx.js'
 import type { Fragment, Node } from '../jsx/types'
 
 /** @description consider set "white-space" css property instead */

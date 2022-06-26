@@ -1,6 +1,6 @@
 import { Link } from '../components/router.js'
 import { Style } from '../components/style.js'
-import JSX from '../jsx/jsx.js'
+import { o } from '../jsx/jsx.js'
 import { sessions } from '../session.js'
 import { Update, UpdateIn } from '../components/update.js'
 import type { ServerMessage } from '../../../client/types'
