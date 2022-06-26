@@ -5,7 +5,8 @@
 2022 - Present
 
 - Changed signature of component function
-	- Move `children?: NodeList` from 2nd argument into optional property of attrs (1st argument)
+
+  - Move `children?: NodeList` from 2nd argument into optional property of attrs (1st argument)
   - Pass context to component function explicitly as 2nd argument
 
   The signature of component function is now: `(attrs, context) => Node`
@@ -13,7 +14,7 @@
 - Make transpiled jsx expression more compact
 
   Now using `o` as jsxFactory and `null` as jsxFragmentFactory.
-Previous version use of `JSX.createElement` and `JSX.Fragment` responsively
+  Previous version use of `JSX.createElement` and `JSX.Fragment` responsively
 
 ## [v3](https://github.com/beenotung/ts-liveview/tree/v3)
 
