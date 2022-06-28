@@ -1,12 +1,12 @@
 import { Link } from '../components/router.js'
 import { Style } from '../components/style.js'
-import JSX from '../jsx/jsx.js'
+import { o } from '../jsx/jsx.js'
 import { sessions } from '../session.js'
 import { Update, UpdateIn } from '../components/update.js'
 import type { ServerMessage } from '../../../client/types'
 import SourceCode from '../components/source-code.js'
 import { StaticPageRoute, title } from '../routes.js'
-import { Node } from '../jsx/types.js'
+import type { Node } from '../jsx/types'
 
 const UpdateInterval = 1000
 

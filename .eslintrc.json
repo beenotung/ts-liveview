@@ -31,7 +31,7 @@
       "error",
       {
         "argsIgnorePattern": "^_",
-        "varsIgnorePattern": "JSX"
+        "varsIgnorePattern": "o"
       }
     ],
     "prefer-const": "off",

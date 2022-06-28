@@ -1,6 +1,5 @@
-import JSX from '../jsx/jsx.js'
-import type { attrs } from '../jsx/types.js'
-import { getContext } from '../context.js'
+import { o } from '../jsx/jsx.js'
+import type { attrs } from '../jsx/types'
 import { debugLog } from '../../debug.js'
 import { Style } from '../components/style.js'
 import { getContextCookie } from '../cookie.js'
@@ -8,6 +7,7 @@ import { getOrSetTokenSync } from '../auth/token.js'
 import { EarlyTerminate } from '../helpers.js'
 import type { Request, Response } from 'express'
 import SourceCode from '../components/source-code.js'
+import type { Context } from '../context'
 
 const log = debugLog('demo-cookie-session.ts')
 log.enabled = true
@@ -38,8 +38,7 @@ function tokenHandler(req: Request, res: Response) {
   }
 }
 
-function DemoCookieSession(attrs: attrs) {
-  const context = getContext(attrs)
+function DemoCookieSession(_attrs: attrs, context: Context) {
   const cookies = getContextCookie(context)
   if (!cookies) {
     return (

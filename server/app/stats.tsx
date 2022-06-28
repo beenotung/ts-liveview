@@ -1,11 +1,11 @@
 import type { ServerMessage } from '../../client/types'
 import type { ManagedWebsocket } from '../ws/wss.js'
-import { getContext } from './context.js'
-import JSX from './jsx/jsx.js'
+import { o } from './jsx/jsx.js'
 import { onWsSessionClose, sessions } from './session.js'
 import { existsSync, mkdirSync, readFileSync, writeFile, rename } from 'fs'
 import { debugLog } from '../debug.js'
 import { join } from 'path'
+import { Context } from './context'
 
 let log = debugLog('stats.tsx')
 log.enabled = true
@@ -60,8 +60,7 @@ let state = {
   live: new Set<ManagedWebsocket>(),
 }
 
-export function Stats(props: {}) {
-  let context = getContext(props)
+export function Stats(_attrs: {}, context: Context) {
   let messages: ServerMessage[] = []
   if (context.type === 'express') {
     state.visitor++

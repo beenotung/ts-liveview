@@ -1,24 +1,26 @@
 import type { JSXFragment, Element, NodeList, attrs } from './types'
 
-export const JSX = {
-  createElement(
-    tagName: string,
-    props: attrs | null,
-    ...children: NodeList
-  ): Element | JSXFragment {
-    if (!tagName && !props) {
-      // simplify JSXFragment
-      return [undefined, null, children]
+/**
+ * @alias createElement
+ * It can be specified in per-file basis: https://www.typescriptlang.org/tsconfig#jsxFactory
+ */
+export function o(
+  tagName: string,
+  props: attrs | null,
+  ...children: NodeList
+): Element | JSXFragment {
+  if (!tagName && !props) {
+    // simplify JSXFragment
+    return [undefined, null, children]
+  }
+  // skip empty fields
+  if (children.length === 0) {
+    if (!props) {
+      return [tagName]
     }
-    // skip empty fields
-    if (children.length === 0) {
-      if (!props) {
-        return [tagName]
-      }
-      return [tagName, fixProps(props)]
-    }
-    return [tagName, props ? fixProps(props) : {}, children]
-  },
+    return [tagName, fixProps(props)]
+  }
+  return [tagName, props ? fixProps(props) : {}, children]
 }
 
 function fixProps(props: attrs) {

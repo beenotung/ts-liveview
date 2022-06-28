@@ -1,5 +1,5 @@
 import { Style } from '../components/style.js'
-import JSX from '../jsx/jsx.js'
+import { o } from '../jsx/jsx.js'
 import SourceCode from '../components/source-code.js'
 
 let update = `c.textContent = a.valueAsNumber + b.valueAsNumber`

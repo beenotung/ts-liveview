@@ -1,6 +1,6 @@
-import JSX from '../jsx/jsx.js'
-import { getContext, getRouterContext } from '../context.js'
-import type { Node } from '../jsx/types'
+import { o } from '../jsx/jsx.js'
+import { castDynamicContext, Context } from '../context.js'
+import type { Node, NodeList } from '../jsx/types'
 import { Router as UrlRouter } from 'url-router.ts'
 import { Fragment } from './fragment.js'
 import { EarlyTerminate } from '../helpers.js'
@@ -11,12 +11,14 @@ export type LinkAttrs = {
   'href': string
   'onclick'?: never
   [name: string]: unknown
+  'children'?: NodeList
 }
 
-export function Link(attrs: LinkAttrs, children?: Node[]) {
-  const { 'no-history': quiet, ...aAttrs } = attrs
+export function Link(attrs: LinkAttrs) {
+  const { 'no-history': quiet, children, ...aAttrs } = attrs
   const onclick = quiet ? `emitHref(event,'q')` : `emitHref(event)`
   if (!children) {
+    console.warn('Link attrs:', attrs)
     console.warn(new Error('Link with empty content'))
   }
   return (
@@ -26,9 +28,11 @@ export function Link(attrs: LinkAttrs, children?: Node[]) {
   )
 }
 
-export function Redirect(attrs: { href: string; status?: number }) {
+export function Redirect(
+  attrs: { href: string; status?: number },
+  context: Context,
+) {
   const href = attrs.href
-  const context = getContext(attrs)
   if (context.type === 'express') {
     const res = context.res
     if (res.headersSent) {
@@ -66,11 +70,14 @@ export function Switch(routes: Routes, defaultNode?: Node): Node {
   return <Router router={router} defaultNode={defaultNode} />
 }
 
-export function Router(attrs: {
-  router: UrlRouter<Node>
-  defaultNode?: Node
-}): Node {
-  const context = getRouterContext(attrs)
+export function Router(
+  attrs: {
+    router: UrlRouter<Node>
+    defaultNode?: Node
+  },
+  _context: Context,
+): Node {
+  const context = castDynamicContext(_context)
   const match = attrs.router.route(context.url)
   if (!match) return attrs.defaultNode
   context.routerMatch = match

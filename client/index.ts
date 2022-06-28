@@ -11,7 +11,7 @@ import {
 } from './jsx/dom.js'
 import { connectWS } from './ws/ws-lite.js'
 import { WindowStub } from './internal'
-import { ClientMessage, ServerMessage } from './types.js'
+import type { ClientMessage, ServerMessage } from './types'
 
 let win = window as unknown as WindowStub
 let origin = location.origin
@@ -31,7 +31,10 @@ connectWS({
       ws.send(Array.from(arguments) as ClientMessage)
     }
 
-    function emitHref(event: Event, flag?: 'q') {
+    function emitHref(event: MouseEvent, flag?: 'q') {
+      if (event.ctrlKey) {
+        return // do not prevent open in new tab
+      }
       let a = event.currentTarget as HTMLAnchorElement
       let url = a.getAttribute('href')
       if (flag !== 'q') {

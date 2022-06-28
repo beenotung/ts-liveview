@@ -1,5 +1,5 @@
-import JSX from '../jsx/jsx.js'
-import { readFileSync } from 'fs'
+import { o } from '../jsx/jsx.js'
+import { existsSync, readFileSync } from 'fs'
 import { Switch } from '../components/router.js'
 import { marked } from 'marked'
 import { Raw } from '../components/raw.js'
@@ -56,7 +56,11 @@ export let About = (
 )
 
 export const License = prerender(
-  <p style="white-space:pre-wrap">{readFileSync('LICENSE').toString()}</p>,
+  <p style="white-space:pre-wrap">
+    {existsSync('LICENSE')
+      ? readFileSync('LICENSE').toString()
+      : 'LICENSE file is missing. You can put it in the project root directory, aloneside with the pacakge.json'}
+  </p>,
 )
 
 export default About

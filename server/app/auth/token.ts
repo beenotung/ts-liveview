@@ -1,6 +1,6 @@
 import { randomBytes } from 'crypto'
 import type { NextFunction, Request, Response } from 'express'
-import type { Context } from '../context.js'
+import type { Context } from '../context'
 import { getSecureCookie, secure, getWsCookie } from '../cookie.js'
 import { EarlyTerminate } from '../helpers.js'
 

@@ -1,6 +1,5 @@
 import escapeHTML from 'escape-html'
 import type { Context } from '../context'
-import { ContextSymbol } from '../context.js'
 import debug from 'debug'
 import type {
   html,
@@ -80,11 +79,12 @@ export function writeNode(
       stream.flush()
       return
     }
-    let attrs = {
-      [ContextSymbol]: context,
-      ...node[1],
+    let attrs = node[1] || {}
+    let children = node[2]
+    if (children) {
+      Object.assign(attrs, { children })
     }
-    node = componentFn(attrs, node[2])
+    node = componentFn(attrs, context)
     return writeNode(stream, node, context)
   }
 

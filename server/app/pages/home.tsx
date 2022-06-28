@@ -1,5 +1,5 @@
 import { Link } from '../components/router.js'
-import JSX from '../jsx/jsx.js'
+import { o } from '../jsx/jsx.js'
 import { prerender } from '../jsx/html.js'
 import Comment from '../components/comment.js'
 import SourceCode from '../components/source-code.js'

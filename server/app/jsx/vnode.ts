@@ -2,7 +2,6 @@
 
 import type { VElement, VNode, VNodeList } from '../../../client/jsx/types'
 import type { Context } from '../context'
-import { ContextSymbol } from '../context.js'
 import type {
   Component,
   Element,
@@ -14,6 +13,7 @@ import type {
   Raw,
 } from './types'
 import { nodeListToHTML } from './html.js'
+import { Flush } from '../components/flush.js'
 
 export function nodeToVElementOptimized(
   node: Element | Component,
@@ -28,7 +28,7 @@ export function nodeToVElementOptimized(
     throw new TypeError('expect Element or Component, got Node')
   }
   while (typeof node[0] === 'function') {
-    node = componentToNode(node as Component, context) as Element | Component
+    node = componentToVNode(node as Component, context) as Element | Component
     if (
       !(
         Array.isArray(node) &&
@@ -85,19 +85,24 @@ export function nodeToVNode(node: Node, context: Context): VNode {
   }
 
   if (typeof node[0] === 'function') {
-    node = componentToNode(node, context)
-    return nodeToVNode(node, context)
+    return componentToVNode(node, context)
   }
 
   return elementToVElement(node, context)
 }
 
-function componentToNode(component: Component, context: Context): Node {
-  const attrs = {
-    [ContextSymbol]: context,
-    ...component[1],
+function componentToVNode(component: Component, context: Context): VNode {
+  let componentFn = component[0]
+  if (componentFn === Flush) {
+    return null
   }
-  return component[0](attrs, component[2])
+  let attrs = component[1] || {}
+  let children = component[2]
+  if (children) {
+    Object.assign(attrs, { children })
+  }
+  let node = componentFn(attrs, context)
+  return nodeToVNode(node, context)
 }
 
 function elementToVElement(element: Element, context: Context): VElement {

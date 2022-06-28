@@ -1,21 +1,24 @@
 import { flagsToClassName } from '../jsx/html.js'
-import JSX from '../jsx/jsx.js'
+import { o } from '../jsx/jsx.js'
 import type { attrs, Node } from '../jsx/types'
 import { mapArray } from './fragment.js'
 import { Link } from './router.js'
 import { Style } from './style.js'
-import { getContextUrl } from '../context.js'
+import { Context, getContextUrl } from '../context.js'
 import { capitalize } from '@beenotung/tslib/string.js'
 
 export type MenuRoutes = Array<[url: string, text: string, alias?: string]>
 
-export function Menu(attrs: {
-  routes: MenuRoutes
-  matchPrefix?: boolean
-  separator?: Node
-  attrs?: attrs
-}) {
-  const currentUrl = getContextUrl(attrs)
+export function Menu(
+  attrs: {
+    routes: MenuRoutes
+    matchPrefix?: boolean
+    separator?: Node
+    attrs?: attrs
+  },
+  context: Context,
+) {
+  const currentUrl = getContextUrl(context)
   return (
     <>
       {Style(/* css */ `

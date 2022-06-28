@@ -1,14 +1,14 @@
-import JSX from '../jsx/jsx.js'
+import { o } from '../jsx/jsx.js'
 import { getContextUrl } from '../context.js'
-import { attrs } from '../jsx/types.js'
+import type { ComponentFn, Node } from '../jsx/types'
 import SourceCode from '../components/source-code.js'
 
-function Url(attrs: attrs) {
-  let url = getContextUrl(attrs)
+let Url: ComponentFn = (_attrs: {}, context) => {
+  let url = getContextUrl(context)
   return url
 }
 
-let NotMatch = (
+let NotMatch: Node = (
   <div id="not-match">
     <h2>404 Page Not Found</h2>
     <p>

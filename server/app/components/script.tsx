@@ -1,26 +1,33 @@
 import { config } from '../../config.js'
-import JSX from '../jsx/jsx.js'
-import { Raw } from './raw.js'
+import { o } from '../jsx/jsx.js'
 import * as minify from 'minify'
-import { nodeToHTML } from '../jsx/html.js'
+import type { Element, Raw } from '../jsx/types'
 
 type MinifyType = {
   minify: {
-    html(code: string): string
+    html(code: string): Promise<string>
   }
 }
 
-export function Script(js: string) {
-  const node = <script>{Raw(js)}</script>
-  if ('not fixed') {
-    return node
-  }
+const cache = new Map<string, string>()
+
+export function Script(js: string): Element {
   if (config.production) {
-    // FIXME need to explicitly allow script tag
-    const html = nodeToHTML(node, { type: 'static' })
-    // TODO support async result
-    return (minify as unknown as MinifyType).minify.html(html)
+    if (cache.has(js)) {
+      js = cache.get(js) as string
+    } else {
+      cache.set(js, js)
+      const p = (minify as unknown as MinifyType).minify.html(js)
+      p.then(code => {
+        cache.set(js, code)
+        raw[1] = code
+      }).catch(error => {
+        console.error('failed to minify js:', { error, js })
+      })
+    }
   }
+  const raw: Raw = ['raw', js]
+  const node = <script>{raw}</script>
   return node
 }
 
@@ -29,12 +36,7 @@ export function aggressivelyTrimInlineScript(html: string): string {
   return html.replace(/ /g, '').replace(/\n/g, '')
 }
 
-export function MuteConsole() {
-  let html = aggressivelyTrimInlineScript(/* html */ `
-<script>
-  console.original_debug = console.debug;
-  console.debug = () => {}
-</script>
+export const MuteConsole = Script(`
+console.original_debug = console.debug;
+console.debug = () => {};
 `)
-  return Raw(html)
-}

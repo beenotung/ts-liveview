@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs'
 import { join } from 'path'
-import JSX from '../jsx/jsx.js'
+import { o } from '../jsx/jsx.js'
 
 export let SourceCodeStyle = /* css */ `
 pre[class*="language-"],

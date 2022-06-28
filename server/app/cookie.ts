@@ -5,7 +5,7 @@ import type express from 'express'
 import { config } from '../config.js'
 import { debugLog } from '../debug.js'
 import { EarlyTerminate } from './helpers.js'
-import { Context } from './context.js'
+import type { Context } from './context'
 
 const log = debugLog('cookie.ts')
 log.enabled = true

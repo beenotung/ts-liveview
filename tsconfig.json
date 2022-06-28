@@ -2,7 +2,8 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "jsx": "react",
-    "reactNamespace": "JSX",
+    "jsxFactory": "o",
+    "jsxFragmentFactory": "null",
     "strict": true,
     "incremental": true,
     "moduleResolution": "node",

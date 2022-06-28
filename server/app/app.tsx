@@ -1,8 +1,8 @@
-import JSX from './jsx/jsx.js'
+import { o } from './jsx/jsx.js'
 import type { index } from '../../template/index.html'
 import { loadTemplate } from '../template.js'
 import express, { Response } from 'express'
-import type { ExpressContext, WsContext } from './context.js'
+import type { ExpressContext, WsContext } from './context'
 import type { Element, Node } from './jsx/types'
 import { nodeToHTML, writeNode } from './jsx/html.js'
 import { sendHTMLHeader } from './express.js'
@@ -30,7 +30,7 @@ let scripts = config.development ? (
   <script src="/js/index.js" type="module" defer></script>
 ) : (
   <>
-    <MuteConsole />
+    {MuteConsole}
     <script src="/js/bundle.min.js" type="module" defer></script>
   </>
 )

@@ -1,8 +1,7 @@
 import { getUserAgents } from '../../../db/store.js'
 import SourceCode from '../components/source-code.js'
 import Style from '../components/style.js'
-import JSX from '../jsx/jsx.js'
-import type { Node } from '../jsx/types.js'
+import { o } from '../jsx/jsx.js'
 
 function classifyUserAgents(
   rows: Array<{ user_agent: string; count: number }>,
@@ -23,9 +22,12 @@ function classifyUserAgents(
   let DuckDuckGoBot = 0
   let TwitterBot = 0
   let TelegramBot = 0
+  let WhatsAppBot = 0
   let YandexBot = 0
   let MixrankBot = 0
   let PetalBot = 0
+  let QwantBot = 0
+  let BLEXBot = 0
   let AhrefsBot = 0
   let DotBot = 0
   let CiscoAnyConnect = 0
@@ -34,12 +36,13 @@ function classifyUserAgents(
   let CensysInspect = 0
   let PaloBot = 0
   let Nmap = 0
-  let otherSet = new Set<string>()
+  let others = new Map<string, number>()
 
   rows.forEach(row => {
     let ua: string = row.user_agent
     let count: number = row.count
     if (ua.startsWith('TelegramBot')) TelegramBot += count
+    else if (ua.startsWith('WhatsApp')) WhatsAppBot += count
     else if (ua.startsWith('AnyConnect')) CiscoAnyConnect += count
     else if (ua.startsWith('python-requests')) PythonRequests += count
     else if (ua.includes('www.bing.com/bingbot')) BingBot += count
@@ -47,9 +50,12 @@ function classifyUserAgents(
     else if (ua.includes('https://nmap.org/book/nse.html')) Nmap += count
     else if (ua.includes('https://webmaster.petalsearch.com/site/petalbot'))
       PetalBot += count
+    else if (ua.includes('https://www.qwant.com/')) QwantBot += count
+    else if (ua.includes('http://webmeup-crawler.com/')) BLEXBot += count
     else if (ua.includes('https://opensiteexplorer.org/dotbot')) DotBot += count
     else if (ua.includes('http://ahrefs.com/robot/')) AhrefsBot += count
     else if (ua.includes('http://www.google.com/bot.html')) GoogleBot += count
+    else if (ua.includes('Googlebot-Image')) GoogleBot += count
     else if (ua.includes('http://duckduckgo.com')) DuckDuckGoBot += count
     else if (ua.includes('http://yandex.com/bots')) YandexBot += count
     else if (ua.includes('https://about.censys.io')) CensysInspect += count
@@ -67,7 +73,7 @@ function classifyUserAgents(
     else if (ua.includes('Linux')) Linux += count
     else {
       Other += count
-      otherSet.add(ua)
+      others.set(ua, (others.get(ua) || 0) + 1)
     }
   })
 
@@ -92,6 +98,9 @@ function classifyUserAgents(
       DuckDuckGoBot,
       TwitterBot,
       TelegramBot,
+      WhatsAppBot,
+      QwantBot,
+      BLEXBot,
       PetalBot,
       YandexBot,
       CiscoAnyConnect,
@@ -103,12 +112,16 @@ function classifyUserAgents(
       PaloBot,
       Nmap,
     },
-    otherSet,
+    others,
   }
 }
 
-function mapRows(counts: Record<string, number>) {
-  return Object.entries(counts)
+function mapRows(counts: Record<string, number> | Map<string, number>) {
+  return (
+    counts instanceof Map
+      ? Array.from(counts.entries())
+      : Object.entries(counts)
+  )
     .filter(entry => entry[1] > 0)
     .sort((a, b) => b[1] - a[1])
     .map(([ua, count]) => (
@@ -121,7 +134,7 @@ function mapRows(counts: Record<string, number>) {
 
 function Tables() {
   let rows = getUserAgents()
-  let { otherSet, bots, platforms } = classifyUserAgents(rows)
+  let { others, bots, platforms } = classifyUserAgents(rows)
 
   let Bots = Object.values(bots).reduce((acc, c) => acc + c)
   Object.assign(platforms, { Bots })
@@ -150,7 +163,7 @@ function Tables() {
     </table>
   )
 
-  if (otherSet.size === 0) {
+  if (others.size === 0) {
     return (
       <>
         {platformTable}
@@ -158,20 +171,13 @@ function Tables() {
       </>
     )
   }
-  let otherRows: Node[] = []
-  otherSet.forEach(name =>
-    otherRows.push(
-      <tr>
-        <td>{name}</td>
-      </tr>,
-    ),
-  )
   let otherTable = (
     <table>
       <thead>
         <th>Other User Agents</th>
+        <th>Count</th>
       </thead>
-      <tbody>{[otherRows]}</tbody>
+      <tbody>{[mapRows(others)]}</tbody>
     </table>
   )
   return (

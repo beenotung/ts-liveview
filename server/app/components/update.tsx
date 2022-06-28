@@ -1,18 +1,21 @@
 import type { ServerMessage } from '../../../client/types'
 import type { VNode } from '../../../client/jsx/types'
-import { ExpressContext, getContext, getRouterContext } from '../context.js'
+import { ExpressContext, castDynamicContext, Context } from '../context.js'
 import { EarlyTerminate, toAbsoluteHref, setNoCache } from '../helpers.js'
 import { setSessionUrl } from '../session.js'
 import { renderRedirect } from './router.js'
 
-export function Update(attrs: {
-  // to redirect static html client
-  to: string
+export function Update(
+  attrs: {
+    // to redirect static html client
+    to: string
 
-  // to update live websocket client
-  message: ServerMessage
-}): VNode {
-  const context = getRouterContext(attrs)
+    // to update live websocket client
+    message: ServerMessage
+  },
+  _context: Context,
+): VNode {
+  const context = castDynamicContext(_context)
   if (context.type === 'ws') {
     context.ws.send(attrs.message)
     setSessionUrl(context.ws, attrs.to)
@@ -39,8 +42,9 @@ export function UpdateIn(
         render: () => VNode
       }
   ),
+  _context: Context,
 ): VNode {
-  const context = getRouterContext(attrs)
+  const context = castDynamicContext(_context)
   if (context.type === 'ws') {
     const content = 'render' in attrs ? attrs.render() : attrs.content
     if (attrs.title) {
@@ -55,8 +59,11 @@ export function UpdateIn(
   throw EarlyTerminate
 }
 
-export function UpdateUrl(attrs: { href: string; status?: number }): VNode {
-  const context = getContext(attrs)
+export function UpdateUrl(
+  attrs: { href: string; status?: number },
+  context: Context,
+): VNode {
+  castDynamicContext(context)
   if (context.type === 'ws') {
     setSessionUrl(context.ws, attrs.href)
   } else if (context.type === 'express') {
