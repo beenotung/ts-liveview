@@ -2,7 +2,7 @@ import type { ServerMessage } from '../../client/types'
 import type { ManagedWebsocket } from '../ws/wss.js'
 import { o } from './jsx/jsx.js'
 import { onWsSessionClose, sessions } from './session.js'
-import { existsSync, mkdirSync, readFileSync, writeFile } from 'fs'
+import { existsSync, mkdirSync, readFileSync, writeFile, rename } from 'fs'
 import { debugLog } from '../debug.js'
 import { join } from 'path'
 import { Context } from './context'
@@ -26,9 +26,26 @@ function loadNumber(file: string): number {
 }
 
 function saveNumber(file: string, value: number) {
-  writeFile(file, String(value), error => {
+  const tmpfile = file + '.tmp.' + Math.random().toString(36).slice(2)
+  writeFile(tmpfile, String(value), error => {
     if (error) {
-      log('Failed to save number:', { file, value, error })
+      log('Failed to save number to temp file:', {
+        tmpfile,
+        file,
+        value,
+        error,
+      })
+    } else {
+      rename(tmpfile, file, error => {
+        if (error) {
+          log('Failed to commit number to file:', {
+            tmpfile,
+            file,
+            value,
+            error,
+          })
+        }
+      })
     }
   })
 }

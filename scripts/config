@@ -1,0 +1,4 @@
+user=node
+host=liveviews.cc
+root_dir=/home/node/workspace/github.com/beenotung/ts-liveview
+pm2_name="ts-liveview"
