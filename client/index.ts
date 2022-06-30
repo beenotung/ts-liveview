@@ -32,8 +32,8 @@ connectWS({
     }
 
     function emitHref(event: MouseEvent, flag?: 'q') {
-      if (event.ctrlKey) {
-        return // do not prevent open in new tab
+      if (event.ctrlKey || event.shiftKey) {
+        return // do not prevent open in new tab or new window
       }
       let a = event.currentTarget as HTMLAnchorElement
       let url = a.getAttribute('href')
