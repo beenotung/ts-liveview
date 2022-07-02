@@ -10,6 +10,7 @@ function classifyUserAgents(
   let iPhone = 0
   let iPad = 0
   let MacOS = 0
+  let ChromeOS = 0
   let Windows = 0
   let Linux = 0
   let Kindle = 0
@@ -17,12 +18,14 @@ function classifyUserAgents(
   let Wget = 0
   let Links = 0
   let Lynx = 0
+  let YahooBot = 0
   let BingBot = 0
   let GoogleBot = 0
   let DuckDuckGoBot = 0
   let TwitterBot = 0
   let TelegramBot = 0
   let WhatsAppBot = 0
+  let FacebookBot = 0
   let YandexBot = 0
   let MixrankBot = 0
   let PetalBot = 0
@@ -30,11 +33,19 @@ function classifyUserAgents(
   let BLEXBot = 0
   let AhrefsBot = 0
   let DotBot = 0
+  let NeevaBot = 0
   let CiscoAnyConnect = 0
   let Other = 0
   let PythonRequests = 0
   let CensysInspect = 0
+  let InternetMeasurement = 0
+  let MJ12Bot = 0
+  let NetcraftSurveyAgent = 0
   let PaloBot = 0
+  let DataForSeoBot = 0
+  let LinkdexBot = 0
+  let BarkrowlerBot = 0
+  let SemrushBot = 0
   let Nmap = 0
   let others = new Map<string, number>()
 
@@ -45,13 +56,20 @@ function classifyUserAgents(
     else if (ua.startsWith('WhatsApp')) WhatsAppBot += count
     else if (ua.startsWith('AnyConnect')) CiscoAnyConnect += count
     else if (ua.startsWith('python-requests')) PythonRequests += count
+    else if (ua.includes('http://help.yahoo.com/help/us/ysearch/slurp'))
+      YahooBot += count
+    else if (ua.includes('https://neeva.com/neevabot')) NeevaBot += count
     else if (ua.includes('www.bing.com/bingbot')) BingBot += count
     else if (ua.includes('paloaltonetworks.com')) PaloBot += count
     else if (ua.includes('https://nmap.org/book/nse.html')) Nmap += count
+    else if (ua.includes('info@netcraft.com')) NetcraftSurveyAgent += count
     else if (ua.includes('https://webmaster.petalsearch.com/site/petalbot'))
       PetalBot += count
     else if (ua.includes('https://www.qwant.com/')) QwantBot += count
+    else if (ua.includes('http://mj12bot.com/')) MJ12Bot += count
+    else if (ua.includes('https://babbar.tech/crawler')) BarkrowlerBot += count
     else if (ua.includes('http://webmeup-crawler.com/')) BLEXBot += count
+    else if (ua.includes('http://www.linkdex.com/bots/')) LinkdexBot += count
     else if (ua.includes('https://opensiteexplorer.org/dotbot')) DotBot += count
     else if (ua.includes('http://ahrefs.com/robot/')) AhrefsBot += count
     else if (ua.includes('http://www.google.com/bot.html')) GoogleBot += count
@@ -60,6 +78,12 @@ function classifyUserAgents(
     else if (ua.includes('http://yandex.com/bots')) YandexBot += count
     else if (ua.includes('https://about.censys.io')) CensysInspect += count
     else if (ua.includes('crawler@mixrank.com')) MixrankBot += count
+    else if (ua.includes('facebookexternalhit')) FacebookBot += count
+    else if (ua.includes('http://www.semrush.com/bot.html')) SemrushBot += count
+    else if (ua.includes('https://internet-measurement.com'))
+      InternetMeasurement += count
+    else if (ua.includes('https://dataforseo.com/dataforseo-bot'))
+      DataForSeoBot += count
     else if (ua.includes('iPhone')) iPhone += count
     else if (ua.includes('iPad')) iPad += count
     else if (ua.includes('Macintosh')) MacOS += count
@@ -69,6 +93,7 @@ function classifyUserAgents(
     else if (ua.includes('Lynx')) Lynx += count
     else if (ua.includes('Links')) Links += count
     else if (ua.includes('Android') || ua.includes('Nokia')) Android += count
+    else if (ua.includes('X11; CrOS x86_64')) ChromeOS += count
     else if (ua.includes('Windows')) Windows += count
     else if (ua.includes('Linux')) Linux += count
     else {
@@ -80,6 +105,7 @@ function classifyUserAgents(
   return {
     platforms: {
       Android,
+      ChromeOS,
       iPhone,
       iPad,
       MacOS,
@@ -95,13 +121,23 @@ function classifyUserAgents(
     bots: {
       BingBot,
       GoogleBot,
+      YahooBot,
       DuckDuckGoBot,
       TwitterBot,
+      FacebookBot,
       TelegramBot,
       WhatsAppBot,
       QwantBot,
       BLEXBot,
       PetalBot,
+      NeevaBot,
+      InternetMeasurement,
+      MJ12Bot,
+      NetcraftSurveyAgent,
+      DataForSeoBot,
+      LinkdexBot,
+      BarkrowlerBot,
+      SemrushBot,
       YandexBot,
       CiscoAnyConnect,
       AhrefsBot,
