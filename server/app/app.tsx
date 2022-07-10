@@ -23,6 +23,7 @@ import Chatroom from './pages/chatroom.js'
 import { redirectDict } from './routes.js'
 import { SourceCodeStyle } from './components/source-code.js'
 import type { ClientMountMessage, ClientRouteMessage } from '../../client/types'
+import { then } from '@beenotung/tslib/result.js'
 
 let template = loadTemplate<index>('index')
 
@@ -93,17 +94,17 @@ appRouter.use((req, res, next) => {
     url: req.url,
   }
 
-  let route = matchRoute(context)
+  then(matchRoute(context), route => {
+    if (route.status) {
+      res.status(route.status)
+    }
 
-  if (route.status) {
-    res.status(route.status)
-  }
-
-  if (route.streaming === false) {
-    responseHTML(res, context, route)
-  } else {
-    streamHTML(res, context, route)
-  }
+    if (route.streaming === false) {
+      responseHTML(res, context, route)
+    } else {
+      streamHTML(res, context, route)
+    }
+  })
 })
 
 function responseHTML(
@@ -212,7 +213,8 @@ export let onWsMessage: OnWsMessage = (event, ws, _wss) => {
     event: eventType,
     session,
   }
-  let route = matchRoute(context)
-  let node = App(route.node)
-  dispatchUpdate(context, node, route.title)
+  then(matchRoute(context), route => {
+    let node = App(route.node)
+    dispatchUpdate(context, node, route.title)
+  })
 }

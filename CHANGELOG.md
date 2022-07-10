@@ -16,6 +16,14 @@
   Now using `o` as jsxFactory and `null` as jsxFragmentFactory.
   Previous version use of `JSX.createElement` and `JSX.Fragment` responsively
 
+- Support async routing
+
+  This enables responsing contentful payload for pages that require async resources.
+  This update may results in better SEO.
+
+  Previous version requires each route to return directly, which force the application to display a loading screen if the resouse is not ready.
+  Now the application developer can choose to delay the response or to show a loading screen immediately.
+
 ## [v3](https://github.com/beenotung/ts-liveview/tree/v3)
 
 2022 - 2022
