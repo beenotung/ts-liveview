@@ -133,6 +133,7 @@ function responseHTML(
     app,
   })
 
+  // deepcode ignore XSS: the dynamic content is html-escaped
   res.end(html)
 }
 
@@ -164,6 +165,7 @@ function streamHTML(
     }
     console.error('Failed to render App:', error)
     if (error instanceof Error) {
+      // deepcode ignore XSS: the dynamic content is html-escaped
       res.write('Internal Error: ' + escapeHtml(error.message))
     } else {
       res.write('Unknown Error: ' + escapeHtml(String(error)))
