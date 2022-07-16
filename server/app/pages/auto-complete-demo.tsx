@@ -88,6 +88,10 @@ export function AutoCompleteDemo(_attrs: attrs, context: Context) {
         </a>
         ) to the browser.
       </p>
+      <p>
+        It all happens on the server so the client does not need to download
+        additional libraries.
+      </p>
       <fieldset style="display: inline-block">
         <legend>Demo</legend>
         <p>

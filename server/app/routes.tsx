@@ -17,6 +17,7 @@ import Home from './pages/home.js'
 import NotMatch from './pages/not-match.js'
 import Thermostat from './pages/thermostat.js'
 import { then } from '@beenotung/tslib/result.js'
+import Clock from './pages/clock.js'
 
 let titles: Record<string, string> = {}
 
@@ -139,6 +140,13 @@ let routeDict: Record<string, PageRoute> = {
     description: 'Live chatroom with realtime-update powered by websocket',
     menuText: 'Chatroom',
     node: <Chatroom.index />,
+  },
+  '/clock': {
+    title: title('Clock'),
+    description:
+      'Realtime clock using system time localized with client language and timezone',
+    menuText: 'Clock',
+    node: <Clock />,
   },
   '/chatroom/typing': {
     title: title('Chatroom Typing'),

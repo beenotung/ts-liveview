@@ -44,7 +44,25 @@ export function formatDateTimeText(
   return toLocaleDateTimeString(attrs.time, context)
 }
 
-export function toLocaleDateTimeString(time: number, context: Context): string {
+export type LocaleDateTimeFormatOptions = Omit<
+  Intl.DateTimeFormatOptions,
+  'timeZone'
+>
+export const DefaultLocaleDateTimeFormatOptions: LocaleDateTimeFormatOptions = {
+  weekday: 'short',
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  hour: '2-digit',
+  hour12: true,
+  minute: '2-digit',
+}
+
+export function toLocaleDateTimeString(
+  time: number,
+  context: Context,
+  options: LocaleDateTimeFormatOptions = DefaultLocaleDateTimeFormatOptions,
+): string {
   let locales: string | undefined
   let timeZone: string | undefined
   let timezoneOffset: number | undefined
@@ -68,13 +86,7 @@ export function toLocaleDateTimeString(time: number, context: Context): string {
         date.setTimezoneOffset(timezoneOffset)
       }
       return date.toLocaleString(locales, {
-        weekday: 'short',
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        hour12: true,
-        minute: '2-digit',
+        ...options,
         timeZone,
       })
     } catch (error) {
