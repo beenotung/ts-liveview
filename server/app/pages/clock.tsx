@@ -55,19 +55,23 @@ const Clock = (_attrs: {}, context: Context) => (
     <p>This is showing system time from the browser, updated locally.</p>
     <div id="spaClock"></div>
     {Script(`
-function tickClock(){
+// use iife (Immediately Invoked Function Expression) to avoid name clash with other parts of the page.
+;(function(){
   let date = new Date()
   let lang = navigator.language
   let options = ${JSON.stringify(options)}
-  spaClock.textContent = date.toLocaleString(lang, options)
-  let time = date.getTime()
-  date.setMilliseconds(0)
-  let diff = time - date.getTime()
-  let interval = 1000 - diff
-  setTimeout(tickClock, interval)
-}
-setTimeout(tickClock)
-    `)}
+  function tickClock() {
+    let time = Date.now()
+    date.setTime(time)
+    spaClock.textContent = date.toLocaleString(lang, options)
+    date.setMilliseconds(0)
+		let diff = time - date.getTime()
+    let interval = 1000 - diff
+    setTimeout(tickClock, interval)
+  }
+  tickClock()
+})();
+`)}
   </>
 )
 
