@@ -4,7 +4,7 @@ import {
   DefaultLocaleDateTimeFormatOptions,
   LocaleDateTimeFormatOptions,
 } from '../components/datetime.js'
-import { MINUTE, SECOND } from '@beenotung/tslib/time.js'
+import { SECOND } from '@beenotung/tslib/time.js'
 import { toLocaleDateTimeString } from '../components/datetime.js'
 import { sessions } from '../session.js'
 import { Context } from '../context.js'
