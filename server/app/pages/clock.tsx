@@ -21,6 +21,9 @@ function startClock() {
     let time = Date.now()
     date.setTime(time)
     sessions.forEach(session => {
+      if (session.url !== '/clock') {
+        return
+      }
       if (session.timezoneOffset !== undefined) {
         date.setTimezoneOffset(session.timezoneOffset)
       }
@@ -61,6 +64,9 @@ const Clock = (_attrs: {}, context: Context) => (
   let lang = navigator.language
   let options = ${JSON.stringify(options)}
   function tickClock() {
+    if(typeof spaClock === "undefined") {
+      return // stop the loop when this component is out of sight
+    }
     let time = Date.now()
     date.setTime(time)
     spaClock.textContent = date.toLocaleString(lang, options)
