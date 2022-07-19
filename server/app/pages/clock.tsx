@@ -65,7 +65,7 @@ const Clock = (
       <ClockText />
     </div>
     {Script(`
-// use iife (Immediately Invoked Function Expression) to avoid name clash with other parts of the page.
+/* use iife (Immediately Invoked Function Expression) to avoid name clash with other parts of the page. */
 ;(function(){
   let date = new Date()
   let lang = navigator.language
