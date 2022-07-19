@@ -146,7 +146,7 @@ let routeDict: Record<string, PageRoute> = {
     description:
       'Realtime clock using system time localized with client language and timezone',
     menuText: 'Clock',
-    node: <Clock />,
+    node: Clock,
   },
   '/chatroom/typing': {
     title: title('Chatroom Typing'),

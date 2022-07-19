@@ -42,8 +42,12 @@ function startClock() {
 }
 startClock()
 
-const Clock = (_attrs: {}, context: Context) => (
-  <>
+function ClockText(_attrs: {}, context: Context) {
+  return toLocaleDateTimeString(Date.now(), context, options)
+}
+
+const Clock = (
+  <div id="clock">
     <h2>Clock Demo</h2>
     <p>
       This page demonstrates how to show content with respect to the client's
@@ -52,11 +56,14 @@ const Clock = (_attrs: {}, context: Context) => (
     <h3>Server-side Rendered Clock</h3>
     <p>This is showing system time from the server, updated over websocket.</p>
     <div id="ssrClock">
-      {toLocaleDateTimeString(Date.now(), context, options)}
+      <ClockText />
     </div>
     <h3>Client-side Rendered Clock</h3>
     <p>This is showing system time from the browser, updated locally.</p>
-    <div id="spaClock"></div>
+    <p>The initial value is rendered on the server, then "re-hydrated" on the client.</p>
+    <div id="spaClock">
+      <ClockText />
+    </div>
     {Script(`
 // use iife (Immediately Invoked Function Expression) to avoid name clash with other parts of the page.
 ;(function(){
@@ -78,7 +85,7 @@ const Clock = (_attrs: {}, context: Context) => (
   tickClock()
 })();
 `)}
-  </>
+  </div>
 )
 
 export default Clock
