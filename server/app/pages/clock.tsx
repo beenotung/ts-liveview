@@ -56,7 +56,10 @@ const Clock = (
     </div>
     <h3>Client-side Rendered Clock</h3>
     <p>This is showing system time from the browser, updated locally.</p>
-    <p>The initial value is rendered on the server, then "re-hydrated" on the client.</p>
+    <p>
+      The initial value is rendered on the server, then "re-hydrated" on the
+      client.
+    </p>
     <div id="spaClock">
       <ClockText />
     </div>
