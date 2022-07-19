@@ -72,7 +72,7 @@ const Clock = (
   let options = ${JSON.stringify(options)};
   function tickClock() {
     if (typeof spaClock === "undefined") {
-      return; // stop the loop when this component is out of sight
+      return; /* stop the loop when this component is out of sight */
     }
     let time = Date.now();
     date.setTime(time);
