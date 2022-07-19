@@ -1,5 +1,4 @@
 import { o } from '../jsx/jsx.js'
-import { TimezoneDate } from 'timezone-date.ts'
 import {
   DefaultLocaleDateTimeFormatOptions,
   LocaleDateTimeFormatOptions,
@@ -16,16 +15,13 @@ let options: LocaleDateTimeFormatOptions = {
 }
 
 function startClock() {
-  let date = new TimezoneDate()
+  let date = new Date()
   function loopClock() {
     let time = Date.now()
     date.setTime(time)
     sessions.forEach(session => {
       if (session.url !== '/clock') {
         return
-      }
-      if (session.timezoneOffset !== undefined) {
-        date.setTimezoneOffset(session.timezoneOffset)
       }
       let text = date.toLocaleString(session.locales, {
         ...options,

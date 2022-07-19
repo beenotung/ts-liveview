@@ -1,7 +1,6 @@
 import { format_relative_time } from '@beenotung/tslib/format.js'
 import type { Context } from '../context'
 import { debugLog } from '../../debug.js'
-import { TimezoneDate } from 'timezone-date.ts'
 import { Session, sessionToContext } from '../session.js'
 import {
   DAY,
@@ -65,7 +64,6 @@ export function toLocaleDateTimeString(
 ): string {
   let locales: string | undefined
   let timeZone: string | undefined
-  let timezoneOffset: number | undefined
   if (context.type === 'express') {
     locales = context.req.headers['accept-language']
       ?.split(',')[0]
@@ -74,17 +72,13 @@ export function toLocaleDateTimeString(
     let session = context.session
     locales = session.locales
     timeZone = session.timeZone
-    timezoneOffset = session.timezoneOffset
   }
   if (locales === '*') {
     locales = undefined
   }
   for (;;) {
     try {
-      let date = new TimezoneDate(time)
-      if (timezoneOffset !== undefined) {
-        date.setTimezoneOffset(timezoneOffset)
-      }
+      let date = new Date(time)
       return date.toLocaleString(locales, {
         ...options,
         timeZone,
