@@ -64,25 +64,26 @@ const Clock = (
       <ClockText />
     </div>
     {Script(`
-/* use iife (Immediately Invoked Function Expression) to avoid name clash with other parts of the page. */
-;(function(){
-  let date = new Date();
-  let lang = navigator.language;
-  let options = ${JSON.stringify(options)};
+// use iife (Immediately Invoked Function Expression) to avoid name clash with other parts of the page.
+(function(){
+  let date = new Date()
+  let lang = navigator.language
+  let options = ${JSON.stringify(options)}
   function tickClock() {
     if (typeof spaClock === "undefined") {
-      return; /* stop the loop when this component is out of sight */
+      // stop the loop when this component is out of sight
+      return
     }
-    let time = Date.now();
-    date.setTime(time);
-    spaClock.textContent = date.toLocaleString(lang, options);
-    date.setMilliseconds(0);
-		let diff = time - date.getTime();
-    let interval = 1000 - diff;
-    setTimeout(tickClock, interval);
+    let time = Date.now()
+    date.setTime(time)
+    spaClock.textContent = date.toLocaleString(lang, options)
+    date.setMilliseconds(0)
+    let diff = time - date.getTime()
+    let interval = 1000 - diff
+    setTimeout(tickClock, interval)
   }
-  tickClock();
-})();
+  tickClock()
+})()
 `)}
   </div>
 )
