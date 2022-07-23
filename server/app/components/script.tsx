@@ -1,13 +1,7 @@
 import { config } from '../../config.js'
 import { o } from '../jsx/jsx.js'
-import * as minify from 'minify'
 import type { Element, Raw } from '../jsx/types'
-
-type MinifyType = {
-  minify: {
-    html(code: string): Promise<string>
-  }
-}
+import * as esbuild from 'esbuild'
 
 const cache = new Map<string, string>()
 
@@ -17,7 +11,9 @@ export function Script(js: string): Element {
       js = cache.get(js) as string
     } else {
       cache.set(js, js)
-      const p = (minify as unknown as MinifyType).minify.html(js)
+      const p = esbuild
+        .build({ write: false, stdin: { contents: js }, minify: true })
+        .then(result => result.outputFiles[0].text)
       p.then(code => {
         cache.set(js, code)
         raw[1] = code
