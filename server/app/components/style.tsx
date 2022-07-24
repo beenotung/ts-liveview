@@ -1,19 +1,24 @@
 import { config } from '../../config.js'
-import { Raw } from './raw.js'
-import { o } from '../jsx/jsx.js'
-import * as minify from 'minify'
+import * as esbuild from 'esbuild'
+import { Element, Raw } from '../jsx/types.js'
 
-type MinifyType = {
-  minify: {
-    css(code: string): string
-  }
-}
+let cache = new Map<string, string>()
 
-export function Style(css: string) {
+export function Style(css: string): Element {
   if (config.production) {
-    css = (minify as unknown as MinifyType).minify.css(css)
+    if (cache.has(css)) {
+      css = cache.get(css) as string
+    } else {
+      let code = esbuild.transformSync(css, {
+        minify: true,
+        loader: 'css',
+      }).code
+      cache.set(css, code)
+      css = code
+    }
   }
-  return <style>{Raw(css)}</style>
+  const raw: Raw = ['raw', css]
+  return ['style', undefined, [raw]]
 }
 
 export default Style
