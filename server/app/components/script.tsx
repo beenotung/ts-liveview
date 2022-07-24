@@ -1,5 +1,4 @@
 import { config } from '../../config.js'
-import { o } from '../jsx/jsx.js'
 import type { Element, Raw } from '../jsx/types'
 import * as esbuild from 'esbuild'
 
@@ -10,24 +9,22 @@ export function Script(js: string): Element {
     if (cache.has(js)) {
       js = cache.get(js) as string
     } else {
-      cache.set(js, js)
-      const p = esbuild
-        .build({ write: false, stdin: { contents: js }, minify: true })
-        .then(result => result.outputFiles[0].text)
-      p.then(code => {
-        cache.set(js, code)
-        raw[1] = code
-      }).catch(error => {
-        console.error('failed to minify js:', { error, js })
-      })
+      let code = esbuild.transformSync(js, {
+        minify: true,
+        loader: 'js',
+      }).code
+      cache.set(js, code)
+      js = code
     }
   }
   const raw: Raw = ['raw', js]
-  const node = <script>{raw}</script>
-  return node
+  return ['script', undefined, [raw]]
 }
 
-/** @description semi-colon is mandatory */
+/**
+ * @description semi-colon is mandatory
+ * @deprecated use esbuild directly instead
+ * */
 export function aggressivelyTrimInlineScript(html: string): string {
   return html.replace(/ /g, '').replace(/\n/g, '')
 }
