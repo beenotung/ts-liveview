@@ -41,6 +41,7 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
 - [x] Enable interactive UI with minimal amount of javascript to be downloaded
 - [x] Still functional when javascript is disabled on client device [[5]](#feature-5)
 - [x] Support to develop with [JSX](#jsx), AST, or html template
+- [x] Auto-minify with esbuild
 - [x] Efficient wire format
 - [x] Lightweight WebSocket-based protocols [[6]](#feature-6)
 - [ ] Reliable connection
