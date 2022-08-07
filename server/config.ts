@@ -17,6 +17,7 @@ export let config = {
   development: env.NODE_ENV === 'development' || process.argv[2] === '--dev',
   port: env.PORT,
   require_https: true,
+  enable_compression: false,
   cookie_secret: env.COOKIE_SECRET,
   site_name: 'ts-liveview Demo',
   site_description: 'Demo website of ts-liveview',
@@ -25,8 +26,10 @@ export let config = {
 
 if (env.BEHIND_HTTPS_PROXY === 'true') {
   config.require_https = false
+  config.enable_compression = false
 } else {
   config.require_https = config.production
+  config.enable_compression = config.production
 }
 
 if (config.production && env.COOKIE_SECRET == ' ') {

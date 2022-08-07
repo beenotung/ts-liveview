@@ -44,7 +44,9 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use(compression())
+if (config.enable_compression) {
+  app.use(compression())
+}
 if (config.development) {
   app.use('/js', express.static(join('dist', 'client')))
 } else {
