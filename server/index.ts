@@ -1,6 +1,6 @@
 import express from 'express'
 import { Server as HttpServer } from 'http'
-import ws from 'typestub-ws'
+import { WebSocketServer } from 'ws'
 import { config } from './config.js'
 import { join } from 'path'
 import compression from 'compression'
@@ -20,7 +20,7 @@ log.enabled = true
 
 const app = express()
 const server = new HttpServer(app)
-const wss = new ws.WebSocketServer({ server })
+const wss = new WebSocketServer({ server })
 listenWSSCookie(wss)
 listenWSSConnection({
   wss,

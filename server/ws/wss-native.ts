@@ -1,4 +1,4 @@
-import type { Server } from 'typestub-ws'
+import type { Server } from 'ws'
 import type { ServerMessage } from '../../client/types'
 import { debugLog } from '../debug.js'
 import type { ManagedWebsocket, OnWsMessage } from './wss'

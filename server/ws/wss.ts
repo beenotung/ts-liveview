@@ -1,5 +1,5 @@
-import type WebSocket from 'typestub-ws'
-import type { Server } from 'typestub-ws'
+import type WebSocket from 'ws'
+import type { Server } from 'ws'
 import type { ClientMessage, ServerMessage } from '../../client/types'
 
 export type ManagedWebsocket = {

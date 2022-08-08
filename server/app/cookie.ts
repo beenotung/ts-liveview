@@ -1,6 +1,6 @@
 import cookieParser from 'cookie-parser'
-import type WebSocket from 'typestub-ws'
-import type ws from 'typestub-ws'
+import type WebSocket from 'ws'
+import type ws from 'ws'
 import type express from 'express'
 import { config } from '../config.js'
 import { debugLog } from '../debug.js'
