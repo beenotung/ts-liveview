@@ -10,6 +10,8 @@ let env = {
   PORT: 8100,
   BEHIND_HTTPS_PROXY: 'false',
   COOKIE_SECRET: ' ',
+  // you can generate the cert file for local development with `mkcert -install && mkcert localhost`
+  // for production deployment, you can use `certbot` (potentially with nginx plugin)
   HTTPS_KEY_FILE: 'localhost-key.pem',
   HTTPS_CERT_FILE: 'localhost.pem',
   HTTP_VERSION: 2, // 1 or 2
