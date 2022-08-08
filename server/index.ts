@@ -1,5 +1,5 @@
 import express from 'express'
-import { Server as HttpServer } from 'http'
+import spdy from 'spdy'
 import { WebSocketServer } from 'ws'
 import { config } from './config.js'
 import { join } from 'path'
@@ -19,7 +19,7 @@ const log = debugLog('index.ts')
 log.enabled = true
 
 const app = express()
-const server = new HttpServer(app)
+const server = spdy.createServer(config.serverOptions, app)
 const wss = new WebSocketServer({ server })
 listenWSSCookie(wss)
 listenWSSConnection({
@@ -44,7 +44,7 @@ app.use((req, res, next) => {
   next()
 })
 
-if (config.enable_compression) {
+if (!config.behind_proxy) {
   app.use(compression())
 }
 if (config.development) {
@@ -61,11 +61,12 @@ app.use(cookieMiddleware)
 
 app.use(appRouter)
 
-const PORT = config.port
-server.listen(PORT, () => {
-  print(PORT)
+const port = config.port
+const protocol = config.serverOptions.key ? 'https' : 'http'
+server.listen(port, () => {
+  print({ port, protocol })
   if (config.development && existsSync('.open')) {
-    open(`http://localhost:${PORT}`)
+    open(`${protocol}://localhost:${port}`)
     unlinkSync('.open')
   }
 })

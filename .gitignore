@@ -18,3 +18,4 @@ localhost_*.report.html
 data/
 *.cert
 *.key
+*.pem
