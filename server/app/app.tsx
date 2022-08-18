@@ -99,11 +99,7 @@ appRouter.use((req, res, next) => {
       res.status(route.status)
     }
 
-    let desc = route.description.replace(/[<"].*/, '')
-    if (route.description.length !== desc.length) {
-      route.description = desc
-      console.debug('removed html tag in route.description:', req.url)
-    }
+    route.description = route.description.replace(/"/g, "'")
 
     if (route.streaming === false) {
       responseHTML(res, context, route)
