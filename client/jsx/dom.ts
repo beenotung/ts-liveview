@@ -9,7 +9,7 @@ import type {
   props,
 } from './types'
 
-let win = window as unknown as WindowStub
+const win = window as unknown as WindowStub
 const origin = location.origin
 
 function findAndApplyRedirect(root: ParentNode) {
