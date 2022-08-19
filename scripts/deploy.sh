@@ -5,7 +5,7 @@ set -o pipefail
 source scripts/config
 npm run build
 if [ "$MODE" == "quick" ]; then
-rsync -SavLP \
+rsync -SavLPz \
   build \
   dist \
   "$user@$host:$root_dir"
@@ -14,12 +14,12 @@ source ~/.nvm/nvm.sh \
 && pm2 reload $pm2_name \
 "
 else
-rsync -SavLP \
+rsync -SavLPz \
   build \
   dist \
   package.json \
   "$user@$host:$root_dir"
-rsync -SavLP \
+rsync -SavLPz \
   db/package.json \
   db/migrations \
   "$user@$host:$root_dir/db"
