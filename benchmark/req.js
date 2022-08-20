@@ -1,4 +1,6 @@
-// 45 ms/req with devtool closed
+// tested locally with devtool closed
+// 45 ms/req on laptop
+// 30 ms/req on desktop
 
 let span = speedSpan
 
@@ -42,7 +44,9 @@ async function benchmark() {
       usedTime = end - start
     }
     // console.log(output, usedTime)
-    span.textContent = `${output}: ${usedTime}`
+    if (Math.random() < 0.01) {
+      span.textContent = `${output}: ${usedTime}`
+    }
     input = output
   }
 }

@@ -1,4 +1,6 @@
-// 1 ms/req with devtool closed
+// tested locally with devtool closed
+// 1 ms/req on laptop
+// 0.25 ms/req on desktop
 
 let span = speedSpan
 
@@ -34,7 +36,9 @@ function onmessage(event) {
   } else {
     usedTime = end - start
   }
-  span.textContent = `${output}: ${usedTime}`
+  if (Math.random() < 0.0001) {
+    span.textContent = `${output}: ${usedTime}`
+  }
   input = output
   sendMessage()
 }
