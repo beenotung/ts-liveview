@@ -133,6 +133,7 @@ function writeElement(
   }
   if (attrs) {
     Object.entries(attrs).forEach(([name, value]) => {
+      if (value === undefined || value === null) return
       switch (name) {
         case 'class':
         case 'className':

@@ -217,7 +217,11 @@ function applySelector(e: Element, selector: string) {
 
 function applyAttrs(e: Element, attrs: attrs) {
   Object.entries(attrs).forEach(entry => {
-    e.setAttribute(entry[0], entry[1] as string)
+    if (entry[1] === null) {
+      e.removeAttribute(entry[0])
+    } else {
+      e.setAttribute(entry[0], entry[1] as string)
+    }
   })
   let input = e as HTMLInputElement
   if (input.tagName === 'INPUT' && input.type === 'radio') {
