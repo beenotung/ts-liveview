@@ -8,9 +8,9 @@
   "license": "BSD-2-Clause",
   "main": "index.js",
   "scripts": {
-    "migrate": "run-s gen-migrate run-migrate gen-proxy",
+    "update-db": "run-s gen-migrate run-migrate gen-proxy",
     "gen-migrate": "auto-migrate data/dev.sqlite3 < docs/erd.txt",
-    "run-migrate": "knex migrate:latest",
+    "migrate": "knex migrate:latest",
     "gen-proxy":"erd-to-proxy < docs/erd.txt > proxy.ts"
   },
   "dependencies": {
