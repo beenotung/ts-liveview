@@ -14,13 +14,19 @@ ts-liveview supports [`JSX`](#jsx) but it **[doesn't rely on Virtual DOM](#no-vd
 
 ```bash
 npm init ts-liveview my-app
-cd my-app/db
-pnpm install  # or `yarn install` or `npm install`
-pnpm migrate  # or `yarn migrate` or `npm run migrate`
+cd my-app
+./scripts/create-cert.sh  # this create self-signed https cert for local development
+
+cd db
+pnpm install --prefer-offline   # you can also install with yarn or npm
+npm run migrate
+
 cd ..
-pnpm install  # or `yarn install` or `npm install`
-pnpm dev      # or `yarn dev`     or `npm run dev`
+pnpm install --prefer-offline
+npm run dev
 ```
+
+To update database schema, see [db/README.md](./db/README.md)
 
 Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liveview)
 
