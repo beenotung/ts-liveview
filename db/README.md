@@ -1,3 +1,21 @@
+## Updating database schema
+
+Remark: cd to `db` if not done already
+
+Auto mode:
+
+1. update `docs/erd.txt`
+2. run `npm run update`
+
+Manual mode:
+1. update `docs/erd.txt`
+2. run `npm run gen-migrate`
+3. review the generated migration script in the `migrations` directory
+4. run `npm run migrate`
+5. run `npm run gen-proxy`
+
+## Why a separate package?
+
 This package is used to isolate knex from top-level context.
 
 We're using esm on the top-level but knex with typescript only works in commonjs package.
