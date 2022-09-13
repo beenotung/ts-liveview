@@ -16,8 +16,8 @@ Manual mode:
 
 ## Why a separate package?
 
-This package is used to isolate knex from top-level context.
+This package is used to isolate knex from top-level package.
 
-We're using esm on the top-level but knex with typescript only works in commonjs package.
+We're using esm on the top-level package but knex with typescript only works in commonjs package.
 
 The files here are compiled and imported from the server directly, so the dependencies of this package should appear on the top-level package.json as well.
