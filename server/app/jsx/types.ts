@@ -1,4 +1,4 @@
-import { Context } from '../context'
+import type { Context } from '../context'
 
 export type Node = Literal | Raw | Fragment | JSXFragment | Component | Element
 export type JSXFragment = [tag: undefined, attr: null, children: NodeList]

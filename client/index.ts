@@ -10,7 +10,7 @@ import {
   setValue,
 } from './jsx/dom.js'
 import { connectWS } from './ws/ws-lite.js'
-import { WindowStub } from './internal'
+import type { WindowStub } from './internal'
 import type { ClientMessage, ServerMessage } from './types'
 
 let win = window as unknown as WindowStub

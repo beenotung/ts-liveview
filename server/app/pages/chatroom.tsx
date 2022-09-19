@@ -22,7 +22,7 @@ import DateTimeText, {
 import { nodeToVNode } from '../jsx/vnode.js'
 import { Request, Response, NextFunction } from 'express'
 import SourceCode from '../components/source-code.js'
-import { Context } from '../context'
+import type { Context } from '../context'
 
 let log = debugLog('chatroom.tsx')
 log.enabled = true

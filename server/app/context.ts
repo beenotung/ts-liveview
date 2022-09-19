@@ -2,7 +2,7 @@ import type express from 'express'
 import type { ManagedWebsocket } from '../ws/wss'
 import type { RouteContext } from 'url-router.ts'
 import type { Session } from './session'
-import { PageRoute } from './routes'
+import type { PageRoute } from './routes'
 
 export type Context = StaticContext | DynamicContext
 

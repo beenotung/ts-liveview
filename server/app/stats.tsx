@@ -5,7 +5,7 @@ import { onWsSessionClose, sessions } from './session.js'
 import { existsSync, mkdirSync, readFileSync, writeFile, rename } from 'fs'
 import { debugLog } from '../debug.js'
 import { join } from 'path'
-import { Context } from './context'
+import type { Context } from './context'
 
 let log = debugLog('stats.tsx')
 log.enabled = true
