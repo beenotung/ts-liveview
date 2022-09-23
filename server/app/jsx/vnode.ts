@@ -14,6 +14,7 @@ import type {
 } from './types'
 import { nodeListToHTML } from './html.js'
 import { Flush } from '../components/flush.js'
+import { renderError } from '../components/error.js'
 
 export function nodeToVElementOptimized(
   node: Element | Component,
@@ -101,8 +102,13 @@ function componentToVNode(component: Component, context: Context): VNode {
   if (children) {
     Object.assign(attrs, { children })
   }
-  let node = componentFn(attrs, context)
-  return nodeToVNode(node, context)
+  try {
+    let node = componentFn(attrs, context)
+    return nodeToVNode(node, context)
+  } catch (error) {
+    console.error('Caught error from componentFn:', error)
+    return renderError(error, context)
+  }
 }
 
 function elementToVElement(element: Element, context: Context): VElement {

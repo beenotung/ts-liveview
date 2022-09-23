@@ -13,6 +13,7 @@ import type {
 } from './types'
 import { HTMLStream, noop } from './stream.js'
 import { Flush } from '../components/flush.js'
+import { renderError } from '../components/error.js'
 
 const log = debug('html.ts')
 log.enabled = true
@@ -84,8 +85,14 @@ export function writeNode(
     if (children) {
       Object.assign(attrs, { children })
     }
-    node = componentFn(attrs, context)
-    return writeNode(stream, node, context)
+    try {
+      node = componentFn(attrs, context)
+      writeNode(stream, node, context)
+    } catch (error) {
+      console.error('Caught error from componentFn:', error)
+      writeNode(stream, renderError(error, context), context)
+    }
+    return
   }
 
   return writeElement(stream, node, context)

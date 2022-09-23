@@ -37,6 +37,11 @@ let scripts = config.development ? (
 )
 
 let style = Style(/* css */ `
+.error {
+  border: 1px solid red;
+  padding: 0.75rem;
+  width: fit-content;
+}
 h1.title {
   color: darkblue;
 }
