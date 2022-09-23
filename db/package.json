@@ -11,7 +11,7 @@
     "update": "run-s gen-migrate migrate gen-proxy",
     "gen-migrate": "auto-migrate data/dev.sqlite3 < docs/erd.txt",
     "migrate": "knex migrate:latest",
-    "gen-proxy":"erd-to-proxy < docs/erd.txt > proxy.ts"
+    "gen-proxy": "erd-to-proxy < docs/erd.txt > proxy.ts"
   },
   "dependencies": {
     "better-sqlite3-proxy": "^1.4.2",

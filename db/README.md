@@ -8,6 +8,7 @@ Auto mode:
 2. run `npm run update`
 
 Manual mode:
+
 1. update `docs/erd.txt` with any text editor
 2. run `npm run gen-migrate`
 3. review the generated migration script in the `migrations` directory
