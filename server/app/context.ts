@@ -49,3 +49,19 @@ export function castDynamicContext(context: Context): DynamicContext {
   }
   return context
 }
+
+export function getContextFormBody(context: Context) {
+  if (context.type === 'ws') {
+    let body = context.args?.[0]
+    if (!body) throw new Error('missing form body in ws context')
+    return body
+  }
+  if (context.type === 'express') {
+    let body = context.req.body
+    if (!body) throw new Error('missing form body in express context')
+    return body
+  }
+  throw new Error(
+    'Assertion failed, expect form submission context, got static context',
+  )
+}
