@@ -14,16 +14,15 @@ import DemoCookieSession from './pages/demo-cookie-session.js'
 import escapeHtml from 'escape-html'
 import { Flush } from './components/flush.js'
 import { config } from '../config.js'
-import Style from './components/style.js'
 import Stats from './stats.js'
 import { MuteConsole } from './components/script.js'
 import { matchRoute, PageRouteMatch } from './routes.js'
 import { topMenu } from './components/top-menu.js'
 import Chatroom from './pages/chatroom.js'
 import { redirectDict } from './routes.js'
-import { SourceCodeStyle } from './components/source-code.js'
 import type { ClientMountMessage, ClientRouteMessage } from '../../client/types'
 import { then } from '@beenotung/tslib/result.js'
+import { style } from './app-style.js'
 
 let template = loadTemplate<index>('index')
 
@@ -35,21 +34,6 @@ let scripts = config.development ? (
     <script src="/js/bundle.min.js" type="module" defer></script>
   </>
 )
-
-let style = Style(/* css */ `
-.error {
-  border: 1px solid red;
-  padding: 0.75rem;
-  width: fit-content;
-}
-h1.title {
-  color: darkblue;
-}
-h1.title a {
-  font-size: 1rem;
-}
-${SourceCodeStyle}
-`)
 
 export function App(main: Node): Element {
   // you can write the AST direct for more compact wire-format
