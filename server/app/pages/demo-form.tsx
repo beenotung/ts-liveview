@@ -160,7 +160,7 @@ const formBody = object({
   username: string({ minLength: 3 }),
   password: string({ minLength: 6 }),
   level: int({ min: 1 }),
-  gender: optional(string()),
+  gender: optional(values(['female', 'male', 'rainbow', 'na'])),
   color: color(),
   happy: checkbox(),
   contact: optional(values(['tel', 'text', 'video', 'face'])),
