@@ -9,8 +9,9 @@ import debug from 'debug'
 import SourceCode from '../components/source-code.js'
 import { Context, getContextFormBody } from '../context.js'
 import {
+  checkbox,
+  color,
   int,
-  literal,
   object,
   optional,
   ParseResult,
@@ -160,8 +161,8 @@ const formBody = object({
   password: string({ minLength: 6 }),
   level: int({ min: 1 }),
   gender: optional(string()),
-  color: string({ match: /#[0-9a-z]{6}/i }),
-  happy: optional(literal('on')),
+  color: color(),
+  happy: checkbox(),
   contact: optional(values(['tel', 'text', 'video', 'face'])),
 })
 
