@@ -7,7 +7,18 @@ import sanitizeHTML from 'sanitize-html'
 import { Script } from '../components/script.js'
 import debug from 'debug'
 import SourceCode from '../components/source-code.js'
-import type { Context } from '../context'
+import { Context, getContextFormBody } from '../context.js'
+import {
+  int,
+  literal,
+  object,
+  optional,
+  ParseResult,
+  string,
+  values,
+} from 'cast.ts'
+import { renderError } from '../components/error.js'
+import { Link } from '../components/router.js'
 
 const log = debug('demo-form.tsx')
 log.enabled = true
@@ -114,34 +125,45 @@ function set(_attrs: attrs, context: Context) {
 }
 
 function submit(_attrs: attrs, context: Context) {
-  function getValue() {
-    if (context.type === 'ws' && context.args) {
-      const value = context.args[0]
-      log('ws submit:', value)
-      return value
-    }
-    if (context.type === 'express') {
-      const value = context.req.body
-      log('req submit:', value)
-      return value
-    }
-  }
-  const value = getValue()
-  if (!value) {
-    return DemoForm()
+  let body = getContextFormBody(context)
+  let input: ParseResult<typeof formBody> | undefined = undefined
+  let err = null
+  try {
+    input = formBody.parse(body, {
+      name: 'form body',
+    })
+  } catch (error) {
+    err = error
   }
   return (
     <>
-      <p>
-        Received:{' '}
-        <pre>
-          <code>{JSON.stringify(value, null, 2)}</code>
-        </pre>
-      </p>
+      {err ? (
+        renderError(err, context)
+      ) : (
+        <p>
+          Received:{' '}
+          <pre>
+            <code>{JSON.stringify(input, null, 2)}</code>
+          </pre>
+        </p>
+      )}
       <p>(The content is not saved on server)</p>
+      <div>
+        <Link href="/form">Retry</Link>
+      </div>
     </>
   )
 }
+
+const formBody = object({
+  username: string({ minLength: 3 }),
+  password: string({ minLength: 6 }),
+  level: int({ min: 1 }),
+  gender: optional(string()),
+  color: string({ match: /#[0-9a-z]{6}/i }),
+  happy: optional(literal('on')),
+  contact: optional(values(['tel', 'text', 'video', 'face'])),
+})
 
 function DemoForm() {
   return (

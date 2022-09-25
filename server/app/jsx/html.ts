@@ -14,6 +14,7 @@ import type {
 import { HTMLStream, noop } from './stream.js'
 import { Flush } from '../components/flush.js'
 import { renderError } from '../components/error.js'
+import { EarlyTerminate, Message } from '../helpers.js'
 
 const log = debug('html.ts')
 log.enabled = true
@@ -89,6 +90,7 @@ export function writeNode(
       node = componentFn(attrs, context)
       writeNode(stream, node, context)
     } catch (error) {
+      if (error === EarlyTerminate || error instanceof Message) throw error
       console.error('Caught error from componentFn:', error)
       writeNode(stream, renderError(error, context), context)
     }
