@@ -33,26 +33,23 @@ let serverOptions: ServerOptions =
         cert: readFileSync(env.HTTPS_CERT_FILE),
       }
 
+let production = env.NODE_ENV === 'production' || process.argv[2] === '--prod'
+let development = env.NODE_ENV === 'development' || process.argv[2] === '--dev'
+
+if (production && env.COOKIE_SECRET == ' ') {
+  console.error('Missing COOKIE_SECRET in env')
+  process.exit(1)
+}
+
 export let config = {
-  production: env.NODE_ENV === 'production' || process.argv[2] === '--prod',
-  development: env.NODE_ENV === 'development' || process.argv[2] === '--dev',
+  production,
+  development,
   port: env.PORT,
-  require_https: true,
+  require_https: !behind_proxy && production,
   behind_proxy,
   cookie_secret: env.COOKIE_SECRET,
   site_name: 'ts-liveview Demo',
   site_description: 'Demo website of ts-liveview',
   setup_robots_txt: false,
   serverOptions,
-}
-
-if (config.behind_proxy) {
-  config.require_https = false
-} else {
-  config.require_https = config.production
-}
-
-if (config.production && env.COOKIE_SECRET == ' ') {
-  console.error('Missing COOKIE_SECRET in env')
-  process.exit(1)
 }
