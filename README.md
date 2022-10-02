@@ -36,19 +36,27 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
 
 ## Available npm scripts
 
-`npm run dev`: start a development server in watch mode
+`npm run dev`:
+Start the development server, with realtime update and live-reload.
 
-`npm run build`: compile the server and bundle the client (only needed for production mode)
+`npm run build`:
+Compile the typescript server into 'dist' folder, and bundle the client into 'build' folder.
+This step is only needed for production mode.
 
-`npm start`: start the built server in production mode
+`npm start`:
+Run the built server in 'build' folder (for production deployment).
 
-`npm run fix`: auto add `.js` extension in import paths, which is required in esm runtime
+`npm run fix`:
+Auto add `.js` extension in import paths, which is required in esm runtime.
 
-`npm run format`: auto format the source code with prettier
+`npm run format`:
+Auto format the source code with prettier.
 
-`npm run lint`: lint the codebase with eslint and auto fix if possible
+`npm run lint`:
+Lint the codebase with eslint and apply auto fix if possible.
 
-`npm run size`: build the frontend and check the size of bundled, minified, and gzipped versions
+`npm run size`:
+Build the frontend and check the size of bundled, minified, and gzipped versions respectively.
 
 ## Features
 
