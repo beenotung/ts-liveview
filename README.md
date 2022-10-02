@@ -15,7 +15,7 @@ ts-liveview supports [`JSX`](#jsx) but it **[doesn't rely on Virtual DOM](#no-vd
 To create a new project, run:
 
 ```bash
-npm init ts-liveview my-app   # or "npx create-ts-liveview" for latest version
+npm init ts-liveview my-app   # or "npx create-ts-liveview@latest my-app" for latest version
 cd my-app
 ./scripts/create-cert.sh  # this create self-signed https cert for local development
 
