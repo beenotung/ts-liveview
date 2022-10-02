@@ -30,6 +30,22 @@ To update database schema, see [db/README.md](./db/README.md)
 
 Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liveview)
 
+## Available npm scripts
+
+`npm run dev`: start a development server in watch mode
+
+`npm run build`: compile the server and bundle the client (only needed for production mode)
+
+`npm start`: start the built server in production mode
+
+`npm run fix`: auto add `.js` extension in import paths, which is required in esm runtime
+
+`npm run format`: auto format the source code with prettier
+
+`npm run lint`: lint the codebase with eslint and auto fix if possible
+
+`npm run size`: build the frontend and check the size of bundled, minified, and gzipped versions
+
 ## Features
 
 - [x] Support hybrid rendering mode
