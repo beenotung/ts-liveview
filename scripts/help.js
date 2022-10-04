@@ -31,7 +31,7 @@ function parseGetStarted(projectName, lines) {
       mode = 'scan'
       continue
     }
-    if (mode === 'code') {
+    if (mode === 'code' && line) {
       line = '  ' + line
     }
     line = extractLink(line)
