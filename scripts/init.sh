@@ -29,3 +29,4 @@ echo "Run 'npm run dev' to start the development server"
 echo
 echo "Run 'npm run build' to build for production deployment"
 echo "Run 'npm start' to start server in production mode"
+echo

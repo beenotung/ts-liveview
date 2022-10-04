@@ -82,3 +82,4 @@ let lines = text.split('\n').map(lines => lines.replace('\r', ''))
 
 console.log(parseCommands(lines))
 console.log(parseGetStarted(projectName, lines))
+console.log()
