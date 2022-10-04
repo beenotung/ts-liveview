@@ -15,9 +15,6 @@ localhost_*.report.html
 # config
 .env
 .open
-data/*.sqlite3*
-data/session.txt
-data/visitor.txt
 *.cert
 *.key
 *.pem
