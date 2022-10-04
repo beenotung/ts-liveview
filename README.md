@@ -32,6 +32,8 @@ To setup a cloned project, run `./scripts/init.sh`, which will run above command
 
 To update database schema, see [db/README.md](./db/README.md)
 
+To deploy, setup [scripts/config](./scripts/config) then run `./scripts/deploy.sh`, which will build and deploy the server with knex migrate and pm2.
+
 Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liveview)
 
 ## Available npm scripts
