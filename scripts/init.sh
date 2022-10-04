@@ -6,8 +6,6 @@ if [ ! -f localhost.pem ] || [ ! -f localhost-key.pem ]; then
   ./scripts/create-cert.sh
 fi
 
-mkdir -p data
-
 #install="slnpm"
 install="pnpm i --prefer-offline"
 #install="yarn"
