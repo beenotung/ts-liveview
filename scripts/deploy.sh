@@ -22,6 +22,8 @@ rsync -SavLPz \
 rsync -SavLPz \
   db/package.json \
   db/migrations \
+  db/knexfile.ts \
+  db/db.ts \
   "$user@$host:$root_dir/db"
 ssh "$user@$host" " \
 source ~/.nvm/nvm.sh \
