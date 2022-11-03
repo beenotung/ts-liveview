@@ -3,9 +3,9 @@ set -e
 set -o pipefail
 
 source scripts/config
-npm run build
 if [ "$MODE" == "quick" ]; then
 rsync -SavLPz \
+  public \
   build \
   dist \
   "$user@$host:$root_dir"
@@ -14,7 +14,10 @@ source ~/.nvm/nvm.sh \
 && pm2 reload $pm2_name \
 "
 else
+npm run build
+npm run fix-dist
 rsync -SavLPz \
+  public \
   build \
   dist \
   package.json \
