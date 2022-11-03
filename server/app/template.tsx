@@ -5,7 +5,9 @@ import { Script } from './components/script.js'
 import { Node } from './jsx/types.js'
 import { prerender } from './jsx/html.js'
 
-let headMeta = prerender(
+const doctype = Raw(`<!DOCTYPE html>`)
+
+const headMetaFragment = prerender(
   <>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -16,15 +18,23 @@ let headMeta = prerender(
   </>,
 )
 
-let noscriptStyle = Style(/* css */ `
+const noscriptFragment = prerender(
+  <div id="noscript" aria-hidden="true">
+    {Style(/* css */ `
 #noscript {
   margin: 1em;
   padding: 1em;
   outline: 1px solid red;
 }
-`)
+`)}
+    Javascript is not enabled. This site can still works but it'll be more
+    interactive when javascript is enabled.
+  </div>,
+)
 
-let bodyStyle = Style(/* css */ `
+const wsStatusFragment = prerender(
+  <>
+    {Style(/* css */ `
 #ws_status {
   position: fixed;
   top: 1em;
@@ -46,12 +56,16 @@ abbr[title]:after {
   filter: invert();
   background-color: black;
 }
-`)
-
-let bodyScript = Script(/* javascript */ `
+`)}
+    <div id="ws_status" hidden role="none">
+      loading...
+    </div>
+    {Script(/* javascript */ `
 document.getElementById('noscript').remove();
 document.getElementById('ws_status').removeAttribute('hidden');
-`)
+`)}
+  </>,
+)
 
 export function Template(attrs: {
   title: string
@@ -60,24 +74,16 @@ export function Template(attrs: {
 }) {
   return (
     <>
-      {Raw(`<!DOCTYPE html>`)}
+      {doctype}
       <html lang="en">
         <head>
-          {headMeta}
+          {headMetaFragment}
           <title>{attrs.title}</title>
           <meta name="description" content={attrs.description} />
         </head>
         <body>
-          <div id="noscript" aria-hidden="true">
-            {noscriptStyle}
-            Javascript is not enabled. This site can still works but it'll be
-            more interactive when javascript is enabled.
-          </div>
-          {bodyStyle}
-          <div id="ws_status" hidden role="none">
-            loading...
-          </div>
-          {bodyScript}
+          {noscriptFragment}
+          {wsStatusFragment}
           {attrs.app}
         </body>
       </html>
