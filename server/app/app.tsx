@@ -1,10 +1,9 @@
 import { o } from './jsx/jsx.js'
-import type { index } from '../../template/index.html'
-import { loadTemplate } from '../template.js'
+import { scanTemplateDir } from '../template.js'
 import express, { Response } from 'express'
 import type { ExpressContext, WsContext } from './context'
 import type { Element, Node } from './jsx/types'
-import { nodeToHTML, writeNode } from './jsx/html.js'
+import { nodeToHTML, prerender, writeNode } from './jsx/html.js'
 import { sendHTMLHeader } from './express.js'
 import { OnWsMessage } from '../ws/wss.js'
 import { dispatchUpdate } from './jsx/dispatch.js'
@@ -23,8 +22,19 @@ import { redirectDict } from './routes.js'
 import type { ClientMountMessage, ClientRouteMessage } from '../../client/types'
 import { then } from '@beenotung/tslib/result.js'
 import { style } from './app-style.js'
+import { indexOptions, indexTemplate } from '../../template/index.js'
+import escapeHTML from 'escape-html'
 
-let template = loadTemplate<index>('index')
+if (config.development) {
+  scanTemplateDir('template')
+}
+function renderTemplate(options: indexOptions): string {
+  return indexTemplate({
+    title: escapeHTML(options.title),
+    description: JSON.stringify(options.description).slice(1, -1),
+    app: options.app,
+  })
+}
 
 let scripts = config.development ? (
   <script src="/js/index.js" type="module" defer></script>
@@ -119,7 +129,7 @@ function responseHTML(
     }
   }
 
-  let html = template({
+  let html = renderTemplate({
     title: route.title || config.site_name,
     description: route.description || config.site_description,
     app,
@@ -135,7 +145,7 @@ function streamHTML(
   route: PageRouteMatch,
 ) {
   let appPlaceholder = '<!-- app -->'
-  let html = template({
+  let html = renderTemplate({
     title: route.title || config.site_name,
     description: route.description || config.site_description,
     app: appPlaceholder,

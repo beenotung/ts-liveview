@@ -1,53 +1,45 @@
-import { readFileSync } from 'fs'
-import { writeFileSync } from 'fs'
-import { join, basename, extname } from 'path'
-import { inspect } from 'util'
+import { readdirSync, readFileSync, writeFileSync } from 'fs'
+import { basename, extname, join } from 'path'
 
-export function toTemplateFile(page: string) {
-  return join('template', page + '.html')
-}
-
-export function loadTemplate<T extends object>(page_or_file: string) {
-  let file = page_or_file.endsWith('.html')
-    ? page_or_file
-    : toTemplateFile(page_or_file)
-  genTemplateType(file)
-  let template = readFileSync(file, 'utf-8')
-  return (options: T) => renderTemplate(template, options)
-}
-
-export function renderTemplate<T extends object>(template: string, options: T) {
-  Object.entries(options).forEach(([key, value]) => {
-    template = template.replace(`{${key}}`, value)
-  })
-  return template
-}
-
-function extractParams(text: string): string[] {
-  let matches = text.match(/\{(.*)\}/g)
-  if (!matches) {
-    return []
+export function buildTemplate(file: string) {
+  let name = file.slice(0, -extname(file).length)
+  let dest = name + '.ts'
+  name = basename(name)
+  let html = readFileSync(file).toString()
+  let matches = html.match(/\{(.*)\}/g) || []
+  let keys = matches.map(match => match.slice(1, -1))
+  console.log(keys)
+  let type = `export type ${name}Options = {`
+  let func = `export function ${name}Template(options: ${name}Options): string {
+  return ''`
+  for (let match of matches) {
+    let key = match.slice(1, -1)
+    type += `
+  ${key}: string`
+    let [before, after] = html.split(match)
+    func += ' + ' + toHTML(before) + ` + options.${key}`
+    html = after
   }
-  return matches.map(match => match.replace('{', '').replace('}', ''))
-}
-
-function calcTemplateName(file: string): string {
-  file = basename(file)
-  file = file.replace(extname(file), '')
-  file = file.replace(/-/g, '_')
-  return file
-}
-
-export function genTemplateType(
-  file: string,
-  name: string = calcTemplateName(file),
-) {
-  let text = readFileSync(file).toString()
-  let params = extractParams(text)
-  let keys = params.map(name => inspect(name)).join(' | ')
   let code = `
-export type ${name}_key = ${keys}
-export type ${name} = Record<${name}_key, string | number>
-`.trim()
-  writeFileSync(file + '.ts', code + '\n')
+${type}
+}
+${func} + ${toHTML(html)}
+}`
+  writeFileSync(dest, code.trim() + '\n')
+}
+
+function toHTML(html: string): string {
+  if (html.includes('`')) {
+    return JSON.stringify(html)
+  }
+  return '/* html */ `' + html + '`'
+}
+
+export function scanTemplateDir(dir: string) {
+  for (let filename of readdirSync(dir)) {
+    let file = join(dir, filename)
+    if (extname(file) == '.html') {
+      buildTemplate(file)
+    }
+  }
 }
