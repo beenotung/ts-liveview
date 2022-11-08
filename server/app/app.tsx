@@ -31,7 +31,7 @@ if (config.development) {
 function renderTemplate(options: indexOptions): string {
   return indexTemplate({
     title: escapeHTML(options.title),
-    description: JSON.stringify(options.description).slice(1, -1),
+    description: escapeHTML(options.description),
     app: options.app,
   })
 }
