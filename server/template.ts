@@ -7,8 +7,6 @@ export function buildTemplate(file: string) {
   name = basename(name)
   let html = readFileSync(file).toString()
   let matches = html.match(/\{(.*)\}/g) || []
-  let keys = matches.map(match => match.slice(1, -1))
-  console.log(keys)
   let type = `export type ${name}Options = {`
   let func = `export function ${name}Template(options: ${name}Options): string {
   return ''`
