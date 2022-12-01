@@ -1,10 +1,20 @@
-export type indexOptions = {
-  title: string
-  description: string
-  app: string
+interface HTMLStream {
+  write(chunk: string): void
+  flush(): void
 }
-export function indexTemplate(options: indexOptions): string {
-  return '' + /* html */ `<!DOCTYPE html>
+type HTMLFunc = (stream: HTMLStream) => void
+
+export type IndexOptions = {
+  title: string | HTMLFunc
+  description: string | HTMLFunc
+  app: string | HTMLFunc
+}
+
+export function renderIndexTemplate(
+  stream: HTMLStream,
+  options: IndexOptions,
+): void {
+  stream.write(/* html */ `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -13,8 +23,12 @@ export function indexTemplate(options: indexOptions): string {
       name="viewport"
       content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=6.0"
     />
-    <title>` + options.title + /* html */ `</title>
-    <meta name="description" content="` + options.description + /* html */ `" />
+    <title>`)
+  typeof options.title == 'function' ? options.title(stream) : stream.write(options.title)
+  stream.write(/* html */ `</title>
+    <meta name="description" content="`)
+  typeof options.description == 'function' ? options.description(stream) : stream.write(options.description)
+  stream.write(/* html */ `" />
   </head>
   <body>
     <div id="noscript" aria-hidden="true">
@@ -56,8 +70,10 @@ export function indexTemplate(options: indexOptions): string {
       document.getElementById('noscript').remove()
       document.getElementById('ws_status').removeAttribute('hidden')
     </script>
-    ` + options.app + /* html */ `
+    `)
+  typeof options.app == 'function' ? options.app(stream) : stream.write(options.app)
+  stream.write(/* html */ `
   </body>
 </html>
-`
+`)
 }

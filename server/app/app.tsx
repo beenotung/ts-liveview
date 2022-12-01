@@ -1,9 +1,9 @@
 import { o } from './jsx/jsx.js'
 import { scanTemplateDir } from '../template.js'
 import express, { Response } from 'express'
-import type { ExpressContext, WsContext } from './context'
+import type { Context, ExpressContext, WsContext } from './context'
 import type { Element, Node } from './jsx/types'
-import { nodeToHTML, prerender, writeNode } from './jsx/html.js'
+import { writeNode } from './jsx/html.js'
 import { sendHTMLHeader } from './express.js'
 import { OnWsMessage } from '../ws/wss.js'
 import { dispatchUpdate } from './jsx/dispatch.js'
@@ -22,17 +22,24 @@ import { redirectDict } from './routes.js'
 import type { ClientMountMessage, ClientRouteMessage } from '../../client/types'
 import { then } from '@beenotung/tslib/result.js'
 import { style } from './app-style.js'
-import { indexOptions, indexTemplate } from '../../template/index.js'
+import { renderIndexTemplate } from '../../template/index.js'
 import escapeHTML from 'escape-html'
+import { HTMLStream } from './jsx/stream.js'
 
 if (config.development) {
   scanTemplateDir('template')
 }
-function renderTemplate(options: indexOptions): string {
-  return indexTemplate({
+function renderTemplate(
+  stream: HTMLStream,
+  context: Context,
+  options: { title: string; description: string; app: Node },
+) {
+  const app = options.app
+  renderIndexTemplate(stream, {
     title: escapeHTML(options.title),
     description: escapeHTML(options.description),
-    app: options.app,
+    app:
+      typeof app == 'string' ? app : stream => writeNode(stream, app, context),
   })
 }
 
@@ -113,27 +120,33 @@ function responseHTML(
   context: ExpressContext,
   route: PageRouteMatch,
 ) {
-  let app: string
+  let html = ''
+  let stream = {
+    write(chunk: string) {
+      html += chunk
+    },
+    flush() {},
+  }
+
   try {
-    app = nodeToHTML(App(route.node), context)
+    renderTemplate(stream, context, {
+      title: route.title || config.site_name,
+      description: route.description || config.site_description,
+      app: App(route.node),
+    })
   } catch (error) {
     if (error === EarlyTerminate) {
       return
     }
     console.error('Failed to render App:', error)
-    res.status(500)
-    if (error instanceof Error) {
-      app = 'Internal Error: ' + escapeHtml(error.message)
-    } else {
-      app = 'Unknown Error: ' + escapeHtml(String(error))
+    if (!res.headersSent) {
+      res.status(500)
     }
+    html +=
+      error instanceof Error
+        ? 'Internal Error: ' + escapeHtml(error.message)
+        : 'Unknown Error: ' + escapeHtml(String(error))
   }
-
-  let html = renderTemplate({
-    title: route.title || config.site_name,
-    description: route.description || config.site_description,
-    app,
-  })
 
   // deepcode ignore XSS: the dynamic content is html-escaped
   res.end(html)
@@ -144,39 +157,28 @@ function streamHTML(
   context: ExpressContext,
   route: PageRouteMatch,
 ) {
-  let appPlaceholder = '<!-- app -->'
-  let html = renderTemplate({
-    title: route.title || config.site_name,
-    description: route.description || config.site_description,
-    app: appPlaceholder,
-  })
-  let idx = html.indexOf(appPlaceholder)
-
-  let beforeApp = html.slice(0, idx)
-  res.write(beforeApp)
-  res.flush()
-
-  let afterApp = html.slice(idx + appPlaceholder.length)
-
   try {
-    // send the html chunks in streaming
-    writeNode(res, App(route.node), context)
+    renderTemplate(res, context, {
+      title: route.title || config.site_name,
+      description: route.description || config.site_description,
+      app: App(route.node),
+    })
+    res.end()
   } catch (error) {
     if (error === EarlyTerminate) {
       return
     }
     console.error('Failed to render App:', error)
-    if (error instanceof Error) {
-      // deepcode ignore XSS: the dynamic content is html-escaped
-      res.write('Internal Error: ' + escapeHtml(error.message))
-    } else {
-      res.write('Unknown Error: ' + escapeHtml(String(error)))
+    if (!res.headersSent) {
+      res.status(500)
     }
+    // deepcode ignore XSS: the dynamic content is html-escaped
+    res.end(
+      error instanceof Error
+        ? 'Internal Error: ' + escapeHtml(error.message)
+        : 'Unknown Error: ' + escapeHtml(String(error)),
+    )
   }
-
-  res.write(afterApp)
-
-  res.end()
 }
 
 export let onWsMessage: OnWsMessage = (event, ws, _wss) => {

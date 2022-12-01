@@ -93,12 +93,14 @@ let routeDict: Record<string, PageRoute> = {
     description:
       'API endpoint to increase target temperature of the demo thermostat',
     node: [Thermostat.inc],
+    streaming: false,
   },
   '/thermostat/dec': {
     title: title('Thermostat'),
     description:
       'API endpoint to decrease target temperature of the demo thermostat',
     node: [Thermostat.dec],
+    streaming: false,
   },
   '/editor': {
     title: title('Image Editor'),
@@ -123,11 +125,13 @@ let routeDict: Record<string, PageRoute> = {
     title: title('Form Submission'),
     description: 'API endpoint to submit demo form',
     node: <DemoForm.submit />,
+    streaming: false,
   },
   '/form/live/:key': {
     title: title('Set Form Key'),
     description: 'API endpoint to set form field in realtime',
     node: <DemoForm.set />,
+    streaming: false,
   },
   '/cookie-session': {
     title: title('Cookie-based Session'),
@@ -157,11 +161,13 @@ let routeDict: Record<string, PageRoute> = {
     title: title('Chatroom Rename'),
     description: 'API endpoint to rename user in chatroom',
     node: <Chatroom.rename />,
+    streaming: false,
   },
   '/chatroom/send': {
     title: title('Chatroom: send message'),
     description: 'API endpoint to send message in chatroom',
     node: <Chatroom.send />,
+    streaming: false,
   },
   '/calculator': {
     title: title('Calculator'),
