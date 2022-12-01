@@ -132,6 +132,7 @@ function update(message: ServerMessage) {
   return <Update to="/thermostat" message={message} />
 }
 
+/* the root node is statically built at boot-time (doesn't need to be reconstructed at request-time) */
 let Thermostat: Node = (
   <div id="thermostat">
     {Style(/* css */ `
@@ -218,7 +219,13 @@ let Thermostat: Node = (
       <div class="text-container">
         Target:&nbsp;
         <span title="Target temperature in celsius degree">
-          <span id="target">{state.target.toFixed(1)}</span>&deg;
+          <span id="target">
+            {
+              /* this fraction is wrapped in an inline functional component to evaluate the state at request-time */
+              [() => state.target.toFixed(1)]
+            }
+          </span>
+          &deg;
         </span>
       </div>
       <div>
@@ -235,7 +242,8 @@ let Thermostat: Node = (
           <div>
             <div class="inner circle">
               <span title="Current temperature in celsius degree">
-                <span id="current">{state.current.toFixed(1)}</span>&deg;
+                <span id="current">{[() => state.current.toFixed(1)]}</span>
+                &deg;
               </span>
             </div>
           </div>
@@ -252,7 +260,7 @@ let Thermostat: Node = (
       </div>
       <div class="text-container">
         <span id="status" title="Current status">
-          {state.status}
+          {[() => state.status]}
         </span>
       </div>
     </div>
