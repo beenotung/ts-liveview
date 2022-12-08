@@ -1,8 +1,18 @@
 # Changelog
 
-## [v4](https://github.com/beenotung/ts-liveview/tree/v4)
+## [v5](https://github.com/beenotung/ts-liveview/tree/v5)
 
 2022 - Present
+
+- Enhanced support on html streaming to both static parts in template file and dynamic parts in typescript
+
+  - The template file is pre-generated with response streaming enabled
+
+  The signature of generated template function is now: `(stream, options) => void`, and the options is an object of string or "html chunk sink" (a.k.a. stream consumer function)
+
+## [v4](https://github.com/beenotung/ts-liveview/tree/v4)
+
+2022
 
 - Changed signature of component function
 
@@ -26,7 +36,7 @@
 
 ## [v3](https://github.com/beenotung/ts-liveview/tree/v3)
 
-2022 - 2022
+2022
 
 - Setup eslint
 - Harden type definition and usage on Context (e.g. avoid non-null assertions and explicit-any)
