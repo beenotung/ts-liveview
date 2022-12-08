@@ -30,5 +30,3 @@ function fixProps(props: attrs) {
   }
   return props
 }
-
-export default JSX
