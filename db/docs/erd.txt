@@ -40,3 +40,11 @@ user_agent
 ----------
 id integer PK
 user_agent text unique
+
+
+# zoom: 1.000
+# view: (0, 0)
+# request_log (74, 55)
+# method (448, 16)
+# url (450, 131)
+# user_agent (448, 243)
