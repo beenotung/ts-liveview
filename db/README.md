@@ -4,12 +4,12 @@ Remark: cd to `db` if not done already
 
 Auto mode:
 
-1. update `docs/erd.txt` with any text editor
+1. update `erd.txt` with any text editor
 2. run `npm run update`
 
 Manual mode:
 
-1. update `docs/erd.txt` with any text editor
+1. update `erd.txt` with any text editor
 2. run `npm run gen-migrate`
 3. review the generated migration script in the `migrations` directory
 4. run `npm run migrate`

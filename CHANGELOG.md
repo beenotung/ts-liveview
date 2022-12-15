@@ -10,6 +10,9 @@
 
   The signature of generated template function is now: `(stream, options) => void`, and the options is an object of string or "html chunk sink" (a.k.a. stream consumer function)
 
+- Moved db/docs/erd.txt to db/erd.txt for easier access
+- Update quick-erd with diagram position inlined
+
 ## [v4](https://github.com/beenotung/ts-liveview/tree/v4)
 
 2022
