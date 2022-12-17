@@ -36,6 +36,15 @@ export function listenWSSCookie(wss: ws.Server) {
   wss.on('connection', (ws, request) => {
     const req = request as express.Request
     const res = {} as express.Response
+    if (!('secure' in req)) {
+      req.secure = req.headers.origin?.startsWith('https') || false
+    }
+    if (!('protocol' in req)) {
+      req.protocol = req.secure ? 'wss' : 'ws'
+    }
+    if (!('originalUrl' in req)) {
+      req.originalUrl = req.url || '/'
+    }
     cookieMiddleware(req, res, () => {
       const cookies = getSecureCookie(req, res)
       ws_cookies.set(ws, cookies)
