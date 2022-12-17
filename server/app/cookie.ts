@@ -22,7 +22,7 @@ export function getSecureCookie(req: express.Request, res: express.Response) {
     const protocol = req.protocol === 'ws' ? 'wss' : 'https'
     const to = `${protocol}://${req.headers.host}${req.originalUrl}`
     log('redirect non-secure request to:', to)
-    res.redirect(to, 301)
+    res.redirect(301, to)
     throw EarlyTerminate
   }
   return req.cookies
