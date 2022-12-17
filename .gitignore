@@ -1,6 +1,8 @@
 # npm
 node_modules
 pnpm-lock.yaml
+package-lock.json
+yarn.lock
 
 # IDE
 .idea/
@@ -18,3 +20,6 @@ localhost_*.report.html
 *.cert
 *.key
 *.pem
+
+# MacOS
+.DS_Store
