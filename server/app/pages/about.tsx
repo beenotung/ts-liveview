@@ -59,7 +59,7 @@ export const License = prerender(
   <p style="white-space:pre-wrap">
     {existsSync('LICENSE')
       ? readFileSync('LICENSE').toString()
-      : 'LICENSE file is missing. You can put it in the project root directory, aloneside with the pacakge.json'}
+      : 'LICENSE file is missing. You can put it in the project root directory, alone-side with the package.json'}
   </p>,
 )
 
