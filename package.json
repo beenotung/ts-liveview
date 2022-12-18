@@ -41,6 +41,7 @@
   "dependencies": {
     "@beenotung/tslib": "^23.12.1",
     "@ionic/core": "^8.4.3",
+    "bcrypt": "^5.1.1",
     "better-sqlite3-proxy": "^2.11.0",
     "better-sqlite3-schema": "^3.1.8",
     "canvas-confetti": "^1.9.3",
@@ -68,6 +69,7 @@
     "ws": "^8.18.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/better-sqlite3": "^7.6.12",
     "@types/canvas-confetti": "^1.9.0",
     "@types/chai": "^4.3.20",
