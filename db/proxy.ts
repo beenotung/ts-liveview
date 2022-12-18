@@ -58,6 +58,14 @@ export type RequestLog = {
   timestamp: number
 }
 
+export type User = {
+  id?: null | number
+  username: string
+  password_hash: null | string // char(60)
+  email: null | string
+  tel: null | string
+}
+
 export type DBProxy = {
   method: Method[]
   url: Url[]
@@ -67,6 +75,7 @@ export type DBProxy = {
   user_agent: UserAgent[]
   ua_stat: UaStat[]
   request_log: RequestLog[]
+  user: User[]
 }
 
 export let proxy = proxySchema<DBProxy>({
@@ -90,5 +99,6 @@ export let proxy = proxySchema<DBProxy>({
       ['user_agent', { field: 'user_agent_id', table: 'user_agent' }],
       ['request_session', { field: 'request_session_id', table: 'request_session' }],
     ],
+    user: [],
   },
 })
