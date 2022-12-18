@@ -74,6 +74,15 @@ timezone text NULL
 timezone_offset integer NULL
 
 
+user
+----
+id
+username varchar(32)
+password_hash char(60) null
+email varchar(320) null
+tel varchar(16) null
+
+
 # zoom: 1.000
 # view: (0, 0)
 # text-bg: #6495ed
@@ -90,3 +99,4 @@ timezone_offset integer NULL
 # ua_bot (845, 410)
 # ua_stat (715, 60)
 # request_session (450, 445)
+# user (450, 680)
