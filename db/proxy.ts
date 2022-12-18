@@ -72,6 +72,14 @@ export type RequestLog = {
   timestamp: number
 }
 
+export type User = {
+  id?: null | number
+  username: string
+  password_hash: null | string // char(60)
+  email: null | string
+  tel: null | string
+}
+
 export type ErrorLog = {
   id?: null | number
   timestamp: number
@@ -96,6 +104,7 @@ export type DBProxy = {
   user_agent: UserAgent[]
   ua_stat: UaStat[]
   request_log: RequestLog[]
+  user: User[]
   error_log: ErrorLog[]
 }
 
@@ -123,6 +132,7 @@ export let proxy = proxySchema<DBProxy>({
       ['geo_ip', { field: 'geo_ip_id', table: 'geo_ip' }],
       ['request_session', { field: 'request_session_id', table: 'request_session' }],
     ],
+    user: [],
     error_log: [
       /* foreign references */
       ['client_url', { field: 'client_url_id', table: 'url' }],
