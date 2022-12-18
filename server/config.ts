@@ -46,6 +46,7 @@ export let config = {
   behind_proxy,
   cookie_secret: env.COOKIE_SECRET,
   site_name: 'ts-liveview Demo',
+  short_site_name: 'demo-site',
   site_description: 'Demo website of ts-liveview',
   setup_robots_txt: false,
   epoch,

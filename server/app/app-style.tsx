@@ -3,8 +3,10 @@ import { ErrorStyle } from './components/error.js'
 import { SourceCodeStyle } from './components/source-code.js'
 import Style from './components/style.js'
 import { UpdateMessageStyle } from './components/update-message.js'
+import { CommonStyle } from './styles/common.js'
 
 export let style = Style(/* css */ `
+${CommonStyle}
 ${SourceCodeStyle}
 ${ErrorStyle}
 ${UpdateMessageStyle}

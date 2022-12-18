@@ -65,6 +65,15 @@ id integer PK
 last_request_log_id integer
 
 
+user
+----
+id
+username varchar(32)
+password_hash char(60) null
+email varchar(320) null
+tel varchar(16) null
+
+
 # zoom: 1.000
 # view: (0, 0)
 # text-bg: #6495ed
@@ -80,3 +89,4 @@ last_request_log_id integer
 # ua_type (901, 232)
 # ua_bot (901, 385)
 # ua_stat (714, 62)
+# user (710, 393)

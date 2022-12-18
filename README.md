@@ -196,6 +196,11 @@ Example using _getter and setter_ see [thermostat.tsx](./server/app/pages/thermo
 - [x] Foldable Navbar
 - [x] Foldable Sidebar
 - [x] Login / Register (branch: v5-auth-template)
+- [ ] OAuth
+- [ ] Email verification
+- [ ] SMS verification
+- [ ] Reset password
+- [ ] Login History
 
 ## Examples / Demo
 

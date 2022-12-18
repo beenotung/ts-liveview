@@ -49,6 +49,14 @@ export type UaStat = {
   last_request_log_id: number
 }
 
+export type User = {
+  id?: null | number
+  username: string
+  password_hash: null | string // char(60)
+  email: null | string
+  tel: null | string
+}
+
 export type DBProxy = {
   method: Method[]
   url: Url[]
@@ -57,6 +65,7 @@ export type DBProxy = {
   user_agent: UserAgent[]
   request_log: RequestLog[]
   ua_stat: UaStat[]
+  user: User[]
 }
 
 export let proxy = proxySchema<DBProxy>({
@@ -78,5 +87,6 @@ export let proxy = proxySchema<DBProxy>({
       ['user_agent', { field: 'user_agent_id', table: 'user_agent' }],
     ],
     ua_stat: [],
+    user: [],
   },
 })
