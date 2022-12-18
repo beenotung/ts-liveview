@@ -16,6 +16,9 @@ import UserAgents from './pages/user-agents.js'
 import Home from './pages/home.js'
 import NotFoundPageRoute from './pages/not-found.js'
 import { then } from '@beenotung/tslib/result.js'
+import SignIn from './pages/signin.js'
+import { commonTemplatePageText } from './components/common-template.js'
+import Signup from './pages/signup.js'
 import type { MenuRoute } from './components/menu'
 import DemoPlugin from './pages/demo-plugin.js'
 import AppHome from './pages/app-home.js'
@@ -78,6 +81,18 @@ let routeDict = {
   ...DemoPlugin.routes,
   ...UILanguage.routes,
   ...UserAgents.routes,
+  '/login': {
+    title: title('Sign in to ' + config.short_site_name),
+    description: commonTemplatePageText,
+    menuText: 'Login',
+    node: SignIn.index,
+  },
+  '/register': {
+    title: title('Join ' + config.short_site_name),
+    description: commonTemplatePageText,
+    menuText: 'Register',
+    node: Signup.index,
+  },
   ...AppHome.routes,
   ...AppCharacter.routes,
   ...AppAbout.routes,
