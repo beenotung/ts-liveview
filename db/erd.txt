@@ -89,6 +89,15 @@ timezone text NULL
 timezone_offset integer NULL
 
 
+user
+----
+id
+username varchar(32)
+password_hash char(60) null
+email varchar(320) null
+tel varchar(16) null
+
+
 error_log
 ---------
 id integer PK
@@ -118,4 +127,5 @@ request_log_id integer FK >0- request_log.id
 # ua_bot (845, 410)
 # ua_stat (715, 60)
 # request_session (450, 445)
+# user (450, 680)
 # error_log (627, 158)
