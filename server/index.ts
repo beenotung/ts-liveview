@@ -1,5 +1,5 @@
 import express from 'express'
-import spdy from 'spdy'
+import spdy from 'spdy-fixes'
 import { WebSocketServer } from 'ws'
 import { config } from './config.js'
 import { join } from 'path'
