@@ -47,9 +47,13 @@ export function nodeToVElementOptimized(
     return nodeToVNode(node, context)
   }
   const vElement: VElement = nodeToVNode(node, context)
-  const childrenHTML: html = nodeListToHTML(children, context)
-  const childrenRaw: Raw = ['raw', childrenHTML]
-  const vElementWithRaw: VElement = [vElement[0], vElement[1], [childrenRaw]]
+  let vChildren: VNodeList | undefined = undefined
+  if (vElement[2]) {
+    const childrenHTML: html = nodeListToHTML(vElement[2], context)
+    const childrenRaw: Raw = ['raw', childrenHTML]
+    vChildren = [childrenRaw]
+  }
+  const vElementWithRaw: VElement = [vElement[0], vElement[1], vChildren]
   const vElementSize = JSON.stringify(vElement).length
   const vElementWithRawSize = JSON.stringify(vElementWithRaw).length
   if (vElementSize > vElementWithRawSize) {
