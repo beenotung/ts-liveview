@@ -22,7 +22,7 @@ export function getSecureCookie(req: express.Request, res: express.Response) {
     const protocol = req.protocol === 'ws' ? 'wss' : 'https'
     const to = `${protocol}://${req.headers.host}${req.originalUrl}`
     log('redirect non-secure request to:', to)
-    res.redirect(to, 301)
+    res.redirect(301, to)
     throw EarlyTerminate
   }
   return req.cookies
@@ -36,9 +36,9 @@ export function listenWSSCookie(wss: ws.Server) {
   wss.on('connection', (ws, request) => {
     const req = request as express.Request
     const res = {} as express.Response
-    req.secure = req.secure || req.headers.origin?.startsWith('https') || false
-    req.protocol = req.protocol || (req.secure ? 'wss' : 'ws')
-    req.originalUrl = req.originalUrl || req.url || '/'
+    req.secure ??= req.headers.origin?.startsWith('https') || false
+    req.protocol ??= req.secure ? 'wss' : 'ws'
+    req.originalUrl ??= req.url || '/'
     cookieMiddleware(req, res, () => {
       const cookies = getSecureCookie(req, res)
       ws_cookies.set(ws, cookies)
