@@ -156,10 +156,15 @@ function submit(_attrs: attrs, context: Context) {
   )
 }
 
+const validation = {
+  username: { minLength: 3, maxLength: 64 },
+  password: { minLength: 6 },
+  level: { min: 1, max: 100 },
+}
 const formBody = object({
-  username: string({ minLength: 3 }),
-  password: string({ minLength: 6 }),
-  level: int({ min: 1 }),
+  username: string(validation.username),
+  password: string(validation.password),
+  level: int(validation.level),
   gender: optional(values(['female', 'male', 'rainbow', 'na'])),
   color: color(),
   happy: checkbox(),
@@ -180,6 +185,8 @@ function DemoForm() {
           type="text"
           name="username"
           id="username"
+          minlength={validation.username.minLength}
+          maxlength={validation.username.maxLength}
           oninput="emit('/form/live/username',this.value)"
         />
         <div title="Tips to try html-injection">
@@ -189,10 +196,22 @@ function DemoForm() {
         <h3>Demo more input types</h3>
 
         <label for="password">password</label>
-        <input type="password" name="password" id="password" />
+        <input
+          type="password"
+          name="password"
+          id="password"
+          minlength={validation.password.minLength}
+        />
 
         <label for="level">level</label>
-        <input type="number" name="level" id="level" min="1" />
+        <input
+          type="number"
+          name="level"
+          id="level"
+          step="1"
+          min={validation.level.min}
+          max={validation.level.max}
+        />
         {Script(`level.defaultValue=1`)}
 
         <label for="gender">gender</label>
