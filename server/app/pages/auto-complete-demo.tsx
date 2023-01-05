@@ -25,11 +25,15 @@ if (existsSync(dictDir)) {
   })
 }
 if (wordSet.size === 0) {
-  let pkg = JSON.parse(readFileSync('package.json').toString())
-  ;[Object.keys(pkg.dependencies), Object.keys(pkg.devDependencies)].forEach(
-    list => list.forEach(word => wordSet.add(word)),
-  )
+  readFileSync('package.json')
+    .toString()
+    .match(/"(.*?)"/g)
+    ?.map(s => s.slice(1, -1)) // remove double quotes
+    .filter(s => !(+s.at(-1)! + 1)) // skip package versions
+    .filter(s => !s.includes('.com')) // skip email address
+    .forEach(s => wordSet.add(s))
 }
+
 const words = Array.from(wordSet)
 
 const TopN = 20
