@@ -48,7 +48,7 @@ let code = /* html */ `
     <button onclick="alert('running js')">Will it popup?</button>
   </span>
 </p>
-`
+`.trim()
 
 const style = Style(/* css */ `
 form > label {
