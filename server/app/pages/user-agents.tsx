@@ -238,6 +238,8 @@ let UserAgents = (
 #user-agents td {
   border: 1px solid var(--text-color, black);
   padding: 0.25rem 0.5rem;
+  max-width: calc(90vw - 8rem);
+  word-break: break-word;
 }
 `)}
     <p>This page demonstrates showing query result from database.</p>
