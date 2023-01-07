@@ -176,104 +176,113 @@ const formBody = object({
 function DemoForm() {
   return (
     <>
-      <h2>Demo Form</h2>
-      <form method="POST" action="/form/submit" onsubmit="emitForm(event)">
-        {style}
-        <div class="inline-label-container">
-          <label for="username">username</label>
-          <span id="username-out" title="Live preview of username" />
+      <div>
+        <div style="display: inline-flex; flex-direction: column">
+          <h2>Demo Form</h2>
+          <form method="POST" action="/form/submit" onsubmit="emitForm(event)">
+            {style}
+            <div class="inline-label-container">
+              <label for="username">username</label>
+              <span id="username-out" title="Live preview of username" />
+            </div>
+            <input
+              type="text"
+              name="username"
+              id="username"
+              minlength={validation.username.minLength}
+              maxlength={validation.username.maxLength}
+              oninput="emit('/form/live/username',this.value)"
+            />
+            <div title="Tips to try html-injection">
+              Hint: Try <code>Bob</code> and <code>{'<b>o</b>'}</code>
+            </div>
+
+            <h3>Demo more input types</h3>
+
+            <label for="password">password</label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              minlength={validation.password.minLength}
+            />
+
+            <label for="level">level</label>
+            <input
+              type="number"
+              name="level"
+              id="level"
+              step="1"
+              min={validation.level.min}
+              max={validation.level.max}
+            />
+            {Script(`level.defaultValue=1`)}
+
+            <label for="gender">gender</label>
+            <select name="gender" id="gender">
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+              <option value="rainbow">Non-binary</option>
+              <option value="na">Prefer not to say</option>
+            </select>
+
+            <label for="color">color</label>
+            <input name="color" id="color" type="color" />
+
+            <div class="inline-label-container">
+              <label for="happy">happy?</label>
+              <input name="happy" id="happy" type="checkbox" />
+            </div>
+
+            <div class="radio-group">
+              <div style="margin-bottom:0.5em">Most often on:</div>
+              <label for="tel">tel</label>
+              <input name="contact" id="tel" type="radio" value="tel" />
+              <label for="text">text</label>
+              <input name="contact" id="text" type="radio" value="text" />
+              <label for="video">video</label>
+              <input name="contact" id="video" type="radio" value="video" />
+              <label for="face">face</label>
+              <input name="contact" id="face" type="radio" value="face" />
+            </div>
+
+            <div class="btn-group">
+              <input type="reset" value="Reset" />
+              <input type="submit" value="Submit" />
+            </div>
+          </form>
         </div>
-        <input
-          type="text"
-          name="username"
-          id="username"
-          minlength={validation.username.minLength}
-          maxlength={validation.username.maxLength}
-          oninput="emit('/form/live/username',this.value)"
-        />
-        <div title="Tips to try html-injection">
-          Hint: Try <code>Bob</code> and <code>{'<b>o</b>'}</code>
+
+        <div style="display: inline-block; width: 3rem"></div>
+
+        <div style="display: inline-flex; flex-direction: column">
+          <h2>Code Snippet</h2>
+
+          <p>HTML code is escaped by default</p>
+          <fieldset>
+            <legend>HTML Code</legend>
+            <pre>
+              <code id="code-out">{code.trim()}</code>
+            </pre>
+          </fieldset>
+
+          <p>But it is possible to display sanitized HTML</p>
+          <fieldset>
+            <legend>HTML Preview</legend>
+            <div id="preview-out">{Raw(sanitize(code))}</div>
+          </fieldset>
+
+          <label for="html-input">HTML Input</label>
+          <textarea
+            id="html-input"
+            style="width:37em;height:10em;"
+            oninput="emit('/form/live/code',this.value)"
+          >
+            {code}
+          </textarea>
         </div>
+      </div>
 
-        <h3>Demo more input types</h3>
-
-        <label for="password">password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          minlength={validation.password.minLength}
-        />
-
-        <label for="level">level</label>
-        <input
-          type="number"
-          name="level"
-          id="level"
-          step="1"
-          min={validation.level.min}
-          max={validation.level.max}
-        />
-        {Script(`level.defaultValue=1`)}
-
-        <label for="gender">gender</label>
-        <select name="gender" id="gender">
-          <option value="female">Female</option>
-          <option value="male">Male</option>
-          <option value="rainbow">Non-binary</option>
-          <option value="na">Prefer not to say</option>
-        </select>
-
-        <label for="color">color</label>
-        <input name="color" id="color" type="color" />
-
-        <div class="inline-label-container">
-          <label for="happy">happy?</label>
-          <input name="happy" id="happy" type="checkbox" />
-        </div>
-
-        <div class="radio-group">
-          <div style="margin-bottom:0.5em">Most often on:</div>
-          <label for="tel">tel</label>
-          <input name="contact" id="tel" type="radio" value="tel" />
-          <label for="text">text</label>
-          <input name="contact" id="text" type="radio" value="text" />
-          <label for="video">video</label>
-          <input name="contact" id="video" type="radio" value="video" />
-          <label for="face">face</label>
-          <input name="contact" id="face" type="radio" value="face" />
-        </div>
-
-        <div class="btn-group">
-          <input type="reset" value="Reset" />
-          <input type="submit" value="Submit" />
-        </div>
-      </form>
-
-      <h2>Code Snippet</h2>
-
-      <p>HTML code is escaped by default</p>
-      <fieldset>
-        <legend>HTML Code</legend>
-        <pre>
-          <code id="code-out">{code.trim()}</code>
-        </pre>
-      </fieldset>
-
-      <p>But it is possible to display sanitized HTML</p>
-      <fieldset>
-        <legend>HTML Preview</legend>
-        <div id="preview-out">{Raw(sanitize(code))}</div>
-      </fieldset>
-
-      <label for="html-input">HTML Input</label>
-      <textarea
-        id="html-input"
-        style="width:37em;height:10em;"
-        oninput="emit('/form/live/code',this.value)"
-      >
-        {code}
-      </textarea>
       <SourceCode page="demo-form.tsx" />
     </>
   )
