@@ -26,10 +26,12 @@ log.enabled = true
 
 function sanitize(html: string) {
   return sanitizeHTML(html, {
-    allowedAttributes: { '*': ['style'] },
+    allowedAttributes: { '*': ['style', 'title', 'width', 'height'] },
     allowedStyles: {
       '*': {
-        'color': [/.*/],
+        width: [/.*/],
+        height: [/.*/],
+        color: [/.*/],
         'background-color': [/.*/],
         'font-size': [/.*/],
         'text-align': [/.*/],
@@ -41,7 +43,7 @@ function sanitize(html: string) {
 let username = ''
 let code = /* html */ `
 <p>
-  <i>Live</i> <b>Rich-Text</b> Editor
+  <i title="with realtime updates">Live</i> <b>Rich-Text</b> Editor
   <span style="color:red; background-color:lightgreen;">
     <button onclick="alert('running js')">Will it popup?</button>
   </span>
