@@ -1,5 +1,0 @@
-{
-  "events": {
-    "restart": "npm run fix-dist"
-  }
-}
