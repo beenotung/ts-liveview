@@ -18,7 +18,7 @@
     "fix:client": "fix-esm-import-path client/index.ts",
     "fix-dist": "fix-esm-import-path dist/db/proxy.js",
     "build": "run-p build:*",
-    "build:server": "tsc -p . && npm run fix-dist",
+    "build:server": "live-tsc --src . --dest dist --exclude scripts --exclude public --exclude data --exclude db/data --post-hook \"npx fix-esm-import-path dist/db/proxy.js\"",
     "build:client": "esbuild client/index.ts --bundle --minify --outfile=build/bundle.min.js",
     "size": "run-s size:*",
     "size:bundle": "esbuild client/index.ts --bundle --outfile=build/bundle.js",
@@ -27,12 +27,11 @@
     "size:report": "ls -l build/bundle.*",
     "size:report-h": "ls -lh build/bundle.*",
     "start": "node dist/server/index.js --prod",
-    "dev": "run-s build reset-open watch",
+    "dev": "run-s reset-open watch",
     "reset-open": "node scripts/reset-open.js",
     "watch": "run-p watch:*",
-    "watch:server": "tsc -p . -w",
-    "watch:client": "esbuild client/index.ts --watch --bundle --minify --outfile=build/bundle.min.js",
-    "watch:js": "nodemon --ignore dist/client dist/server/index.js -- --dev"
+    "watch:server": "npm run build:server -- --watch --server dist/server/index.js",
+    "watch:client": "npm run build:client -- --watch"
   },
   "dependencies": {
     "@beenotung/tslib": "^20.1.3",
@@ -73,7 +72,7 @@
     "fix-esm-import-path": "^1.3.1",
     "format-json-cli": "^1.0.1",
     "gen-env": "^1.0.1",
-    "nodemon": "^2.0.20",
+    "live-tsc": "^1.1.1",
     "npm-run-all": "^4.1.5",
     "populate-env": "^2.0.0",
     "prettier": "^2.7.1",
