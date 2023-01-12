@@ -23,3 +23,6 @@ localhost_*.report.html
 
 # MacOS
 .DS_Store
+
+# live server
+server.pid

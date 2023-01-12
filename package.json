@@ -72,7 +72,7 @@
     "fix-esm-import-path": "^1.3.1",
     "format-json-cli": "^1.0.1",
     "gen-env": "^1.0.1",
-    "live-tsc": "^1.1.1",
+    "live-tsc": "^1.2.0",
     "npm-run-all": "^4.1.5",
     "populate-env": "^2.0.0",
     "prettier": "^2.7.1",
