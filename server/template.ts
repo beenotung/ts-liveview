@@ -45,7 +45,16 @@ ${type}
 ${func}
 }
 `
-  writeFileSync(dest, code.trim() + '\n')
+  saveFile(dest, code.trim() + '\n')
+}
+
+function saveFile(file: string, content: string) {
+  try {
+    if (readFileSync(file).toString() == content) return
+  } catch (error) {
+    // maybe file not exists
+  }
+  writeFileSync(file, content)
 }
 
 function toHTML(html: string): string {
