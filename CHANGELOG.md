@@ -13,6 +13,12 @@
 - Moved db/docs/erd.txt to db/erd.txt for easier access
 - Update quick-erd with diagram position inlined
 
+- Speedup dev mode restart update source file changes with esbuild (instead of tsc)
+
+  Previous version was using tsc and nodemon in dev mode, which takes more time to load. Current version is using go-built esbuild without type checking, hence it load much faster.
+
+  You can still get type hints from the IDE or by running `npm run type-check`, which will run tsc in watch mode without saving the built files.
+
 ## [v4](https://github.com/beenotung/ts-liveview/tree/v4)
 
 2022
