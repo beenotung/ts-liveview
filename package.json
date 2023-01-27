@@ -18,7 +18,7 @@
     "fix:client": "fix-esm-import-path client/index.ts",
     "fix-dist": "fix-esm-import-path dist/db/proxy.js",
     "build": "run-p build:*",
-    "build:server": "live-tsc --src . --dest dist --exclude scripts --exclude public --exclude data --exclude db/data --post-hook \"npx fix-esm-import-path dist/db/proxy.js#watch:dist/db\"",
+    "build:server": "live-tsc --src . --dest dist --exclude scripts --exclude public --exclude data --exclude db/data --post-hook \"fix-esm-import-path dist/db/proxy.js#watch:dist/db\"",
     "build:client": "esbuild client/index.ts --bundle --minify --outfile=build/bundle.min.js",
     "size": "run-s size:*",
     "size:bundle": "esbuild client/index.ts --bundle --outfile=build/bundle.js",
