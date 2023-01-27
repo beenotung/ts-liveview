@@ -65,8 +65,7 @@ const port = config.port
 const protocol = config.serverOptions.key ? 'https' : 'http'
 server.listen(port, () => {
   print({ port, protocol })
-  if (config.development && existsSync('.open')) {
+  if (config.development && config.epoch == 1) {
     open(`${protocol}://localhost:${port}`)
-    unlinkSync('.open')
   }
 })

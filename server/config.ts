@@ -15,6 +15,7 @@ let env = {
   HTTPS_KEY_FILE: 'localhost-key.pem',
   HTTPS_CERT_FILE: 'localhost.pem',
   HTTP_VERSION: 2, // 1 or 2
+  EPOCH: 1, // to distinct initial run or restart in serve mode
 }
 
 populateEnv(env, { mode: 'halt' })
@@ -52,4 +53,5 @@ export let config = {
   site_description: 'Demo website of ts-liveview',
   setup_robots_txt: false,
   serverOptions,
+  epoch: env.EPOCH,
 }
