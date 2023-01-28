@@ -1,8 +1,3 @@
-import AppNotice from './pages/app-notice.js'
-import AppChat from './pages/app-chat.js'
-import AppSettings from './pages/app-settings.js'
-import AppMore from './pages/app-more.js'
-import Privacy from './pages/privacy.js'
 import { capitalize } from '@beenotung/tslib/string.js'
 import { Router } from 'url-router.ts'
 import { LayoutType, config, title } from '../config.js'
@@ -18,9 +13,6 @@ import NotFoundPageRoute from './pages/not-found.js'
 import { then } from '@beenotung/tslib/result.js'
 import type { MenuRoute } from './components/menu'
 import DemoPlugin from './pages/demo-plugin.js'
-import AppHome from './pages/app-home.js'
-import AppAbout from './pages/app-about.js'
-import AppCharacter from './pages/app-character.js'
 import type { renderWebTemplate } from '../../template/web.js'
 import type { renderIonicTemplate } from '../../template/ionic.js'
 import { VNode } from '../../client/jsx/types.js'
@@ -78,18 +70,11 @@ let routeDict = {
   ...DemoPlugin.routes,
   ...UILanguage.routes,
   ...UserAgents.routes,
-  ...AppHome.routes,
-  ...AppCharacter.routes,
-  ...AppAbout.routes,
-  ...AppChat.routes,
-  ...AppNotice.routes,
-  ...AppMore.routes,
-  ...AppSettings.routes,
-  ...Privacy.routes,
 } satisfies Routes
 
 export let redirectDict: Record<string, string> = {
   '/server/app/pages/home.tsx': '/',
+  '/server/app/app.tsx': '/about/markdown',
 }
 
 export const pageRouter = new Router<PageRoute>()
