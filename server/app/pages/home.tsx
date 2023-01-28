@@ -54,7 +54,7 @@ let content = (
           <td>
             <fieldset>
               <legend>JSX Example</legend>
-              <code>{`<a href='#'>hash link</a>`}</code>
+              <code class="inline-code">{`<a href='#'>hash link</a>`}</code>
             </fieldset>
           </td>
         </tr>
@@ -62,7 +62,7 @@ let content = (
           <td>
             <fieldset>
               <legend>AST Example</legend>
-              <code>{`['a', { href: '#' }, ['hash link']]`}</code>
+              <code class="inline-code">{`['a', { href: '#' }, ['hash link']]`}</code>
             </fieldset>
           </td>
         </tr>
@@ -70,9 +70,7 @@ let content = (
           <td>
             <fieldset>
               <legend>HTML output</legend>
-              <code>
-                <a href="#">hash link</a>
-              </code>
+              <a href="#">hash link</a>
             </fieldset>
           </td>
         </tr>
