@@ -14,20 +14,17 @@ import { OnWsMessage } from '../ws/wss.js'
 import { dispatchUpdate } from './jsx/dispatch.js'
 import { EarlyTerminate } from './helpers.js'
 import { getWSSession } from './session.js'
-import DemoCookieSession from './pages/demo-cookie-session.js'
 import { Flush } from './components/flush.js'
 import { config } from '../config.js'
 import Stats from './stats.js'
 import { MuteConsole, Script } from './components/script.js'
 import { matchRoute, menuRoutes, PageRouteMatch } from './routes.js'
-import Chatroom from './pages/chatroom.js'
 import { redirectDict } from './routes.js'
 import type { ClientMountMessage, ClientRouteMessage } from '../../client/types'
 import { then } from '@beenotung/tslib/result.js'
 import { style } from './app-style.js'
 import { renderIndexTemplate } from '../../template/index.js'
 import { HTMLStream } from './jsx/stream.js'
-import DemoUpload from './pages/demo-upload.js'
 import { getWsCookies } from './cookie.js'
 import { PickLanguage } from './components/ui-language.js'
 import Navbar from './components/navbar.js'
@@ -152,9 +149,6 @@ function Footer(attrs: { style?: string }) {
 // prefer flat router over nested router for less overhead
 export function attachRoutes(app: Router) {
   // ajax/middleware routes
-  DemoCookieSession.attachRoutes(app)
-  Chatroom.attachRoutes(app)
-  DemoUpload.attachRoutes(app)
 
   // redirect routes
   Object.entries(redirectDict).forEach(([from, to]) =>
