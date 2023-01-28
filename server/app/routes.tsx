@@ -9,24 +9,11 @@ import { Redirect } from './components/router.js'
 import type { Context, DynamicContext } from './context'
 import { o } from './jsx/jsx.js'
 import type { Node } from './jsx/types'
-import About from './pages/about.js'
-import AutoCompleteDemo from './pages/auto-complete-demo.js'
-import Calculator from './pages/calculator.js'
 import UserAgents from './pages/user-agents.js'
-import Chatroom from './pages/chatroom.js'
-import DemoCookieSession from './pages/demo-cookie-session.js'
-import DemoForm from './pages/demo-form.js'
-import DemoInputComponents from './pages/demo-inputs.js'
-import UserList from './pages/user-list.js'
-import Editor from './pages/editor.js'
 import Home from './pages/home.js'
 import NotFoundPageRoute from './pages/not-found.js'
-import Thermostat from './pages/thermostat.js'
 import { then } from '@beenotung/tslib/result.js'
-import DemoLocale from './pages/demo-locale.js'
-import Clock from './pages/clock.js'
 import type { MenuRoute } from './components/menu'
-import DemoUpload from './pages/demo-upload.js'
 import DemoToast from './pages/demo-toast.js'
 import appHome from './pages/app-home.js'
 import appAbout from './pages/app-about.js'
@@ -90,42 +77,7 @@ let routeDict = {
   ...AppSettings.routes,
   ...AppMore.routes,
   ...Home.routes,
-  ...About.routes,
-  ...Thermostat.routes,
-  '/editor': {
-    title: title('Image Editor'),
-    description:
-      'Image Editor that works without javascript, with progress enhancement when javascript and websocket are available',
-    menuText: 'Editor',
-    node: <Editor />,
-  },
-  '/auto-complete': {
-    title: title('Auto Complete'),
-    description: 'Server-driven auto-complete input box demo',
-    menuText: 'Auto Complete',
-    node: <AutoCompleteDemo />,
-  },
-  ...DemoForm.routes,
-  ...DemoInputComponents.routes,
-  ...UserList.routes,
   ...DemoToast.routes,
-  ...DemoUpload.routes,
-  ...DemoCookieSession.routes,
-  ...Chatroom.routes,
-  ...DemoLocale.routes,
-  '/clock': {
-    title: title('Clock'),
-    description:
-      'Realtime clock using system time localized with client language and timezone',
-    menuText: 'Clock',
-    node: Clock,
-  },
-  '/calculator': {
-    title: title('Calculator'),
-    description: 'A simple stateful component demo',
-    menuText: 'Calculator',
-    node: <Calculator />,
-  },
   '/user-agents': {
     title: title('User Agents of Visitors'),
     description: "User agents of this site's visitors",
@@ -138,13 +90,7 @@ let routeDict = {
 } satisfies Routes
 
 export let redirectDict: Record<string, string> = {
-  '/server/app/pages/thermostat.tsx': '/thermostat',
-  '/server/app/pages/editor.tsx': '/editor',
-  '/server/app/pages/auto-complete-demo.tsx': '/auto-complete',
-  '/server/app/pages/demo-form.tsx': '/form',
   '/server/app/pages/home.tsx': '/',
-  '/server/app/app.tsx': '/about/markdown',
-  '/server/app/pages/chatroom.tsx': '/chatroom',
 }
 
 export const pageRouter = new Router<PageRoute>()
@@ -162,11 +108,6 @@ Object.entries(routeDict as Routes).forEach(([url, route]) => {
       menuFullNavigate: route.menuFullNavigate,
     })
   }
-})
-
-menuRoutes.push({
-  url: '/some/page/that/does-not/exist',
-  menuText: '404',
 })
 
 Object.entries(redirectDict).forEach(([url, href]) =>
