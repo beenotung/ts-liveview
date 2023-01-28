@@ -62,7 +62,7 @@ let content = (
           <td>
             <fieldset>
               <legend>AST Example</legend>
-              <code>{`{['a', { href: '#' }, ['hash link']]}`}</code>
+              <code>{`['a', { href: '#' }, ['hash link']]`}</code>
             </fieldset>
           </td>
         </tr>
