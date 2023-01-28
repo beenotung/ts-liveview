@@ -46,6 +46,9 @@ export function renderIndexTemplate(
       body {
         padding-bottom: 2.5rem;
       }
+      #noscript {
+        display: none;
+      }
       #ws_status {
         position: fixed;
         bottom: 1em;
