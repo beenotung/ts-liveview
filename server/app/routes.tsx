@@ -10,24 +10,11 @@ import UILanguage from './components/ui-language.js'
 import type { Context, DynamicContext } from './context'
 import { o } from './jsx/jsx.js'
 import type { Node } from './jsx/types'
-import About from './pages/about.js'
-import AutoCompleteDemo from './pages/auto-complete-demo.js'
-import Calculator from './pages/calculator.js'
 import UserAgents from './pages/user-agents.js'
-import Chatroom from './pages/chatroom.js'
-import DemoCookieSession from './pages/demo-cookie-session.js'
-import DemoForm from './pages/demo-form.js'
-import DemoInputComponents from './pages/demo-inputs.js'
-import UserList from './pages/user-list.js'
-import Editor from './pages/editor.js'
 import Home from './pages/home.js'
 import NotFoundPageRoute from './pages/not-found.js'
-import Thermostat from './pages/thermostat.js'
 import { then } from '@beenotung/tslib/result.js'
-import DemoLocale from './pages/demo-locale.js'
-import Clock from './pages/clock.js'
 import type { MenuRoute } from './components/menu'
-import DemoUpload from './pages/demo-upload.js'
 import DemoToast from './pages/demo-toast.js'
 import AppHome from './pages/app-home.js'
 import AppAbout from './pages/app-about.js'
@@ -88,69 +75,8 @@ export type Routes = Record<string, PageRoute>
 // TODO direct support alternative urls instead of having to repeat the entry
 let routeDict = {
   ...Home.routes,
-  ...About.routes,
-  ...Thermostat.routes,
-  '/editor': {
-    menuText: <Locale en="Editor" zh="編輯器" />,
-    resolve(context) {
-      let zh = isPreferZh(context)
-      return {
-        title: title(zh ? '圖片編輯器' : 'Image Editor'),
-        description: zh
-          ? '不依賴 JavaScript 的圖片編輯器，當支援 JavaScript 和 WebSocket 時會提供增強功能'
-          : 'Image Editor that works without JavaScript, with progressive enhancement when JavaScript and WebSocket are available',
-        node: <Editor />,
-      }
-    },
-  },
-  '/auto-complete': {
-    menuText: <Locale en="Auto Complete" zh="自動輸入框" />,
-    resolve(context) {
-      let zh = isPreferZh(context)
-      return {
-        title: title(zh ? '自動完成' : 'Auto Complete'),
-        description: zh
-          ? '伺服器驅動的自動完成輸入框範例'
-          : 'Server-driven auto-complete input box demo',
-        node: <AutoCompleteDemo />,
-      }
-    },
-  },
-  ...DemoForm.routes,
-  ...DemoInputComponents.routes,
-  ...UserList.routes,
   ...DemoToast.routes,
-  ...DemoUpload.routes,
-  ...DemoCookieSession.routes,
-  ...Chatroom.routes,
-  ...DemoLocale.routes,
   ...UILanguage.routes,
-  '/clock': {
-    menuText: <Locale en="Clock" zh="時鐘" />,
-    resolve(context) {
-      let zh = isPreferZh(context)
-      return {
-        title: title(zh ? '時鐘' : 'Clock'),
-        description: zh
-          ? '使用系統時間的即時時鐘，根據客戶端的語言和時區本地化'
-          : 'Realtime clock using system time localized with client language and timezone',
-        node: Clock,
-      }
-    },
-  },
-  '/calculator': {
-    menuText: <Locale en="Calculator" zh="計算器" />,
-    resolve(context) {
-      let zh = isPreferZh(context)
-      return {
-        title: title(zh ? '計算器' : 'Calculator'),
-        description: zh
-          ? '一個簡單的有狀態元件範例'
-          : 'A simple stateful component demo',
-        node: <Calculator />,
-      }
-    },
-  },
   '/user-agents': {
     menuText: <Locale en="Visitor Stats" zh="訪客統計" />,
     resolve(context) {
@@ -174,13 +100,7 @@ let routeDict = {
 } satisfies Routes
 
 export let redirectDict: Record<string, string> = {
-  '/server/app/pages/thermostat.tsx': '/thermostat',
-  '/server/app/pages/editor.tsx': '/editor',
-  '/server/app/pages/auto-complete-demo.tsx': '/auto-complete',
-  '/server/app/pages/demo-form.tsx': '/form',
   '/server/app/pages/home.tsx': '/',
-  '/server/app/app.tsx': '/about/markdown',
-  '/server/app/pages/chatroom.tsx': '/chatroom',
 }
 
 export const pageRouter = new Router<PageRoute>()
@@ -198,11 +118,6 @@ Object.entries(routeDict as Routes).forEach(([url, route]) => {
       menuFullNavigate: route.menuFullNavigate,
     })
   }
-})
-
-menuRoutes.push({
-  url: '/some/page/that/does-not/exist',
-  menuText: '404',
 })
 
 Object.entries(redirectDict).forEach(([url, href]) =>
