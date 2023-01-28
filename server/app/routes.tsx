@@ -1,4 +1,3 @@
-import DemoTypescriptPage from './pages/demo-typescript-page.js'
 import AppNotice from './pages/app-notice.js'
 import AppChat from './pages/app-chat.js'
 import AppSettings from './pages/app-settings.js'
@@ -13,24 +12,11 @@ import type express from 'express'
 import type { DynamicContext, ExpressContext } from './context'
 import { o } from './jsx/jsx.js'
 import type { Node } from './jsx/types'
-import About from './pages/about.js'
-import AutoCompleteDemo from './pages/auto-complete-demo.js'
-import Calculator from './pages/calculator.js'
 import UserAgents from './pages/user-agents.js'
-import Chatroom from './pages/chatroom.js'
-import DemoCookieSession from './pages/demo-cookie-session.js'
-import DemoForm from './pages/demo-form.js'
-import DemoInputComponents from './pages/demo-inputs.js'
-import UserList from './pages/user-list.js'
-import Editor from './pages/editor.js'
 import Home from './pages/home.js'
 import NotFoundPageRoute from './pages/not-found.js'
-import Thermostat from './pages/thermostat.js'
 import { then } from '@beenotung/tslib/result.js'
-import DemoLocale from './pages/demo-locale.js'
-import Clock from './pages/clock.js'
 import type { MenuRoute } from './components/menu'
-import DemoUpload from './pages/demo-upload.js'
 import DemoPlugin from './pages/demo-plugin.js'
 import AppHome from './pages/app-home.js'
 import AppAbout from './pages/app-about.js'
@@ -89,22 +75,8 @@ export type Routes = Record<string, PageRoute>
 // TODO direct support alternative urls instead of having to repeat the entry
 let routeDict = {
   ...Home.routes,
-  ...About.routes,
-  ...Thermostat.routes,
-  ...Editor.routes,
-  ...AutoCompleteDemo.routes,
-  ...DemoForm.routes,
-  ...DemoInputComponents.routes,
-  ...UserList.routes,
   ...DemoPlugin.routes,
-  ...DemoUpload.routes,
-  ...DemoCookieSession.routes,
-  ...DemoTypescriptPage.routes,
-  ...Chatroom.routes,
-  ...DemoLocale.routes,
   ...UILanguage.routes,
-  ...Clock.routes,
-  ...Calculator.routes,
   ...UserAgents.routes,
   ...AppHome.routes,
   ...AppCharacter.routes,
@@ -117,13 +89,7 @@ let routeDict = {
 } satisfies Routes
 
 export let redirectDict: Record<string, string> = {
-  '/server/app/pages/thermostat.tsx': '/thermostat',
-  '/server/app/pages/editor.tsx': '/editor',
-  '/server/app/pages/auto-complete-demo.tsx': '/auto-complete',
-  '/server/app/pages/demo-form.tsx': '/form',
   '/server/app/pages/home.tsx': '/',
-  '/server/app/app.tsx': '/about/markdown',
-  '/server/app/pages/chatroom.tsx': '/chatroom',
 }
 
 export const pageRouter = new Router<PageRoute>()
@@ -142,11 +108,6 @@ Object.entries(routeDict as Routes).forEach(([url, route]) => {
       menuFullNavigate: route.menuFullNavigate,
     })
   }
-})
-
-menuRoutes.push({
-  url: '/some/page/that/does-not/exist',
-  menuText: '404',
 })
 
 Object.entries(redirectDict).forEach(([url, href]) =>
