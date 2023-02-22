@@ -29,9 +29,9 @@ function sanitize(html: string) {
     allowedAttributes: { '*': ['style', 'title', 'width', 'height'] },
     allowedStyles: {
       '*': {
-        width: [/.*/],
-        height: [/.*/],
-        color: [/.*/],
+        'width': [/.*/],
+        'height': [/.*/],
+        'color': [/.*/],
         'background-color': [/.*/],
         'font-size': [/.*/],
         'text-align': [/.*/],
