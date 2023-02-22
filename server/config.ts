@@ -42,6 +42,14 @@ if (production && env.COOKIE_SECRET == ' ') {
   process.exit(1)
 }
 
+function fixEpoch() {
+  // workaround of initial build twice since esbuild v0.17
+  if (env.EPOCH >= 2) {
+    return env.EPOCH - 1
+  }
+  return env.EPOCH
+}
+
 export let config = {
   production,
   development,
@@ -53,5 +61,5 @@ export let config = {
   site_description: 'Demo website of ts-liveview',
   setup_robots_txt: false,
   serverOptions,
-  epoch: env.EPOCH,
+  epoch: fixEpoch(),
 }
