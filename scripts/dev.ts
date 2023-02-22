@@ -1,19 +1,26 @@
 #!/usr/bin/env node
-'use strict'
+
 import esbuild from 'esbuild'
 import fs from 'fs'
 import path from 'path'
 import child_process from 'child_process'
 import debug from 'debug'
+
 let log = debug('ts-liveview dev')
 log.enabled = true
-const mode = process.argv[2]
+
+type Mode = 'build' | 'serve'
+const mode = process.argv[2] as Mode
+
 if (mode != 'build' && mode != 'serve') {
   console.log('Please specify a mode: build or serve')
   process.exit(1)
 }
+
 main()
+
 let stop = () => {}
+
 if (mode === 'serve') {
   process.stdin.on('data', chunk => {
     if (chunk.toString().trim() == 'rs') {
@@ -23,6 +30,7 @@ if (mode === 'serve') {
     }
   })
 }
+
 async function main() {
   log('scanning files...')
   let files = scan()
@@ -33,9 +41,11 @@ async function main() {
   }
   build(files)
 }
+
 function scan() {
-  let files = []
-  function scanDir(dir) {
+  let files: string[] = []
+
+  function scanDir(dir: string) {
     fs.readdirSync(dir).forEach(filename => {
       if (filename == 'node_modules') return
       let file = path.join(dir, filename)
@@ -52,19 +62,22 @@ function scan() {
       }
     })
   }
+
   scanDir('server')
   scanDir('db')
   scanDir('client')
   scanDir('template')
+
   return files
 }
-async function build(files) {
-  let plugins = []
+
+async function build(files: string[]) {
+  let plugins: esbuild.Plugin[] = []
   plugins.push({
     name: 'dev-server-watch',
-    setup(build2) {
+    setup(build) {
       let count = 0
-      build2.onEnd(result => {
+      build.onEnd(result => {
         count++
         log(`Finished build x${count}`)
         if (result.errors.length > 0) {
@@ -99,12 +112,14 @@ async function build(files) {
     )
   }
 }
+
 function postBuild() {
   fix()
   if (mode == 'serve') {
     restartServer()
   }
 }
+
 function fix() {
   let file = path.join('dist', 'db', 'proxy.js')
   let text = fs.readFileSync(file).toString()
@@ -115,8 +130,11 @@ function fix() {
   )
   fs.writeFileSync(file, text)
 }
+
 let stopServer = async () => {}
+
 let EPOCH = 0
+
 async function restartServer() {
   await stopServer()
   log('starting server...')
