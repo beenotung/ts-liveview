@@ -18,6 +18,7 @@
     "fix:client": "fix-esm-import-path client/index.ts",
     "type-check": "tsc -p . --watch --noEmit",
     "build": "run-p build:*",
+    "build:dev": "esbuild scripts/dev.ts --outfile=scripts/dev.js && prettier --write scripts/dev.js",
     "build:server": "node scripts/dev.js build",
     "build:client": "esbuild client/index.ts --bundle --minify --outfile=build/bundle.min.js",
     "size": "run-s size:*",
