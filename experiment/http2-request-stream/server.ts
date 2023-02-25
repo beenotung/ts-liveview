@@ -33,5 +33,5 @@ server.on('request', (req, res) => {
 
 let port = 8200
 server.listen(port, () => {
-  print(port)
+  print({ port, protocol: 'https' })
 })
