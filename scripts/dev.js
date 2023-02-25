@@ -13,12 +13,12 @@ if (mode != 'build' && mode != 'serve') {
   process.exit(1)
 }
 main()
-let stop = () => {}
+let stop = async () => {}
 if (mode === 'serve') {
-  process.stdin.on('data', chunk => {
+  process.stdin.on('data', async chunk => {
     if (chunk.toString().trim() == 'rs') {
       log('manual restarting...')
-      stop()
+      await stop()
       main()
     }
   })
