@@ -31,7 +31,10 @@ async function main() {
   } else if (mode == 'serve') {
     log('watching', files.length, 'files...')
   }
-  build(files)
+  await build(files)
+  if (mode == 'build') {
+    process.exit(0)
+  }
 }
 function scan() {
   let files = []
