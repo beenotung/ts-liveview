@@ -1,8 +1,12 @@
+import { array, object, string } from 'cast.ts'
 import { config } from '../../config.js'
 import { commonTemplatePageDesc } from '../components/common-template.js'
-import { Link } from '../components/router.js'
+import { Link, Redirect, Switch } from '../components/router.js'
 import Style from '../components/style.js'
+import { Context, getContextFormBody, WsContext } from '../context.js'
+import { EarlyTerminate } from '../helpers.js'
 import { o } from '../jsx/jsx.js'
+import { find } from 'better-sqlite3-proxy'
 import {
   appleLogo,
   facebookLogo,
@@ -10,6 +14,7 @@ import {
   googleLogo,
   instagramLogo,
 } from '../svgs/logo.js'
+import { proxy } from '../../../db/proxy.js'
 
 let style = Style(/* css */ `
 .or-line::before,
@@ -32,7 +37,7 @@ let style = Style(/* css */ `
 }
 `)
 
-let SignUp = (
+let SignUpPage = (
   <div id="sign-up">
     {style}
     <h2>Sign up</h2>
@@ -56,18 +61,23 @@ let SignUp = (
       </div>
     </div>
     <div class="or-line flex-center">or</div>
-    <form>
+    <SignUpForm />
+  </div>
+)
+
+function SignUpForm() {
+  return (
+    <form onsubmit="emitForm(this)" action="/register/submit" method="POST">
       <label>
         Username
         <div class="input-container">
-          <input name="username" />
+          <input
+            name="username"
+            oninput="emit('/register/check-username', this.value)"
+          />
         </div>
+        <p id="usernameMsg"></p>
       </label>
-      <p>This username is already used</p>
-      <p>
-        The username should only consist of english letters [a-z] and digits
-        [0-9], hyphen [-] and underscore [_] are also allowed
-      </p>
       <label>
         Email
         <div class="input-container">
@@ -92,8 +102,123 @@ let SignUp = (
         </div>
       </label>
       <p>Password not matched</p>
+      <input type="submit" value="Submit" />
     </form>
-  </div>
-)
+  )
+}
 
-export default { index: SignUp }
+let formParser = object({
+  username: string(),
+  password: string(),
+})
+function Submit(_attrs: {}, context: Context) {
+  let body = getContextFormBody(context)
+  console.log({ body })
+  let input = formParser.parse(body)
+  console.log({ input })
+  return (
+    <div>
+      todo
+      <Redirect href="/register"></Redirect>
+    </div>
+  )
+}
+
+let minUsername = 1
+let maxUsername = 32
+
+function CheckUsername(_: {}, context: WsContext) {
+  console.log('check username', context.args)
+  let username = context.args?.[0]
+  if (typeof username !== 'string' || username.length === 0) {
+    context.ws.send(['batch', [['update-text', '#usernameMsg', ``]]])
+    throw EarlyTerminate
+  }
+  if (username.length < minUsername) {
+    context.ws.send([
+      'batch',
+      [
+        [
+          'update-text',
+          '#usernameMsg',
+          `username "${username}" is too short, need ${
+            minUsername - username.length
+          } more characters`,
+        ],
+        ['update-attrs', '#usernameMsg', { style: 'color:red' }],
+      ],
+    ])
+    throw EarlyTerminate
+  }
+  if (username.length > maxUsername) {
+    context.ws.send([
+      'batch',
+      [
+        [
+          'update-text',
+          '#usernameMsg',
+          `username "${username}" is too long, need ${
+            username.length - maxUsername
+          } less characters`,
+        ],
+        ['update-attrs', '#usernameMsg', { style: 'color:red' }],
+      ],
+    ])
+    throw EarlyTerminate
+  }
+  let excludedChars = Array.from(
+    new Set(username.replace(/[a-z0-9]/g, '')),
+  ).join('')
+  if (excludedChars.length > 0) {
+    context.ws.send([
+      'batch',
+      [
+        [
+          'update-text',
+          '#usernameMsg',
+          `username should only consist of english letters [a-z] and digits [0-9], hyphen [-] and underscore [_] are also allowed.`,
+        ],
+        ['update-attrs', '#usernameMsg', { style: 'color:#a00' }],
+        [
+          'append',
+          '#usernameMsg',
+          [
+            'p',
+            { style: 'color:red' },
+            [`But ${JSON.stringify(excludedChars)} could not be used.`],
+          ],
+        ],
+      ],
+    ])
+    throw EarlyTerminate
+  }
+  if (find(proxy.user, { username })) {
+    context.ws.send([
+      'batch',
+      [
+        [
+          'update-text',
+          '#usernameMsg',
+          `username "${username}" is already used`,
+        ],
+        ['update-attrs', '#usernameMsg', { style: 'color:red' }],
+      ],
+    ])
+    throw EarlyTerminate
+  }
+  context.ws.send([
+    'batch',
+    [
+      ['update-text', '#usernameMsg', `username "${username}" is available`],
+      ['update-attrs', '#usernameMsg', { style: 'color:green' }],
+    ],
+  ])
+
+  throw EarlyTerminate
+}
+
+export default Switch({
+  '/register': SignUpPage,
+  '/register/check-username': <CheckUsername />,
+  '/register/submit': <Submit />,
+})
