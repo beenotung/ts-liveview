@@ -1,4 +1,4 @@
-import { object, string } from 'cast.ts'
+import { email, object, string } from 'cast.ts'
 import { config } from '../../config.js'
 import { commonTemplatePageDesc } from '../components/common-template.js'
 import { Link, Redirect, Switch } from '../components/router.js'
@@ -18,6 +18,7 @@ import { proxy, User } from '../../../db/proxy.js'
 import { ServerMessage } from '../../../client/types.js'
 import { is_email } from '@beenotung/tslib'
 import { Raw } from '../components/raw.js'
+import { hashPassword } from '../../hash.js'
 
 let style = Style(/* css */ `
 .or-line::before,
@@ -70,7 +71,7 @@ let SignUpPage = (
 
 function SignUpForm() {
   return (
-    <form onsubmit="emitForm(this)" action="/register/submit" method="POST">
+    <form onsubmit="emitForm(event)" action="/register/submit" method="POST">
       <label>
         Username
         <div class="input-container">
@@ -133,23 +134,6 @@ function checkPassword (form) {
 </script>`)}
       <input type="submit" value="Submit" />
     </form>
-  )
-}
-
-let formParser = object({
-  username: string(),
-  password: string(),
-})
-function Submit(_attrs: {}, context: Context) {
-  let body = getContextFormBody(context)
-  console.log({ body })
-  let input = formParser.parse(body)
-  console.log({ input })
-  return (
-    <div>
-      todo
-      <Redirect href="/register"></Redirect>
-    </div>
   )
 }
 
@@ -352,6 +336,49 @@ function CheckEmail(_: {}, context: WsContext) {
     selector: '#emailMsg',
     validate: validateEmail,
   })
+}
+
+let formParser = object({
+  username: string({ minLength: minUsername, maxLength: maxUsername }),
+  password: string({ minLength: minPassword, maxLength: maxPassword }),
+  confirm_password: string({ minLength: minPassword, maxLength: maxPassword }),
+  email: email(),
+})
+
+function Submit(_attrs: {}, context: Context) {
+  let body = getContextFormBody(context)
+  try {
+    let input = formParser.parse(body)
+    if (input.password != input.confirm_password) {
+      throw new Error('Password not matched')
+    }
+    proxy.user.push({
+      username: input.username,
+      // TODO hash with async function'
+      password_hash: 'todo',
+      email: input.email,
+      tel: null,
+    })
+    return (
+      <div>
+        todo
+        <pre>
+          <code>{JSON.stringify(input, null, 2)}</code>
+        </pre>
+        <Link href="/register">again</Link>
+      </div>
+    )
+  } catch (error) {
+    let message = String(error)
+      .replace('TypeError: ', '')
+      .replace('Error: ', '')
+    return (
+      <div>
+        <p style="color:darkred">{message}</p>
+        <Link href="/register">Try again</Link>
+      </div>
+    )
+  }
 }
 
 export default Switch({
