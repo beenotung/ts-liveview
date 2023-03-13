@@ -72,13 +72,7 @@ let routeDict: Routes = {
     menuText: 'Login',
     node: SignIn.index,
   },
-  '/register/:action?': {
-    title: title('Join ' + config.short_site_name),
-    description: commonTemplatePageText,
-    menuText: 'Register',
-    menuUrl: '/register',
-    node: Signup,
-  },
+  ...Signup.routes,
 }
 
 export let redirectDict: Record<string, string> = {

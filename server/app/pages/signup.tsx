@@ -1,7 +1,10 @@
 import { email, object, string } from 'cast.ts'
 import { config } from '../../config.js'
-import { commonTemplatePageDesc } from '../components/common-template.js'
-import { Link, Redirect, Switch } from '../components/router.js'
+import {
+  commonTemplatePageDesc,
+  commonTemplatePageText,
+} from '../components/common-template.js'
+import { Link } from '../components/router.js'
 import Style from '../components/style.js'
 import { Context, getContextFormBody, WsContext } from '../context.js'
 import { EarlyTerminate } from '../helpers.js'
@@ -19,6 +22,8 @@ import { ServerMessage } from '../../../client/types.js'
 import { is_email } from '@beenotung/tslib'
 import { Raw } from '../components/raw.js'
 import { hashPassword } from '../../hash.js'
+import { PageRoute, StaticPageRoute, title } from '../routes.js'
+import { Node } from '../jsx/types.js'
 
 let style = Style(/* css */ `
 .or-line::before,
@@ -38,6 +43,17 @@ let style = Style(/* css */ `
 }
 #sign-up form p {
   color: darkred;
+}
+#sign-up form p .extra {
+  color: darkred;
+  display: block;
+  margin-top: 0.25rem;
+}
+#sign-up form .hint {
+  border-inline-start: 3px solid #748;
+  background-color: #edf;
+  padding: 1rem;
+  margin-bottom: 1rem;
 }
 `)
 
@@ -65,56 +81,57 @@ let SignUpPage = (
       </div>
     </div>
     <div class="or-line flex-center">or</div>
-    <SignUpForm />
-  </div>
-)
-
-function SignUpForm() {
-  return (
     <form onsubmit="emitForm(event)" action="/register/submit" method="POST">
       <label>
         Username
         <div class="input-container">
-          <input
+          <Input
             name="username"
             oninput="emit('/register/check-username', this.value)"
           />
         </div>
-        <p id="usernameMsg"></p>
+        <InputErrorMessage id="usernameMsg" />
       </label>
       <label>
         Email
         <div class="input-container">
-          <input
+          <Input
             name="email"
             type="email"
             oninput="emit('/register/check-email', this.value)"
           />
         </div>
-        <p id="emailMsg"></p>
+        <InputErrorMessage id="emailMsg" />
       </label>
       <label>
         Password
         <div className="input-container">
-          <input
+          <Input
             name="password"
             type="password"
             oninput="emit('/register/check-password', this.value);this.form.confirm_password.value=''"
           />
         </div>
-        <p id="passwordMsg"></p>
+        <InputErrorMessage id="passwordMsg" />
+        <div class="hint">
+          Your password is not be stored in plain text.
+          <br />
+          Instead, it is processed with{' '}
+          <a href="https://en.wikipedia.org/wiki/Bcrypt">bcrypt algorithm</a> to
+          protect your credential against data leak.
+        </div>
       </label>
       <label>
         Confirm password
         <div className="input-container">
-          <input
+          <Input
             name="confirm_password"
             type="password"
             oninput="checkPassword(this.form)"
           />
         </div>
       </label>
-      <p id="confirmPasswordMsg"></p>
+      <InputErrorMessage id="confirmPasswordMsg" />
       {Raw(/* html */ `<script>
 function checkPassword (form) {
   let c = form.confirm_password.value
@@ -133,9 +150,53 @@ function checkPassword (form) {
 }
 </script>`)}
       <input type="submit" value="Submit" />
+      <ClearInputContext />
     </form>
+  </div>
+)
+
+function Input(
+  attrs: { name: string; type?: string; oninput: string },
+  context: InputContext,
+) {
+  let value = context.values?.[attrs.name]
+  return (
+    <input
+      name={attrs.name}
+      type={attrs.type}
+      oninput={attrs.oninput}
+      value={value}
+    />
   )
 }
+
+function InputErrorMessage(attrs: { id: string }, context: InputContext) {
+  let id = attrs.id
+
+  let result = context.contextError?.[id]
+  if (!result) return <p id={id}></p>
+
+  let children = [result.text]
+  if (result.extra) {
+    children.push(<span class="extra">{result.extra}</span>)
+  }
+  return (
+    <p id={id} style={result.type == 'ok' ? 'color:green' : 'color:red'}>
+      {[children]}
+    </p>
+  )
+}
+
+function ClearInputContext(_attrs: {}, context: InputContext) {
+  context.contextError = undefined
+  context.values = undefined
+}
+
+type InputContext = Context & {
+  contextError?: ContextError
+  values?: Record<string, string>
+}
+type ContextError = Record<string, ValidateResult>
 
 type ValidateResult =
   | { type: 'error'; text: string; extra?: string }
@@ -145,12 +206,16 @@ type ValidateResult =
       user: User
       extra?: string
     }
-  | { type: 'ok'; text: string }
+  | { type: 'ok'; text: string; extra?: string }
 
 let minUsername = 1
 let maxUsername = 32
 
 function validateUsername(username: string): ValidateResult {
+  if (!username) {
+    return { type: 'error', text: 'username not provided' }
+  }
+
   if (username.length < minUsername) {
     let diff = minUsername - username.length
     return {
@@ -204,6 +269,10 @@ let minPassword = 6
 let maxPassword = 256
 
 function validatePassword(password: string): ValidateResult {
+  if (!password) {
+    return { type: 'error', text: 'password not provided' }
+  }
+
   if (password.length < minPassword) {
     let diff = minPassword - password.length
     return {
@@ -223,6 +292,10 @@ function validatePassword(password: string): ValidateResult {
 }
 
 function validateEmail(email: string): ValidateResult {
+  if (!email) {
+    return { type: 'error', text: 'email not provided' }
+  }
+
   if (!is_email(email)) {
     return { type: 'error', text: 'invalid email' }
   }
@@ -239,10 +312,30 @@ function validateEmail(email: string): ValidateResult {
   return { type: 'ok', text: `email "${email}" is valid` }
 }
 
+function validateConfirmPassword(input: {
+  password: string
+  confirm_password: string
+}): ValidateResult {
+  if (!input.password)
+    return {
+      type: 'error',
+      text: 'Password not provided',
+    }
+  if (input.password != input.confirm_password)
+    return {
+      type: 'error',
+      text: 'Password not matched',
+    }
+  return {
+    type: 'ok',
+    text: 'Password matched',
+  }
+}
+
 function validateInput(input: {
   context: WsContext
   field: string
-  value: string
+  value: string | void
   selector: string
   validate: (value: string) => ValidateResult
 }) {
@@ -295,7 +388,9 @@ function sendInvalidMessage(input: {
       selector,
       [
         'span',
-        { style: 'color:darkred;display:block;margin-top:0.25rem' },
+        {
+          class: 'extra',
+        },
         [extra],
       ],
     ])
@@ -306,7 +401,7 @@ function sendInvalidMessage(input: {
 
 function CheckUsername(_: {}, context: WsContext) {
   let username = context.args?.[0] as string
-  username = username?.toLocaleLowerCase()
+  username = username?.toLowerCase()
   validateInput({
     context,
     value: username,
@@ -338,34 +433,51 @@ function CheckEmail(_: {}, context: WsContext) {
   })
 }
 
-let formParser = object({
-  username: string({ minLength: minUsername, maxLength: maxUsername }),
-  password: string({ minLength: minPassword, maxLength: maxPassword }),
-  confirm_password: string({ minLength: minPassword, maxLength: maxPassword }),
-  email: email(),
-})
+function getString(body: any, key: string): string {
+  let value = body?.[key]
+  if (typeof value === 'string') {
+    return value
+  }
+  return ''
+}
 
-function Submit(_attrs: {}, context: Context) {
+async function submit(context: InputContext): Promise<Node> {
   let body = getContextFormBody(context)
   try {
-    let input = formParser.parse(body)
-    if (input.password != input.confirm_password) {
-      throw new Error('Password not matched')
+    let input = {
+      username: getString(body, 'username').trim().toLowerCase(),
+      password: getString(body, 'password'),
+      email: getString(body, 'email').trim().toLowerCase(),
+      confirm_password: getString(body, 'confirm_password'),
     }
-    proxy.user.push({
+    let results = {
+      usernameMsg: validateUsername(input.username),
+      passwordMsg: validatePassword(input.password),
+      emailMsg: validateEmail(input.email),
+      confirmPasswordMsg: validateConfirmPassword(input),
+    }
+    let errors = Object.entries(results)
+    let hasError = errors.some(entry => entry[1].type != 'ok')
+    if (hasError) {
+      context.contextError = Object.fromEntries<ValidateResult>(errors)
+      context.values = input
+      return SignUpPage
+    }
+    let user_id = proxy.user.push({
       username: input.username,
-      // TODO hash with async function'
-      password_hash: 'todo',
+      password_hash: await hashPassword(input.password),
       email: input.email,
       tel: null,
     })
+
     return (
       <div>
-        todo
-        <pre>
-          <code>{JSON.stringify(input, null, 2)}</code>
-        </pre>
-        <Link href="/register">again</Link>
+        <p>Signup successfully.</p>
+        <p>Your user id is ${user_id}.</p>
+        <p>
+          TODO: A verification email has already been sent to your email
+          address. Please check your inbox and spam folder.
+        </p>
       </div>
     )
   } catch (error) {
@@ -381,10 +493,38 @@ function Submit(_attrs: {}, context: Context) {
   }
 }
 
-export default Switch({
-  '/register': SignUpPage,
-  '/register/check-username': <CheckUsername />,
-  '/register/check-password': <CheckPassword />,
-  '/register/check-email': <CheckEmail />,
-  '/register/submit': <Submit />,
-})
+let routes: Record<string, PageRoute> = {
+  '/register': {
+    title: title('Join ' + config.short_site_name),
+    description: commonTemplatePageText,
+    menuText: 'Register',
+    menuUrl: '/register',
+    node: SignUpPage,
+  },
+  '/register/check-username': {
+    title: title('API Endpoint'),
+    description: 'validate username and check availability',
+    node: <CheckUsername />,
+  },
+  '/register/check-password': {
+    title: title('API Endpoint'),
+    description: 'validate password',
+    node: <CheckPassword />,
+  },
+  '/register/check-email': {
+    title: title('API Endpoint'),
+    description: 'validate email and check availability',
+    node: <CheckEmail />,
+  },
+  '/register/submit': {
+    async resolve(context): Promise<StaticPageRoute> {
+      return {
+        title: title('API Endpoint'),
+        description: 'register new account',
+        node: await submit(context),
+      }
+    },
+  },
+}
+
+export default { routes }
