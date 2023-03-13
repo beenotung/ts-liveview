@@ -44,10 +44,9 @@ export type StaticPageRoute = {
   status?: number
 }
 export type DynamicPageRoute = {
-  resolve: (
-    context: DynamicContext,
-  ) => StaticPageRoute | Promise<StaticPageRoute>
+  resolve: (context: DynamicContext) => ResolvedPageRoue
 }
+export type ResolvedPageRoue = StaticPageRoute | Promise<StaticPageRoute>
 
 export type MenuRoute = {
   url: string
@@ -224,18 +223,18 @@ Object.entries(redirectDict).forEach(([url, href]) =>
   }),
 )
 
+export let NotFoundPage: PageRoute = {
+  title: title('Page Not Found'),
+  description: 'This page is not found. Probably due to outdated menu.',
+  node: NotMatch,
+  status: 404,
+}
+
 export function matchRoute(
   context: DynamicContext,
 ): PageRouteMatch | Promise<PageRouteMatch> {
   let match = pageRouter.route(context.url)
-  let route: PageRoute = match
-    ? match.value
-    : {
-        title: title('Page Not Found'),
-        description: 'This page is not found. Probably due to outdated menu.',
-        node: NotMatch,
-        status: 404,
-      }
+  let route: PageRoute = match ? match.value : NotFoundPage
   if (route.streaming === undefined) {
     route.streaming = StreamingByDefault
   }
