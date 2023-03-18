@@ -52,6 +52,7 @@ let style = Style(/* css */ `
   background-color: #edf;
   padding: 1rem;
   margin-bottom: 1rem;
+  width: fit-content;
 }
 `)
 
