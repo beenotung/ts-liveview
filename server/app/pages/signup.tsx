@@ -142,11 +142,11 @@ function checkPassword (form) {
   }
   let p = form.password.value
   if (p != c) {
-    confirmPasswordMsg.textContent = 'Password not matched'
+    confirmPasswordMsg.textContent = 'password not matched'
     confirmPasswordMsg.style.color = 'red'
     return
   }
-  confirmPasswordMsg.textContent = 'Password matched'
+  confirmPasswordMsg.textContent = 'password matched'
   confirmPasswordMsg.style.color = 'green'
 }
 </script>`)}
@@ -298,7 +298,10 @@ function validateEmail(email: string): ValidateResult {
   }
 
   if (!is_email(email)) {
-    return { type: 'error', text: 'invalid email' }
+    return {
+      type: 'error',
+      text: 'invalid email, the format should be "user@example.net"',
+    }
   }
 
   let user = find(proxy.user, { email })
