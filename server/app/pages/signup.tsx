@@ -41,19 +41,30 @@ let style = Style(/* css */ `
   border-radius: 0.25rem;
   margin: 0.25rem;
 }
-#sign-up form p {
-  color: darkred;
+#sign-up form .field {
+  display: flex;
+  flex-wrap: wrap;
 }
-#sign-up form p .extra {
+#sign-up form .field input {
+  margin: 0.25rem 0;
+}
+#sign-up form .field .space {
+  width: 4rem;
+}
+#sign-up form .field .msg {
+  align-self: end;
+  margin-bottom: 0.25rem;
+}
+#sign-up form .field .extra {
   color: darkred;
   display: block;
   margin-top: 0.25rem;
 }
-#sign-up form .hint {
+#sign-up .hint {
   border-inline-start: 3px solid #748;
   background-color: #edf;
   padding: 1rem;
-  margin-bottom: 1rem;
+  margin: 0.5rem 0;
   width: fit-content;
 }
 `)
@@ -83,56 +94,34 @@ let SignUpPage = (
     </div>
     <div class="or-line flex-center">or</div>
     <form onsubmit="emitForm(event)" action="/register/submit" method="POST">
-      <label>
-        Username
-        <div class="input-container">
-          <Input
-            name="username"
-            oninput="emit('/register/check-username', this.value)"
-          />
-        </div>
-        <InputErrorMessage id="usernameMsg" />
-      </label>
-      <label>
-        Email
-        <div class="input-container">
-          <Input
-            name="email"
-            type="email"
-            oninput="emit('/register/check-email', this.value)"
-          />
-        </div>
-        <InputErrorMessage id="emailMsg" />
-      </label>
-      <label>
-        Password
-        <div className="input-container">
-          <Input
-            name="password"
-            type="password"
-            oninput="emit('/register/check-password', this.value);this.form.confirm_password.value=''"
-          />
-        </div>
-        <InputErrorMessage id="passwordMsg" />
-        <div class="hint">
-          Your password is not be stored in plain text.
-          <br />
-          Instead, it is processed with{' '}
-          <a href="https://en.wikipedia.org/wiki/Bcrypt">bcrypt algorithm</a> to
-          protect your credential against data leak.
-        </div>
-      </label>
-      <label>
-        Confirm password
-        <div className="input-container">
-          <Input
-            name="confirm_password"
-            type="password"
-            oninput="checkPassword(this.form)"
-          />
-        </div>
-      </label>
-      <InputErrorMessage id="confirmPasswordMsg" />
+      <Field
+        label="Username"
+        name="username"
+        msgId="usernameMsg"
+        oninput="emit('/register/check-username', this.value)"
+      />
+      <Field
+        label="Email"
+        type="email"
+        name="email"
+        msgId="emailMsg"
+        oninput="emit('/register/check-email', this.value)"
+      />
+      <Field
+        label="Password"
+        type="password"
+        name="password"
+        msgId="passwordMsg"
+        oninput="emit('/register/check-password', this.value);this.form.confirm_password.value=''"
+      />
+
+      <Field
+        label="Confirm password"
+        type="password"
+        name="confirm_password"
+        msgId="confirmPasswordMsg"
+        oninput="checkPassword(this.form)"
+      />
       {Raw(/* html */ `<script>
 function checkPassword (form) {
   let c = form.confirm_password.value
@@ -153,38 +142,61 @@ function checkPassword (form) {
       <input type="submit" value="Submit" />
       <ClearInputContext />
     </form>
+    <div class="hint">
+      Your password is not be stored in plain text.
+      <br />
+      Instead, it is processed with{' '}
+      <a href="https://en.wikipedia.org/wiki/Bcrypt">bcrypt algorithm</a> to
+      protect your credential against data leak.
+    </div>
   </div>
 )
 
-function Input(
-  attrs: { name: string; type?: string; oninput: string },
+function Field(
+  attrs: {
+    label: string
+    type?: string
+    name: string
+    oninput: string
+    msgId: string
+  },
   context: InputContext,
 ) {
   let value = context.values?.[attrs.name]
+  let validateResult = context.contextError?.[attrs.msgId]
   return (
-    <input
-      name={attrs.name}
-      type={attrs.type}
-      oninput={attrs.oninput}
-      value={value}
-    />
+    <div class="field">
+      <label>
+        {attrs.label}
+        <div>
+          <input
+            type={attrs.type}
+            name={attrs.name}
+            oninput={attrs.oninput}
+            value={value}
+          />
+        </div>
+      </label>
+      <div class="space"></div>
+      {renderErrorMessage(attrs.msgId, validateResult)}
+    </div>
   )
 }
 
-function InputErrorMessage(attrs: { id: string }, context: InputContext) {
-  let id = attrs.id
-
-  let result = context.contextError?.[id]
-  if (!result) return <p id={id}></p>
-
-  let children = [result.text]
-  if (result.extra) {
-    children.push(<span class="extra">{result.extra}</span>)
+function renderErrorMessage(id: string, result: ValidateResult | undefined) {
+  if (!result) {
+    return <div id={id} class="msg"></div>
   }
+
   return (
-    <p id={id} style={result.type == 'ok' ? 'color:green' : 'color:red'}>
-      {[children]}
-    </p>
+    <div
+      id={id}
+      class="msg"
+      style={result.type == 'ok' ? 'color:green' : 'color:red'}
+    >
+      {result.text}
+      {result.extra && <span class="extra">{result.extra}</span>}
+    </div>
   )
 }
 
