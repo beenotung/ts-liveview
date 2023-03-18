@@ -47,9 +47,18 @@ connectWS({
 
     function emitForm(event: Event) {
       let form = event.target as HTMLFormElement
-      let data = {} as Record<string, FormDataEntryValue>
+      let data = {} as Record<string, FormDataEntryValue | FormDataEntryValue[]>
       new FormData(form).forEach((value, key) => {
-        data[key] = value
+        if (key in data) {
+          let prevValue = data[key]
+          if (Array.isArray(prevValue)) {
+            prevValue.push(value)
+          } else {
+            data[key] = [prevValue, value]
+          }
+        } else {
+          data[key] = value
+        }
       })
       let url = form.getAttribute('action') || location.href.replace(origin, '')
       emit(url, data)
