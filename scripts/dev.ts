@@ -134,7 +134,7 @@ function fix() {
   fs.writeFileSync(file, text)
 }
 
-let stopServer = async () => {}
+let stopServer = () => Promise.resolve()
 
 let EPOCH = 0
 
@@ -149,10 +149,21 @@ async function restartServer() {
       EPOCH: String(EPOCH),
     },
   })
-  stopServer = () =>
-    new Promise(resolve => {
-      log('stopping server...')
-      server.on('close', resolve)
-      server.kill()
+  let stopped = false
+  let stopServerPromise = new Promise<void>(resolve => {
+    server.on('close', () => {
+      stopped = true
+      log('server stopped')
+      resolve()
     })
+  })
+  stopServer = () => {
+    if (stopped) {
+      log('server already stopped')
+    } else {
+      log('stopping server...')
+      server.kill()
+    }
+    return stopServerPromise
+  }
 }
