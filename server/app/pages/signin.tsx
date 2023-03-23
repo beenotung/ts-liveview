@@ -26,7 +26,7 @@ let SignIn = (
     </form>
     <div>
       New to {config.short_site_name}?{' '}
-      <Link href="/register">Create an account</Link>.
+      <Link href="/signup">Create an account</Link>.
     </div>
   </div>
 )
