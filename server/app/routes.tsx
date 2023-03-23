@@ -171,7 +171,7 @@ let routeDict: Record<string, PageRoute> = {
     node: <Calculator />,
   },
   '/user-agents': {
-    title: 'User Agents of Visitors',
+    title: title('User Agents of Visitors'),
     description: "User agents of this site's visitors",
     menuText: 'User Agents',
     node: UserAgents,
