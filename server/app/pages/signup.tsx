@@ -93,26 +93,26 @@ let SignUpPage = (
       </div>
     </div>
     <div class="or-line flex-center">or</div>
-    <form onsubmit="emitForm(event)" action="/register/submit" method="POST">
+    <form onsubmit="emitForm(event)" action="/signup/submit" method="POST">
       <Field
         label="Username"
         name="username"
         msgId="usernameMsg"
-        oninput="emit('/register/check-username', this.value)"
+        oninput="emit('/signup/check-username', this.value)"
       />
       <Field
         label="Email"
         type="email"
         name="email"
         msgId="emailMsg"
-        oninput="emit('/register/check-email', this.value)"
+        oninput="emit('/signup/check-email', this.value)"
       />
       <Field
         label="Password"
         type="password"
         name="password"
         msgId="passwordMsg"
-        oninput="emit('/register/check-password', this.value);this.form.confirm_password.value=''"
+        oninput="emit('/signup/check-password', this.value);this.form.confirm_password.value=''"
       />
 
       <Field
@@ -503,40 +503,40 @@ async function submit(context: InputContext): Promise<Node> {
     return (
       <div>
         <p style="color:darkred">{message}</p>
-        <Link href="/register">Try again</Link>
+        <Link href="/signup">Try again</Link>
       </div>
     )
   }
 }
 
 let routes: Record<string, PageRoute> = {
-  '/register': {
+  '/signup': {
     title: title('Join ' + config.short_site_name),
     description: commonTemplatePageText,
-    menuText: 'Register',
-    menuUrl: '/register',
+    menuText: 'Sign Up',
+    menuUrl: '/signup',
     node: SignUpPage,
   },
-  '/register/check-username': {
+  '/signup/check-username': {
     title: title('API Endpoint'),
     description: 'validate username and check availability',
     node: <CheckUsername />,
   },
-  '/register/check-password': {
+  '/signup/check-password': {
     title: title('API Endpoint'),
     description: 'validate password',
     node: <CheckPassword />,
   },
-  '/register/check-email': {
+  '/signup/check-email': {
     title: title('API Endpoint'),
     description: 'validate email and check availability',
     node: <CheckEmail />,
   },
-  '/register/submit': {
+  '/signup/submit': {
     async resolve(context): Promise<StaticPageRoute> {
       return {
         title: title('API Endpoint'),
-        description: 'register new account',
+        description: 'sign up new account',
         node: await submit(context),
       }
     },
