@@ -1,12 +1,12 @@
 import { config } from '../../config.js'
-import { commonTemplatePageDesc } from '../components/common-template.js'
+import { commonTemplatePageText } from '../components/common-template.js'
 import { Link } from '../components/router.js'
 import { o } from '../jsx/jsx.js'
 
 let SignIn = (
   <div id="sign-in">
     <h2>Sign in to {config.short_site_name}</h2>
-    {commonTemplatePageDesc}
+    <p>{commonTemplatePageText}</p>
     <form>
       <label>
         Username or email address
