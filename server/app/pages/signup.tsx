@@ -507,8 +507,8 @@ async function submit(context: InputContext): Promise<Node> {
 
 let routes: Record<string, PageRoute> = {
   '/signup': {
-    title: title('Join ' + config.short_site_name),
-    description: commonTemplatePageText,
+    title: title('Sign Up'),
+    description: `Sign up to access exclusive content and functionality. Join our community on ${config.short_site_name}.`,
     menuText: 'Sign Up',
     menuUrl: '/signup',
     node: SignUpPage,
