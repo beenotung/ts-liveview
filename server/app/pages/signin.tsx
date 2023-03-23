@@ -2,8 +2,9 @@ import { config, title } from '../../config.js'
 import { commonTemplatePageText } from '../components/common-template.js'
 import { Link } from '../components/router.js'
 import { o } from '../jsx/jsx.js'
+import { PageRoute } from '../routes.js'
 
-let SignIn = (
+let SignInPage = (
   <div id="sign-in">
     <h2>Sign in to {config.short_site_name}</h2>
     <p>{commonTemplatePageText}</p>
@@ -31,4 +32,14 @@ let SignIn = (
   </div>
 )
 
-export default { index: SignIn }
+let routes: Record<string, PageRoute> = {
+  '/signin': {
+    title: title('Sign In'),
+    description: `Sign in to access exclusive content and functionality. Welcome back to our community on ${config.short_site_name}.`,
+    menuText: 'Sign In',
+    menuUrl: '/signin',
+    node: SignInPage,
+  },
+}
+
+export default { routes }
