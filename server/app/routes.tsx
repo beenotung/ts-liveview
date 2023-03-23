@@ -66,12 +66,7 @@ let routeDict: Routes = {
     menuText: 'User Agents',
     node: UserAgents,
   },
-  '/login': {
-    title: title('Sign in to ' + config.short_site_name),
-    description: commonTemplatePageText,
-    menuText: 'Login',
-    node: SignIn.index,
-  },
+  ...SignIn.routes,
   ...Signup.routes,
 }
 
