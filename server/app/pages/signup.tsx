@@ -1,8 +1,5 @@
 import { config } from '../../config.js'
-import {
-  commonTemplatePageDesc,
-  commonTemplatePageText,
-} from '../components/common-template.js'
+import { commonTemplatePageText } from '../components/common-template.js'
 import { Link } from '../components/router.js'
 import Style from '../components/style.js'
 import { Context, getContextFormBody, WsContext } from '../context.js'
@@ -72,7 +69,7 @@ let SignUpPage = (
   <div id="sign-up">
     {style}
     <h2>Sign up</h2>
-    {commonTemplatePageDesc}
+    <p>{commonTemplatePageText}</p>
     <p>
       Welcome to {config.short_site_name}!
       <br />
