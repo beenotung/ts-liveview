@@ -5,8 +5,9 @@ import { sessions } from '../session.js'
 import { Update, UpdateIn } from '../components/update.js'
 import type { ServerMessage } from '../../../client/types'
 import SourceCode from '../components/source-code.js'
-import { StaticPageRoute, title } from '../routes.js'
+import { StaticPageRoute } from '../routes.js'
 import type { Node } from '../jsx/types'
+import { title } from '../../config.js'
 
 const UpdateInterval = 1000
 

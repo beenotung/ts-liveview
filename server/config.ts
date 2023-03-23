@@ -63,3 +63,7 @@ export let config = {
   serverOptions,
   epoch: fixEpoch(),
 }
+
+export function title(page: string) {
+  return page + ' | ' + config.site_name
+}

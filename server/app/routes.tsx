@@ -1,6 +1,6 @@
 import { capitalize } from '@beenotung/tslib/string.js'
 import { Router } from 'url-router.ts'
-import { config } from '../config.js'
+import { config, title } from '../config.js'
 import { Redirect } from './components/router.js'
 import type { DynamicContext } from './context'
 import { o } from './jsx/jsx.js'
@@ -55,10 +55,6 @@ export type MenuRoute = {
 }
 
 export type PageRouteMatch = PageRouteOptions & StaticPageRoute
-
-export function title(page: string) {
-  return page + ' | ' + config.site_name
-}
 
 // jsx node can be used directly, e.g. `Home`
 // invoke functional component with square bracket, e.g. `[Editor]`
