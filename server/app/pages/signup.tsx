@@ -2,7 +2,12 @@ import { apiEndpointTitle, config, title } from '../../config.js'
 import { commonTemplatePageText } from '../components/common-template.js'
 import { Link } from '../components/router.js'
 import Style from '../components/style.js'
-import { Context, getContextFormBody, WsContext } from '../context.js'
+import {
+  Context,
+  getContextFormBody,
+  WsContext,
+  getStringCasual,
+} from '../context.js'
 import { EarlyTerminate } from '../../exception.js'
 import { o } from '../jsx/jsx.js'
 import { find } from 'better-sqlite3-proxy'
@@ -20,6 +25,7 @@ import { Raw } from '../components/raw.js'
 import { hashPassword } from '../../hash.js'
 import { PageRoute, StaticPageRoute } from '../routes.js'
 import { Node } from '../jsx/types.js'
+import { renderError } from '../components/error.js'
 
 let style = Style(/* css */ `
 .or-line::before,
@@ -76,7 +82,7 @@ let SignUpPage = (
       Let's begin the adventure~
     </p>
     <p>
-      Already have an account? <Link href="/login">Sign in</Link>
+      Already have an account? <Link href="/signin">Sign in</Link>
     </p>
     <div class="flex-center flex-column">
       <div>Register with:</div>
@@ -445,22 +451,14 @@ function CheckEmail(_: {}, context: WsContext) {
   })
 }
 
-function getString(body: any, key: string): string {
-  let value = body?.[key]
-  if (typeof value === 'string') {
-    return value
-  }
-  return ''
-}
-
 async function submit(context: InputContext): Promise<Node> {
-  let body = getContextFormBody(context)
   try {
+    let body = getContextFormBody(context)
     let input = {
-      username: getString(body, 'username').trim().toLowerCase(),
-      password: getString(body, 'password'),
-      email: getString(body, 'email').trim().toLowerCase(),
-      confirm_password: getString(body, 'confirm_password'),
+      username: getStringCasual(body, 'username').trim().toLowerCase(),
+      password: getStringCasual(body, 'password'),
+      email: getStringCasual(body, 'email').trim().toLowerCase(),
+      confirm_password: getStringCasual(body, 'confirm_password'),
     }
     let results = {
       usernameMsg: validateUsername(input.username),
@@ -485,7 +483,7 @@ async function submit(context: InputContext): Promise<Node> {
     return (
       <div>
         <p>Signup successfully.</p>
-        <p>Your user id is ${user_id}.</p>
+        <p>Your user id is #{user_id}.</p>
         <p>
           TODO: A verification email has already been sent to your email
           address. Please check your inbox and spam folder.
@@ -493,12 +491,9 @@ async function submit(context: InputContext): Promise<Node> {
       </div>
     )
   } catch (error) {
-    let message = String(error)
-      .replace('TypeError: ', '')
-      .replace('Error: ', '')
     return (
       <div>
-        <p style="color:darkred">{message}</p>
+        {renderError(error, context)}
         <Link href="/signup">Try again</Link>
       </div>
     )
