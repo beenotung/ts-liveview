@@ -1,4 +1,4 @@
-import { config, title } from '../../config.js'
+import { apiEndpointTitle, config, title } from '../../config.js'
 import { commonTemplatePageText } from '../components/common-template.js'
 import { Link } from '../components/router.js'
 import Style from '../components/style.js'
@@ -514,24 +514,24 @@ let routes: Record<string, PageRoute> = {
     node: SignUpPage,
   },
   '/signup/check-username': {
-    title: title('API Endpoint'),
+    title: apiEndpointTitle,
     description: 'validate username and check availability',
     node: <CheckUsername />,
   },
   '/signup/check-password': {
-    title: title('API Endpoint'),
+    title: apiEndpointTitle,
     description: 'validate password',
     node: <CheckPassword />,
   },
   '/signup/check-email': {
-    title: title('API Endpoint'),
+    title: apiEndpointTitle,
     description: 'validate email and check availability',
     node: <CheckEmail />,
   },
   '/signup/submit': {
     async resolve(context): Promise<StaticPageRoute> {
       return {
-        title: title('API Endpoint'),
+        title: apiEndpointTitle,
         description: 'sign up new account',
         node: await submit(context),
       }
