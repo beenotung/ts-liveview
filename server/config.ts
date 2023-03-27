@@ -70,3 +70,5 @@ export let config = {
 export function title(page: string) {
   return page + ' | ' + config.site_name
 }
+
+export let apiEndpointTitle = title('API Endpoint')
