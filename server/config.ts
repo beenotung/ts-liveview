@@ -50,6 +50,8 @@ function fixEpoch() {
   return env.EPOCH
 }
 
+let epoch = fixEpoch()
+
 export let config = {
   production,
   development,
@@ -61,7 +63,8 @@ export let config = {
   site_description: 'Demo website of ts-liveview',
   setup_robots_txt: false,
   serverOptions,
-  epoch: fixEpoch(),
+  epoch,
+  auto_open: !production && development && epoch === 1,
 }
 
 export function title(page: string) {
