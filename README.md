@@ -25,7 +25,7 @@ npm run migrate
 
 cd ..
 pnpm install --prefer-offline
-npm run dev   # starts the development server
+npm start   # starts the development server
 ```
 
 To setup a cloned project, run `./scripts/init.sh`, which will run above commands for you.
@@ -38,15 +38,16 @@ Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liv
 
 ## Available npm scripts
 
-`npm run dev`:
-Start the development server, with realtime update and live-reload.
+`npm start`:
+Start the development server, with realtime-update and live-reload.
 
 `npm run build`:
 Compile the typescript server into 'dist' folder, and bundle the client into 'build' folder.
-This step is only needed for production mode.
+This step is only needed when preparing production deployment.
 
-`npm start`:
-Run the built server in 'build' folder (for production deployment).
+`npm run production`:
+Run the built server (`dist/server/index.js`) in production mode.
+This step is only needed for production deployment.
 
 `npm run fix`:
 Auto add `.js` extension in import paths, which is required in esm runtime.
