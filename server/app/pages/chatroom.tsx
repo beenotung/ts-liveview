@@ -23,6 +23,8 @@ import { nodeToVNode } from '../jsx/vnode.js'
 import { Request, Response, NextFunction } from 'express'
 import SourceCode from '../components/source-code.js'
 import type { Context } from '../context'
+import { PageRoute } from '../routes.js'
+import { apiEndpointTitle, title } from '../../config.js'
 
 let log = debugLog('chatroom.tsx')
 log.enabled = true
@@ -224,13 +226,13 @@ function getChatSession(context: Context) {
   }
 }
 
-function typing(_attrs: {}, context: Context) {
+function Typing(_attrs: {}, context: Context) {
   let { session } = getChatSession(context)
   session.markTyping()
   throw EarlyTerminate
 }
 
-function rename(_attrs: {}, _context: Context) {
+function Rename(_attrs: {}, _context: Context) {
   let { session, context } = getChatSession(_context)
   let newNickname = context.args?.[0]
   if (!newNickname) {
@@ -247,7 +249,7 @@ type PostBody = {
   nickname?: string
   message?: string
 }
-function send(_attrs: {}, context: Context) {
+function Send(_attrs: {}, context: Context) {
   if (context.type === 'express') {
     const { req, res } = context
     if (req.method !== 'POST') {
@@ -422,10 +424,33 @@ function MessageItem(attrs: MessageItemAttrs, context: Context) {
   )
 }
 
+let routes: Record<string, PageRoute> = {
+  '/chatroom': {
+    title: title('Chatroom'),
+    description: 'Live chatroom with realtime-update powered by websocket',
+    menuText: 'Chatroom',
+    node: <Chatroom />,
+  },
+  '/chatroom/typing': {
+    title: apiEndpointTitle,
+    description: 'declare typing status in chatroom',
+    node: <Typing />,
+  },
+  '/chatroom/rename': {
+    title: apiEndpointTitle,
+    description: 'rename user in chatroom',
+    node: <Rename />,
+    streaming: false,
+  },
+  '/chatroom/send': {
+    title: apiEndpointTitle,
+    description: 'send message in chatroom',
+    node: <Send />,
+    streaming: false,
+  },
+}
+
 export default {
-  index: Chatroom,
-  typing,
-  rename,
-  send,
+  routes,
   nicknameMiddleware,
 }

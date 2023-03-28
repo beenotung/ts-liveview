@@ -20,6 +20,8 @@ import {
 } from 'cast.ts'
 import { renderError } from '../components/error.js'
 import { Link } from '../components/router.js'
+import { apiEndpointTitle, title } from '../../config.js'
+import { PageRoute } from '../routes.js'
 
 const log = debug('demo-form.tsx')
 log.enabled = true
@@ -95,7 +97,7 @@ fieldset fieldset {
 }
 `)
 
-function set(_attrs: attrs, context: Context) {
+function SetKey(_attrs: attrs, context: Context) {
   type Params = {
     key: string
   }
@@ -127,7 +129,7 @@ function set(_attrs: attrs, context: Context) {
   return DemoForm()
 }
 
-function submit(_attrs: attrs, context: Context) {
+function Submit(_attrs: attrs, context: Context) {
   let body = getContextFormBody(context)
   let input: ParseResult<typeof formBody> | undefined = undefined
   let err = null
@@ -288,8 +290,25 @@ function DemoForm() {
   )
 }
 
-export default {
-  index: DemoForm,
-  submit,
-  set,
+let routes: Record<string, PageRoute> = {
+  '/form': {
+    title: title('Demo Form'),
+    description: 'Demonstrate form handling with ts-liveview',
+    menuText: 'Form',
+    node: <DemoForm />,
+  },
+  '/form/submit': {
+    title: apiEndpointTitle,
+    description: 'submit demo form',
+    node: <Submit />,
+    streaming: false,
+  },
+  '/form/live/:key': {
+    title: apiEndpointTitle,
+    description: 'set form field in realtime',
+    node: <SetKey />,
+    streaming: false,
+  },
 }
+
+export default { routes }

@@ -79,24 +79,7 @@ let routeDict: Record<string, PageRoute> = {
     node: About,
     streaming: true,
   },
-  '/thermostat': {
-    resolve: Thermostat.index,
-    menuText: 'Thermostat',
-  },
-  '/thermostat/inc': {
-    title: title('Thermostat'),
-    description:
-      'API endpoint to increase target temperature of the demo thermostat',
-    node: [Thermostat.inc],
-    streaming: false,
-  },
-  '/thermostat/dec': {
-    title: title('Thermostat'),
-    description:
-      'API endpoint to decrease target temperature of the demo thermostat',
-    node: [Thermostat.dec],
-    streaming: false,
-  },
+  ...Thermostat.routes,
   '/editor': {
     title: title('Image Editor'),
     description:
@@ -110,59 +93,20 @@ let routeDict: Record<string, PageRoute> = {
     menuText: 'Auto Complete',
     node: <AutoCompleteDemo />,
   },
-  '/form': {
-    title: title('Form'),
-    description: 'Demonstrate form handling with ts-liveview',
-    menuText: 'Form',
-    node: <DemoForm.index />,
-  },
-  '/form/submit': {
-    title: title('Form Submission'),
-    description: 'API endpoint to submit demo form',
-    node: <DemoForm.submit />,
-    streaming: false,
-  },
-  '/form/live/:key': {
-    title: title('Set Form Key'),
-    description: 'API endpoint to set form field in realtime',
-    node: <DemoForm.set />,
-    streaming: false,
-  },
+  ...DemoForm.routes,
   '/cookie-session': {
     title: title('Cookie-based Session'),
     description: 'Demonstrate accessing cookie with ts-liveview',
     menuText: 'Cookie Session',
     node: <DemoCookieSession.index />,
   },
-  '/chatroom': {
-    title: title('Chatroom'),
-    description: 'Live chatroom with realtime-update powered by websocket',
-    menuText: 'Chatroom',
-    node: <Chatroom.index />,
-  },
+  ...Chatroom.routes,
   '/clock': {
     title: title('Clock'),
     description:
       'Realtime clock using system time localized with client language and timezone',
     menuText: 'Clock',
     node: Clock,
-  },
-  '/chatroom/typing': {
-    title: title('Chatroom Typing'),
-    description: 'API endpoint to declare typing status in chatroom',
-    node: <Chatroom.typing />,
-  },
-  '/chatroom/rename': {
-    title: title('Chatroom Rename'),
-    description: 'API endpoint to rename user in chatroom',
-    node: <Chatroom.rename />,
-    streaming: false,
-  },
-  '/chatroom/send': {
-    title: title('Chatroom: send message'),
-    description: 'API endpoint to send message in chatroom',
-    node: <Chatroom.send />,
-    streaming: false,
   },
   '/calculator': {
     title: title('Calculator'),

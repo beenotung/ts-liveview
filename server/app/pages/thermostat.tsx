@@ -5,9 +5,9 @@ import { sessions } from '../session.js'
 import { Update, UpdateIn } from '../components/update.js'
 import type { ServerMessage } from '../../../client/types'
 import SourceCode from '../components/source-code.js'
-import { StaticPageRoute } from '../routes.js'
+import { PageRoute, StaticPageRoute } from '../routes.js'
 import type { Node } from '../jsx/types'
-import { title } from '../../config.js'
+import { apiEndpointTitle, title } from '../../config.js'
 
 const UpdateInterval = 1000
 
@@ -282,8 +282,23 @@ function index(): StaticPageRoute {
   }
 }
 
-export default {
-  inc,
-  dec,
-  index,
+let routes: Record<string, PageRoute> = {
+  '/thermostat': {
+    resolve: index,
+    menuText: 'Thermostat',
+  },
+  '/thermostat/inc': {
+    title: apiEndpointTitle,
+    description: 'increase target temperature of the demo thermostat',
+    node: [inc],
+    streaming: false,
+  },
+  '/thermostat/dec': {
+    title: apiEndpointTitle,
+    description: 'decrease target temperature of the demo thermostat',
+    node: [dec],
+    streaming: false,
+  },
 }
+
+export default { routes }
