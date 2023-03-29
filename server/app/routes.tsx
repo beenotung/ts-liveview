@@ -9,7 +9,7 @@ import UserAgents from './pages/user-agents.js'
 import Home from './pages/home.js'
 import NotFoundPageRoute from './pages/not-found.js'
 import { then } from '@beenotung/tslib/result.js'
-import SignIn from './pages/signin.js'
+import Login from './pages/login.js'
 import { commonTemplatePageText } from './components/common-template.js'
 import Signup from './pages/signup.js'
 import type { MenuRoute } from './components/menu'
@@ -66,7 +66,7 @@ let routeDict: Routes = {
     menuText: 'User Agents',
     node: UserAgents,
   },
-  ...SignIn.routes,
+  ...Login.routes,
   ...Signup.routes,
 }
 
