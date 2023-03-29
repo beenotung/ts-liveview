@@ -77,7 +77,7 @@ let SignUpPage = (
       Let's begin the adventure~
     </p>
     <p>
-      Already have an account? <Link href="/signin">Sign in</Link>
+      Already have an account? <Link href="/login">Login</Link>
     </p>
     <div class="flex-center flex-column">
       <div>Register with:</div>
