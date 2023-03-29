@@ -66,10 +66,10 @@ let style = Style(/* css */ `
 }
 `)
 
-let SignUpPage = (
+let RegisterPage = (
   <div id="sign-up">
     {style}
-    <h2>Sign up</h2>
+    <h2>Register</h2>
     <p>{commonTemplatePageText}</p>
     <p>
       Welcome to {config.short_site_name}!
@@ -90,26 +90,26 @@ let SignUpPage = (
       </div>
     </div>
     <div class="or-line flex-center">or</div>
-    <form onsubmit="emitForm(event)" action="/signup/submit" method="POST">
+    <form onsubmit="emitForm(event)" action="/register/submit" method="POST">
       <Field
         label="Username"
         name="username"
         msgId="usernameMsg"
-        oninput="emit('/signup/check-username', this.value)"
+        oninput="emit('/register/check-username', this.value)"
       />
       <Field
         label="Email"
         type="email"
         name="email"
         msgId="emailMsg"
-        oninput="emit('/signup/check-email', this.value)"
+        oninput="emit('/register/check-email', this.value)"
       />
       <Field
         label="Password"
         type="password"
         name="password"
         msgId="passwordMsg"
-        oninput="emit('/signup/check-password', this.value);this.form.confirm_password.value=''"
+        oninput="emit('/register/check-password', this.value);this.form.confirm_password.value=''"
       />
 
       <Field
@@ -466,7 +466,7 @@ async function submit(context: InputContext): Promise<Node> {
     if (hasError) {
       context.contextError = Object.fromEntries<ValidateResult>(errors)
       context.values = input
-      return SignUpPage
+      return RegisterPage
     }
     let user_id = proxy.user.push({
       username: input.username,
@@ -477,7 +477,7 @@ async function submit(context: InputContext): Promise<Node> {
 
     return (
       <div>
-        <p>Signup successfully.</p>
+        <p>Register successfully.</p>
         <p>Your user id is #{user_id}.</p>
         <p>
           TODO: A verification email has already been sent to your email
@@ -489,40 +489,40 @@ async function submit(context: InputContext): Promise<Node> {
     return (
       <div>
         {renderError(error, context)}
-        <Link href="/signup">Try again</Link>
+        <Link href="/register">Try again</Link>
       </div>
     )
   }
 }
 
 let routes: Record<string, PageRoute> = {
-  '/signup': {
-    title: title('Sign Up'),
-    description: `Sign up to access exclusive content and functionality. Join our community on ${config.short_site_name}.`,
-    menuText: 'Sign Up',
-    menuUrl: '/signup',
-    node: SignUpPage,
+  '/register': {
+    title: title('Register'),
+    description: `Register to access exclusive content and functionality. Join our community on ${config.short_site_name}.`,
+    menuText: 'Register',
+    menuUrl: '/register',
+    node: RegisterPage,
   },
-  '/signup/check-username': {
+  '/register/check-username': {
     title: apiEndpointTitle,
     description: 'validate username and check availability',
     node: <CheckUsername />,
   },
-  '/signup/check-password': {
+  '/register/check-password': {
     title: apiEndpointTitle,
     description: 'validate password',
     node: <CheckPassword />,
   },
-  '/signup/check-email': {
+  '/register/check-email': {
     title: apiEndpointTitle,
     description: 'validate email and check availability',
     node: <CheckEmail />,
   },
-  '/signup/submit': {
+  '/register/submit': {
     async resolve(context): Promise<StaticPageRoute> {
       return {
         title: apiEndpointTitle,
-        description: 'sign up new account',
+        description: 'register new account',
         node: await submit(context),
       }
     },

@@ -9,9 +9,9 @@ import UserAgents from './pages/user-agents.js'
 import Home from './pages/home.js'
 import NotFoundPageRoute from './pages/not-found.js'
 import { then } from '@beenotung/tslib/result.js'
-import Login from './pages/login.js'
 import { commonTemplatePageText } from './components/common-template.js'
-import Signup from './pages/signup.js'
+import Login from './pages/login.js'
+import Register from './pages/register.js'
 import type { MenuRoute } from './components/menu'
 
 let titles: Record<string, string> = {}
@@ -67,7 +67,7 @@ let routeDict: Routes = {
     node: UserAgents,
   },
   ...Login.routes,
-  ...Signup.routes,
+  ...Register.routes,
 }
 
 export let redirectDict: Record<string, string> = {
