@@ -11,11 +11,11 @@ import { find } from 'better-sqlite3-proxy'
 import { getStringCasual } from '../helpers.js'
 import { comparePassword } from '../../hash.js'
 
-let SignInPage = (
-  <div id="sign-in">
-    <h2>Sign in to {config.short_site_name}</h2>
+let LoginPage = (
+  <div id="login">
+    <h2>Login to {config.short_site_name}</h2>
     <p>{commonTemplatePageText}</p>
-    <form method="post" action="/signin/submit" onsubmit="emitForm(event)">
+    <form method="post" action="/login/submit" onsubmit="emitForm(event)">
       <label>
         Username or email address
         <div class="input-container">
@@ -29,7 +29,7 @@ let SignInPage = (
         </div>
       </label>
       <div class="input-container">
-        <input type="submit" value="Sign in" />
+        <input type="submit" value="Login" />
       </div>
     </form>
     <div>
@@ -52,7 +52,7 @@ async function submit(context: Context) {
       return (
         <div>
           {renderError('user not found', context)}
-          <Link href="/signin">Try again</Link>
+          <Link href="/login">Try again</Link>
         </div>
       )
     }
@@ -66,7 +66,7 @@ async function submit(context: Context) {
       return (
         <div>
           {renderError('wrong username, email or password', context)}
-          <Link href="/signin">Try again</Link>
+          <Link href="/login">Try again</Link>
         </div>
       )
     }
@@ -75,7 +75,7 @@ async function submit(context: Context) {
 
     return (
       <div>
-        <p>Signin successfully.</p>
+        <p>Login successfully.</p>
         <p>Your user id is #{user_id}.</p>
         <p>
           Back to <Link href="/">home page</Link>
@@ -86,25 +86,25 @@ async function submit(context: Context) {
     return (
       <div>
         {renderError(error, context)}
-        <Link href="/signin">Try again</Link>
+        <Link href="/login">Try again</Link>
       </div>
     )
   }
 }
 
 let routes: Record<string, PageRoute> = {
-  '/signin': {
-    title: title('Sign In'),
-    description: `Sign in to access exclusive content and functionality. Welcome back to our community on ${config.short_site_name}.`,
-    menuText: 'Sign In',
-    menuUrl: '/signin',
-    node: SignInPage,
+  '/login': {
+    title: title('Login'),
+    description: `Login to access exclusive content and functionality. Welcome back to our community on ${config.short_site_name}.`,
+    menuText: 'Login',
+    menuUrl: '/login',
+    node: LoginPage,
   },
-  '/signin/submit': {
+  '/login/submit': {
     async resolve(context): Promise<StaticPageRoute> {
       return {
         title: apiEndpointTitle,
-        description: `signin existing account`,
+        description: `login existing account`,
         node: await submit(context),
       }
     },
