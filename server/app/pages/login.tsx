@@ -1,7 +1,7 @@
 import { apiEndpointTitle, config, title } from '../../config.js'
 import { commonTemplatePageText } from '../components/common-template.js'
-import { Link } from '../components/router.js'
-import { Context } from '../context.js'
+import { Link, Redirect } from '../components/router.js'
+import { Context, DynamicContext, ExpressContext } from '../context.js'
 import { o } from '../jsx/jsx.js'
 import { PageRoute, StaticPageRoute } from '../routes.js'
 import { getContextFormBody } from '../context.js'
@@ -10,12 +10,13 @@ import { proxy } from '../../../db/proxy.js'
 import { find } from 'better-sqlite3-proxy'
 import { getStringCasual } from '../helpers.js'
 import { comparePassword } from '../../hash.js'
+import { encodeJwt } from '../jwt.js'
 
 let LoginPage = (
   <div id="login">
     <h2>Login to {config.short_site_name}</h2>
     <p>{commonTemplatePageText}</p>
-    <form method="post" action="/login/submit" onsubmit="emitForm(event)">
+    <form method="post" action="/login/submit">
       <label>
         Username or email address
         <div class="input-container">
@@ -31,6 +32,7 @@ let LoginPage = (
       <div class="input-container">
         <input type="submit" value="Login" />
       </div>
+      <Message />
     </form>
     <div>
       New to {config.short_site_name}?{' '}
@@ -39,7 +41,19 @@ let LoginPage = (
   </div>
 )
 
-async function submit(context: Context) {
+let codes: Record<string, string> = {
+  not_found: 'user not found',
+  wrong: 'wrong username, email or password',
+  ok: 'login successfully',
+}
+
+function Message(_attrs: {}, context: DynamicContext) {
+  let code = new URLSearchParams(context.url.split('?').pop()).get('code')
+  if (!code) return null
+  return <p class="error">{codes[code] || code}</p>
+}
+
+async function submit(context: ExpressContext) {
   try {
     let body = getContextFormBody(context) || {}
     let loginId = getStringCasual(body, 'loginId')
@@ -48,13 +62,8 @@ async function submit(context: Context) {
       proxy.user,
       loginId.includes('@') ? { email: loginId } : { username: loginId },
     )
-    if (!user) {
-      return (
-        <div>
-          {renderError('user not found', context)}
-          <Link href="/login">Try again</Link>
-        </div>
-      )
+    if (!user || !user.id) {
+      return <Redirect href="/login?code=not_found" />
     }
 
     let matched = await comparePassword({
@@ -63,25 +72,20 @@ async function submit(context: Context) {
     })
 
     if (!matched) {
-      return (
-        <div>
-          {renderError('wrong username, email or password', context)}
-          <Link href="/login">Try again</Link>
-        </div>
-      )
+      return <Redirect href="/login?code=wrong" />
     }
 
     let user_id = user.id
 
-    return (
-      <div>
-        <p>Login successfully.</p>
-        <p>Your user id is #{user_id}.</p>
-        <p>
-          Back to <Link href="/">home page</Link>
-        </p>
-      </div>
-    )
+    let token = encodeJwt({ id: user_id })
+
+    context.res.cookie('token', token, {
+      sameSite: true,
+      secure: true,
+      httpOnly: true,
+    })
+
+    return <Redirect href="/login?code=ok" />
   } catch (error) {
     return (
       <div>
@@ -101,11 +105,12 @@ let routes: Record<string, PageRoute> = {
     node: LoginPage,
   },
   '/login/submit': {
-    async resolve(context): Promise<StaticPageRoute> {
+    streaming: false,
+    async resolve(context: Context): Promise<StaticPageRoute> {
       return {
         title: apiEndpointTitle,
         description: `login existing account`,
-        node: await submit(context),
+        node: await submit(context as ExpressContext),
       }
     },
   },
