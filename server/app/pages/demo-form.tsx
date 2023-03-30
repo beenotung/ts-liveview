@@ -21,7 +21,7 @@ import {
 import { renderError } from '../components/error.js'
 import { Link } from '../components/router.js'
 import { apiEndpointTitle, title } from '../../config.js'
-import { PageRoute } from '../routes.js'
+import { Routes } from '../routes.js'
 
 const log = debug('demo-form.tsx')
 log.enabled = true
@@ -290,7 +290,7 @@ function DemoForm() {
   )
 }
 
-let routes: Record<string, PageRoute> = {
+let routes: Routes = {
   '/form': {
     title: title('Demo Form'),
     description: 'Demonstrate form handling with ts-liveview',

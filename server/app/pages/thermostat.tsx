@@ -5,7 +5,7 @@ import { sessions } from '../session.js'
 import { Update, UpdateIn } from '../components/update.js'
 import type { ServerMessage } from '../../../client/types'
 import SourceCode from '../components/source-code.js'
-import { PageRoute, StaticPageRoute } from '../routes.js'
+import { Routes, StaticPageRoute } from '../routes.js'
 import type { Node } from '../jsx/types'
 import { apiEndpointTitle, title } from '../../config.js'
 
@@ -282,7 +282,7 @@ function index(): StaticPageRoute {
   }
 }
 
-let routes: Record<string, PageRoute> = {
+let routes: Routes = {
   '/thermostat': {
     resolve: index,
     menuText: 'Thermostat',

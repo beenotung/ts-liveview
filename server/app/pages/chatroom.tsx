@@ -23,7 +23,7 @@ import { nodeToVNode } from '../jsx/vnode.js'
 import { Request, Response, NextFunction } from 'express'
 import SourceCode from '../components/source-code.js'
 import type { Context } from '../context'
-import { PageRoute } from '../routes.js'
+import { Routes } from '../routes.js'
 import { apiEndpointTitle, title } from '../../config.js'
 
 let log = debugLog('chatroom.tsx')
@@ -424,7 +424,7 @@ function MessageItem(attrs: MessageItemAttrs, context: Context) {
   )
 }
 
-let routes: Record<string, PageRoute> = {
+let routes: Routes = {
   '/chatroom': {
     title: title('Chatroom'),
     description: 'Live chatroom with realtime-update powered by websocket',

@@ -56,12 +56,14 @@ export type MenuRoute = {
 
 export type PageRouteMatch = PageRouteOptions & StaticPageRoute
 
+export type Routes = Record<string, PageRoute>
+
 // jsx node can be used directly, e.g. `Home`
 // invoke functional component with square bracket, e.g. `[Editor]`
 // or invoke functional component with x-html tag, e.g. `<Editor/>
 
 // TODO direct support alternative urls instead of having to repeat the entry
-let routeDict: Record<string, PageRoute> = {
+let routeDict: Routes = {
   '/': {
     title: title('Home'),
     description:
