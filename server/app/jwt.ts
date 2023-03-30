@@ -9,6 +9,6 @@ export function encodeJwt(payload: JwtPayload): string {
   return jwt.encode(payload, config.cookie_secret)
 }
 
-export function decodeJwt(token: string) {
+export function decodeJwt(token: string): JwtPayload {
   return jwt.decode(token, config.cookie_secret)
 }
