@@ -115,6 +115,7 @@ let routes: Routes = {
     description: `Login to access exclusive content and functionality. Welcome back to our community on ${config.short_site_name}.`,
     menuText: 'Login',
     menuUrl: '/login',
+    guestOnly: true,
     node: LoginPage,
   },
   '/login/submit': {
