@@ -12,6 +12,8 @@ export type MenuRoute = {
   menuUrl?: string // optional, default to be same as PageRoute.url
   menuMatchPrefix?: boolean
   menuFullNavigate?: boolean // default false to enable ws updates
+  guestOnly?: boolean
+  userOnly?: boolean
 }
 
 export function isCurrentMenuRoute(
@@ -36,6 +38,7 @@ export function Menu(
   context: Context,
 ) {
   const currentUrl = getContextUrl(context)
+  const role = getContextCookie(context)?.token ? 'user' : 'guest'
   return (
     <>
       {Style(/* css */ `
@@ -50,7 +53,13 @@ export function Menu(
 `)}
       <div class="menu" {...attrs.attrs}>
         {mapArray(
-          attrs.routes,
+          attrs.routes.filter(
+            route =>
+              !(
+                (route.guestOnly && role !== 'guest') ||
+                (route.userOnly && role !== 'user')
+              ),
+          ),
           route => (
             <a
               href={route.menuUrl || route.url}
