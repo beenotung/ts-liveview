@@ -475,6 +475,12 @@ async function submit(context: InputContext): Promise<Node> {
       tel: null,
     })
 
+    let text = JSON.stringify({
+      loginId: input.username,
+      password: input.password,
+    })
+    text = JSON.stringify(text)
+
     return (
       <div>
         <p>Register successfully.</p>
@@ -483,6 +489,15 @@ async function submit(context: InputContext): Promise<Node> {
           TODO: A verification email has already been sent to your email
           address. Please check your inbox and spam folder.
         </p>
+        {Raw(/* html */ `<script>
+fetch('/login/submit',{
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: ${text}
+})
+</script>`)}
       </div>
     )
   } catch (error) {
