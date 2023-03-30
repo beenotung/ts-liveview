@@ -38,6 +38,22 @@ function tokenHandler(req: Request, res: Response) {
   }
 }
 
+let style = Style(/* css */ `
+#demo-cookie-session code {
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+#demo-cookie-session .buttons {
+  margin: 1em 0;
+}
+#demo-cookie-session button {
+  margin: 0 0.5em;
+}
+#demo-cookie-session fieldset {
+  display: inline-block
+}
+`)
+
 function DemoCookieSession(_attrs: attrs, context: Context) {
   const cookies = getContextCookie(context)
   if (!cookies) {
@@ -51,21 +67,7 @@ function DemoCookieSession(_attrs: attrs, context: Context) {
   // TODO send ajax from client to let server set HTTP-Only cookies
   return (
     <div id="demo-cookie-session">
-      {Style(/* css */ `
-      #demo-cookie-session code {
-        word-break: break-all;
-        white-space: pre-wrap;
-      }
-      #demo-cookie-session .buttons {
-        margin: 1em 0;
-      }
-      #demo-cookie-session button {
-        margin: 0 0.5em;
-      }
-      #demo-cookie-session fieldset {
-        display: inline-block
-      }
-      `)}
+      {style}
       <h2>Demo Cookie-based Session</h2>
       <div class="buttons">
         <button onclick="get('/cookie-session/token').then(()=>location.reload())">
