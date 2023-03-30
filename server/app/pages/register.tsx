@@ -21,8 +21,9 @@ import { hashPassword } from '../../hash.js'
 import { Routes, StaticPageRoute } from '../routes.js'
 import { Node } from '../jsx/types.js'
 import { renderError } from '../components/error.js'
-import { getContextCookie } from '../cookie.js'
+import { getContextCookie, getWsCookie } from '../cookie.js'
 import { renderUserMessageInGuestView } from './profile.js'
+import { encodeJwt } from '../jwt.js'
 
 let style = Style(/* css */ `
 .or-line::before,
@@ -481,46 +482,53 @@ async function submit(context: InputContext): Promise<Node> {
       context.values = input
       return RegisterPage
     }
-    let user_id = proxy.user.push({
+    let id = proxy.user.push({
       username: input.username,
       password_hash: await hashPassword(input.password),
       email: input.email,
       tel: null,
     })
 
-    let text = JSON.stringify({
-      loginId: input.username,
-      password: input.password,
-    })
-    text = JSON.stringify(text)
+    let main: Node
 
-    return (
-      <div>
-        <p>Register successfully.</p>
-        <p id="next_js" hidden>
-          You can go to your <Link href="/profile">profile page</Link>
-        </p>
-        <p id="next_no_js">
-          You can now <Link href="/login">login</Link> to the system.
-        </p>
-        <p hidden>
-          TODO: A verification email has already been sent to your email
-          address. Please check your inbox and spam folder.
-        </p>
-        {Raw(/* html */ `<script>
+    if (context.type === 'ws') {
+      let token = encodeJwt({ id })
+      getWsCookie(context.ws.ws).token = token
+      let text = JSON.stringify({
+        loginId: input.username,
+        password: input.password,
+      })
+      text = JSON.stringify(text)
+      main = (
+        <>
+          {renderUserMessageInGuestView('', input.username)}
+          {Raw(/* html */ `<script>
 fetch('/login/submit',{
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
   },
   body: ${text}
-}).then(res=>{
-  if(res.url.includes('code=ok')){
-    next_js.hidden=false
-    next_no_js.hidden=true
-  }
 })
 </script>`)}
+        </>
+      )
+    } else {
+      main = (
+        <p>
+          You can now <a href="/login">login</a> to the system.
+        </p>
+      )
+    }
+
+    return (
+      <div>
+        <p>Register successfully.</p>
+        <p hidden>
+          TODO: A verification email has already been sent to your email
+          address. Please check your inbox and spam folder.
+        </p>
+        {main}
       </div>
     )
   } catch (error) {
@@ -539,6 +547,7 @@ let routes: Routes = {
     description: `Register to access exclusive content and functionality. Join our community on ${config.short_site_name}.`,
     menuText: 'Register',
     menuUrl: '/register',
+    guestOnly: true,
     node: RegisterPage,
   },
   '/register/check-username': {
