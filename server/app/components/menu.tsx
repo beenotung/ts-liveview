@@ -7,11 +7,15 @@ import { Style } from './style.js'
 import { Context, getContextUrl } from '../context.js'
 import { capitalize } from '@beenotung/tslib/string.js'
 
-export type MenuRoutes = Array<[url: string, text: string, alias?: string]>
+export type MenuRoute = {
+  url: string
+  menuText: string
+  menuUrl: string // optional, default to be same as PageRoute.url
+}
 
 export function Menu(
   attrs: {
-    routes: MenuRoutes
+    routes: MenuRoute[]
     matchPrefix?: boolean
     separator?: Node
     attrs?: attrs
@@ -34,18 +38,18 @@ export function Menu(
       <div class="menu" {...attrs.attrs}>
         {mapArray(
           attrs.routes,
-          ([href, text, alias]) => (
+          route => (
             <Link
-              href={href}
+              href={route.menuUrl}
               class={flagsToClassName({
                 selected:
-                  currentUrl === alias ||
+                  currentUrl === route.url ||
                   (attrs.matchPrefix
-                    ? currentUrl.startsWith(href)
-                    : currentUrl === href),
+                    ? currentUrl.startsWith(route.menuUrl)
+                    : currentUrl === route.menuUrl),
               })}
             >
-              {text}
+              {route.menuText}
             </Link>
           ),
           attrs.separator,

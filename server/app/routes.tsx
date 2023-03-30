@@ -18,6 +18,7 @@ import NotMatch from './pages/not-match.js'
 import Thermostat from './pages/thermostat.js'
 import { then } from '@beenotung/tslib/result.js'
 import Clock from './pages/clock.js'
+import type { MenuRoute } from './components/menu'
 
 let titles: Record<string, string> = {}
 
@@ -47,12 +48,6 @@ export type DynamicPageRoute = {
   resolve: (context: DynamicContext) => ResolvedPageRoue
 }
 export type ResolvedPageRoue = StaticPageRoute | Promise<StaticPageRoute>
-
-export type MenuRoute = {
-  url: string
-  menuText: string
-  menuUrl: string // optional, default to be same as PageRoute.url
-}
 
 export type PageRouteMatch = PageRouteOptions & StaticPageRoute
 
@@ -153,6 +148,13 @@ Object.entries(routeDict).forEach(([url, route]) => {
       menuUrl: route.menuUrl || url,
     })
   }
+})
+
+let demo404Url = '/some/page/that/does-not/exist'
+menuRoutes.push({
+  url: demo404Url,
+  menuText: '404',
+  menuUrl: demo404Url,
 })
 
 Object.entries(redirectDict).forEach(([url, href]) =>
