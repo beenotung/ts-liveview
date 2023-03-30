@@ -18,6 +18,7 @@ import NotFoundPageRoute from './pages/not-found.js'
 import { then } from '@beenotung/tslib/result.js'
 import Login from './pages/login.js'
 import Register from './pages/register.js'
+import Profile from './pages/profile.js'
 import type { MenuRoute } from './components/menu'
 import DemoPlugin from './pages/demo-plugin.js'
 import AppHome from './pages/app-home.js'
@@ -82,6 +83,7 @@ let routeDict = {
   ...UserAgents.routes,
   ...Login.routes,
   ...Register.routes,
+  ...Profile.routes,
   ...AppHome.routes,
   ...AppCharacter.routes,
   ...AppAbout.routes,

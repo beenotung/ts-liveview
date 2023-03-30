@@ -18,9 +18,11 @@ import { ServerMessage } from '../../../client/types.js'
 import { is_email } from '@beenotung/tslib'
 import { Raw } from '../components/raw.js'
 import { hashPassword } from '../../hash.js'
-import { PageRoute, StaticPageRoute } from '../routes.js'
+import { Routes, StaticPageRoute } from '../routes.js'
 import { Node } from '../jsx/types.js'
 import { renderError } from '../components/error.js'
+import { getContextCookie } from '../cookie.js'
+import { renderUserMessageInGuestView } from './profile.js'
 
 let style = Style(/* css */ `
 .or-line::before,
@@ -69,13 +71,24 @@ let style = Style(/* css */ `
 let RegisterPage = (
   <div id="sign-up">
     {style}
-    <h2>Register</h2>
+    <h2>Register on {config.short_site_name}</h2>
     <p>{commonTemplatePageText}</p>
     <p>
       Welcome to {config.short_site_name}!
       <br />
       Let's begin the adventure~
     </p>
+    <Main />
+  </div>
+)
+
+function Main(_attrs: {}, context: Context) {
+  let token = getContextCookie(context)?.token
+  return token ? renderUserMessageInGuestView(token) : guestView
+}
+
+let guestView = (
+  <>
     <p>
       Already have an account? <Link href="/login">Login</Link>
     </p>
@@ -146,7 +159,7 @@ function checkPassword (form) {
       <a href="https://en.wikipedia.org/wiki/Bcrypt">bcrypt algorithm</a> to
       protect your credential against data leak.
     </div>
-  </div>
+  </>
 )
 
 function Field(
@@ -484,8 +497,13 @@ async function submit(context: InputContext): Promise<Node> {
     return (
       <div>
         <p>Register successfully.</p>
-        <p>Your user id is #{user_id}.</p>
-        <p>
+        <p id="next_js" hidden>
+          You can go to your <Link href="/profile">profile page</Link>
+        </p>
+        <p id="next_no_js">
+          You can now <Link href="/login">login</Link> to the system.
+        </p>
+        <p hidden>
           TODO: A verification email has already been sent to your email
           address. Please check your inbox and spam folder.
         </p>
@@ -496,6 +514,11 @@ fetch('/login/submit',{
     'Content-Type': 'application/json'
   },
   body: ${text}
+}).then(res=>{
+  if(res.url.includes('code=ok')){
+    next_js.hidden=false
+    next_no_js.hidden=true
+  }
 })
 </script>`)}
       </div>
@@ -510,7 +533,7 @@ fetch('/login/submit',{
   }
 }
 
-let routes: Record<string, PageRoute> = {
+let routes: Routes = {
   '/register': {
     title: title('Register'),
     description: `Register to access exclusive content and functionality. Join our community on ${config.short_site_name}.`,

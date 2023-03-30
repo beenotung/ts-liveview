@@ -3,19 +3,32 @@ import { commonTemplatePageText } from '../components/common-template.js'
 import { Link, Redirect } from '../components/router.js'
 import { Context, DynamicContext, ExpressContext } from '../context.js'
 import { o } from '../jsx/jsx.js'
-import { PageRoute, StaticPageRoute } from '../routes.js'
+import { Routes, StaticPageRoute } from '../routes.js'
 import { getContextFormBody } from '../context.js'
 import { renderError } from '../components/error.js'
 import { proxy } from '../../../db/proxy.js'
 import { find } from 'better-sqlite3-proxy'
 import { getStringCasual } from '../helpers.js'
 import { comparePassword } from '../../hash.js'
-import { encodeJwt } from '../jwt.js'
+import { decodeJwt, encodeJwt } from '../jwt.js'
+import { getContextCookie } from '../cookie.js'
+import { renderUserMessageInGuestView } from './profile.js'
 
 let LoginPage = (
   <div id="login">
     <h2>Login to {config.short_site_name}</h2>
     <p>{commonTemplatePageText}</p>
+    <Main />
+  </div>
+)
+
+function Main(_attrs: {}, context: Context) {
+  let token = getContextCookie(context)?.token
+  return token ? renderUserMessageInGuestView(token) : guestView
+}
+
+let guestView = (
+  <>
     <form method="post" action="/login/submit">
       <label>
         Username or email address
@@ -38,7 +51,7 @@ let LoginPage = (
       New to {config.short_site_name}?{' '}
       <Link href="/register">Create an account</Link>.
     </div>
-  </div>
+  </>
 )
 
 let codes: Record<string, string> = {
@@ -80,7 +93,7 @@ async function submit(context: ExpressContext) {
     let token = encodeJwt({ id: user_id })
 
     context.res.cookie('token', token, {
-      sameSite: true,
+      sameSite: 'lax',
       secure: true,
       httpOnly: true,
     })
@@ -96,7 +109,7 @@ async function submit(context: ExpressContext) {
   }
 }
 
-let routes: Record<string, PageRoute> = {
+let routes: Routes = {
   '/login': {
     title: title('Login'),
     description: `Login to access exclusive content and functionality. Welcome back to our community on ${config.short_site_name}.`,
