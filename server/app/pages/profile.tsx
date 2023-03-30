@@ -51,12 +51,15 @@ function Logout(_attrs: {}, context: ExpressContext) {
   return <Redirect href="/login" />
 }
 
-export function renderUserMessageInGuestView(token: string) {
-  let id = decodeJwt(token).id
-  let user = proxy.user[id]
+export function renderUserMessageInGuestView(
+  token: string,
+  username = tokenToUsername(token),
+) {
   return (
     <>
-      <p>You have login as {user.username}.</p>
+      <p>
+        You have login as <b>{username}</b>.
+      </p>
       <p>
         You can go to <Link href="/profile">profile page</Link> to manage your
         public profile and exclusive content.
@@ -65,11 +68,18 @@ export function renderUserMessageInGuestView(token: string) {
   )
 }
 
+function tokenToUsername(token: string) {
+  let id = decodeJwt(token).id
+  let user = proxy.user[id]
+  return user.username
+}
+
 let routes: Routes = {
   '/profile': {
     title: title('Profile Page'),
     description: `Manage your public profile and exclusive content`,
     menuText: 'Profile',
+    userOnly: true,
     node: <ProfilePage />,
   },
   '/logout': {
