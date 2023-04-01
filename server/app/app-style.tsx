@@ -3,6 +3,7 @@ import { SourceCodeStyle } from './components/source-code.js'
 import Style from './components/style.js'
 
 export let style = Style(/* css */ `
+${SourceCodeStyle}
 ${ErrorStyle}
 h1.title {
   color: darkblue;
@@ -19,5 +20,4 @@ code.inline-code {
   border-radius: 0.25rem;
   font-family: monospace;
 }
-${SourceCodeStyle}
 `)
