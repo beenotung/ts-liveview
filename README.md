@@ -200,6 +200,9 @@ Example using _getter and setter_ see [thermostat.tsx](./server/app/pages/thermo
 - [x] Realtime Collaborative Painting [[source](https://github.com/beenotung/live-paint) | [demo](https://paint.liveviews.cc)]
 - [x] Hacker News Clone [[source](https://github.com/beenotung/liveview-hn) | [demo](https://hn.liveviews.cc)]
 - [ ] Snake Game
+https://github.com/teckyio/live-seat
+https://github.com/teckyio/live-votes
+https://github.com/beenotung/live-chess
 
 ## Inspired from
 
