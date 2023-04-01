@@ -56,6 +56,7 @@ let guestView = (
 
 let codes: Record<string, string> = {
   not_found: 'user not found',
+  no_pw: 'password is not set, did you use social login?',
   wrong: 'wrong username, email or password',
   ok: 'login successfully',
 }
@@ -79,9 +80,14 @@ async function submit(context: ExpressContext) {
       return <Redirect href="/login?code=not_found" />
     }
 
+    let password_hash = user.password_hash
+    if (!password_hash) {
+      return <Redirect href="/login?code=no_pw" />
+    }
+
     let matched = await comparePassword({
       password,
-      password_hash: user.password_hash,
+      password_hash,
     })
 
     if (!matched) {
