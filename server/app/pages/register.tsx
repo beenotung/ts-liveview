@@ -41,26 +41,26 @@ let style = Style(/* css */ `
   border-radius: 0.25rem;
   margin: 0.25rem;
 }
-#sign-up form .field {
+#register form .field {
   display: flex;
   flex-wrap: wrap;
 }
-#sign-up form .field input {
+#register form .field input {
   margin: 0.25rem 0;
 }
-#sign-up form .field .space {
+#register form .field .space {
   width: 4rem;
 }
-#sign-up form .field .msg {
+#register form .field .msg {
   align-self: end;
   margin-bottom: 0.25rem;
 }
-#sign-up form .field .extra {
+#register form .field .extra {
   color: darkred;
   display: block;
   margin-top: 0.25rem;
 }
-#sign-up .hint {
+#register .hint {
   border-inline-start: 3px solid #748;
   background-color: #edf;
   padding: 1rem;
@@ -70,7 +70,7 @@ let style = Style(/* css */ `
 `)
 
 let RegisterPage = (
-  <div id="sign-up">
+  <div id="register">
     {style}
     <h2>Register on {config.short_site_name}</h2>
     <p>{commonTemplatePageText}</p>
