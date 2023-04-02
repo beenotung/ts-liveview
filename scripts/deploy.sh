@@ -15,7 +15,6 @@ source ~/.nvm/nvm.sh \
 "
 else
 npm run build
-npm run fix-dist
 rsync -SavLPz \
   public \
   build \
