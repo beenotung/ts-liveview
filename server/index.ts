@@ -28,7 +28,7 @@ listenWSSConnection({
     startSession(ws)
   },
   onClose: (ws, code, reason) => {
-    log('close ws:', ws.ws.protocol, code, reason)
+    log('close ws:', ws.ws.protocol, code, String(reason))
     closeSession(ws)
   },
   onMessage: onWsMessage,
