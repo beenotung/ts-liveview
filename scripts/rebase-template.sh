@@ -26,7 +26,6 @@ if [ "x-$ans" != "x-y" ]; then
 fi
 set -x
 
-git push origin v5-demo
-git push origin -f v5-minimal-template
-git push origin -f v5-auth-template
+git push origin master v5-demo
+git push origin -f v5-minimal-template v5-auth-template
 
