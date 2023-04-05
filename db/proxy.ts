@@ -2,27 +2,27 @@ import { proxySchema } from 'better-sqlite3-proxy'
 import { db } from './db'
 
 export type Method = {
-  id?: number | null
+  id?: null | number
   method: string
 }
 
 export type Url = {
-  id?: number | null
+  id?: null | number
   url: string
 }
 
 export type UserAgent = {
-  id?: number | null
+  id?: null | number
   user_agent: string
 }
 
 export type RequestLog = {
-  id?: number | null
+  id?: null | number
   method_id: number
   method?: Method
   url_id: number
   url?: Url
-  user_agent_id: number | null
+  user_agent_id: null | number
   user_agent?: UserAgent
   timestamp: number
 }
