@@ -19,7 +19,7 @@ git cherry-pick origin/v5-minimal-template..origin/v5-auth-template
 set +x
 echo finished cherry-pick.
 
-echo -n 'continue to push? [y/N]'
+echo -n 'continue to push? [y/N] '
 read ans
 if [ "x-$ans" != "x-y" ]; then
   exit
