@@ -177,6 +177,10 @@ export function createRelativeTimer(options: CreateRelativeTimerOptions) {
   return { startRelativeTimer }
 }
 
+export type StartRelativeTimer = ReturnType<
+  typeof createRelativeTimer
+>['startRelativeTimer']
+
 const formatRelativeTimePairs: Array<[interval: number, unit: string]> = [
   [SECOND, 'second'],
   [MINUTE, 'minute'],
