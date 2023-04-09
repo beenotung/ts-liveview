@@ -80,6 +80,6 @@ let projectName = 'demo-server'
 let text = readReadme(file)
 let lines = text.split('\n').map(lines => lines.replace('\r', ''))
 
-console.log(parseCommands(lines))
-console.log(parseGetStarted(projectName, lines))
-console.log()
+process.stdout.write(parseCommands(lines) + os.EOL)
+process.stdout.write(parseGetStarted(projectName, lines) + os.EOL)
+process.stdout.write(os.EOL)
