@@ -15,20 +15,20 @@ ts-liveview supports [`JSX`](#jsx) but it **[doesn't rely on Virtual DOM](#no-vd
 To create a new project, run:
 
 ```bash
-npm init ts-liveview my-app   # or "npx create-ts-liveview@latest my-app" for latest version
+## start from a template
+npm init ts-liveview my-app
+# or "npx create-ts-liveview@latest my-app" for latest version
+
 cd my-app
-./scripts/create-cert.sh  # this create self-signed https cert for local development
 
-cd db
-pnpm install --prefer-offline   # you can also install with yarn or npm
-npm run migrate
+## auto setup self-signed https cert for local development, install packages and setup sqlite database
+./scripts/init.sh
 
-cd ..
-pnpm install --prefer-offline
-npm start   # starts the development server
+## starts the development server
+npm start
 ```
 
-To setup a cloned project, run `./scripts/init.sh`, which will run above commands for you.
+To setup a cloned project, run `./scripts/init.sh`, which will install packages and setup sqlite database for you.
 
 To update database schema, see [db/README.md](./db/README.md)
 

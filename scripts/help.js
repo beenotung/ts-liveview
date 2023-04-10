@@ -7,35 +7,41 @@ function readReadme(file) {
   return fs.readFileSync(file).toString()
 }
 
-function parseGetStarted(projectName, lines) {
-  let start = lines.findIndex(line => line.startsWith('## Get Started'))
-  lines = lines.slice(start + 1)
-  let end = lines.findIndex(line => line.startsWith('## '))
-  lines = lines.slice(0, end)
+function findLineIndex(lines, predicate, offset = 0) {
+  for (let i = offset; i < lines.length; i++) {
+    if (predicate(lines[i])) {
+      return i
+    }
+  }
+  return -1
+}
+
+function getStarted() {
+  let message = ''
+
+  message += 'Get started by typing:' + os.EOL
+  message += os.EOL
+  message += '  ./scripts/init.sh' + os.EOL
+  message += '  npm start' + os.EOL
+
+  return message.trim()
+}
+
+function parseGuides(lines) {
+  let start = findLineIndex(lines, line => line.startsWith('## Get Started'))
+  if (start === -1) return ''
+  start = findLineIndex(lines, line => line === '```', start)
+  if (start === -1) return ''
+  start++
+  let end = findLineIndex(lines, line => line.startsWith('## '), start)
+  if (end === -1) return ''
 
   let message = ''
 
-  let mode = 'scan'
-  for (let line of lines) {
-    if (line === 'To create a new project, run:') {
-      line = 'Get started by typing:'
-    }
-    if (line.includes('npm init') || line.includes('npx create')) {
-      continue
-    }
-    if (line.startsWith('```bash')) {
-      mode = 'code'
-      continue
-    }
-    if (line.startsWith('```')) {
-      mode = 'scan'
-      continue
-    }
-    if (mode === 'code' && line) {
-      line = '  ' + line
-    }
+  for (let i = start; i < end; i++) {
+    let line = lines[i]
     line = extractLink(line)
-    message += line.replace(/my-app/g, projectName) + os.EOL
+    message += line + os.EOL
   }
 
   return message.trim()
@@ -63,7 +69,7 @@ function parseCommands(lines) {
     message += line + os.EOL
   }
 
-  return message
+  return message.trim()
 }
 
 let lineRegex = /\[.*?\]\((.*)\)/
@@ -76,10 +82,11 @@ function extractLink(line) {
 }
 
 let file = 'README.md'
-let projectName = 'demo-server'
 let text = readReadme(file)
 let lines = text.split('\n').map(lines => lines.replace('\r', ''))
 
+process.stdout.write(getStarted() + os.EOL)
+process.stdout.write(os.EOL + os.EOL)
+process.stdout.write(parseGuides(lines) + os.EOL)
+process.stdout.write(os.EOL + os.EOL)
 process.stdout.write(parseCommands(lines) + os.EOL)
-process.stdout.write(parseGetStarted(projectName, lines) + os.EOL)
-process.stdout.write(os.EOL)
