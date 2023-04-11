@@ -41,8 +41,8 @@ export let About = (
       <legend>
         <Menu
           routes={[
-            ['/about', 'Rendered HTML'],
-            ['/about/markdown', 'Source Markdown'],
+            { url: '/about', menuText: 'Rendered HTML' },
+            { url: '/about/markdown', menuText: 'Source Markdown' },
           ]}
           separator=" / "
         />
