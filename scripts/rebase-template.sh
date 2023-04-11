@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 set -e
 set -o pipefail
 set -x
@@ -28,4 +28,3 @@ set -x
 
 git push origin master v5-demo
 git push origin -f v5-minimal-template v5-auth-template
-
