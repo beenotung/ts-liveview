@@ -5,6 +5,7 @@
     "jsxFactory": "o",
     "jsxFragmentFactory": "null",
     "strict": true,
+    "skipLibCheck": true,
     "incremental": true,
     "moduleResolution": "node",
     "target": "es2018",
