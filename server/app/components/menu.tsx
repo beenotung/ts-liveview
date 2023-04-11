@@ -10,7 +10,7 @@ import { capitalize } from '@beenotung/tslib/string.js'
 export type MenuRoute = {
   url: string
   menuText: string
-  menuUrl: string // optional, default to be same as PageRoute.url
+  menuUrl?: string // optional, default to be same as PageRoute.url
 }
 
 export function Menu(
@@ -40,13 +40,15 @@ export function Menu(
           attrs.routes,
           route => (
             <Link
-              href={route.menuUrl}
+              href={route.menuUrl || route.url}
               class={flagsToClassName({
                 selected:
                   currentUrl === route.url ||
-                  (attrs.matchPrefix
-                    ? currentUrl.startsWith(route.menuUrl)
-                    : currentUrl === route.menuUrl),
+                  (route.menuUrl
+                    ? attrs.matchPrefix
+                      ? currentUrl.startsWith(route.menuUrl)
+                      : currentUrl === route.menuUrl
+                    : false),
               })}
             >
               {route.menuText}
