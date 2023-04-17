@@ -199,7 +199,14 @@ Example using _getter and setter_ see [thermostat.tsx](./server/app/pages/thermo
 - [x] User Agents from sqlite3 database [[source](./server/app/pages/user-agents.tsx) | [demo](https://liveviews.cc/user-agents)]
 - [x] Realtime Collaborative Painting [[source](https://github.com/beenotung/live-paint) | [demo](https://paint.liveviews.cc)]
 - [x] Hacker News Clone [[source](https://github.com/beenotung/liveview-hn) | [demo](https://hn.liveviews.cc)]
-- [ ] Snake Game
+- [x] Multi-Player Apple Chess Board Game [[source](https://github.com/beenotung/live-chess) | [demo](https://chess.liveviews.cc/)]
+
+Examples to be done:
+- [ ] Snake game
+- [ ] Blog with headline image
+- [ ] Landing page with contact form
+- [ ] Survey form
+- [ ] Content marketing with lead magnet
 
 ## Inspired from
 
