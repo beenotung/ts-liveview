@@ -117,7 +117,7 @@ let guestView = (
         oninput="emit('/register/check-username', this.value)"
       />
       <Field
-        label="Email"
+        label="Email (optional)"
         type="email"
         name="email"
         msgId="emailMsg"
