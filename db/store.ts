@@ -26,7 +26,7 @@ function getUserAgentId(user_agent: string): number {
   if (id) return id
   id =
     find(proxy.user_agent, { user_agent })?.id ||
-    proxy.user_agent.push({ user_agent })
+    proxy.user_agent.push({ user_agent, ua_type_id: null, ua_bot_id: null })
   user_agent_cache.set(user_agent, id)
   return id
 }
