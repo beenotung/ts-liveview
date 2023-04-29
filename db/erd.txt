@@ -40,6 +40,7 @@ user_agent
 ----------
 id integer PK
 user_agent text unique
+count integer
 ua_type_id integer NULL FK >0- ua_type.id
 ua_bot_id integer NULL FK >0- ua_bot.id
 
