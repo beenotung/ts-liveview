@@ -3,6 +3,8 @@ set -e
 set -o pipefail
 set -x
 
+git checkout v5-auth-template
+git checkout v5-minimal-template
 git checkout master
 git merge v5-demo
 git checkout v5-demo
