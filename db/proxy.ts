@@ -26,6 +26,7 @@ export type UaBot = {
 export type UserAgent = {
   id?: null | number
   user_agent: string
+  count: number
   ua_type_id: null | number
   ua_type?: UaType
   ua_bot_id: null | number
