@@ -98,7 +98,7 @@ function classifyUserAgents(
     else if (ua.includes('Linux')) Linux += count
     else {
       Other += count
-      others.set(ua, (others.get(ua) || 0) + 1)
+      others.set(ua, (others.get(ua) || 0) + count)
     }
   })
 
