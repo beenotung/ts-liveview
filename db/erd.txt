@@ -40,6 +40,28 @@ user_agent
 ----------
 id integer PK
 user_agent text unique
+ua_type_id integer NULL FK >0- ua_type.id
+ua_bot_id integer NULL FK >0- ua_bot.id
+
+
+ua_type
+-------
+id integer PK
+name text unique
+count integer
+
+
+ua_bot
+------
+id integer PK
+name text unique
+count integer
+
+
+ua_stat
+-------
+id integer PK
+last_request_log_id integer
 
 
 # zoom: 1.000
@@ -48,3 +70,6 @@ user_agent text unique
 # method (448, 16)
 # url (450, 131)
 # user_agent (448, 243)
+# ua_type (901, 232)
+# ua_bot (901, 385)
+# ua_stat (532, 493)
