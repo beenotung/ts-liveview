@@ -176,7 +176,7 @@ function createElement(element: VElement): Element | null {
   return e
 }
 
-const tagNameRegex = /([\w-]+)/
+const tagNameRegex = /^([\w-]+)/
 const idRegex = /#([\w-]+)/
 const attrListRegex = /\[([\w-]+)=?(.*?)\]/g
 const classListRegex = /\.([\w-]+)/g
@@ -188,15 +188,12 @@ function createElementBySelector(selector: string): Element {
     throw new Error('Failed to parse tagName from selector')
   }
   let e = document.createElement(tagNameMatch[1])
+  selector = selector.slice(tagNameMatch[0].length)
   applySelector(e, selector)
   return e
 }
 
 function applySelector(e: Element, selector: string) {
-  let idMatch = selector.match(idRegex)
-  if (idMatch) {
-    e.id = idMatch[1]
-  }
   for (let attrMatch of selector.matchAll(attrListRegex)) {
     selector = selector.replace(attrMatch[0], '')
     let key = attrMatch[1]
@@ -210,8 +207,17 @@ function applySelector(e: Element, selector: string) {
     }
     e.setAttribute(key, value)
   }
+  let idMatch = selector.match(idRegex)
+  if (idMatch) {
+    selector = selector.replace(idMatch[0], '')
+    e.id = idMatch[1]
+  }
   for (let classMatch of selector.matchAll(classListRegex)) {
+    selector = selector.replace(classMatch[0], '')
     e.classList.add(classMatch[1])
+  }
+  if (selector.length > 0) {
+    console.warn('Unexpected selector fragment remains:', selector)
   }
 }
 
