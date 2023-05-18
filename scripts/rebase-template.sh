@@ -5,7 +5,9 @@ set -x
 
 git checkout v5-auth-template
 git checkout v5-minimal-template
+git checkout v5-demo
 git checkout master
+
 git merge v5-demo
 git checkout v5-demo
 git merge master
