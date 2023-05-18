@@ -1,4 +1,4 @@
-import { WindowStub } from '../internal'
+import type { WindowStub } from '../internal'
 import type {
   Fragment,
   Raw,
