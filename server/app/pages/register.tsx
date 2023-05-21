@@ -315,9 +315,10 @@ function validatePassword(password: string): ValidateResult {
   return { type: 'ok' as const, text: 'password is acceptable' }
 }
 
+// email is optional
 function validateEmail(email: string): ValidateResult {
   if (!email) {
-    return { type: 'error', text: 'email not provided' }
+    return { type: 'ok', text: '' }
   }
 
   if (!is_email(email)) {
