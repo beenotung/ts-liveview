@@ -73,4 +73,4 @@ last_request_log_id integer
 # user_agent (448, 243)
 # ua_type (901, 232)
 # ua_bot (901, 385)
-# ua_stat (532, 493)
+# ua_stat (714, 62)
