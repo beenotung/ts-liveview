@@ -44,6 +44,7 @@ let style = Style(/* css */ `
 #register form .field {
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 0.5rem;
 }
 #register form .field input {
   margin: 0.25rem 0;
