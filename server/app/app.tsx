@@ -82,7 +82,8 @@ export function App(main: Node): Element {
 export let appRouter = express.Router()
 
 // non-streaming routes
-appRouter.use('/cookie-session/token', DemoCookieSession.tokenHandler)
+appRouter.delete('/cookie-session/token', DemoCookieSession.deleteToken)
+appRouter.get('/cookie-session/token', DemoCookieSession.refreshToken)
 appRouter.get('/chatroom', Chatroom.nicknameMiddleware)
 Object.entries(redirectDict).forEach(([from, to]) =>
   appRouter.use(from, (_req, res) => res.redirect(to)),

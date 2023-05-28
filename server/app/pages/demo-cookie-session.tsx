@@ -2,41 +2,13 @@ import { o } from '../jsx/jsx.js'
 import type { attrs } from '../jsx/types'
 import { debugLog } from '../../debug.js'
 import { Style } from '../components/style.js'
-import { getContextCookie } from '../cookie.js'
-import { getOrSetTokenSync } from '../auth/token.js'
-import { EarlyTerminate } from '../helpers.js'
+import { getContextCookie, mustCookieSecure } from '../cookie.js'
 import type { Request, Response } from 'express'
 import SourceCode from '../components/source-code.js'
 import type { Context } from '../context'
 
 const log = debugLog('demo-cookie-session.ts')
 log.enabled = true
-
-/** @description cannot call this when streaming html
- *  because it need to set cookie in response header
- * */
-function tokenHandler(req: Request, res: Response) {
-  try {
-    switch (req.method) {
-      case 'GET':
-        getOrSetTokenSync(req, res)
-        break
-      case 'DELETE':
-        res.clearCookie('token')
-        break
-      default:
-        log(req.method, req.url)
-        res.status(405).end('method not allowed')
-        return
-    }
-    res.end('done')
-  } catch (error) {
-    if (error === EarlyTerminate) {
-      return
-    }
-    res.status(500).end(String(error))
-  }
-}
 
 let style = Style(/* css */ `
 #demo-cookie-session code {
@@ -56,6 +28,8 @@ let style = Style(/* css */ `
 
 function DemoCookieSession(_attrs: attrs, context: Context) {
   const cookies = getContextCookie(context)
+  log('cookies:', cookies)
+  log('signed cookie:')
   if (!cookies) {
     return (
       <div id="demo-cookie-session">
@@ -63,12 +37,12 @@ function DemoCookieSession(_attrs: attrs, context: Context) {
       </div>
     )
   }
-  const { token, ...restCookies } = cookies
-  // TODO send ajax from client to let server set HTTP-Only cookies
+  let { token, ...restCookies } = cookies.signedCookies
   return (
     <div id="demo-cookie-session">
       {style}
       <h2>Demo Cookie-based Session</h2>
+      <p>For demo purpose, the token cookie will expire in 30 seconds</p>
       <div class="buttons">
         <button onclick="get('/cookie-session/token').then(()=>location.reload())">
           Refresh Token
@@ -78,14 +52,17 @@ function DemoCookieSession(_attrs: attrs, context: Context) {
         </button>
       </div>
       <fieldset>
-        <legend>Cookies</legend>
+        <legend>Unsigned Cookies</legend>
+        <pre>
+          <code>{JSON.stringify(cookies.unsignedCookies, null, 2)}</code>
+        </pre>
+      </fieldset>
+      <fieldset>
+        <legend>Signed Cookies</legend>
         <pre>
           <code>
             {JSON.stringify(
-              {
-                ...restCookies,
-                token: token ? '<hidden>' : '<none>',
-              },
+              { ...restCookies, token: token ? '<hidden>' : '<none>' },
               null,
               2,
             )}
@@ -97,7 +74,36 @@ function DemoCookieSession(_attrs: attrs, context: Context) {
   )
 }
 
+/** @description cannot call this when streaming html
+ *  because it need to set cookie in response header
+ * */
+function deleteToken(req: Request, res: Response) {
+  res.clearCookie('token')
+  res.end('ok')
+}
+
+/** @description cannot call this when streaming html
+ *  because it need to set cookie in response header
+ * */
+function refreshToken(req: Request, res: Response) {
+  let token = randomToken()
+  res.cookie('token', token, {
+    httpOnly: true,
+    sameSite: 'strict',
+    signed: true,
+    secure: mustCookieSecure,
+    maxAge: 30 * 1000, // 30 seconds
+  })
+  res.end('ok')
+}
+
+function randomToken(): string {
+  let token = Math.random().toString(36).slice(2)
+  return token
+}
+
 export default {
   index: DemoCookieSession,
-  tokenHandler,
+  deleteToken,
+  refreshToken,
 }
