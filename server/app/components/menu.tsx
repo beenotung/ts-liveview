@@ -6,7 +6,6 @@ import { Link } from './router.js'
 import { Style } from './style.js'
 import { Context, getContextUrl } from '../context.js'
 import { capitalize } from '@beenotung/tslib/string.js'
-import { getContextCookie } from '../cookie.js'
 import { getAuthUserId } from '../auth/user.js'
 
 export type MenuRoute = {
