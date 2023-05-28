@@ -35,7 +35,9 @@ function renderProfile(user_id: number) {
   return (
     <>
       <p>Welcome back, {user.username}</p>
-      <a href="/logout">logout</a>
+      <a href="/logout" rel="nofollow">
+        Logout
+      </a>
     </>
   )
 }
