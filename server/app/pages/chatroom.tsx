@@ -297,7 +297,7 @@ let nicknameMiddleware = (req: Request, res: Response, next: NextFunction) => {
 }
 
 function Chatroom(_attrs: {}, context: Context) {
-  let cookies = getContextCookie(context)
+  let cookies = getContextCookie(context)?.cookies
   let nickname = cookies?.nickname || ''
   log({ type: context.type, cookies })
   switch (context.type) {

@@ -12,25 +12,33 @@ log.enabled = true
 
 export const cookieMiddleware = cookieParser(config.cookie_secret)
 
-export const secure = config.production
+export const mustCookieSecure = config.production
 
-export function getSecureCookie(req: express.Request, res: express.Response) {
-  if (!config.require_https) {
-    return req.cookies
-  }
-  if (secure && !req.secure) {
+export function getSecureCookies(
+  req: express.Request,
+  res: express.Response,
+): Cookies {
+  if (config.require_https && mustCookieSecure && !req.secure) {
     const protocol = req.protocol === 'ws' ? 'wss' : 'https'
     const to = `${protocol}://${req.headers.host}${req.originalUrl}`
     log('redirect non-secure request to:', to)
     res.redirect(301, to)
     throw EarlyTerminate
   }
-  return req.cookies
+  return {
+    unsignedCookies: req.cookies,
+    signedCookies: req.signedCookies,
+  }
 }
 
-export type Cookie = Record<string, string>
+export type CookieDict = Record<string, string>
 
-const ws_cookies = new WeakMap<WebSocket, Cookie>()
+export type Cookies = {
+  unsignedCookies: CookieDict
+  signedCookies: CookieDict
+}
+
+const ws_cookies = new WeakMap<WebSocket, Cookies>()
 
 export function listenWSSCookie(wss: ws.Server) {
   wss.on('connection', (ws, request) => {
@@ -40,7 +48,7 @@ export function listenWSSCookie(wss: ws.Server) {
     req.protocol ??= req.secure ? 'wss' : 'ws'
     req.originalUrl ??= req.url || '/'
     cookieMiddleware(req, res, () => {
-      const cookies = getSecureCookie(req, res)
+      const cookies = getSecureCookies(req, res)
       ws_cookies.set(ws, cookies)
     })
     ws.on('close', () => {
@@ -49,7 +57,7 @@ export function listenWSSCookie(wss: ws.Server) {
   })
 }
 
-export function getWsCookie(ws: WebSocket): Cookie {
+export function getWsCookie(ws: WebSocket): Cookies {
   const cookies = ws_cookies.get(ws)
   if (!cookies) {
     log('no ws cookies')
@@ -58,9 +66,9 @@ export function getWsCookie(ws: WebSocket): Cookie {
   return cookies
 }
 
-export function getContextCookie(context: Context): Cookie | null {
+export function getContextCookie(context: Context): Cookies | null {
   if (context.type === 'express') {
-    return getSecureCookie(context.req, context.res)
+    return getSecureCookies(context.req, context.res)
   }
   if (context.type === 'ws') {
     return getWsCookie(context.ws.ws)
