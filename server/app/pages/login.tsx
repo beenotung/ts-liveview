@@ -10,9 +10,8 @@ import { proxy } from '../../../db/proxy.js'
 import { find } from 'better-sqlite3-proxy'
 import { getStringCasual } from '../helpers.js'
 import { comparePassword } from '../../hash.js'
-import { decodeJwt, encodeJwt } from '../jwt.js'
-import { getContextCookie } from '../cookie.js'
-import { renderUserMessageInGuestView } from './profile.js'
+import { UserMessageInGuestView } from './profile.js'
+import { getAuthUserId, writeUserIdToCookie } from '../auth/user.js'
 
 let LoginPage = (
   <div id="login">
@@ -23,8 +22,8 @@ let LoginPage = (
 )
 
 function Main(_attrs: {}, context: Context) {
-  let token = getContextCookie(context)?.token
-  return token ? renderUserMessageInGuestView(token) : guestView
+  let user_id = getAuthUserId(context)
+  return user_id ? <UserMessageInGuestView user_id={user_id} /> : guestView
 }
 
 let guestView = (
@@ -94,15 +93,7 @@ async function submit(context: ExpressContext) {
       return <Redirect href="/login?code=wrong" />
     }
 
-    let user_id = user.id
-
-    let token = encodeJwt({ id: user_id })
-
-    context.res.cookie('token', token, {
-      sameSite: 'lax',
-      secure: true,
-      httpOnly: true,
-    })
+    writeUserIdToCookie(context.res, user.id)
 
     return <Redirect href="/login?code=ok" />
   } catch (error) {

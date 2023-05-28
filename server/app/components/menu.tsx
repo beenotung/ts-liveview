@@ -6,6 +6,8 @@ import { Link } from './router.js'
 import { Style } from './style.js'
 import { Context, getContextUrl } from '../context.js'
 import { capitalize } from '@beenotung/tslib/string.js'
+import { getContextCookie } from '../cookie.js'
+import { getAuthUserId } from '../auth/user.js'
 
 export type MenuRoute = {
   url: string
@@ -38,7 +40,7 @@ export function Menu(
   context: Context,
 ) {
   const currentUrl = getContextUrl(context)
-  const role = getContextCookie(context)?.token ? 'user' : 'guest'
+  const role = getAuthUserId(context) ? 'user' : 'guest'
   return (
     <>
       {Style(/* css */ `

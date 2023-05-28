@@ -25,6 +25,7 @@ import { then } from '@beenotung/tslib/result.js'
 import { style } from './app-style.js'
 import { renderIndexTemplate } from '../../template/index.js'
 import { HTMLStream } from './jsx/stream.js'
+import { renewAuthCookieMiddleware } from './auth/user.js'
 import { getWsCookies } from './cookie.js'
 import { PickLanguage } from './components/ui-language.js'
 import Navbar from './components/navbar.js'
@@ -149,6 +150,7 @@ function Footer(attrs: { style?: string }) {
 // prefer flat router over nested router for less overhead
 export function attachRoutes(app: Router) {
   // ajax/middleware routes
+  app.use(renewAuthCookieMiddleware)
 
   // redirect routes
   Object.entries(redirectDict).forEach(([from, to]) =>

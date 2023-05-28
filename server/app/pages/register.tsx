@@ -22,8 +22,8 @@ import { Routes, StaticPageRoute } from '../routes.js'
 import { Node } from '../jsx/types.js'
 import { renderError } from '../components/error.js'
 import { getContextCookie, getWsCookie } from '../cookie.js'
-import { renderUserMessageInGuestView } from './profile.js'
-import { encodeJwt } from '../jwt.js'
+import { getAuthUserId } from '../auth/user.js'
+import { UserMessageInGuestView } from './profile.js'
 
 let style = Style(/* css */ `
 .or-line::before,
@@ -85,8 +85,8 @@ let RegisterPage = (
 )
 
 function Main(_attrs: {}, context: Context) {
-  let token = getContextCookie(context)?.token
-  return token ? renderUserMessageInGuestView(token) : guestView
+  let user_id = getAuthUserId(context)
+  return user_id ? <UserMessageInGuestView user_id={user_id} /> : guestView
 }
 
 let guestView = (
@@ -494,8 +494,10 @@ async function submit(context: InputContext): Promise<Node> {
     let main: Node
 
     if (context.type === 'ws') {
-      let token = encodeJwt({ id })
-      getWsCookie(context.ws.ws).token = token
+      let cookies = getWsCookie(context.ws.ws)
+      if (cookies) {
+        cookies.signedCookies.user_id = String(id)
+      }
       let text = JSON.stringify({
         loginId: input.username,
         password: input.password,
@@ -503,7 +505,7 @@ async function submit(context: InputContext): Promise<Node> {
       text = JSON.stringify(text)
       main = (
         <>
-          {renderUserMessageInGuestView('', input.username)}
+          <UserMessageInGuestView user_id={id} />
           {Raw(/* html */ `<script>
 fetch('/login/submit',{
   method: 'POST',
