@@ -34,6 +34,7 @@ import { preIonicAppScript, postIonicAppScript } from './styles/mobile-style.js'
 import { renderWebTemplate } from '../../template/web.js'
 import { renderIonicTemplate } from '../../template/ionic.js'
 import { HTMLStream } from './jsx/stream.js'
+import { renewAuthCookieMiddleware } from './auth/user.js'
 import { getWsCookies } from './cookie.js'
 import Navbar from './components/navbar.js'
 import Sidebar from './components/sidebar.js'
@@ -205,6 +206,7 @@ function Footer(attrs: { style?: string }) {
 // prefer flat router over nested router for less overhead
 export function attachRoutes(app: Router) {
   // ajax/upload/middleware routes
+  app.use(renewAuthCookieMiddleware)
   ErrorLog.attachRoutes(app)
 
   // redirect routes
