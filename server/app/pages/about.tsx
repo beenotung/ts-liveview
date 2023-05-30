@@ -1,15 +1,15 @@
 import { o } from '../jsx/jsx.js'
 import { existsSync, readFileSync } from 'fs'
 import { Switch } from '../components/router.js'
-import { marked } from 'marked'
 import { Raw } from '../components/raw.js'
 import { prerender } from '../jsx/html.js'
 import { Menu } from '../components/menu.js'
 import SourceCode from '../components/source-code.js'
+import { markdownToHtml } from '../format/markdown.js'
 
 let text = readFileSync('README.md').toString()
 
-let html = Raw(marked(text))
+let html = Raw(markdownToHtml(text))
 let markdown = <pre style="white-space: break-spaces">{text}</pre>
 markdown = (
   <pre>
