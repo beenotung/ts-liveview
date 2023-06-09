@@ -202,16 +202,22 @@ function formatRelativeTime(
     if (diff < interval) {
       return [
         floor(diff / lastInterval) + ' ' + lastUnit + 's',
-        lastInterval - (diff % lastInterval),
+        Math.min(MaxTimeoutInterval, lastInterval - (diff % lastInterval)),
       ]
     }
     if (diff === interval) {
-      return ['1 ' + unit, interval - (diff % interval)]
+      return [
+        '1 ' + unit,
+        Math.min(MaxTimeoutInterval, interval - (diff % interval)),
+      ]
     }
     lastInterval = interval
     lastUnit = unit
   }
   return null
 }
+
+// timeout interval must fit into a 32-bit signed integer
+const MaxTimeoutInterval = 2147483647
 
 export default DateTimeText
