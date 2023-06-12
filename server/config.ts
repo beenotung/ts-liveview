@@ -16,6 +16,7 @@ let env = {
   HTTPS_CERT_FILE: 'localhost.pem',
   HTTP_VERSION: 2, // 1 or 2
   EPOCH: 1, // to distinct initial run or restart in serve mode
+  UPLOAD_DIR: 'uploads',
 }
 
 populateEnv(env, { mode: 'halt' })
@@ -65,6 +66,7 @@ export let config = {
   serverOptions,
   epoch,
   auto_open: !production && development && epoch === 1,
+  upload_dir: env.UPLOAD_DIR,
 }
 
 export function title(page: string) {
