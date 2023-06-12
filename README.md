@@ -202,6 +202,7 @@ Example using _getter and setter_ see [thermostat.tsx](./server/app/pages/thermo
 - [x] Multi-Player Apple Chess Board Game [[source](https://github.com/beenotung/live-chess) | [demo](https://chess.liveviews.cc/)]
 
 Examples to be done:
+
 - [ ] Snake game
 - [ ] Blog with headline image
 - [ ] Landing page with contact form
