@@ -2,13 +2,22 @@ import { config, title } from '../../config.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 import { Request, Response, NextFunction } from 'express'
-import { createUploadForm } from '../upload.js'
+import { createUploadForm, toFiles } from '../upload.js'
 import { Raw } from '../components/raw.js'
 import * as esbuild from 'esbuild'
 import Style from '../components/style.js'
-import { array, object, string } from 'cast.ts'
 import { KB } from '@beenotung/tslib/size.js'
-import { format_byte } from '@beenotung/tslib/format.js'
+import { format_byte, format_time_duration } from '@beenotung/tslib/format.js'
+import { mapArray } from '../components/fragment.js'
+import { readdirSync, statSync, unlink } from 'fs'
+import { join } from 'path'
+import { SECOND } from '@beenotung/tslib/time.js'
+import { debugLog } from '../../debug.js'
+import { nodeListToHTML } from '../jsx/html.js'
+import { Context } from '../context.js'
+
+let log = debugLog('demo-upload.tsx')
+log.enabled = true
 
 esbuild.buildSync({
   entryPoints: ['client/image.ts'],
@@ -19,14 +28,16 @@ esbuild.buildSync({
 
 const maxFiles = 5
 const maxFileSize = 300 * KB * maxFiles
+const deleteInterval = 5 * SECOND
 
 let style = Style(/* css */ `
 #imagePreviewList,
-#imagePreviewList fieldset,
-#imagePreviewList img {
+#uploadDemo fieldset,
+#uploadDemo figure,
+#uploadDemo img {
   max-width: 100%;
 }
-#imagePreviewList fieldset {
+#uploadDemo fieldset {
   display: inline-block;
 }
 #uploadDemo img {
@@ -45,6 +56,7 @@ let style = Style(/* css */ `
 `)
 
 function View() {
+  let filenames = readdirSync(config.upload_dir)
   return (
     <div id="uploadDemo">
       {style}
@@ -55,6 +67,10 @@ function View() {
       </p>
       <p>
         (For simple file upload (e.g. txt and pdf), Javascript is not required.)
+      </p>
+      <p>
+        For demo purpose, the uploaded images will be deleted automatically
+        after {format_time_duration(deleteInterval)}.
       </p>
       <form
         method="POST"
@@ -86,6 +102,16 @@ function View() {
         <input type="reset" value="Reset" />
         <h3>Upload Result</h3>
         <p id="demoUploadResult">Not uploaded yet.</p>
+        <h3>Uploaded Images</h3>
+        <div id="uploadedImageList">
+          {filenames.length === 0 ? (
+            <p>No images uploaded yet.</p>
+          ) : (
+            mapArray(filenames, filename => (
+              <UploadedImage filename={filename} />
+            ))
+          )}
+        </div>
         {Raw(
           /* html */ `
 <script src="/js/image.bundle.js"></script>
@@ -127,12 +153,12 @@ async function previewImages(input) {
       formData.append('image', file)
     }
     let res = await fetch(form.action, { method: 'POST', body: formData })
-    if (res.headers.get('Content-Type')?.startsWith('application/json')) {
-      demoUploadResult.textContent = JSON.stringify(await res.json(), null, 2)
-      demoUploadResult.style.whiteSpace = 'pre-wrap'
+    if (res.ok) {
+      demoUploadResult.textContent = 'Uploaded successfully.'
+      uploadedImageList.innerHTML = await res.text()
+      clearPreviewImages()
     } else {
       demoUploadResult.innerHTML = await res.text()
-      demoUploadResult.style.whiteSpace = 'unset'
     }
   }
 }
@@ -150,6 +176,31 @@ function clearPreviewImages() {
   )
 }
 
+function UploadedImage(attrs: { filename: string }) {
+  let { filename } = attrs
+  let file = join(config.upload_dir, filename)
+  let size = format_byte(statSync(file).size)
+  triggerAutoDelete(file)
+  return (
+    <figure>
+      <img src={'/uploads/' + filename} />
+      <figcaption>
+        {filename} ({size})
+      </figcaption>
+    </figure>
+  )
+}
+
+function triggerAutoDelete(file: string) {
+  setTimeout(() => {
+    unlink(file, err => {
+      if (!err) return
+      if (err?.code == 'ENOENT') return
+      log('failed to delete uploaded image:', { file, err })
+    })
+  }, deleteInterval)
+}
+
 let routes: Routes = {
   '/upload': {
     title: title('Upload Demo'),
@@ -159,12 +210,6 @@ let routes: Routes = {
   },
 }
 
-let filesParser = array(
-  object({
-    newFilename: string(),
-  }),
-  { maybeSingle: true },
-)
 let handleUpload = (req: Request, res: Response, next: NextFunction) => {
   let form = createUploadForm({
     mimeTypeRegex: /^image\/.*/,
@@ -176,10 +221,20 @@ let handleUpload = (req: Request, res: Response, next: NextFunction) => {
       next(err)
       return
     }
-    let imageFiles = filesParser
-      .parse(files.image)
-      .map(file => file.newFilename)
-    res.json({ imageFiles })
+    let images = toFiles(files.image)
+    let context: Context = {
+      type: 'express',
+      req,
+      res,
+      next,
+      url: req.url,
+    }
+    let html = nodeListToHTML(
+      images.map(file => <UploadedImage filename={file.newFilename} />),
+      context,
+    )
+    res.setHeader('Content-Type', 'text/html')
+    res.end(html)
   })
 }
 

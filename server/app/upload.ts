@@ -1,4 +1,4 @@
-import formidable from 'formidable'
+import formidable, { File } from 'formidable'
 import { config } from '../config.js'
 import { existsSync, mkdirSync } from 'fs'
 import { randomUUID } from 'crypto'
@@ -35,4 +35,8 @@ export function createUploadForm(options: {
     },
   })
   return form
+}
+
+export function toFiles(file: File[] | File | undefined): File[] {
+  return Array.isArray(file) ? file : file ? [file] : []
 }
