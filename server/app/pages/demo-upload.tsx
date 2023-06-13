@@ -26,6 +26,9 @@ let style = Style(/* css */ `
 #imagePreviewList img {
   max-width: 100%;
 }
+#imagePreviewList fieldset {
+  display: inline-block;
+}
 #uploadDemo img {
   max-height: calc(100vh - 2rem);
 }
@@ -34,6 +37,10 @@ let style = Style(/* css */ `
 }
 #uploadDemo [type=submit] {
   margin-top: 1rem;
+  margin-inline-end: 1rem;
+}
+#uploadDemo [type=reset] {
+  color: red;
 }
 `)
 
@@ -49,7 +56,12 @@ function View() {
       <p>
         (For simple file upload (e.g. txt and pdf), Javascript is not required.)
       </p>
-      <form method="POST" action="/upload/submit" onsubmit="upload(event)">
+      <form
+        method="POST"
+        action="/upload/submit"
+        onsubmit="upload(event)"
+        onreset="clearPreviewImages()"
+      >
         <label>
           Select up to {format_byte(maxFileSize)} images to upload:{' '}
           <input
@@ -71,6 +83,7 @@ function View() {
           </fieldset>
         </template>
         <input type="submit" value="Upload" />
+        <input type="reset" value="Reset" />
         <h3>Upload Result</h3>
         <p id="demoUploadResult">Not uploaded yet.</p>
         {Raw(
@@ -80,9 +93,10 @@ function View() {
 var previewFiles = []
 var totalSize = 0
 function renderTotalSize() {
-  demoUploadResult.textContent =
-    previewFiles.length + ' files in ' +
-    format_byte(totalSize) + ' to be uploaded.'
+  demoUploadResult.textContent = previewFiles.length == 0
+    ? 'Not uploaded yet.'
+    : previewFiles.length + ' files in ' +
+      format_byte(totalSize) + ' to be uploaded.'
 }
 async function previewImages(input) {
   let images = await compressPhotos(input.files)
@@ -121,6 +135,12 @@ async function previewImages(input) {
       demoUploadResult.style.whiteSpace = 'unset'
     }
   }
+}
+function clearPreviewImages() {
+  previewFiles = []
+  totalSize = 0
+  demoUploadResult.textContent = 'Not uploaded yet.'
+  imagePreviewList.textContent = ''
 }
 </script>
 `.trim(),
