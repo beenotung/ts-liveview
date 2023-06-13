@@ -8,6 +8,7 @@ import * as esbuild from 'esbuild'
 import Style from '../components/style.js'
 import { array, object, string } from 'cast.ts'
 import { KB } from '@beenotung/tslib/size.js'
+import { format_byte } from '@beenotung/tslib/format.js'
 
 esbuild.buildSync({
   entryPoints: ['client/image.ts'],
@@ -17,10 +18,15 @@ esbuild.buildSync({
 })
 
 const maxFiles = 5
+const maxFileSize = 300 * KB * maxFiles
 
 let style = Style(/* css */ `
-#uploadDemo img {
+#imagePreviewList,
+#imagePreviewList fieldset,
+#imagePreviewList img {
   max-width: 100%;
+}
+#uploadDemo img {
   max-height: calc(100vh - 2rem);
 }
 #uploadDemo .del-btn {
@@ -38,13 +44,14 @@ function View() {
       <h2>Upload Demo</h2>
       <p>
         This page demo image upload with client-side (canvas based) compression.
+        Each image is compressed to {format_byte(maxFileSize / maxFiles)}.
       </p>
       <p>
         (For simple file upload (e.g. txt and pdf), Javascript is not required.)
       </p>
       <form method="POST" action="/upload/submit" onsubmit="upload(event)">
         <label>
-          Select up to {maxFiles} images to upload:{' '}
+          Select up to {format_byte(maxFileSize)} images to upload:{' '}
           <input
             name="image"
             type="file"
@@ -65,30 +72,39 @@ function View() {
         </template>
         <input type="submit" value="Upload" />
         <h3>Upload Result</h3>
-        <p id="demoUploadResult">not uploaded yet</p>
+        <p id="demoUploadResult">Not uploaded yet.</p>
         {Raw(
           /* html */ `
 <script src="/js/image.bundle.js"></script>
 <script>
 var previewFiles = []
+var totalSize = 0
+function renderTotalSize() {
+  demoUploadResult.textContent =
+    previewFiles.length + ' files in ' +
+    format_byte(totalSize) + ' to be uploaded.'
+}
 async function previewImages(input) {
-  demoUploadResult.textContent = 'not uploaded yet'
   let images = await compressPhotos(input.files)
   for (let image of images) {
     let node = imagePreviewTemplate.content.firstElementChild.cloneNode(true)
     node.querySelector('legend').textContent =
-      image.file.name + ' (' + format_byte(image.file.size) + ')'
+    image.file.name + ' (' + format_byte(image.file.size) + ')'
     node.querySelector('img').src = image.dataUrl
     node.querySelector('.del-btn').onclick = () => {
       let idx = previewFiles.indexOf(image.file)
       if (idx != -1) {
-        images.splice(idx, 1)
+        previewFiles.splice(idx, 1)
+        totalSize -= image.file.size
+        renderTotalSize()
       }
       node.remove()
     }
     imagePreviewList.appendChild(node)
     previewFiles.push(image.file)
+    totalSize += image.file.size
   }
+  renderTotalSize()
   let form = input.form
   form.onsubmit = async event => {
     event.preventDefault()
@@ -97,8 +113,13 @@ async function previewImages(input) {
       formData.append('image', file)
     }
     let res = await fetch(form.action, { method: 'POST', body: formData })
-    let text = await res.text()
-    demoUploadResult.innerHTML = text
+    if (res.headers.get('Content-Type')?.startsWith('application/json')) {
+      demoUploadResult.textContent = JSON.stringify(await res.json(), null, 2)
+      demoUploadResult.style.whiteSpace = 'pre-wrap'
+    } else {
+      demoUploadResult.innerHTML = await res.text()
+      demoUploadResult.style.whiteSpace = 'unset'
+    }
   }
 }
 </script>
@@ -127,7 +148,7 @@ let filesParser = array(
 let handleUpload = (req: Request, res: Response, next: NextFunction) => {
   let form = createUploadForm({
     mimeTypeRegex: /^image\/.*/,
-    maxFileSize: 300 * KB * maxFiles,
+    maxFileSize,
     maxFiles,
   })
   form.parse(req, (err, fields, files) => {
