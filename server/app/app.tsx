@@ -87,7 +87,6 @@ appRouter.delete('/cookie-session/token', DemoCookieSession.deleteToken)
 appRouter.get('/cookie-session/token', DemoCookieSession.refreshToken)
 appRouter.get('/chatroom', Chatroom.nicknameMiddleware)
 appRouter.post('/upload/submit', DemoUpload.handleUpload)
-appRouter.use('/uploads', express.static(config.upload_dir))
 Object.entries(redirectDict).forEach(([from, to]) =>
   appRouter.use(from, (_req, res) => res.redirect(to)),
 )
