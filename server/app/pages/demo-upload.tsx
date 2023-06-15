@@ -4,7 +4,6 @@ import { Routes } from '../routes.js'
 import { Request, Response, NextFunction } from 'express'
 import { createUploadForm, toFiles } from '../upload.js'
 import { Raw } from '../components/raw.js'
-import * as esbuild from 'esbuild'
 import Style from '../components/style.js'
 import { KB } from '@beenotung/tslib/size.js'
 import { format_byte, format_time_duration } from '@beenotung/tslib/format.js'
@@ -15,15 +14,13 @@ import { SECOND } from '@beenotung/tslib/time.js'
 import { debugLog } from '../../debug.js'
 import { nodeListToHTML } from '../jsx/html.js'
 import { Context } from '../context.js'
+import { loadClientPlugin } from '../../client-plugin.js'
 
 let log = debugLog('demo-upload.tsx')
 log.enabled = true
 
-esbuild.buildSync({
-  entryPoints: ['client/image.ts'],
-  outfile: 'build/image.bundle.js',
-  bundle: true,
-  minify: config.production,
+let imagePlugin = loadClientPlugin({
+  entryFile: 'dist/client/image.js',
 })
 
 const maxFiles = 5
@@ -114,7 +111,7 @@ function View() {
         </div>
         {Raw(
           /* html */ `
-<script src="/js/image.bundle.js"></script>
+${imagePlugin.script}
 <script>
 var previewFiles = []
 var totalSize = 0
