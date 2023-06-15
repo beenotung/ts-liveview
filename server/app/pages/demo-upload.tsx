@@ -25,7 +25,7 @@ let imagePlugin = loadClientPlugin({
 
 const maxFiles = 5
 const maxFileSize = 300 * KB * maxFiles
-const deleteInterval = 5 * SECOND
+const deleteInterval = 10 * SECOND
 
 let style = Style(/* css */ `
 #imagePreviewList,
