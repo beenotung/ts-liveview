@@ -4,7 +4,7 @@ import { YEAR } from '@beenotung/tslib/time.js'
 import type { ServerMessage } from '../../../client/types'
 import { debugLog } from '../../debug.js'
 import { Style } from '../components/style.js'
-import { getContextCookie } from '../cookie.js'
+import { getContextCookies } from '../cookie.js'
 import { o } from '../jsx/jsx.js'
 import type { Node } from '../jsx/types'
 import {
@@ -297,7 +297,7 @@ let nicknameMiddleware = (req: Request, res: Response, next: NextFunction) => {
 }
 
 function Chatroom(_attrs: {}, context: Context) {
-  let cookies = getContextCookie(context)?.cookies
+  let cookies = getContextCookies(context)?.cookies
   let nickname = cookies?.nickname || ''
   log({ type: context.type, cookies })
   switch (context.type) {
