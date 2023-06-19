@@ -2,7 +2,7 @@ import { o } from '../jsx/jsx.js'
 import type { attrs } from '../jsx/types'
 import { debugLog } from '../../debug.js'
 import { Style } from '../components/style.js'
-import { getContextCookie, mustCookieSecure } from '../cookie.js'
+import { getContextCookies, mustCookieSecure } from '../cookie.js'
 import type { Request, Response } from 'express'
 import SourceCode from '../components/source-code.js'
 import type { Context } from '../context'
@@ -27,7 +27,7 @@ let style = Style(/* css */ `
 `)
 
 function DemoCookieSession(_attrs: attrs, context: Context) {
-  const cookies = getContextCookie(context)
+  const cookies = getContextCookies(context)
   log('cookies:', cookies)
   log('signed cookie:')
   if (!cookies) {

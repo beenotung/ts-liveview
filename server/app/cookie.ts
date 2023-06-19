@@ -57,7 +57,7 @@ export function listenWSSCookie(wss: ws.Server) {
   })
 }
 
-export function getWsCookie(ws: WebSocket): Cookies {
+export function getWsCookies(ws: WebSocket): Cookies {
   const cookies = ws_cookies.get(ws)
   if (!cookies) {
     log('no ws cookies')
@@ -66,12 +66,12 @@ export function getWsCookie(ws: WebSocket): Cookies {
   return cookies
 }
 
-export function getContextCookie(context: Context): Cookies | null {
+export function getContextCookies(context: Context): Cookies | null {
   if (context.type === 'express') {
     return getSecureCookies(context.req, context.res)
   }
   if (context.type === 'ws') {
-    return getWsCookie(context.ws.ws)
+    return getWsCookies(context.ws.ws)
   }
   return null
 }
