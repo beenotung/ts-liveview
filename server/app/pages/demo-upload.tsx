@@ -15,6 +15,7 @@ import { debugLog } from '../../debug.js'
 import { nodeListToHTML } from '../jsx/html.js'
 import { Context } from '../context.js'
 import { loadClientPlugin } from '../../client-plugin.js'
+import SourceCode from '../components/source-code.js'
 
 let log = debugLog('demo-upload.tsx')
 log.enabled = true
@@ -169,6 +170,8 @@ function clearPreviewImages() {
 `.trim(),
         )}
       </form>
+
+      <SourceCode page="demo-upload.tsx" />
     </div>
   )
 }
