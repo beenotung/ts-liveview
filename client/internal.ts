@@ -4,4 +4,5 @@ export type WindowStub = {
   emitForm(event: Event): void
   get(url: string): Promise<Response>
   del(url: string): Promise<Response>
+  upload(event: Event): Promise<Response>
 }

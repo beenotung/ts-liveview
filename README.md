@@ -197,11 +197,13 @@ Example using _getter and setter_ see [thermostat.tsx](./server/app/pages/thermo
 - [x] SPA with url-based routing [source: [app.tsx](./server/app/app.tsx), [routes.tsx](./server/app/routes.tsx), [menu.tsx](./server/app/menu.tsx) | [demo](https://liveviews.cc/)]
 - [x] Chatroom with locales and timezone support [[source](./server/app/pages/chatroom.tsx) | [demo](https://liveviews.cc/chatroom)]
 - [x] User Agents from sqlite3 database [[source](./server/app/pages/user-agents.tsx) | [demo](https://liveviews.cc/user-agents)]
+- [x] Image compression and file uploading [[source](./server/app/pages/demo-upload.tsx)] | [demo](https://liveviews.cc/upload)]
 - [x] Realtime Collaborative Painting [[source](https://github.com/beenotung/live-paint) | [demo](https://paint.liveviews.cc)]
 - [x] Hacker News Clone [[source](https://github.com/beenotung/liveview-hn) | [demo](https://hn.liveviews.cc)]
 - [x] Multi-Player Apple Chess Board Game [[source](https://github.com/beenotung/live-chess) | [demo](https://chess.liveviews.cc/)]
 
 Examples to be done:
+
 - [ ] Snake game
 - [ ] Blog with headline image
 - [ ] Landing page with contact form

@@ -19,6 +19,7 @@ import Thermostat from './pages/thermostat.js'
 import { then } from '@beenotung/tslib/result.js'
 import Clock from './pages/clock.js'
 import type { MenuRoute } from './components/menu'
+import DemoUpload from './pages/demo-upload.js'
 
 let titles: Record<string, string> = {}
 
@@ -91,6 +92,7 @@ let routeDict: Routes = {
     node: <AutoCompleteDemo />,
   },
   ...DemoForm.routes,
+  ...DemoUpload.routes,
   '/cookie-session': {
     title: title('Cookie-based Session'),
     description: 'Demonstrate accessing cookie with ts-liveview',

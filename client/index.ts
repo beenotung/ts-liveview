@@ -161,7 +161,19 @@ function get(url: string) {
   return fetch(url)
 }
 win.get = get
+
 function del(url: string) {
   return fetch(url, { method: 'DELETE' })
 }
 win.del = del
+
+function upload(event: Event) {
+  let form = event.target as HTMLFormElement
+  let result = fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form),
+  })
+  event.preventDefault()
+  return result
+}
+win.upload = upload

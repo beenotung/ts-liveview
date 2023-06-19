@@ -25,6 +25,7 @@ import { style } from './app-style.js'
 import { renderIndexTemplate } from '../../template/index.js'
 import escapeHTML from 'escape-html'
 import { HTMLStream } from './jsx/stream.js'
+import DemoUpload from './pages/demo-upload.js'
 
 if (config.development) {
   scanTemplateDir('template')
@@ -85,6 +86,7 @@ export let appRouter = express.Router()
 appRouter.delete('/cookie-session/token', DemoCookieSession.deleteToken)
 appRouter.get('/cookie-session/token', DemoCookieSession.refreshToken)
 appRouter.get('/chatroom', Chatroom.nicknameMiddleware)
+appRouter.post('/upload/submit', DemoUpload.handleUpload)
 Object.entries(redirectDict).forEach(([from, to]) =>
   appRouter.use(from, (_req, res) => res.redirect(to)),
 )

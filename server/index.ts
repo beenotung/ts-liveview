@@ -48,9 +48,9 @@ if (!config.behind_proxy) {
 }
 if (config.development) {
   app.use('/js', express.static(join('dist', 'client')))
-} else {
-  app.use('/js', express.static('build'))
 }
+app.use('/js', express.static('build'))
+app.use('/uploads', express.static(config.upload_dir))
 app.use(express.static('public'))
 
 app.use(express.json())

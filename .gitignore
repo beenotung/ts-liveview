@@ -26,3 +26,6 @@ localhost_*.report.html
 
 # live server
 server.pid
+
+# user uploaded files
+uploads/
