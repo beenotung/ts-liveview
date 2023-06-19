@@ -1,8 +1,6 @@
-import { Knex } from "knex";
-
+import { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
-
   if (!(await knex.schema.hasTable('ua_type'))) {
     await knex.schema.createTable('ua_type', table => {
       table.increments('id')
@@ -20,8 +18,12 @@ export async function up(knex: Knex): Promise<void> {
       table.timestamps(false, true)
     })
   }
-  await knex.raw('alter table `user_agent` add column `ua_type_id` integer null references `ua_type`(`id`)')
-  await knex.raw('alter table `user_agent` add column `ua_bot_id` integer null references `ua_bot`(`id`)')
+  await knex.raw(
+    'alter table `user_agent` add column `ua_type_id` integer null references `ua_type`(`id`)',
+  )
+  await knex.raw(
+    'alter table `user_agent` add column `ua_bot_id` integer null references `ua_bot`(`id`)',
+  )
 
   if (!(await knex.schema.hasTable('ua_stat'))) {
     await knex.schema.createTable('ua_stat', table => {
@@ -31,7 +33,6 @@ export async function up(knex: Knex): Promise<void> {
     })
   }
 }
-
 
 export async function down(knex: Knex): Promise<void> {
   await knex.schema.dropTableIfExists('ua_stat')
