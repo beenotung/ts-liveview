@@ -21,7 +21,7 @@ import { hashPassword } from '../../hash.js'
 import { Routes, StaticPageRoute } from '../routes.js'
 import { Node } from '../jsx/types.js'
 import { renderError } from '../components/error.js'
-import { getContextCookie, getWsCookie } from '../cookie.js'
+import { getContextCookies, getWsCookies } from '../cookie.js'
 import { getAuthUserId } from '../auth/user.js'
 import { UserMessageInGuestView } from './profile.js'
 
@@ -494,7 +494,7 @@ async function submit(context: InputContext): Promise<Node> {
     let main: Node
 
     if (context.type === 'ws') {
-      let cookies = getWsCookie(context.ws.ws)
+      let cookies = getWsCookies(context.ws.ws)
       if (cookies) {
         cookies.signedCookies.user_id = String(id)
       }
