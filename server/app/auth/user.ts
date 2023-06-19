@@ -2,13 +2,14 @@ import { DAY } from '@beenotung/tslib/time.js'
 import { Request, Response, NextFunction } from 'express'
 import { Context } from '../context.js'
 import { getContextCookie, mustCookieSecure } from '../cookie.js'
+import { proxy } from '../../../db/proxy.js'
 
 const auto_logout_interval = 90 * DAY
 const auto_renew_interval = 30 * DAY
 
 export function getAuthUserId(context: Context): number | null {
-  let user_id = getContextCookie(context)?.signedCookies?.user_id
-  return user_id ? +user_id : null
+  let id = +getContextCookie(context)?.signedCookies?.user_id!
+  return id && id in proxy.user ? id : null
 }
 
 export function writeUserIdToCookie(res: Response, user_id: number) {
