@@ -8,12 +8,11 @@
     "skipLibCheck": true,
     "incremental": true,
     "moduleResolution": "node",
-    "target": "es2018",
-    "module": "es6",
+    "target": "es2022",
+    "module": "es2022",
     "lib": [
       "dom",
-      "es2019.object",
-      "es2020.string"
+      "es2022",
     ],
     "outDir": "dist"
   },
