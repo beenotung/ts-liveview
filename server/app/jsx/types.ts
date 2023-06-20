@@ -5,7 +5,7 @@ export type JSXFragment = [tag: undefined, attr: null, children: NodeList]
 export type Component<Attrs = CFAttrs> = [ComponentFn<Attrs>, attrs?, NodeList?]
 export type Element = [selector, attrs?, NodeList?]
 export type NodeList = Node[]
-export type Literal = string | number | null | undefined | false
+export type Literal = string | number | null | undefined | false | true
 export type Raw = ['raw', html]
 export type Fragment = [NodeList]
 
