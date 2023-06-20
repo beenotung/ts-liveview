@@ -297,8 +297,8 @@ let nicknameMiddleware = (req: Request, res: Response, next: NextFunction) => {
 }
 
 function Chatroom(_attrs: {}, context: Context) {
-  let cookies = getContextCookies(context)?.cookies
-  let nickname = cookies?.nickname || ''
+  let cookies = getContextCookies(context)
+  let nickname = cookies?.unsignedCookies.nickname || ''
   log({ type: context.type, cookies })
   switch (context.type) {
     case 'express': {
@@ -325,7 +325,7 @@ function Chatroom(_attrs: {}, context: Context) {
       if (!nickname) {
         nickname = randomName()
         if (cookies) {
-          cookies.nickname = nickname
+          cookies.unsignedCookies.nickname = nickname
         }
         let message: ServerMessage = [
           'set-cookie',
