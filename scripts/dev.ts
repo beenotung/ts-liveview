@@ -95,9 +95,7 @@ async function build(files: string[]) {
     outdir: './dist',
     platform: 'node',
     format: 'esm',
-    jsx: 'transform',
-    jsxFactory: 'o',
-    jsxFragment: 'null',
+    target: 'es2022',
     plugins,
   })
   await context.rebuild()
