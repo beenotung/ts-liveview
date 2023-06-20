@@ -14,15 +14,15 @@
     "gen-proxy": "erd-to-proxy < erd.txt > proxy.ts"
   },
   "dependencies": {
-    "better-sqlite3-proxy": "^2.3.1",
-    "better-sqlite3-schema": "^3.1.1",
+    "better-sqlite3-proxy": "^2.4.1",
+    "better-sqlite3-schema": "^3.1.2",
     "knex": "^2.4.2"
   },
   "devDependencies": {
     "@types/integer": "^4.0.1",
-    "@types/node": "^18.16.16",
-    "quick-erd": "^4.6.1",
+    "@types/node": "^18.16.18",
+    "quick-erd": "^4.8.1",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.1.3"
   }
 }
