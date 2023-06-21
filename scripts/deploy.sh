@@ -24,6 +24,7 @@ else
     build \
     dist \
     package.json \
+    README.md \
     "$user@$host:$root_dir"
   rsync -SavLPz \
     db/package.json \
