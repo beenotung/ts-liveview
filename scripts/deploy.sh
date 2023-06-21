@@ -8,6 +8,8 @@ set -x
 
 if [ "$MODE" == "quick" ]; then
   rsync -SavLPz \
+    server \
+    client \
     public \
     build \
     dist \
@@ -20,6 +22,8 @@ if [ "$MODE" == "quick" ]; then
 else
   npm run build
   rsync -SavLPz \
+    server \
+    client \
     public \
     build \
     dist \
