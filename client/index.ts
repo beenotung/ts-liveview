@@ -47,6 +47,11 @@ connectWS({
 
     function emitForm(event: Event) {
       let form = event.target as HTMLFormElement
+      submitForm(form)
+      event.preventDefault()
+    }
+
+    function submitForm(form: HTMLFormElement) {
       let data = {} as Record<string, FormDataEntryValue | FormDataEntryValue[]>
       new FormData(form).forEach((value, key) => {
         if (key in data) {
@@ -62,7 +67,6 @@ connectWS({
       })
       let url = form.getAttribute('action') || location.href.replace(origin, '')
       emit(url, data)
-      event.preventDefault()
     }
 
     window.onpopstate = (_event: PopStateEvent) => {
@@ -73,6 +77,7 @@ connectWS({
     win.emit = emit
     win.emitHref = emitHref
     win.emitForm = emitForm
+    win.submitForm = submitForm
 
     ws.ws.addEventListener('open', () => {
       let locale =
