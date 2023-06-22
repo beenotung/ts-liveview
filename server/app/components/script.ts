@@ -21,6 +21,22 @@ export function Script(js: string): Element {
   return ['script', undefined, [raw]]
 }
 
+// use iife (Immediately Invoked Function Expression) to avoid name clash with other parts of the page.
+export function iife<F extends () => void>(fn: F): Element
+export function iife<F extends (...args: any[]) => void>(
+  fn: F,
+  args: Parameters<F>,
+): Element
+export function iife<F extends (...args: any[]) => void>(
+  fn: F,
+  args?: Parameters<F>,
+): Element {
+  if (args && args.length > 0) {
+    return Script(`(${fn}).apply(this,${JSON.stringify(args)})`)
+  }
+  return Script(`(${fn})()`)
+}
+
 /**
  * @description semi-colon is mandatory
  * @deprecated use esbuild directly instead
