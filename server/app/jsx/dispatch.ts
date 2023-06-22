@@ -1,7 +1,7 @@
 import type { ServerMessage } from '../../../client/types'
 import type { VElement, title } from '../../../client/jsx/types'
 import type { WsContext } from '../context'
-import { EarlyTerminate, Message } from '../helpers.js'
+import { EarlyTerminate, MessageException } from '../helpers.js'
 import type { Element, Component } from './types'
 import { nodeToVElementOptimized } from './vnode.js'
 
@@ -22,7 +22,7 @@ export function dispatchUpdate(
     if (error === EarlyTerminate) {
       return
     }
-    if (error instanceof Message) {
+    if (error instanceof MessageException) {
       context.ws.send(error.message)
       return
     }

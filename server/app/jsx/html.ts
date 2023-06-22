@@ -13,8 +13,8 @@ import type {
 } from './types'
 import { HTMLStream, noop } from './stream.js'
 import { Flush } from '../components/flush.js'
-import { renderError } from '../components/error.js'
-import { EarlyTerminate, Message } from '../helpers.js'
+import { renderError, renderErrorNode } from '../components/error.js'
+import { EarlyTerminate, ErrorNode, MessageException } from '../helpers.js'
 
 const log = debug('html.ts')
 log.enabled = true
@@ -90,9 +90,14 @@ export function writeNode(
       node = componentFn(attrs, context)
       writeNode(stream, node, context)
     } catch (error) {
-      if (error === EarlyTerminate || error instanceof Message) throw error
-      console.error('Caught error from componentFn:', error)
-      writeNode(stream, renderError(error, context), context)
+      if (error === EarlyTerminate || error instanceof MessageException)
+        throw error
+      if (error instanceof ErrorNode) {
+        writeNode(stream, renderErrorNode(error, context), context)
+      } else {
+        console.error('Caught error from componentFn:', error)
+        writeNode(stream, renderError(error, context), context)
+      }
     }
     return
   }

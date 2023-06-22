@@ -15,7 +15,7 @@ import type {
 import { nodeListToHTML } from './html.js'
 import { Flush } from '../components/flush.js'
 import { renderError } from '../components/error.js'
-import { EarlyTerminate, Message } from '../helpers.js'
+import { EarlyTerminate, MessageException } from '../helpers.js'
 
 export function nodeToVElementOptimized(
   node: Element | Component,
@@ -112,7 +112,8 @@ function componentToVNode(component: Component, context: Context): VNode {
     let node = componentFn(attrs, context)
     return nodeToVNode(node, context)
   } catch (error) {
-    if (error === EarlyTerminate || error instanceof Message) throw error
+    if (error === EarlyTerminate || error instanceof MessageException)
+      throw error
     console.error('Caught error from componentFn:', error)
     return renderError(error, context)
   }
