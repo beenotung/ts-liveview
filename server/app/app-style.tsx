@@ -7,15 +7,18 @@ export let style = Style(/* css */ `
 ${SourceCodeStyle}
 ${ErrorStyle}
 ${UpdateMessageStyle}
+
 h1.title {
   color: darkblue;
 }
 h1.title a {
   font-size: 1rem;
 }
+
 [hidden] {
   display: none !important;
 }
+
 code.inline-code {
   background: rgba(175, 184, 193, 0.2);
   padding: 0.25rem 0.5rem;
