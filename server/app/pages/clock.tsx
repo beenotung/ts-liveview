@@ -7,7 +7,7 @@ import { SECOND } from '@beenotung/tslib/time.js'
 import { toLocaleDateTimeString } from '../components/datetime.js'
 import { sessions } from '../session.js'
 import { Context } from '../context.js'
-import { Script } from '../components/script.js'
+import { iife } from '../components/script.js'
 
 let options: LocaleDateTimeFormatOptions = {
   ...DefaultLocaleDateTimeFormatOptions,
@@ -63,29 +63,34 @@ const Clock = (
     <div id="spaClock">
       <ClockText />
     </div>
-    {Script(`
-// use iife (Immediately Invoked Function Expression) to avoid name clash with other parts of the page.
-(function(){
-  let date = new Date()
-  let lang = navigator.language
-  let options = ${JSON.stringify(options)}
-  function tickClock() {
-    if (typeof spaClock === "undefined") {
-      // stop the loop when this component is out of sight
-      return
-    }
-    let time = Date.now()
-    date.setTime(time)
-    spaClock.textContent = date.toLocaleString(lang, options)
-    date.setMilliseconds(0)
-    let diff = time - date.getTime()
-    let interval = 1000 - diff
-    setTimeout(tickClock, interval)
-  }
-  tickClock()
-})()
-`)}
+    {iife(
+      function (options: Intl.DateTimeFormatOptions) {
+        let date = new Date()
+        let lang = navigator.language
+        function tickClock() {
+          if (typeof spaClock === 'undefined') {
+            // stop the loop when this component is out of sight
+            return
+          }
+          let time = Date.now()
+          date.setTime(time)
+          spaClock.textContent = date.toLocaleString(lang, options)
+          date.setMilliseconds(0)
+          let diff = time - date.getTime()
+          let interval = 1000 - diff
+          setTimeout(tickClock, interval)
+        }
+        tickClock()
+      },
+      [
+        {
+          ...DefaultLocaleDateTimeFormatOptions,
+          second: '2-digit',
+        },
+      ],
+    )}
   </div>
 )
+var spaClock: HTMLDivElement | undefined
 
 export default Clock
