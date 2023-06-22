@@ -12,6 +12,7 @@ import UserAgents from './pages/user-agents.js'
 import Chatroom from './pages/chatroom.js'
 import DemoCookieSession from './pages/demo-cookie-session.js'
 import DemoForm from './pages/demo-form.js'
+import DemoInputComponents from './pages/demo-inputs.js'
 import Editor from './pages/editor.js'
 import Home from './pages/home.js'
 import NotMatch from './pages/not-match.js'
@@ -92,6 +93,7 @@ let routeDict: Routes = {
     node: <AutoCompleteDemo />,
   },
   ...DemoForm.routes,
+  ...DemoInputComponents.routes,
   ...DemoUpload.routes,
   '/cookie-session': {
     title: title('Cookie-based Session'),
