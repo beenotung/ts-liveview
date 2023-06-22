@@ -1,10 +1,12 @@
 import { ErrorStyle } from './components/error.js'
 import { SourceCodeStyle } from './components/source-code.js'
 import Style from './components/style.js'
+import { UpdateMessageStyle } from './components/update-message.js'
 
 export let style = Style(/* css */ `
 ${SourceCodeStyle}
 ${ErrorStyle}
+${UpdateMessageStyle}
 h1.title {
   color: darkblue;
 }
