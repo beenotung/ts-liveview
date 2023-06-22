@@ -29,8 +29,15 @@ export function updateMessageText(
   return `[${time}] Updated ${label}.`
 }
 
+let counter = 0
+
+function newId() {
+  counter++
+  return 'update-message-' + counter
+}
+
 export function newUpdateMessage(attrs?: { id?: string }) {
-  let id = attrs?.id || uniqueId()
+  let id = attrs?.id || newId()
   let node = UpdateMessage({ id })
   let selector = '#' + id
   function sendWsUpdate(attrs: { label: string }, context: WsContext) {
@@ -38,11 +45,4 @@ export function newUpdateMessage(attrs?: { id?: string }) {
     context.ws.send(['update-text', selector, text])
   }
   return { node, sendWsUpdate }
-}
-
-let nextId = 1
-function uniqueId() {
-  let id = 'update-message-' + nextId
-  nextId++
-  return id
 }
