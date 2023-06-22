@@ -1,6 +1,6 @@
 import { Raw } from '../components/raw.js'
 import { Style } from '../components/style.js'
-import { Message } from '../helpers.js'
+import { MessageException } from '../helpers.js'
 import { o } from '../jsx/jsx.js'
 import type { attrs } from '../jsx/types'
 import sanitizeHTML from 'sanitize-html'
@@ -112,9 +112,9 @@ function SetKey(_attrs: attrs, context: Context) {
     switch (key) {
       case 'username':
         username = value
-        throw new Message(['update-in', '#username-out', username])
+        throw new MessageException(['update-in', '#username-out', username])
       case 'code':
-        throw new Message([
+        throw new MessageException([
           'batch',
           [
             ['update-in', '#code-out', value],

@@ -1,8 +1,13 @@
 import type { ServerMessage } from '../../client/types'
 import type express from 'express'
+import { Node } from './jsx/types'
 
-export class Message {
+export class MessageException {
   constructor(public message: ServerMessage) {}
+}
+
+export class ErrorNode {
+  constructor(public node: Node) {}
 }
 
 /**
