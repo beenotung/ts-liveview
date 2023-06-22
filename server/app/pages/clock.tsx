@@ -8,6 +8,7 @@ import { toLocaleDateTimeString } from '../components/datetime.js'
 import { sessions } from '../session.js'
 import { Context } from '../context.js'
 import { iife } from '../components/script.js'
+import SourceCode from '../components/source-code.js'
 
 let options: LocaleDateTimeFormatOptions = {
   ...DefaultLocaleDateTimeFormatOptions,
@@ -51,18 +52,18 @@ const Clock = (
     </p>
     <h3>Server-side Rendered Clock</h3>
     <p>This is showing system time from the server, updated over websocket.</p>
-    <div id="ssrClock">
+    <p id="ssrClock">
       <ClockText />
-    </div>
+    </p>
     <h3>Client-side Rendered Clock</h3>
     <p>This is showing system time from the browser, updated locally.</p>
     <p>
       The initial value is rendered on the server, then "re-hydrated" on the
       client.
     </p>
-    <div id="spaClock">
+    <p id="spaClock">
       <ClockText />
-    </div>
+    </p>
     {iife(
       function (options: Intl.DateTimeFormatOptions) {
         let date = new Date()
@@ -89,6 +90,7 @@ const Clock = (
         },
       ],
     )}
+    <SourceCode page="clock.tsx" />
   </div>
 )
 var spaClock: HTMLDivElement | undefined
