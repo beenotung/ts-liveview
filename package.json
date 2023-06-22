@@ -33,7 +33,7 @@
     "watch:client": "npm run build:client -- --watch"
   },
   "dependencies": {
-    "@beenotung/tslib": "^21.0.3",
+    "@beenotung/tslib": "^22.0.0",
     "better-sqlite3-proxy": "^2.4.1",
     "better-sqlite3-schema": "^3.1.2",
     "cast.ts": "^1.7.1",
@@ -48,7 +48,7 @@
     "listening-on": "^2.0.9",
     "marked": "^5.1.0",
     "open": "^9.1.0",
-    "sanitize-html": "^2.10.0",
+    "sanitize-html": "^2.11.0",
     "spdy-fixes": "^4.0.5",
     "timezone-date.ts": "^2.0.1",
     "url-router.ts": "^1.2.0",
@@ -68,7 +68,7 @@
     "@types/ws": "^8.5.5",
     "@typescript-eslint/eslint-plugin": "^5.60.0",
     "@typescript-eslint/parser": "^5.60.0",
-    "esbuild": "^0.18.5",
+    "esbuild": "^0.18.6",
     "eslint": "^8.43.0",
     "fix-esm-import-path": "^1.4.0",
     "format-json-cli": "^1.0.2",
