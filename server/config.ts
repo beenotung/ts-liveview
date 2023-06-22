@@ -67,6 +67,7 @@ export let config = {
   epoch,
   auto_open: !production && development && epoch === 1,
   upload_dir: env.UPLOAD_DIR,
+  client_target: 'es2020',
 }
 
 export function title(page: string) {

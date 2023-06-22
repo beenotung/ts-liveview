@@ -12,6 +12,7 @@ export function Style(css: string): Element {
       let code = esbuild.transformSync(css, {
         minify: true,
         loader: 'css',
+        target: config.client_target,
       }).code
       cache.set(css, code)
       css = code

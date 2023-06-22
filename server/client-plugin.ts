@@ -26,6 +26,7 @@ export function loadClientPlugin(options: {
     outfile: outFile,
     bundle: true,
     minify: config.production,
+    target: config.client_target,
   })
 
   // e.g. js/image.bundle.js

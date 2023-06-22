@@ -12,6 +12,7 @@ export function Script(js: string): Element {
       let code = esbuild.transformSync(js, {
         minify: true,
         loader: 'js',
+        target: config.client_target,
       }).code
       cache.set(js, code)
       js = code
