@@ -64,6 +64,8 @@ export function newSingleFieldForm<
     extraFields?: Node
     submitOnInput?: boolean
     submitOnUpdate?: boolean
+    class?: string
+    id?: string
   }) {
     let { value, type, extraFields } = attrs
     let input =
@@ -88,7 +90,13 @@ export function newSingleFieldForm<
         />
       )
     return (
-      <form method={method} action={action} onsubmit="emitForm(event)">
+      <form
+        method={method}
+        action={action}
+        onsubmit="emitForm(event)"
+        class={attrs.class}
+        id={attrs.id}
+      >
         {extraFields}
         <label>
           {label}: {input}
