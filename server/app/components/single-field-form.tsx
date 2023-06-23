@@ -31,7 +31,7 @@ export function newSingleFieldForm<
   submitButton?: string | false // default: Save, pass false to skip the button
   // for <Update/>
   updateParser?: Parser<Input>
-  updateMessageLabel?: string // short, for ACK message
+  updateMessageLabel?: string | false // short, for ACK message, pass false to skill ACK
   updateValue: (attrs: { input: Input }, context: DynamicContext) => void
   renderUpdate: (attrs: { input: Input }, context: DynamicContext) => Node
   // for route
@@ -53,10 +53,10 @@ export function newSingleFieldForm<
   let updateParser: Parser<Input> =
     attrs.updateParser ||
     (object({ [name]: string({ trim: true, nonEmpty: true }) }) as Parser<any>)
-  let updateMessageLabel = attrs.updateMessageLabel || label
+  let updateMessageLabel = attrs.updateMessageLabel ?? label
   let description = attrs.description || `update ${label}`
 
-  let updateMessage = newUpdateMessage()
+  let updateMessage = updateMessageLabel == false ? null : newUpdateMessage()
 
   function Form(attrs: {
     value: FieldValue
@@ -94,7 +94,7 @@ export function newSingleFieldForm<
           {label}: {input}
         </label>{' '}
         {submitButton ? <input type="submit" value={submitButton} /> : null}
-        {updateMessage.node}
+        {updateMessage?.node}
       </form>
     )
   }
@@ -105,7 +105,7 @@ export function newSingleFieldForm<
 
     updateValue({ input }, context)
 
-    if (context.type === 'ws') {
+    if (updateMessageLabel && updateMessage && context.type === 'ws') {
       updateMessage.sendWsUpdate({ label: updateMessageLabel }, context)
       throw EarlyTerminate
     }
