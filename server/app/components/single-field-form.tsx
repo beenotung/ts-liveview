@@ -65,6 +65,7 @@ export function newSingleFieldForm<
     class?: string
     formId?: string
     inputId?: string
+    list?: string
   }) {
     let { value, type, extraFields } = attrs
     let input =
@@ -81,6 +82,7 @@ export function newSingleFieldForm<
       ) : (
         <input
           id={attrs.inputId}
+          list={attrs.list}
           type={type}
           name={name}
           placeholder={placeholder}
