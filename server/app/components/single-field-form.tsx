@@ -63,12 +63,14 @@ export function newSingleFieldForm<
     type?: string
     extraFields?: Node
     class?: string
-    id?: string
+    formId?: string
+    inputId?: string
   }) {
     let { value, type, extraFields } = attrs
     let input =
       typeof value === 'object' ? (
         Select({
+          id: attrs.inputId,
           name,
           autocomplete,
           options: value.options,
@@ -78,6 +80,7 @@ export function newSingleFieldForm<
         })
       ) : (
         <input
+          id={attrs.inputId}
           type={type}
           name={name}
           placeholder={placeholder}
@@ -93,7 +96,7 @@ export function newSingleFieldForm<
         action={action}
         onsubmit="emitForm(event)"
         class={attrs.class}
-        id={attrs.id}
+        id={attrs.formId}
       >
         {extraFields}
         <label>
