@@ -62,8 +62,6 @@ export function newSingleFieldForm<
     value: FieldValue
     type?: string
     extraFields?: Node
-    submitOnInput?: boolean
-    submitOnUpdate?: boolean
     class?: string
     id?: string
   }) {
