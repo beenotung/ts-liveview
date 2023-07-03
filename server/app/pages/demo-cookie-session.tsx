@@ -6,6 +6,7 @@ import { getContextCookies, mustCookieSecure } from '../cookie.js'
 import type { Request, Response } from 'express'
 import SourceCode from '../components/source-code.js'
 import type { Context } from '../context'
+import { renderError } from '../components/error.js'
 
 const log = debugLog('demo-cookie-session.ts')
 log.enabled = true
@@ -33,7 +34,7 @@ function DemoCookieSession(_attrs: attrs, context: Context) {
   if (!cookies) {
     return (
       <div id="demo-cookie-session">
-        <p>Cookies is required but not supported</p>
+        {renderError('Cookies is required but not supported', context)}
       </div>
     )
   }
