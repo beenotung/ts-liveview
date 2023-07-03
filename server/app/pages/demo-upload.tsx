@@ -1,7 +1,7 @@
 import { config, title } from '../../config.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction, Router } from 'express'
 import { createUploadForm, toFiles } from '../upload.js'
 import { Raw } from '../components/raw.js'
 import Style from '../components/style.js'
@@ -201,16 +201,7 @@ function triggerAutoDelete(file: string) {
   }, deleteInterval)
 }
 
-let routes: Routes = {
-  '/upload': {
-    title: title('Upload Demo'),
-    description: 'Demonstrate file upload',
-    menuText: 'Upload',
-    node: <View />,
-  },
-}
-
-let handleUpload = (req: Request, res: Response, next: NextFunction) => {
+function handleUpload(req: Request, res: Response, next: NextFunction) {
   let form = createUploadForm({
     mimeTypeRegex: /^image\/.*/,
     maxFileSize,
@@ -238,4 +229,17 @@ let handleUpload = (req: Request, res: Response, next: NextFunction) => {
   })
 }
 
-export default { routes, handleUpload }
+let routes: Routes = {
+  '/upload': {
+    title: title('Upload Demo'),
+    description: 'Demonstrate file upload',
+    menuText: 'Upload',
+    node: <View />,
+  },
+}
+
+function attachRoutes(app: Router) {
+  app.post('/upload/submit', handleUpload)
+}
+
+export default { routes, attachRoutes }

@@ -3,13 +3,12 @@ import type { attrs } from '../jsx/types'
 import { debugLog } from '../../debug.js'
 import { Style } from '../components/style.js'
 import { getContextCookies, mustCookieSecure } from '../cookie.js'
-import type { Request, Response } from 'express'
+import type { Request, Response, Router } from 'express'
 import SourceCode from '../components/source-code.js'
 import type { Context } from '../context'
 import { Routes } from '../routes.js'
 import { title } from '../../config.js'
 import { renderError } from '../components/error.js'
-import express from 'express'
 
 const log = debugLog('demo-cookie-session.ts')
 log.enabled = true
@@ -117,11 +116,12 @@ let routes: Routes = {
 }
 
 // ajax-routes
-let router = express.Router()
-router.delete('/cookie-session/token', deleteToken)
-router.get('/cookie-session/token', refreshToken)
+function attachRoutes(app: Router) {
+  app.delete('/cookie-session/token', deleteToken)
+  app.get('/cookie-session/token', refreshToken)
+}
 
 export default {
   routes,
-  router,
+  attachRoutes,
 }
