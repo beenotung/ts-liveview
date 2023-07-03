@@ -6,7 +6,7 @@ import { join } from 'path'
 import compression from 'compression'
 import { debugLog } from './debug.js'
 import { listenWSSConnection } from './ws/wss-lite.js'
-import { appRouter, onWsMessage } from './app/app.js'
+import { attachRoutes, onWsMessage } from './app/app.js'
 import { startSession, closeSession } from './app/session.js'
 import open from 'open'
 import { cookieMiddleware } from './app/cookie.js'
@@ -58,7 +58,7 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(cookieMiddleware)
 
-app.use(appRouter)
+attachRoutes(app)
 
 const port = config.port
 const protocol = config.serverOptions.key ? 'https' : 'http'

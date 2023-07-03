@@ -1,6 +1,6 @@
 import { o } from './jsx/jsx.js'
 import { scanTemplateDir } from '../template.js'
-import express, { Response } from 'express'
+import { NextFunction, Request, Response, Router } from 'express'
 import type { Context, ExpressContext, WsContext } from './context'
 import type { Element, Node } from './jsx/types'
 import { writeNode } from './jsx/html.js'
@@ -80,18 +80,23 @@ export function App(main: Node): Element {
   ]
 }
 
-export let appRouter = express.Router()
+// prefer flat router over nested router for less overhead
+export function attachRoutes(app: Router) {
+  // ajax/middleware routes
+  DemoCookieSession.attachRoutes(app)
+  Chatroom.attachRoutes(app)
+  DemoUpload.attachRoutes(app)
 
-// non-streaming routes
-appRouter.use(DemoCookieSession.router)
-appRouter.get('/chatroom', Chatroom.nicknameMiddleware)
-appRouter.post('/upload/submit', DemoUpload.handleUpload)
-Object.entries(redirectDict).forEach(([from, to]) =>
-  appRouter.use(from, (_req, res) => res.redirect(to)),
-)
+  // redirect routes
+  Object.entries(redirectDict).forEach(([from, to]) =>
+    app.use(from, (_req, res) => res.redirect(to)),
+  )
 
-// html-streaming routes
-appRouter.use((req, res, next) => {
+  // liveview routes
+  app.use(handleLiveView)
+}
+
+function handleLiveView(req: Request, res: Response, next: NextFunction) {
   sendHTMLHeader(res)
 
   let context: ExpressContext = {
@@ -115,7 +120,7 @@ appRouter.use((req, res, next) => {
       streamHTML(res, context, route)
     }
   })
-})
+}
 
 function responseHTML(
   res: Response,

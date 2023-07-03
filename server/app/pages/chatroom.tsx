@@ -20,7 +20,7 @@ import DateTimeText, {
   toLocaleDateTimeString,
 } from '../components/datetime.js'
 import { nodeToVNode } from '../jsx/vnode.js'
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction, Router } from 'express'
 import SourceCode from '../components/source-code.js'
 import type { Context } from '../context'
 import { Routes } from '../routes.js'
@@ -450,7 +450,11 @@ let routes: Routes = {
   },
 }
 
+function attachRoutes(app: Router) {
+  app.get('/chatroom', nicknameMiddleware)
+}
+
 export default {
   routes,
-  nicknameMiddleware,
+  attachRoutes,
 }
