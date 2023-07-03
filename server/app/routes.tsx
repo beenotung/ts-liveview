@@ -95,12 +95,7 @@ let routeDict: Routes = {
   ...DemoForm.routes,
   ...DemoInputComponents.routes,
   ...DemoUpload.routes,
-  '/cookie-session': {
-    title: title('Cookie-based Session'),
-    description: 'Demonstrate accessing cookie with ts-liveview',
-    menuText: 'Cookie Session',
-    node: <DemoCookieSession.index />,
-  },
+  ...DemoCookieSession.routes,
   ...Chatroom.routes,
   '/clock': {
     title: title('Clock'),

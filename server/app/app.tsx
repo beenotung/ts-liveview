@@ -83,8 +83,7 @@ export function App(main: Node): Element {
 export let appRouter = express.Router()
 
 // non-streaming routes
-appRouter.delete('/cookie-session/token', DemoCookieSession.deleteToken)
-appRouter.get('/cookie-session/token', DemoCookieSession.refreshToken)
+appRouter.use(DemoCookieSession.router)
 appRouter.get('/chatroom', Chatroom.nicknameMiddleware)
 appRouter.post('/upload/submit', DemoUpload.handleUpload)
 Object.entries(redirectDict).forEach(([from, to]) =>

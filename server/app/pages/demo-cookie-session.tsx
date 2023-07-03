@@ -6,7 +6,10 @@ import { getContextCookies, mustCookieSecure } from '../cookie.js'
 import type { Request, Response } from 'express'
 import SourceCode from '../components/source-code.js'
 import type { Context } from '../context'
+import { Routes } from '../routes.js'
+import { title } from '../../config.js'
 import { renderError } from '../components/error.js'
+import express from 'express'
 
 const log = debugLog('demo-cookie-session.ts')
 log.enabled = true
@@ -103,8 +106,22 @@ function randomToken(): string {
   return token
 }
 
+// liveview-routes
+let routes: Routes = {
+  '/cookie-session': {
+    title: title('Cookie-based Session'),
+    description: 'Demonstrate accessing cookie with ts-liveview',
+    menuText: 'Cookie Session',
+    node: <DemoCookieSession />,
+  },
+}
+
+// ajax-routes
+let router = express.Router()
+router.delete('/cookie-session/token', deleteToken)
+router.get('/cookie-session/token', refreshToken)
+
 export default {
-  index: DemoCookieSession,
-  deleteToken,
-  refreshToken,
+  routes,
+  router,
 }
