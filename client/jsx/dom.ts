@@ -194,6 +194,10 @@ function createElementBySelector(selector: string): Element {
 }
 
 function applySelector(e: Element, selector: string) {
+  let tagNameMatch = selector.match(/^\w+/)
+  if (tagNameMatch) {
+    selector = selector.slice(tagNameMatch[0].length)
+  }
   for (let attrMatch of selector.matchAll(attrListRegex)) {
     selector = selector.replace(attrMatch[0], '')
     let key = attrMatch[1]
