@@ -5,6 +5,7 @@ import SourceCode from '../../components/source-code.js'
 import Style from '../../components/style.js'
 import { o } from '../../jsx/jsx.js'
 import { Routes } from '../../routes.js'
+import { Link } from '../../components/router.js'
 
 let style = Style(/* css */ `
 #fruit_card {
@@ -196,6 +197,16 @@ export default { routes, content }
         <UserProfile />
       </fieldset>
     </div>
+
+    <p>
+      The update message id is auto incremented to avoid duplication among
+      different fields created by {code('newSingleFieldForm()')}. However, if
+      the {code('<field.Form/>')} is used multiple times on screen, e.g. in{' '}
+      {code('mapArray')} loop, you should supply {code('updateMessageKeyName')}{' '}
+      attribute to {code('newSingleFieldForm()')} and {code('key')} attribute to{' '}
+      {code('<field.Form/>')}. Example see{' '}
+      <Link href="/name-list">List Editing Demo</Link>
+    </p>
 
     <p>
       The possibility is endless. You can extend or modify the page and

@@ -31,18 +31,15 @@ export function updateMessageText(
 
 let counter = 0
 
-function newId() {
+export function newUpdateMessageId() {
   counter++
   return 'update-message-' + counter
 }
 
-export function newUpdateMessage(attrs?: { id?: string }) {
-  let id = attrs?.id || newId()
-  let node = UpdateMessage({ id })
-  let selector = '#' + id
-  function sendWsUpdate(attrs: { label: string }, context: WsContext) {
-    let text = updateMessageText(attrs, context)
-    context.ws.send(['update-text', selector, text])
-  }
-  return { node, sendWsUpdate }
+export function sendUpdateMessage(
+  attrs: { label: string; selector: string },
+  context: WsContext,
+) {
+  let text = updateMessageText(attrs, context)
+  context.ws.send(['update-text', attrs.selector, text])
 }

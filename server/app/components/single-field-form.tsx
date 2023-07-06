@@ -6,7 +6,11 @@ import { o } from '../jsx/jsx.js'
 import { Node } from '../jsx/types.js'
 import { Routes } from '../routes.js'
 import { OptionValue, Select, SelectOption } from './select.js'
-import { newUpdateMessage } from './update-message.js'
+import {
+  UpdateMessage,
+  newUpdateMessageId,
+  sendUpdateMessage,
+} from './update-message.js'
 
 type FieldValue =
   | OptionValue
@@ -17,7 +21,8 @@ type FieldValue =
 
 export function newSingleFieldForm<
   Name extends string = 'input',
-  Input = Record<Name, string>,
+  UpdateMessageKeyField extends string = 'key',
+  Input = Record<Name | UpdateMessageKeyField, string>,
 >(attrs: {
   // for <Form/>
   method?: string // default: POST
@@ -32,6 +37,8 @@ export function newSingleFieldForm<
   // for <Update/>
   updateParser?: Parser<Input>
   updateMessageLabel?: string | false // short, for ACK message, pass false to skill ACK
+  updateMessageId?: string
+  updateMessageKeyName?: UpdateMessageKeyField // example: update-message-key, form field name of update message key if the <Form/> will be used multiple times (e.g. in mapArray)
   updateValue: (attrs: { input: Input }, context: DynamicContext) => void
   renderUpdate: (attrs: { input: Input }, context: DynamicContext) => Node
   // for route
@@ -44,6 +51,7 @@ export function newSingleFieldForm<
     oninput,
     onchange,
     updateValue,
+    updateMessageKeyName: updateMessageKeyField,
     renderUpdate,
   } = attrs
   let method = attrs.method || 'POST'
@@ -52,11 +60,20 @@ export function newSingleFieldForm<
   let submitButton = attrs.submitButton ?? 'Save'
   let updateParser: Parser<Input> =
     attrs.updateParser ||
-    (object({ [name]: string({ trim: true, nonEmpty: true }) }) as Parser<any>)
+    (object(
+      updateMessageKeyField
+        ? {
+            [name]: string({ trim: true, nonEmpty: true }),
+            [updateMessageKeyField]: string(),
+          }
+        : {
+            [name]: string({ trim: true, nonEmpty: true }),
+          },
+    ) as Parser<any>)
   let updateMessageLabel = attrs.updateMessageLabel ?? label
   let description = attrs.description || `update ${label}`
 
-  let updateMessage = updateMessageLabel == false ? null : newUpdateMessage()
+  let defaultUpdateMessageId = attrs.updateMessageId || newUpdateMessageId()
 
   function Form(attrs: {
     value: FieldValue
@@ -66,8 +83,13 @@ export function newSingleFieldForm<
     formId?: string
     inputId?: string
     list?: string
+    key?: string | number
   }) {
-    let { value, type, extraFields } = attrs
+    let { value, type, extraFields, key } = attrs
+    let isKeyed = updateMessageKeyField && key != undefined
+    let updateMessageId = isKeyed
+      ? `${defaultUpdateMessageId}-${key}`
+      : defaultUpdateMessageId
     let input =
       typeof value === 'object' ? (
         Select({
@@ -100,24 +122,33 @@ export function newSingleFieldForm<
         class={attrs.class}
         id={attrs.formId}
       >
+        {isKeyed ? (
+          <input name={updateMessageKeyField} value={key} hidden />
+        ) : null}
         {extraFields}
         <label>
           {label}: {input}
         </label>{' '}
         {submitButton ? <input type="submit" value={submitButton} /> : null}
-        {updateMessage?.node}
+        {UpdateMessage({ id: updateMessageId })}
       </form>
     )
   }
 
-  function Update(attrs: {}, context: DynamicContext) {
+  function Update(_attrs: {}, context: DynamicContext) {
     let body = getContextFormBody(context)
     let input = updateParser.parse(body)
 
     updateValue({ input }, context)
 
-    if (updateMessageLabel && updateMessage && context.type === 'ws') {
-      updateMessage.sendWsUpdate({ label: updateMessageLabel }, context)
+    if (updateMessageLabel && context.type === 'ws') {
+      let id = updateMessageKeyField
+        ? defaultUpdateMessageId + '-' + (input as any)[updateMessageKeyField]
+        : defaultUpdateMessageId
+      sendUpdateMessage(
+        { label: updateMessageLabel, selector: '#' + id },
+        context,
+      )
       throw EarlyTerminate
     }
 
