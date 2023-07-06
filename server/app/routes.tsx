@@ -13,6 +13,7 @@ import Chatroom from './pages/chatroom.js'
 import DemoCookieSession from './pages/demo-cookie-session.js'
 import DemoForm from './pages/demo-form.js'
 import DemoInputComponents from './pages/demo-inputs.js'
+import NameList from './pages/name-list.js'
 import Editor from './pages/editor.js'
 import Home from './pages/home.js'
 import NotMatch from './pages/not-match.js'
@@ -94,6 +95,7 @@ let routeDict: Routes = {
   },
   ...DemoForm.routes,
   ...DemoInputComponents.routes,
+  ...NameList.routes,
   ...DemoUpload.routes,
   ...DemoCookieSession.routes,
   ...Chatroom.routes,
