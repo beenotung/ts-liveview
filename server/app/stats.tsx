@@ -78,7 +78,7 @@ let state = {
   live: new Set<ManagedWebsocket>(),
 }
 
-export function Stats(_attrs: {}, context: Context) {
+export function Stats(attrs: { hidden?: boolean }, context: Context) {
   let messages: ServerMessage[] = []
   if (context.type === 'express') {
     state.visit++
@@ -110,7 +110,7 @@ export function Stats(_attrs: {}, context: Context) {
   }
   sendMessage(['batch', messages], ws)
   return (
-    <div id="stats">
+    <div id="stats" hidden={attrs.hidden || undefined}>
       <table>
         <tbody>
           <tr>
