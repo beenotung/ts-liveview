@@ -76,10 +76,7 @@ export function App(route: PageRouteMatch): Element {
             {route.node}
           </fieldset>
         ) : (
-          <div className="page">
-            <h2>{removeTitleSuffix(route.title)}</h2>
-            {route.node}
-          </div>
+          route.node
         )}
         <Flush />
       </>,
