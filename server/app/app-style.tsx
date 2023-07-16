@@ -19,6 +19,11 @@ h1.title a {
   display: none !important;
 }
 
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
 code.inline-code {
   background: rgba(175, 184, 193, 0.2);
   padding: 0.25rem 0.5rem;
