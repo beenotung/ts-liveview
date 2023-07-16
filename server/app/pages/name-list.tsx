@@ -9,7 +9,7 @@ let Nickname = newSingleFieldForm({
   action: '/name-list/update',
   label: 'Nickname',
   name: 'nickname',
-  updateMessageKeyName: 'index',
+  updateKeyName: 'index',
   updateValue(attrs, context) {
     const { index, nickname } = attrs.input
     names[+index] = nickname
