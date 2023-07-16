@@ -77,8 +77,4 @@ export function title(page: string) {
   return page + titleSuffix
 }
 
-export function removeTitleSuffix(title: string) {
-  return title.replace(titleSuffix, '')
-}
-
 export let apiEndpointTitle = title('API Endpoint')
