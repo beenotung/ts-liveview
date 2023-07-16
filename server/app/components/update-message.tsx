@@ -9,11 +9,12 @@ export let UpdateMessageStyle = /* css */ `
 }
 `
 
+// use this for multiple instance of input field update message
 export function UpdateMessage(attrs: { id: string }) {
   return <p id={attrs.id} class="update-message"></p>
 }
 
-export function updateMessageText(
+function updateMessageText(
   attrs: {
     label: string
   },
@@ -36,10 +37,23 @@ export function newUpdateMessageId() {
   return 'update-message-' + counter
 }
 
+// use this for multiple instance of input field update message
 export function sendUpdateMessage(
   attrs: { label: string; selector: string },
   context: WsContext,
 ) {
   let text = updateMessageText(attrs, context)
   context.ws.send(['update-text', attrs.selector, text])
+}
+
+// use this to create singleton instance of input field update message
+export function newUpdateMessage() {
+  const id = newUpdateMessageId()
+  const selector = '#' + id
+  const node = UpdateMessage({ id })
+  function sendWsUpdate(attrs: { label: string }, context: WsContext) {
+    let text = updateMessageText(attrs, context)
+    context.ws.send(['update-text', selector, text])
+  }
+  return { node, sendWsUpdate }
 }
