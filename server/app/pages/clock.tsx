@@ -24,7 +24,7 @@ function startClock() {
       if (session.url !== '/clock') {
         return
       }
-      let text = date.toLocaleString(session.locales, {
+      let text = date.toLocaleString(session.language, {
         ...options,
         timeZone: session.timeZone,
       })
