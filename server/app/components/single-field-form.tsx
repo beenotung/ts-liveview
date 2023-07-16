@@ -21,8 +21,8 @@ type FieldValue =
 
 export function newSingleFieldForm<
   Name extends string = 'input',
-  UpdateMessageKeyField extends string = 'key',
-  Input = Record<Name | UpdateMessageKeyField, string>,
+  UpdateKeyField extends string = 'key',
+  Input = Record<Name | UpdateKeyField, string>,
 >(attrs: {
   // for <Form/>
   method?: string // default: POST
@@ -38,7 +38,7 @@ export function newSingleFieldForm<
   updateParser?: Parser<Input>
   updateMessageLabel?: string | false // short, for ACK message, pass false to skill ACK
   updateMessageId?: string
-  updateMessageKeyName?: UpdateMessageKeyField // example: update-message-key, form field name of update message key if the <Form/> will be used multiple times (e.g. in mapArray)
+  updateKeyName?: UpdateKeyField // example: update-message-key, form field name of update message key if the <Form/> will be used multiple times (e.g. in mapArray)
   updateValue: (attrs: { input: Input }, context: DynamicContext) => void
   renderUpdate: (attrs: { input: Input }, context: DynamicContext) => Node
   // for route
@@ -51,7 +51,7 @@ export function newSingleFieldForm<
     oninput,
     onchange,
     updateValue,
-    updateMessageKeyName: updateMessageKeyField,
+    updateKeyName: updateKeyField,
     renderUpdate,
   } = attrs
   let method = attrs.method || 'POST'
@@ -61,10 +61,10 @@ export function newSingleFieldForm<
   let updateParser: Parser<Input> =
     attrs.updateParser ||
     (object(
-      updateMessageKeyField
+      updateKeyField
         ? {
             [name]: string({ trim: true, nonEmpty: true }),
-            [updateMessageKeyField]: string(),
+            [updateKeyField]: string(),
           }
         : {
             [name]: string({ trim: true, nonEmpty: true }),
@@ -86,7 +86,7 @@ export function newSingleFieldForm<
     key?: string | number
   }) {
     let { value, type, extraFields, key } = attrs
-    let isKeyed = updateMessageKeyField && key != undefined
+    let isKeyed = updateKeyField && key != undefined
     let updateMessageId = isKeyed
       ? `${defaultUpdateMessageId}-${key}`
       : defaultUpdateMessageId
@@ -122,9 +122,7 @@ export function newSingleFieldForm<
         class={attrs.class}
         id={attrs.formId}
       >
-        {isKeyed ? (
-          <input name={updateMessageKeyField} value={key} hidden />
-        ) : null}
+        {isKeyed ? <input name={updateKeyField} value={key} hidden /> : null}
         {extraFields}
         <label>
           {label}: {input}
@@ -142,8 +140,8 @@ export function newSingleFieldForm<
     updateValue({ input }, context)
 
     if (updateMessageLabel && context.type === 'ws') {
-      let id = updateMessageKeyField
-        ? defaultUpdateMessageId + '-' + (input as any)[updateMessageKeyField]
+      let id = updateKeyField
+        ? defaultUpdateMessageId + '-' + (input as any)[updateKeyField]
         : defaultUpdateMessageId
       sendUpdateMessage(
         { label: updateMessageLabel, selector: '#' + id },
