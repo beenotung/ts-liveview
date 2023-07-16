@@ -68,10 +68,17 @@ export let config = {
   auto_open: !production && development && epoch === 1,
   upload_dir: env.UPLOAD_DIR,
   client_target: 'es2020',
+  demo_router: true,
 }
 
+const titleSuffix = ' | ' + config.site_name
+
 export function title(page: string) {
-  return page + ' | ' + config.site_name
+  return page + titleSuffix
+}
+
+export function removeTitleSuffix(title: string) {
+  return title.replace(titleSuffix, '')
 }
 
 export let apiEndpointTitle = title('API Endpoint')
