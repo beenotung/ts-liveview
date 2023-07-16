@@ -12,7 +12,7 @@ import { getWSSession } from './session.js'
 import DemoCookieSession from './pages/demo-cookie-session.js'
 import escapeHtml from 'escape-html'
 import { Flush } from './components/flush.js'
-import { config } from '../config.js'
+import { config, removeTitleSuffix } from '../config.js'
 import Stats from './stats.js'
 import { MuteConsole } from './components/script.js'
 import { matchRoute, PageRouteMatch } from './routes.js'
@@ -53,7 +53,7 @@ let scripts = config.development ? (
   </>
 )
 
-export function App(main: Node): Element {
+export function App(route: PageRouteMatch): Element {
   // you can write the AST direct for more compact wire-format
   return [
     'div.app',
@@ -70,10 +70,17 @@ export function App(main: Node): Element {
         {scripts}
         <Stats />
         {topMenu}
-        <fieldset>
-          <legend>Router Demo</legend>
-          {main}
-        </fieldset>
+        {config.demo_router ? (
+          <fieldset>
+            <legend>Router Demo</legend>
+            {route.node}
+          </fieldset>
+        ) : (
+          <div className="page">
+            <h2>{removeTitleSuffix(route.title)}</h2>
+            {route.node}
+          </div>
+        )}
         <Flush />
       </>,
     ],
@@ -139,7 +146,7 @@ function responseHTML(
     renderTemplate(stream, context, {
       title: route.title || config.site_name,
       description: route.description || config.site_description,
-      app: App(route.node),
+      app: App(route),
     })
   } catch (error) {
     if (error === EarlyTerminate) {
@@ -168,7 +175,7 @@ function streamHTML(
     renderTemplate(res, context, {
       title: route.title || config.site_name,
       description: route.description || config.site_description,
-      app: App(route.node),
+      app: App(route),
     })
     res.end()
   } catch (error) {
@@ -224,7 +231,7 @@ export let onWsMessage: OnWsMessage = (event, ws, _wss) => {
     session,
   }
   then(matchRoute(context), route => {
-    let node = App(route.node)
+    let node = App(route)
     dispatchUpdate(context, node, route.title)
   })
 }
