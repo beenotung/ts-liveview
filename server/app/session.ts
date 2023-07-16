@@ -7,7 +7,7 @@ log.enabled = true
 
 export type Session = {
   ws: ManagedWebsocket
-  locales?: string
+  language?: string
   timeZone?: string
   timezoneOffset?: number
   url?: string

@@ -203,7 +203,7 @@ export let onWsMessage: OnWsMessage = (event, ws, _wss) => {
     event = event as ClientMountMessage
     eventType = 'mount'
     url = event[1]
-    session.locales = event[2]
+    session.language = event[2]
     let timeZone = event[3]
     if (timeZone && timeZone !== 'null') {
       session.timeZone = timeZone
