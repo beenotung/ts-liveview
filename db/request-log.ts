@@ -42,6 +42,7 @@ export function storeRequestLog(request: {
   url: string
   user_agent: string | null
   session_id: number | null
+  user_id: number | null
 }) {
   let user_agent = request.user_agent
   let log_id = proxy.request_log.push({
@@ -50,6 +51,7 @@ export function storeRequestLog(request: {
     user_agent_id: user_agent ? getUserAgentId(user_agent) : null,
     geo_ip_id: null,
     request_session_id: request.session_id,
+    user_id: request.user_id,
     timestamp: Date.now(),
   })
   checkNewRequestLog(log_id)
