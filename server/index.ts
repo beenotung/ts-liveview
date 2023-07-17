@@ -35,6 +35,7 @@ listenWSSConnection({
   onMessage: onWsMessage,
 })
 
+app.use(cookieMiddleware)
 app.use((req, res, next) => {
   logRequest(req, req.method, req.url, null)
   next()
@@ -49,8 +50,6 @@ app.use(express.static('public'))
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-
-app.use(cookieMiddleware)
 
 attachRoutes(app)
 
