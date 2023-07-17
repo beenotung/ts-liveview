@@ -6,5 +6,6 @@ export function logRequest(req: Request, method: string, url: string) {
     method,
     url,
     user_agent: req.headers['user-agent'] || null,
+    user_id: +req.signedCookies.user_id || null,
   })
 }
