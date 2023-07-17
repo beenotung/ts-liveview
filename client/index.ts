@@ -78,9 +78,12 @@ connectWS({
     win.emitHref = emitHref
     win.emitForm = emitForm
     win.submitForm = submitForm
+    win.remount = mount
 
-    ws.ws.addEventListener('open', () => {
-      let locale =
+    ws.ws.addEventListener('open', mount)
+
+    function mount() {
+      let language =
         navigator && navigator.language ? navigator.language : undefined
       let url = location.href.replace(origin, '')
       let timeZone = Intl
@@ -90,12 +93,13 @@ connectWS({
       let message: ClientMessage = [
         'mount',
         url,
-        locale,
+        language,
         timeZone,
         timezoneOffset,
+        document.cookie,
       ]
       ws.send(message)
-    })
+    }
 
     const status = document.querySelector('#ws_status')
     if (status) {

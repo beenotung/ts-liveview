@@ -13,6 +13,7 @@ export type ClientMountMessage = [
   locale: string | undefined,
   timeZone: string | undefined,
   timezoneOffset: number,
+  cookie: string,
 ]
 type Prefix<K extends string, T extends string> = `${K}${T}`
 export type ClientRouteMessage = [url: Prefix<'/', string>, data?: unknown]

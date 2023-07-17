@@ -26,6 +26,8 @@ import { renderIndexTemplate } from '../../template/index.js'
 import escapeHTML from 'escape-html'
 import { HTMLStream } from './jsx/stream.js'
 import DemoUpload from './pages/demo-upload.js'
+import { getWsCookies } from './cookie.js'
+import { PickLanguage } from './components/ui-language.js'
 
 if (config.development) {
   scanTemplateDir('template')
@@ -79,9 +81,18 @@ export function App(route: PageRouteMatch): Element {
           route.node
         )}
         <Flush />
+        <Footer />
       </>,
     ],
   ]
+}
+
+function Footer() {
+  return (
+    <footer>
+      <PickLanguage style="text-align: end" />
+    </footer>
+  )
 }
 
 // prefer flat router over nested router for less overhead
@@ -209,6 +220,17 @@ export let onWsMessage: OnWsMessage = (event, ws, _wss) => {
       session.timeZone = timeZone
     }
     session.timezoneOffset = event[4]
+    let cookie = event[5]
+    if (cookie) {
+      getWsCookies(ws.ws).unsignedCookies = Object.fromEntries(
+        new URLSearchParams(
+          cookie
+            .split(';')
+            .map(s => s.trim())
+            .join('&'),
+        ),
+      )
+    }
   } else if (event[0][0] === '/') {
     event = event as ClientRouteMessage
     eventType = 'route'
