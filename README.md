@@ -85,6 +85,7 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
   - [x] Auto reconnect when network resume
   - [ ] Auto send accumulated offline messages when network resume (WIP)
 - [x] Work well with express.js [[7]](#feature-7)
+- [x] Built-in locale support (language and timezone)
 - [x] Fully customizable [[8]](#feature-8)
 
 **Remarks**:

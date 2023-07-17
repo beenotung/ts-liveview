@@ -3,6 +3,7 @@ import type { ManagedWebsocket } from '../ws/wss'
 import type { RouteContext } from 'url-router.ts'
 import type { Session } from './session'
 import type { PageRoute } from './routes'
+import { getContextCookies } from './cookie.js'
 
 export type Context = StaticContext | DynamicContext
 
@@ -60,6 +61,10 @@ export function getContextFormBody(context: Context): unknown | undefined {
 }
 
 export function getContextLanguage(context: Context): string | undefined {
+  let lang = getContextCookies(context)?.unsignedCookies.lang
+  if (lang) {
+    return lang
+  }
   if (context.type === 'static') {
     return
   }

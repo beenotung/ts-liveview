@@ -19,6 +19,7 @@ import Home from './pages/home.js'
 import NotMatch from './pages/not-match.js'
 import Thermostat from './pages/thermostat.js'
 import { then } from '@beenotung/tslib/result.js'
+import DemoLocale from './pages/demo-locale.js'
 import Clock from './pages/clock.js'
 import type { MenuRoute } from './components/menu'
 import DemoUpload from './pages/demo-upload.js'
@@ -99,6 +100,12 @@ let routeDict: Routes = {
   ...DemoUpload.routes,
   ...DemoCookieSession.routes,
   ...Chatroom.routes,
+  '/locale': {
+    title: title('Locale Demo'),
+    description: 'Locale demo for multiple languages and timezone (i18n)',
+    menuText: 'Locale',
+    node: <DemoLocale />,
+  },
   '/clock': {
     title: title('Clock'),
     description:
