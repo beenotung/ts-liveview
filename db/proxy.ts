@@ -45,6 +45,14 @@ export type UaStat = {
   last_request_log_id: number
 }
 
+export type User = {
+  id?: null | number
+  username: string
+  password_hash: null | string // char(60)
+  email: null | string
+  tel: null | string
+}
+
 export type RequestLog = {
   id?: null | number
   method_id: number
@@ -55,15 +63,9 @@ export type RequestLog = {
   user_agent?: UserAgent
   request_session_id: null | number
   request_session?: RequestSession
+  user_id: null | number
+  user?: User
   timestamp: number
-}
-
-export type User = {
-  id?: null | number
-  username: string
-  password_hash: null | string // char(60)
-  email: null | string
-  tel: null | string
 }
 
 export type DBProxy = {
@@ -74,8 +76,8 @@ export type DBProxy = {
   ua_bot: UaBot[]
   user_agent: UserAgent[]
   ua_stat: UaStat[]
-  request_log: RequestLog[]
   user: User[]
+  request_log: RequestLog[]
 }
 
 export let proxy = proxySchema<DBProxy>({
@@ -92,13 +94,14 @@ export let proxy = proxySchema<DBProxy>({
       ['ua_bot', { field: 'ua_bot_id', table: 'ua_bot' }],
     ],
     ua_stat: [],
+    user: [],
     request_log: [
       /* foreign references */
       ['method', { field: 'method_id', table: 'method' }],
       ['url', { field: 'url_id', table: 'url' }],
       ['user_agent', { field: 'user_agent_id', table: 'user_agent' }],
       ['request_session', { field: 'request_session_id', table: 'request_session' }],
+      ['user', { field: 'user_id', table: 'user' }],
     ],
-    user: [],
   },
 })
