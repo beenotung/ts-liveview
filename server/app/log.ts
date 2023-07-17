@@ -12,5 +12,6 @@ export function logRequest(
     url,
     user_agent: req.headers['user-agent'] || null,
     session_id,
+    user_id: +req.signedCookies.user_id || null,
   })
 }
