@@ -23,6 +23,7 @@ url_id integer FK >- url.id
 user_agent_id integer NULL FK >- user_agent.id
 geo_ip_id integer NULL FK >- geo_ip.id
 request_session_id integer NULL FK >0- request_session.id
+user_id integer NULL FK >0- user.id
 timestamp integer
 
 

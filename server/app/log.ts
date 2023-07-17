@@ -26,6 +26,7 @@ export function logRequest(
     url,
     user_agent,
     session_id,
+    user_id: +req.signedCookies.user_id || null,
   })
   req.request_log_id = log_id
 
