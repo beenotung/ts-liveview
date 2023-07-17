@@ -29,3 +29,6 @@ server.pid
 
 # user uploaded files
 uploads/
+
+# git files
+*.orig
