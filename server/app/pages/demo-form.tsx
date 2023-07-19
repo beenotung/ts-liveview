@@ -53,46 +53,46 @@ let code = /* html */ `
 `.trim()
 
 const style = Style(/* css */ `
-form > label {
+#DemoForm form > label {
   color: green;
 }
-label {
+#DemoForm label {
   margin-top: 1rem;
   display: block;
   text-transform: capitalize;
 }
-.inline-label-container,
-.radio-group
+#DemoForm .inline-label-container,
+#DemoForm .radio-group
 {
   margin-top: 1rem;
 }
-.inline-label-container label,
-.radio-group label
+#DemoForm .inline-label-container label,
+#DemoForm .radio-group label
 {
   display: inline;
 }
-.radio-group label::before {
+#DemoForm .radio-group label::before {
   width: 1.5em;
   display: inline-block;
   content: "";
 }
-label::after {
+#DemoForm label::after {
   content: ": ";
 }
-.btn-group input {
+#DemoForm .btn-group input {
   border-radius: 0.25em;
   padding: 0.3em;
   margin: 0.3em;
 }
-[type=reset] {
+#DemoForm [type=reset] {
   background-color: lightcoral;
   color: darkred;
 }
-[type=submit] {
+#DemoForm [type=submit] {
   background-color: lightgreen;
   color: darkgreen;
 }
-fieldset fieldset {
+#DemoForm fieldset fieldset {
   display: inline-block
 }
 `)
@@ -177,7 +177,7 @@ const formBody = object({
 
 function DemoForm() {
   return (
-    <>
+    <div id="DemoForm">
       <div>
         <div style="display: inline-flex; flex-direction: column">
           <h2>Demo Form</h2>
@@ -286,7 +286,7 @@ function DemoForm() {
       </div>
 
       <SourceCode page="demo-form.tsx" />
-    </>
+    </div>
   )
 }
 
