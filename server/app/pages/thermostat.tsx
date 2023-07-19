@@ -133,9 +133,13 @@ function update(message: ServerMessage) {
   return <Update to="/thermostat" message={message} />
 }
 
+let str = `<b>o</b> Alex's "wong" `
+
 /* the root node is statically built at boot-time (doesn't need to be reconstructed at request-time) */
 let Thermostat: Node = (
   <div id="thermostat">
+    <p>{str}</p>
+
     {Style(/* css */ `
 #thermostat button {
   margin: 0.25em;

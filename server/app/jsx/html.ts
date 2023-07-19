@@ -1,4 +1,4 @@
-import escapeHTML from 'escape-html'
+// import escapeHTML from 'escape-html'
 import type { Context } from '../context'
 import debug from 'debug'
 import type {
@@ -15,6 +15,15 @@ import { HTMLStream, noop } from './stream.js'
 import { Flush } from '../components/flush.js'
 import { renderError, renderErrorNode } from '../components/error.js'
 import { EarlyTerminate, ErrorNode, MessageException } from '../helpers.js'
+
+function escapeHTML(str: string): string {
+  str = str.replace(/&/g, '&amp;')
+  str = str.replace(/</g, '&lt;')
+  str = str.replace(/>/g, '&gt;')
+  str = str.replace(/"/g, '&quot;')
+  str = str.replace(/'/g, '&#39;')
+  return str
+}
 
 const log = debug('html.ts')
 log.enabled = true

@@ -15,7 +15,7 @@ import { Flush } from './components/flush.js'
 import { config } from '../config.js'
 import Stats from './stats.js'
 import { MuteConsole } from './components/script.js'
-import { matchRoute, PageRouteMatch } from './routes.js'
+import { matchRoute, menuRoutes, PageRouteMatch } from './routes.js'
 import { topMenu } from './components/top-menu.js'
 import Chatroom from './pages/chatroom.js'
 import { redirectDict } from './routes.js'
@@ -28,6 +28,7 @@ import { HTMLStream } from './jsx/stream.js'
 import DemoUpload from './pages/demo-upload.js'
 import { getWsCookies } from './cookie.js'
 import { PickLanguage } from './components/ui-language.js'
+import Navbar from './components/navbar.js'
 
 if (config.development) {
   scanTemplateDir('template')
@@ -64,6 +65,17 @@ export function App(route: PageRouteMatch): Element {
       // or you can write in JSX for better developer-experience (if you're coming from React)
       <>
         {style}
+        <Navbar
+          brand={
+            <h1 class="title">
+              ts-liveview{' '}
+              <a href="https://news.ycombinator.com/item?id=22830472">HN</a>{' '}
+              <a href="https://github.com/beenotung/ts-liveview">git</a>
+            </h1>
+          }
+          menuRoutes={menuRoutes}
+        />
+        <hr />
         <h1 class="title">
           ts-liveview{' '}
           <a href="https://news.ycombinator.com/item?id=22830472">HN</a>{' '}
