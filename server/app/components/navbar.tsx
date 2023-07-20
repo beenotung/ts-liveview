@@ -7,6 +7,7 @@ import { MenuRoute, isCurrentMenuRoute } from './menu.js'
 import { Link } from './router.js'
 import Style from './style.js'
 import { menuIcon } from '../icons/menu.js'
+import { getAuthUserId } from '../auth/user.js'
 
 let style = Style(/* css */ `
 .navbar {
@@ -64,6 +65,7 @@ function Navbar(
   context: Context,
 ) {
   let currentUrl = getContextUrl(context)
+  let hasLogin = !!getAuthUserId(context)
   let toggleId = attrs.toggleId || 'navbar-menu-toggle'
   return (
     <nav class="navbar">
@@ -78,17 +80,20 @@ function Navbar(
       </label>
       <input name="navbar-menu-toggle" type="checkbox" id={toggleId} />
       <div class="navbar-menu">
-        {mapArray(attrs.menuRoutes, route => (
-          <Link
-            class={flagsToClassName({
-              'navbar-menu-item': true,
-              'selected': isCurrentMenuRoute(currentUrl, route),
-            })}
-            href={route.menuUrl || route.url}
-          >
-            {route.menuText}
-          </Link>
-        ))}
+        {mapArray(attrs.menuRoutes, route =>
+          (route.guestOnly && hasLogin) ||
+          (route.userOnly && !hasLogin) ? null : (
+            <Link
+              class={flagsToClassName({
+                'navbar-menu-item': true,
+                'selected': isCurrentMenuRoute(currentUrl, route),
+              })}
+              href={route.menuUrl || route.url}
+            >
+              {route.menuText}
+            </Link>
+          ),
+        )}
       </div>
     </nav>
   )
