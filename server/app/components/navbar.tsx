@@ -20,7 +20,7 @@ let style = Style(/* css */ `
 	justify-content: center;
 	align-items: center;
 }
-.navbar .navbar-menu-toggle .navbar-toggle-icon {
+.navbar .navbar-menu-toggle .icon {
 	display: none;
 	width: 3rem;
 	height: 3rem;
@@ -41,7 +41,7 @@ let style = Style(/* css */ `
 	margin-bottom: calc(0.25rem - 1px)
 }
 @media (max-width: 480px) {
-	.navbar .navbar-menu-toggle .navbar-toggle-icon {
+	.navbar .navbar-menu-toggle .icon {
 		display: initial;
 	}
 	.navbar .navbar-menu {
@@ -65,31 +65,10 @@ function Navbar(
   let currentUrl = getContextUrl(context)
   return (
     <nav class="navbar">
-      {/* {menuIcon} */}
       {style}
       <div class="navbar-brand">{attrs.brand}</div>
       <label class="navbar-menu-toggle">
         {menuIcon}
-
-        <img class="navbar-toggle-icon" src="/icons/menu.svg" />
-
-        <svg
-          class="navbar-toggle-icon"
-          viewBox="0 0 512 512"
-          width="512"
-          height="512"
-        >
-          <path
-            fill="none"
-            stroke="white"
-            stroke-width="48"
-            d="M1,1 L 512,512"
-          />
-        </svg>
-
-        {/* <div className="icon"> */}
-        {/* <img src="https://picsum.photos/seed/1/100/100" /> */}
-        {/* </div> */}
         <input name="navbar-menu-toggle" type="checkbox" />
         <div class="navbar-menu">
           {mapArray(attrs.menuRoutes, route => (
