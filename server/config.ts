@@ -68,8 +68,6 @@ export let config = {
   auto_open: !production && development && epoch === 1,
   upload_dir: env.UPLOAD_DIR,
   client_target: 'es2020',
-  demo_router: true,
-  english_only: true,
 }
 
 const titleSuffix = ' | ' + config.site_name
