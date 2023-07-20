@@ -7,6 +7,7 @@ import { mapArray } from './fragment.js'
 import { MenuRoute, isCurrentMenuRoute } from './menu.js'
 import { Link } from './router.js'
 import Style from './style.js'
+import { getAuthUserId } from '../auth/user.js'
 
 let containerClass = 'sidebar-container'
 let mainContainerClass = 'sidebar-main-container'
@@ -104,6 +105,7 @@ function Sidebar(
   context: Context,
 ) {
   let currentUrl = getContextUrl(context)
+  let hasLogin = !!getAuthUserId(context)
   let toggleId = attrs.toggleId || 'sidebar-menu-toggle'
   return (
     <nav class="sidebar">
@@ -122,17 +124,20 @@ function Sidebar(
       </div>
       <div class="sidebar-foldable">
         <div class="sidebar-menu">
-          {mapArray(attrs.menuRoutes, route => (
-            <Link
-              class={flagsToClassName({
-                'sidebar-menu-item': true,
-                'selected': isCurrentMenuRoute(currentUrl, route),
-              })}
-              href={route.menuUrl || route.url}
-            >
-              {route.menuText}
-            </Link>
-          ))}
+          {mapArray(attrs.menuRoutes, route =>
+            (route.guestOnly && hasLogin) ||
+            (route.userOnly && !hasLogin) ? null : (
+              <Link
+                class={flagsToClassName({
+                  'sidebar-menu-item': true,
+                  'selected': isCurrentMenuRoute(currentUrl, route),
+                })}
+                href={route.menuUrl || route.url}
+              >
+                {route.menuText}
+              </Link>
+            ),
+          )}
         </div>
       </div>
     </nav>
