@@ -1,5 +1,7 @@
 import { o } from '../jsx/jsx.js'
 
+// source: https://ionic.io/ionicons
+
 export let menuIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
