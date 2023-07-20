@@ -3,14 +3,17 @@ import { scanTemplateDir } from '../template.js'
 import { NextFunction, Request, Response, Router } from 'express'
 import type { Context, ExpressContext, WsContext } from './context'
 import type { Element, Node } from './jsx/types'
-import { writeNode } from './jsx/html.js'
+import {
+  escapeHTMLAttributeValue,
+  escapeHTMLTextContent,
+  writeNode,
+} from './jsx/html.js'
 import { sendHTMLHeader } from './express.js'
 import { OnWsMessage } from '../ws/wss.js'
 import { dispatchUpdate } from './jsx/dispatch.js'
 import { EarlyTerminate } from './helpers.js'
 import { getWSSession } from './session.js'
 import DemoCookieSession from './pages/demo-cookie-session.js'
-import escapeHtml from 'escape-html'
 import { Flush } from './components/flush.js'
 import { config } from '../config.js'
 import Stats from './stats.js'
@@ -23,7 +26,6 @@ import type { ClientMountMessage, ClientRouteMessage } from '../../client/types'
 import { then } from '@beenotung/tslib/result.js'
 import { style } from './app-style.js'
 import { renderIndexTemplate } from '../../template/index.js'
-import escapeHTML from 'escape-html'
 import { HTMLStream } from './jsx/stream.js'
 import DemoUpload from './pages/demo-upload.js'
 import { getWsCookies } from './cookie.js'
@@ -40,8 +42,8 @@ function renderTemplate(
 ) {
   const app = options.app
   renderIndexTemplate(stream, {
-    title: escapeHTML(options.title),
-    description: escapeHTML(options.description),
+    title: escapeHTMLAttributeValue(options.title),
+    description: escapeHTMLAttributeValue(options.description),
     app:
       typeof app == 'string' ? app : stream => writeNode(stream, app, context),
   })
@@ -178,8 +180,8 @@ function responseHTML(
     }
     html +=
       error instanceof Error
-        ? 'Internal Error: ' + escapeHtml(error.message)
-        : 'Unknown Error: ' + escapeHtml(String(error))
+        ? 'Internal Error: ' + escapeHTMLTextContent(error.message)
+        : 'Unknown Error: ' + escapeHTMLTextContent(String(error))
   }
 
   // deepcode ignore XSS: the dynamic content is html-escaped
@@ -209,8 +211,8 @@ function streamHTML(
     // deepcode ignore XSS: the dynamic content is html-escaped
     res.end(
       error instanceof Error
-        ? 'Internal Error: ' + escapeHtml(error.message)
-        : 'Unknown Error: ' + escapeHtml(String(error)),
+        ? 'Internal Error: ' + escapeHTMLTextContent(error.message)
+        : 'Unknown Error: ' + escapeHTMLTextContent(String(error)),
     )
   }
 }

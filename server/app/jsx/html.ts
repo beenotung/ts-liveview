@@ -1,4 +1,3 @@
-// import escapeHTML from 'escape-html'
 import type { Context } from '../context'
 import debug from 'debug'
 import type {
@@ -16,17 +15,26 @@ import { Flush } from '../components/flush.js'
 import { renderError, renderErrorNode } from '../components/error.js'
 import { EarlyTerminate, ErrorNode, MessageException } from '../helpers.js'
 
-function escapeHTML(str: string): string {
+const log = debug('html.ts')
+log.enabled = true
+
+/**
+ * only use for textContent, not attribute values
+ */
+export function escapeHTMLTextContent(str: string): string {
   str = str.replace(/&/g, '&amp;')
   str = str.replace(/</g, '&lt;')
   str = str.replace(/>/g, '&gt;')
-  str = str.replace(/"/g, '&quot;')
-  str = str.replace(/'/g, '&#39;')
+  // str = str.replace(/"/g, '&quot;')
+  // str = str.replace(/'/g, '&#39;')
   return str
 }
 
-const log = debug('html.ts')
-log.enabled = true
+export function escapeHTMLAttributeValue(
+  str: string | number | boolean,
+): string {
+  return JSON.stringify(str)
+}
 
 export function nodeToHTML(node: Node, context: Context): html {
   let html = ''
@@ -67,7 +75,7 @@ export function writeNode(
   }
   switch (typeof node) {
     case 'string':
-      return stream.write(escapeHTML(node))
+      return stream.write(escapeHTMLTextContent(node))
     case 'number':
       return stream.write(String(node))
   }
@@ -165,7 +173,7 @@ function writeElement(
             return
           }
       }
-      value = JSON.stringify(value)
+      value = escapeHTMLAttributeValue(value)
       html += ` ${name}=${value}`
     })
   }
