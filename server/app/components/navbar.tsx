@@ -7,6 +7,7 @@ import { MenuRoute, isCurrentMenuRoute } from './menu.js'
 import Style from './style.js'
 import { menuIcon } from '../icons/menu.js'
 import { PickLanguage } from './ui-language.js'
+import { getAuthUserId } from '../auth/user.js'
 
 let style = Style(/* css */ `
 .navbar {
@@ -81,6 +82,7 @@ function Navbar(
   context: Context,
 ) {
   let currentUrl = getContextUrl(context)
+  let hasLogin = !!getAuthUserId(context)
   let toggleId = attrs.toggleId || 'navbar-menu-toggle'
   return (
     <nav class="navbar">
@@ -95,18 +97,21 @@ function Navbar(
       </label>
       <input name="navbar-menu-toggle" type="checkbox" id={toggleId} />
       <div class="navbar-menu">
-        {mapArray(attrs.menuRoutes, route => (
-          <a
-            class={flagsToClassName({
-              'navbar-menu-item': true,
-              'selected': isCurrentMenuRoute(currentUrl, route),
-            })}
-            href={route.menuUrl || route.url}
-            onclick={route.menuFullNavigate ? undefined : 'emitHref(event)'}
-          >
-            {route.menuText}
-          </a>
-        ))}
+        {mapArray(attrs.menuRoutes, route =>
+          (route.guestOnly && hasLogin) ||
+          (route.userOnly && !hasLogin) ? null : (
+            <a
+              class={flagsToClassName({
+                'navbar-menu-item': true,
+                'selected': isCurrentMenuRoute(currentUrl, route),
+              })}
+              href={route.menuUrl || route.url}
+              onclick={route.menuFullNavigate ? undefined : 'emitHref(event)'}
+            >
+              {route.menuText}
+            </a>
+          ),
+        )}
         <PickLanguage style="text-align: end; margin-inline: 1rem; flex-grow: 1" />
       </div>
     </nav>
