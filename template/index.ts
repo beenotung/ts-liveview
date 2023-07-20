@@ -45,8 +45,8 @@ export function renderIndexTemplate(
     <style>
       #ws_status {
         position: fixed;
-        top: 1em;
-        right: 1em;
+        bottom: 1em;
+        left: 1em;
         padding: 0.25em;
         background: white;
         border: 1px solid black;

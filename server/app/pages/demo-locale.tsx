@@ -1,6 +1,4 @@
-import { utf8_style } from '../app-style.js'
 import SourceCode from '../components/source-code.js'
-import Style from '../components/style.js'
 import { PickLanguage } from '../components/ui-language.js'
 import { Context, getContextLanguage, getContextTimezone } from '../context.js'
 import { o } from '../jsx/jsx.js'
@@ -10,7 +8,6 @@ function DemoLocale(_attrs: {}, context: Context) {
   let timezone = getContextTimezone(context) || 'unknown'
   return (
     <div id="demo-locale">
-      {Style(utf8_style)}
       {lang?.includes('zh') ? Zh({ lang, timezone }) : En({ lang, timezone })}
       <SourceCode page="demo-locale.tsx" />
     </div>

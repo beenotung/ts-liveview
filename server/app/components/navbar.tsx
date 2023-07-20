@@ -12,7 +12,7 @@ let style = Style(/* css */ `
 .navbar {
 	display: flex;
 	justify-content: space-between;
-	align-items: end;
+	align-items: center;
 }
 .navbar .navbar-brand {}
 .navbar .navbar-menu-toggle {
@@ -21,12 +21,13 @@ let style = Style(/* css */ `
 	align-items: center;
 }
 .navbar .navbar-menu-toggle .icon {
-	display: none;
 	width: 3rem;
 	height: 3rem;
-	background: red;
 }
-.navbar .navbar-menu-toggle input {
+.navbar [name=navbar-menu-toggle] {
+	display: none;
+}
+.navbar .navbar-menu-toggle {
 	display: none;
 }
 .navbar .navbar-menu-item {
@@ -40,8 +41,8 @@ let style = Style(/* css */ `
 	border-bottom: 2px solid black;
 	margin-bottom: calc(0.25rem - 1px)
 }
-@media (max-width: 480px) {
-	.navbar .navbar-menu-toggle .icon {
+@media (max-width: 768px) {
+	.navbar .navbar-menu-toggle {
 		display: initial;
 	}
 	.navbar .navbar-menu {
@@ -59,33 +60,34 @@ let style = Style(/* css */ `
 `)
 
 function Navbar(
-  attrs: { brand: Node; menuRoutes: MenuRoute[] },
+  attrs: { brand: Node; menuRoutes: MenuRoute[]; toggleId?: string },
   context: Context,
 ) {
   let currentUrl = getContextUrl(context)
+  let toggleId = attrs.toggleId || 'navbar-menu-toggle'
   return (
     <nav class="navbar">
       {style}
       <div class="navbar-brand">{attrs.brand}</div>
-      <label class="navbar-menu-toggle">
+      <label class="navbar-menu-toggle" for={toggleId}>
         {menuIcon}
-        <input name="navbar-menu-toggle" type="checkbox" />
-        <div class="navbar-menu">
-          {mapArray(attrs.menuRoutes, route => (
-            <Link
-              class={flagsToClassName({
-                'navbar-menu-item': true,
-                'selected':
-                  currentUrl === route.url ||
-                  (route.menuUrl ? currentUrl === route.menuUrl : false),
-              })}
-              href={route.menuUrl || route.url}
-            >
-              {route.menuText}
-            </Link>
-          ))}
-        </div>
       </label>
+      <input name="navbar-menu-toggle" type="checkbox" id={toggleId} />
+      <div class="navbar-menu">
+        {mapArray(attrs.menuRoutes, route => (
+          <Link
+            class={flagsToClassName({
+              'navbar-menu-item': true,
+              'selected':
+                currentUrl === route.url ||
+                (route.menuUrl ? currentUrl === route.menuUrl : false),
+            })}
+            href={route.menuUrl || route.url}
+          >
+            {route.menuText}
+          </Link>
+        ))}
+      </div>
     </nav>
   )
 }

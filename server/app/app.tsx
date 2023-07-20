@@ -19,7 +19,6 @@ import { config } from '../config.js'
 import Stats from './stats.js'
 import { MuteConsole } from './components/script.js'
 import { matchRoute, menuRoutes, PageRouteMatch } from './routes.js'
-import { topMenu } from './components/top-menu.js'
 import Chatroom from './pages/chatroom.js'
 import { redirectDict } from './routes.js'
 import type { ClientMountMessage, ClientRouteMessage } from '../../client/types'
@@ -69,31 +68,21 @@ export function App(route: PageRouteMatch): Element {
         {style}
         <Navbar
           brand={
-            <h1 class="title">
-              ts-liveview{' '}
-              <a href="https://news.ycombinator.com/item?id=22830472">HN</a>{' '}
-              <a href="https://github.com/beenotung/ts-liveview">git</a>
-            </h1>
+            <div style="color: darkblue; font-weight: bold">
+              <span style="font-size: 1.7rem" class="text-no-wrap">
+                ts-liveview
+              </span>{' '}
+              <div class="text-no-wrap">
+                <a href="https://news.ycombinator.com/item?id=22830472">HN</a>{' '}
+                <a href="https://github.com/beenotung/ts-liveview">git</a>
+              </div>
+            </div>
           }
           menuRoutes={menuRoutes}
         />
         <hr />
-        <h1 class="title">
-          ts-liveview{' '}
-          <a href="https://news.ycombinator.com/item?id=22830472">HN</a>{' '}
-          <a href="https://github.com/beenotung/ts-liveview">git</a>
-        </h1>
         {scripts}
-        <Stats />
-        {topMenu}
-        {config.demo_router ? (
-          <fieldset>
-            <legend>Router Demo</legend>
-            {route.node}
-          </fieldset>
-        ) : (
-          route.node
-        )}
+        {route.node}
         <Flush />
         <Footer />
       </>,
@@ -103,8 +92,9 @@ export function App(route: PageRouteMatch): Element {
 
 function Footer() {
   return (
-    <footer>
+    <footer style="border-top: 1px solid #aaa; padding-top: 0.5rem; margin-top: 0.5rem">
       <PickLanguage style="text-align: end" />
+      <Stats />
     </footer>
   )
 }
