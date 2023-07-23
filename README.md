@@ -190,7 +190,7 @@ Example using _getter and setter_ see [thermostat.tsx](./server/app/pages/thermo
 
 ## Template of common use cases
 
-- [x] Navbar
+- [x] Foldable Navbar
 - [x] Foldable Sidebar
 - [x] Login / Register (branch: v5-auth-template)
 
