@@ -70,8 +70,8 @@ let brand = (
   </div>
 )
 
-// export let App = NavbarApp
-export let App = SidebarApp
+export let App = NavbarApp
+// export let App = SidebarApp
 
 export function NavbarApp(route: PageRouteMatch): Element {
   // you can write the AST direct for more compact wire-format
