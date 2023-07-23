@@ -9,7 +9,10 @@ export let menuIcon = (
     viewBox="0 0 512 512"
     width="512"
     height="512"
+    aria-hidden="true"
   >
+    {/* fallback text in case path cannot be displayed */}
+    <span style="font-size: 2rem">☰</span>
     <path
       fill="none"
       stroke="currentColor"

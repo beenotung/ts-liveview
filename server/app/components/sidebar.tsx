@@ -115,6 +115,7 @@ function Sidebar(
         <label
           class="sidebar-menu-toggle sidebar-foldable-animation"
           for={toggleId}
+          aria-label="toggle navigation menu"
         >
           {menuIcon}
         </label>
