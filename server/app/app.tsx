@@ -30,6 +30,7 @@ import DemoUpload from './pages/demo-upload.js'
 import { getWsCookies } from './cookie.js'
 import { PickLanguage } from './components/ui-language.js'
 import Navbar from './components/navbar.js'
+import Sidebar from './components/sidebar.js'
 
 if (config.development) {
   scanTemplateDir('template')
@@ -57,7 +58,22 @@ let scripts = config.development ? (
   </>
 )
 
-export function App(route: PageRouteMatch): Element {
+let brand = (
+  <div style="color: darkblue; font-weight: bold">
+    <span style="font-size: 1.7rem" class="text-no-wrap">
+      ts-liveview
+    </span>{' '}
+    <div class="text-no-wrap">
+      <a href="https://news.ycombinator.com/item?id=22830472">HN</a>{' '}
+      <a href="https://github.com/beenotung/ts-liveview">git</a>
+    </div>
+  </div>
+)
+
+// export let App = NavbarApp
+export let App = SidebarApp
+
+export function NavbarApp(route: PageRouteMatch): Element {
   // you can write the AST direct for more compact wire-format
   return [
     'div.app',
@@ -66,23 +82,32 @@ export function App(route: PageRouteMatch): Element {
       // or you can write in JSX for better developer-experience (if you're coming from React)
       <>
         {style}
-        <Navbar
-          brand={
-            <div style="color: darkblue; font-weight: bold">
-              <span style="font-size: 1.7rem" class="text-no-wrap">
-                ts-liveview
-              </span>{' '}
-              <div class="text-no-wrap">
-                <a href="https://news.ycombinator.com/item?id=22830472">HN</a>{' '}
-                <a href="https://github.com/beenotung/ts-liveview">git</a>
-              </div>
-            </div>
-          }
-          menuRoutes={menuRoutes}
-        />
+        <Navbar brand={brand} menuRoutes={menuRoutes} />
         <hr />
         {scripts}
         {route.node}
+        <Flush />
+        <Footer />
+      </>,
+    ],
+  ]
+}
+
+export function SidebarApp(route: PageRouteMatch): Element {
+  // you can write the AST direct for more compact wire-format
+  return [
+    'div.app',
+    {},
+    [
+      // or you can write in JSX for better developer-experience (if you're coming from React)
+      <>
+        {style}
+        {scripts}
+        {Sidebar.style}
+        <div class={Sidebar.containerClass}>
+          <Sidebar brand={brand} menuRoutes={menuRoutes} />
+          {route.node}
+        </div>
         <Flush />
         <Footer />
       </>,
