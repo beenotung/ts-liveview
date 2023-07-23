@@ -52,7 +52,7 @@ let style = Style(/* css */ `
 		inset: 0;
 		margin-top: 5rem;
 	}
-	.navbar input:checked ~ .navbar-menu {
+	.navbar [name=navbar-menu-toggle]:checked ~ .navbar-menu {
 		display: initial;
 	}
 	.navbar .navbar-menu-item {}

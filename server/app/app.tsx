@@ -106,18 +106,28 @@ export function SidebarApp(route: PageRouteMatch): Element {
         {Sidebar.style}
         <div class={Sidebar.containerClass}>
           <Sidebar brand={brand} menuRoutes={menuRoutes} />
-          {route.node}
+          <div
+            class={Sidebar.mainContainerClass}
+            style="display: flex; flex-direction: column"
+          >
+            <div style="flex-grow: 1; padding: 0 1rem">{route.node}</div>
+            <Footer style="padding: 0.5rem;" />
+          </div>
         </div>
         <Flush />
-        <Footer />
       </>,
     ],
   ]
 }
 
-function Footer() {
+function Footer(attrs: { style?: string }) {
   return (
-    <footer style="border-top: 1px solid #aaa; padding-top: 0.5rem; margin-top: 0.5rem">
+    <footer
+      style={
+        'border-top: 1px solid #aaa; padding-top: 0.5rem; margin-top: 0.5rem;' +
+        (attrs.style || '')
+      }
+    >
       <PickLanguage style="text-align: end" />
       <Stats />
     </footer>
