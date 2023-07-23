@@ -21,8 +21,8 @@ let style = Style(/* css */ `
 	align-items: center;
 }
 .navbar .navbar-menu-toggle .icon {
-	width: 3rem;
-	height: 3rem;
+	width: 2rem;
+	height: 2rem;
 }
 .navbar [name=navbar-menu-toggle] {
 	display: none;
@@ -69,7 +69,11 @@ function Navbar(
     <nav class="navbar">
       {style}
       <div class="navbar-brand">{attrs.brand}</div>
-      <label class="navbar-menu-toggle" for={toggleId}>
+      <label
+        class="navbar-menu-toggle"
+        for={toggleId}
+        aria-label="toggle navigation menu"
+      >
         {menuIcon}
       </label>
       <input name="navbar-menu-toggle" type="checkbox" id={toggleId} />
