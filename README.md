@@ -188,6 +188,12 @@ The application can be built on top of reactive model powered by [S.js](https://
 
 Example using _getter and setter_ see [thermostat.tsx](./server/app/pages/thermostat.tsx)
 
+## Template of common use cases
+
+- [x] Navbar
+- [x] Foldable Sidebar
+- [x] Login / Register (branch: v5-auth-template)
+
 ## Examples / Demo
 
 - [x] Thermostat [[source](./server/app/pages/thermostat.tsx) | [demo](https://liveviews.cc/thermostat)]
