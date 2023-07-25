@@ -45,7 +45,7 @@ let content = (
       which improve the user-experience (UX).
     </p>
 
-    <h1>ts-liveview code snippet</h1>
+    <h2>ts-liveview code snippet</h2>
     <p>You can either write in JSX or AST.</p>
     {Comment(`using table to align 3 code blocks with the same width`)}
     <table>
