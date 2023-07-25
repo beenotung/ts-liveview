@@ -183,6 +183,9 @@ function DemoForm() {
           <h1>Demo Form</h1>
           <form method="POST" action="/form/submit" onsubmit="emitForm(event)">
             {style}
+
+            <h2>Sanitized user input</h2>
+
             <div class="inline-label-container">
               <label for="username">username</label>
               <span id="username-out" title="Live preview of username" />
