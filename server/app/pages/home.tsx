@@ -12,7 +12,7 @@ import SourceCode from '../components/source-code.js'
 
 let content = (
   <div id="home">
-    <h2>Home Page</h2>
+    <h1>Home Page</h1>
     <p>
       This website is a{' '}
       <b>
@@ -45,7 +45,7 @@ let content = (
       which improve the user-experience (UX).
     </p>
 
-    <h2>ts-liveview code snippet</h2>
+    <h1>ts-liveview code snippet</h1>
     <p>You can either write in JSX or AST.</p>
     {Comment(`using table to align 3 code blocks with the same width`)}
     <table>

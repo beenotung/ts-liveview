@@ -14,7 +14,7 @@ echo "import { o } from '../jsx/jsx.js'
 
 function $name() {
   return <div id='$name'>
-    <h2>$name</h2>
+    <h1>$name</h1>
   </div>
 }
 export default $name" > "$file"

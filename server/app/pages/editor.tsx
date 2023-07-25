@@ -81,7 +81,7 @@ export function Editor(_attrs: attrs, context: Context) {
   return (
     <div id="image-editor">
       {style}
-      <h2>Image Editor Demo</h2>
+      <h1>Image Editor Demo</h1>
       <p>
         This demo illustrates how low-latency can it be even when the state and
         logic are maintained on the server.

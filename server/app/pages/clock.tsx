@@ -45,17 +45,17 @@ function ClockText(_attrs: {}, context: Context) {
 
 const Clock = (
   <div id="clock">
-    <h2>Clock Demo</h2>
+    <h1>Clock Demo</h1>
     <p>
       This page demonstrates how to show content with respect to the client's
       language and timezone.
     </p>
-    <h3>Server-side Rendered Clock</h3>
+    <h2>Server-side Rendered Clock</h2>
     <p>This is showing system time from the server, updated over websocket.</p>
     <p id="ssrClock">
       <ClockText />
     </p>
-    <h3>Client-side Rendered Clock</h3>
+    <h2>Client-side Rendered Clock</h2>
     <p>This is showing system time from the browser, updated locally.</p>
     <p>
       The initial value is rendered on the server, then "re-hydrated" on the

@@ -205,7 +205,7 @@ let Thermostat: Node = (
   height: var(--size);
 }
 `)}
-    <h2>Thermostat Demo</h2>
+    <h1>Thermostat Demo</h1>
     <p>This demo illustrates how to do cross-browser realtime update.</p>
     <p>
       The state is globally shared (for all connections) and the logic are
@@ -215,7 +215,7 @@ let Thermostat: Node = (
       In addition, the document title is dynamically generated and updated in
       realtime.
     </p>
-    <h3 class="title">Interactive UIs</h3>
+    <h2 class="title">Interactive UIs</h2>
     <div class="outer circle" style={StatusStyles[state.status]}>
       <div class="text-container">
         Target:&nbsp;

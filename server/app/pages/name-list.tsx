@@ -23,7 +23,7 @@ let names = ['alice', 'bob', 'charlie']
 
 let content = (
   <div>
-    <h2>List Editing Demo</h2>
+    <h1>List Editing Demo</h1>
     <View />
   </div>
 )

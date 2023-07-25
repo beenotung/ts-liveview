@@ -21,7 +21,7 @@ let style = Style(/* css */ `
 
 let content = (
   <div id="demo-inputs">
-    <h2>Input Components Demo</h2>
+    <h1>Input Components Demo</h1>
     <p>This page demo component based input fields.</p>
 
     {style}

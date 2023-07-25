@@ -50,7 +50,7 @@ let style = Style(/* css */ `
 		position: fixed;
 		background-color: #eee;
 		inset: 0;
-		margin-top: 5rem;
+		margin-top: 3rem;
 	}
 	.navbar [name=navbar-menu-toggle]:checked ~ .navbar-menu {
 		display: initial;

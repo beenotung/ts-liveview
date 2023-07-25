@@ -180,7 +180,7 @@ function DemoForm() {
     <div id="DemoForm">
       <div>
         <div style="display: inline-flex; flex-direction: column">
-          <h2>Demo Form</h2>
+          <h1>Demo Form</h1>
           <form method="POST" action="/form/submit" onsubmit="emitForm(event)">
             {style}
             <div class="inline-label-container">
@@ -199,7 +199,7 @@ function DemoForm() {
               Hint: Try <code>Bob</code> and <code>{'<b>o</b>'}</code>
             </div>
 
-            <h3>Demo more input types</h3>
+            <h2>Demo more input types</h2>
 
             <label for="password">password</label>
             <input
@@ -258,7 +258,7 @@ function DemoForm() {
         <div style="display: inline-block; width: 3rem"></div>
 
         <div style="display: inline-flex; flex-direction: column">
-          <h2>Code Snippet</h2>
+          <h1>Code Snippet</h1>
 
           <p>HTML code is escaped by default</p>
           <fieldset>

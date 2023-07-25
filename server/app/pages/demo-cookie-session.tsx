@@ -44,7 +44,7 @@ function DemoCookieSession(_attrs: attrs, context: Context) {
   return (
     <div id="demo-cookie-session">
       {style}
-      <h2>Demo Cookie-based Session</h2>
+      <h1>Demo Cookie-based Session</h1>
       <p>For demo purpose, the token cookie will expire in 30 seconds</p>
       <div class="buttons">
         <button onclick="get('/cookie-session/token').then(()=>location.reload())">

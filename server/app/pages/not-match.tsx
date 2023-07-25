@@ -10,7 +10,7 @@ let Url: ComponentFn = (_attrs: {}, context) => {
 
 let NotMatch: Node = (
   <div id="not-match">
-    <h2>404 Page Not Found</h2>
+    <h1>404 Page Not Found</h1>
     <p>
       url:{' '}
       <code>
