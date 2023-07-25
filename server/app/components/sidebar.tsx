@@ -4,7 +4,7 @@ import { flagsToClassName } from '../jsx/html.js'
 import { o } from '../jsx/jsx.js'
 import { Node } from '../jsx/types.js'
 import { mapArray } from './fragment.js'
-import { MenuRoute } from './menu.js'
+import { MenuRoute, isCurrentMenuRoute } from './menu.js'
 import { Link } from './router.js'
 import Style from './style.js'
 
@@ -126,9 +126,7 @@ function Sidebar(
             <Link
               class={flagsToClassName({
                 'sidebar-menu-item': true,
-                'selected':
-                  currentUrl === route.url ||
-                  (route.menuUrl ? currentUrl === route.menuUrl : false),
+                'selected': isCurrentMenuRoute(currentUrl, route),
               })}
               href={route.menuUrl || route.url}
             >

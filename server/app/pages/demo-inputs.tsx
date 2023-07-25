@@ -62,6 +62,7 @@ let routes: Routes = {
     title: title('Demo input components'),
     description: 'Demonstrate component-based input fields',
     menuText: 'Inputs',
+    matchPrefix: true,
     node: content,
   },
   '/inputs/select': {
