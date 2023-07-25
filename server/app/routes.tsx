@@ -77,6 +77,7 @@ let routeDict: Routes = {
       'About ts-liveview - a server-side rendering realtime webapp framework with progressive enhancement',
     menuText: 'About',
     menuUrl: '/about',
+    menuMatchPrefix: true,
     node: About,
     streaming: true,
   },
@@ -154,7 +155,7 @@ Object.entries(routeDict).forEach(([url, route]) => {
       url,
       menuText: route.menuText,
       menuUrl: route.menuUrl || url,
-      matchPrefix: route.matchPrefix,
+      menuMatchPrefix: route.menuMatchPrefix,
     })
   }
 })

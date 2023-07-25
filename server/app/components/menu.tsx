@@ -11,14 +11,14 @@ export type MenuRoute = {
   url: string
   menuText: string
   menuUrl?: string // optional, default to be same as PageRoute.url
-  matchPrefix?: boolean
+  menuMatchPrefix?: boolean
 }
 
 export function isCurrentMenuRoute(
   currentUrl: string,
   route: MenuRoute,
 ): boolean {
-  return route.matchPrefix
+  return route.menuMatchPrefix
     ? currentUrl.startsWith(route.url) ||
         (route.menuUrl && currentUrl.startsWith(route.menuUrl)) ||
         false
