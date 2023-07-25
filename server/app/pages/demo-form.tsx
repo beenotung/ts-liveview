@@ -258,7 +258,7 @@ function DemoForm() {
         <div style="display: inline-block; width: 3rem"></div>
 
         <div style="display: inline-flex; flex-direction: column">
-          <h1>Code Snippet</h1>
+          <h2>Code Snippet</h2>
 
           <p>HTML code is escaped by default</p>
           <fieldset>
