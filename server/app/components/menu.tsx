@@ -11,12 +11,25 @@ export type MenuRoute = {
   url: string
   menuText: string
   menuUrl?: string // optional, default to be same as PageRoute.url
+  matchPrefix?: boolean
+}
+
+export function isCurrentMenuRoute(
+  currentUrl: string,
+  route: MenuRoute,
+): boolean {
+  return route.matchPrefix
+    ? currentUrl.startsWith(route.url) ||
+        (route.menuUrl && currentUrl.startsWith(route.menuUrl)) ||
+        false
+    : currentUrl == route.url ||
+        (route.menuUrl && currentUrl == route.menuUrl) ||
+        false
 }
 
 export function Menu(
   attrs: {
     routes: MenuRoute[]
-    matchPrefix?: boolean
     separator?: Node
     attrs?: attrs
   },
@@ -42,13 +55,7 @@ export function Menu(
             <Link
               href={route.menuUrl || route.url}
               class={flagsToClassName({
-                selected:
-                  currentUrl === route.url ||
-                  (route.menuUrl
-                    ? attrs.matchPrefix
-                      ? currentUrl.startsWith(route.menuUrl)
-                      : currentUrl === route.menuUrl
-                    : false),
+                selected: isCurrentMenuRoute(currentUrl, route),
               })}
             >
               {route.menuText}

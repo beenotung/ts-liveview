@@ -154,6 +154,7 @@ Object.entries(routeDict).forEach(([url, route]) => {
       url,
       menuText: route.menuText,
       menuUrl: route.menuUrl || url,
+      matchPrefix: route.matchPrefix,
     })
   }
 })
