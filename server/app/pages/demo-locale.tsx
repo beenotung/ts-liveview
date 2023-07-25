@@ -17,7 +17,7 @@ function DemoLocale(_attrs: {}, context: Context) {
 function En(attrs: { lang: string; timezone: string }) {
   return (
     <>
-      <h2>Demo Locale</h2>
+      <h1>Demo Locale</h1>
       <p>
         This page demo supporting users with multiple langues and timezones.
       </p>
@@ -32,7 +32,7 @@ function En(attrs: { lang: string; timezone: string }) {
 function Zh(attrs: { lang: string; timezone: string }) {
   return (
     <>
-      <h2>本地化設置示範</h2>
+      <h1>本地化設置示範</h1>
       <p>此頁面示範支援多種語言和時區的使用者。</p>
       <p>目前語言：{attrs.lang}</p>
       <p>目前時區：{attrs.timezone}</p>

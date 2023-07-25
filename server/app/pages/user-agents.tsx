@@ -54,7 +54,7 @@ function Tables() {
 
 let UserAgents = (
   <div id="user-agents">
-    <h2>User Agents of Visitors</h2>
+    <h1>User Agents of Visitors</h1>
     {Style(/* css */ `
 #user-agents table {
   border-collapse: collapse;

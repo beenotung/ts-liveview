@@ -58,7 +58,7 @@ function View() {
   return (
     <div id="uploadDemo">
       {style}
-      <h2>Upload Demo</h2>
+      <h1>Upload Demo</h1>
       <p>
         This page demo image upload with client-side (canvas based) compression.
         Each image is compressed to {format_byte(maxFileSize / maxFiles)}.
@@ -98,9 +98,9 @@ function View() {
         </template>
         <input type="submit" value="Upload" />
         <input type="reset" value="Reset" />
-        <h3>Upload Result</h3>
+        <h2>Upload Result</h2>
         <p id="demoUploadResult">Not uploaded yet.</p>
-        <h3>Uploaded Images</h3>
+        <h2>Uploaded Images</h2>
         <div id="uploadedImageList">
           {filenames.length === 0 ? (
             <p>No images uploaded yet.</p>

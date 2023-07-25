@@ -20,7 +20,7 @@ markdown = (
 // The JSX expression don't need to be re-built on every render
 export let About = (
   <div id="about">
-    <h2>About Page</h2>
+    <h1>About Page</h1>
     <p>
       This page is generated from README.md in the <code>markdown</code> format.
     </p>

@@ -48,7 +48,7 @@ const TopN = 20
 
 let content = (
   <div id="auto-complete-demo">
-    <h2>Auto-complete Demo</h2>
+    <h1>Auto-complete Demo</h1>
     <p>
       This page demo how to implement server-filtered auto-complete input field.
     </p>

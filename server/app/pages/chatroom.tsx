@@ -344,7 +344,7 @@ function Chatroom(_attrs: {}, context: Context) {
     <>
       {style}
       <div id="chatroom">
-        <h2>Chatroom Demo</h2>
+        <h1>Chatroom Demo</h1>
         <p>
           The locale is detected from HTTP header <code>accept-language</code>{' '}
           in the initial request.

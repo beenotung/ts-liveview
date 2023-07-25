@@ -12,7 +12,7 @@ function Calculator() {
   color: green
 }
 `)}
-      <h2>Calculator Demo</h2>
+      <h1>Calculator Demo</h1>
       <p>This page demo completely local stateful component.</p>
       <p>
         The realtime-update does not relay on the server once this page is

@@ -30,7 +30,7 @@ let content = (
       {placeholder} attributes.
     </p>
 
-    <h3>Approach with {code('<Select/>')} component</h3>
+    <h2>Approach with {code('<Select/>')} component</h2>
 
     <div class="code-demo">
       <fieldset>
@@ -63,11 +63,11 @@ let content = (
       </fieldset>
     </div>
 
-    <h3>Approaches without component</h3>
+    <h2>Approaches without component</h2>
 
-    <h4>
+    <h3>
       Workaround of {placeholder} for {select}
-    </h4>
+    </h3>
     <p>
       A workaround to display {placeholder} for {select} is to put a disabled{' '}
       {option} with empty value.
@@ -103,9 +103,9 @@ let content = (
       </fieldset>
     </div>
 
-    <h4>
+    <h3>
       Workarounds of {value} for {select}
-    </h4>
+    </h3>
 
     <p>
       One approach is to set the value of select field with inline javascript.

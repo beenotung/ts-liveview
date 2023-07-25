@@ -18,7 +18,7 @@ import { apiEndpointTitle, title } from '../../config.js'
 
 function $Name() {
   return <div id='$name'>
-    <h2>$Name</h2>
+    <h1>$Name</h1>
   </div>
 }
 
