@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Request, Response, NextFunction } from 'express'
 import spdy from 'spdy-fixes'
 import { WebSocketServer } from 'ws'
 import { config } from './config.js'
@@ -13,6 +13,7 @@ import { cookieMiddleware } from './app/cookie.js'
 import { listenWSSCookie } from './app/cookie.js'
 import { print } from 'listening-on'
 import { storeRequestLog } from '../db/store.js'
+import { HttpError } from './http-error.js'
 
 const log = debugLog('index.ts')
 log.enabled = true
@@ -59,6 +60,11 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieMiddleware)
 
 attachRoutes(app)
+
+app.use((error: HttpError, req: Request, res: Response, next: NextFunction) => {
+  res.status(error.statusCode || 500)
+  res.json({ error: String(error) })
+})
 
 const port = config.port
 const protocol = config.serverOptions.key ? 'https' : 'http'
