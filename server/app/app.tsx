@@ -36,6 +36,7 @@ import { getWsCookies } from './cookie.js'
 import { PickLanguage } from './components/ui-language.js'
 import Navbar from './components/navbar.js'
 import Sidebar from './components/sidebar.js'
+import Profile from './pages/profile.js'
 import { logRequest } from './log.js'
 import { WindowStub } from '../../client/internal.js'
 import { updateRequestSession } from '../../db/request-log.js'
@@ -199,6 +200,7 @@ function Footer(attrs: { style?: string }) {
 export function attachRoutes(app: Router) {
   // ajax/upload/middleware routes
   app.use(renewAuthCookieMiddleware)
+  Profile.attachRoutes(app)
 
   // redirect routes
   Object.entries(redirectDict).forEach(([from, to]) =>
