@@ -51,6 +51,7 @@ export type User = {
   password_hash: null | string // char(60)
   email: null | string
   tel: null | string
+  avatar: null | string
 }
 
 export type RequestLog = {
