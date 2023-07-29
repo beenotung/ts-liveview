@@ -489,6 +489,7 @@ async function submit(context: InputContext): Promise<Node> {
       password_hash: await hashPassword(input.password),
       email: input.email,
       tel: null,
+      avatar: null,
     })
 
     let main: Node

@@ -73,6 +73,7 @@ username varchar(32)
 password_hash char(60) NULL
 email varchar(320) NULL
 tel varchar(16) NULL
+avatar varchar(256) NULL
 
 
 # zoom: 1.000
