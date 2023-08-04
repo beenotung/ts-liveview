@@ -93,6 +93,6 @@ const Clock = (
     <SourceCode page="clock.tsx" />
   </div>
 )
-var spaClock: HTMLDivElement | undefined
+declare let spaClock: HTMLDivElement | undefined
 
 export default Clock
