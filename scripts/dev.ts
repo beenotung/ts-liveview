@@ -19,7 +19,9 @@ if (mode != 'build' && mode != 'serve') {
 
 main()
 
-let stop = async () => {}
+let stop = async () => {
+  /* this callback will be replaced to dispose current context */
+}
 
 if (mode === 'serve') {
   process.stdin.on('data', async chunk => {
