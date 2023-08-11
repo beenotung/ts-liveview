@@ -11,13 +11,23 @@ import { createUploadForm, toFiles } from '../upload.js'
 import { HttpError } from '../../http-error.js'
 import Style from '../components/style.js'
 import { renderError } from '../components/error.js'
+import { Raw } from '../components/raw.js'
+import { loadClientPlugin } from '../../client-plugin.js'
 
 let style = Style(/* css */ `
 #profile .avatar {
   max-width: 128px;
   max-height: 128px;
 }
+#profile #previewImg {
+  max-width: 160px;
+  max-height: 160px;
+}
 `)
+
+let imagePlugin = loadClientPlugin({
+  entryFile: 'dist/client/image.js',
+})
 
 let ProfilePage = (_attrs: {}, context: DynamicContext) => {
   let user_id = getAuthUserId(context)
@@ -67,10 +77,37 @@ function renderProfile(user_id: number, context: DynamicContext) {
           )}
         </div>
         <label>
-          Change avatar: <input type="file" name="avatar" accept="image/*" />
+          Change avatar:{' '}
+          <input
+            type="file"
+            name="avatar"
+            accept="image/*"
+            onchange="previewAvatar(this)"
+          />
         </label>
-        <input type="submit" value="Upload Avatar" />
+        <div id="previewContainer" hidden>
+          <div id="previewMessage"></div>
+          <img id="previewImg" />
+          <br />
+          <input type="submit" value="Upload Avatar" />
+        </div>
         {error ? renderError(error, context) : null}
+        {Raw(/* html */ `
+${imagePlugin.script}
+<script>
+async function previewAvatar(input) {
+  let [image] = await compressPhotos(input.files)
+  if (!image) return
+  previewImg.src = image.dataUrl
+  let kb = Math.ceil(image.file.size / 1024)
+  previewMessage.textContent = 'Image Preview (' + kb + ' KB)'
+  let list = new DataTransfer()
+  list.items.add(image.file)
+  input.files = list.files
+  previewContainer.hidden = false
+}
+</script>
+`)}
       </form>
       <a href="/logout" rel="nofollow">
         Logout
@@ -117,7 +154,10 @@ function attachRoutes(app: Router) {
     let user = proxy.user[user_id]
     if (!user) return reject(404, 'user not found')
 
-    let form = createUploadForm({ mimeTypeRegex: /^image\/.+/ })
+    let form = createUploadForm({
+      mimeTypeRegex: /^image\/.+/,
+      maxFileSize: 300 * 1024,
+    })
     form.parse(req, (err, fields, files) => {
       if (err) return next(err)
 
