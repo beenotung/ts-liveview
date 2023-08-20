@@ -36,6 +36,11 @@ export function escapeHTMLAttributeValue(
   return JSON.stringify(str)
 }
 
+// to be used in template that has already wrapped the attribute value in double quotes
+export function unquote(str: string): string {
+  return str.slice(1, str.length - 1)
+}
+
 export function nodeToHTML(node: Node, context: Context): html {
   let html = ''
   let stream = {

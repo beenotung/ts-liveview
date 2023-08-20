@@ -6,6 +6,7 @@ import type { Element, Node } from './jsx/types'
 import {
   escapeHTMLAttributeValue,
   escapeHTMLTextContent,
+  unquote,
   writeNode,
 } from './jsx/html.js'
 import { sendHTMLHeader } from './express.js'
@@ -42,8 +43,8 @@ function renderTemplate(
 ) {
   const app = options.app
   renderIndexTemplate(stream, {
-    title: escapeHTMLAttributeValue(options.title),
-    description: escapeHTMLAttributeValue(options.description),
+    title: escapeHTMLTextContent(options.title),
+    description: unquote(escapeHTMLAttributeValue(options.description)),
     app:
       typeof app == 'string' ? app : stream => writeNode(stream, app, context),
   })
