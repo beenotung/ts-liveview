@@ -26,10 +26,15 @@ function sendMessage(message: ServerMessage, skip?: ManagedWebsocket) {
 }
 
 function loadNumber(file: string): number {
-  if (existsSync(file)) {
-    return parseInt(readFileSync(file).toString())
+  if (!existsSync(file)) {
+    return 0
   }
-  return 0
+  let text = readFileSync(file).toString()
+  let num = parseInt(text)
+  if (Number.isNaN(num)) {
+    throw new Error(`Invalid number, file: ${file}, text: ${text}`)
+  }
+  return num
 }
 
 function saveNumber(file: string, value: number) {
