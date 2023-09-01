@@ -32,13 +32,17 @@ let guestView = (
       <label>
         Username or email address
         <div class="input-container">
-          <input name="loginId" />
+          <input name="loginId" autocomplete="username" />
         </div>
       </label>
       <label>
         Password
         <div class="input-container">
-          <input name="password" type="password" />
+          <input
+            name="password"
+            type="password"
+            autocomplete="current-password"
+          />
         </div>
       </label>
       <div class="input-container">
