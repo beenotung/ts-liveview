@@ -111,6 +111,7 @@ let guestView = (
         name="username"
         msgId="usernameMsg"
         oninput="emit('/register/check-username', this.value)"
+        autocomplete="username"
       />
       <Field
         label="Email (optional)"
@@ -118,6 +119,7 @@ let guestView = (
         name="email"
         msgId="emailMsg"
         oninput="emit('/register/check-email', this.value)"
+        autocomplete="email"
       />
       <Field
         label="Password"
@@ -125,6 +127,7 @@ let guestView = (
         name="password"
         msgId="passwordMsg"
         oninput="emit('/register/check-password', this.value);this.form.confirm_password.value=''"
+        autocomplete="new-password"
       />
 
       <Field
@@ -133,6 +136,7 @@ let guestView = (
         name="confirm_password"
         msgId="confirmPasswordMsg"
         oninput="checkPassword(this.form)"
+        autocomplete="new-password"
       />
       {Raw(/* html */ `<script>
 function checkPassword (form) {
@@ -171,6 +175,7 @@ function Field(
     name: string
     oninput: string
     msgId: string
+    autocomplete?: string
   },
   context: InputContext,
 ) {
@@ -186,6 +191,7 @@ function Field(
             name={attrs.name}
             oninput={attrs.oninput}
             value={value}
+            autocomplete={attrs.autocomplete}
           />
         </div>
       </label>
