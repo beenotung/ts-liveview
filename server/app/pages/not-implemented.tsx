@@ -1,22 +1,16 @@
 import { o } from '../jsx/jsx.js'
-import { Context, getContextUrl } from '../context.js'
-import type { attrs, Node } from '../jsx/types'
-
-function Url(_attrs: attrs, context: Context) {
-  let url = getContextUrl(context)
-  return url
-}
+import type { Node } from '../jsx/types'
+import StatusPage from '../components/status-page.js'
 
 let NotImplemented: Node = (
-  <div class="not-implemented">
-    <h1>501 Not Implemented</h1>
-    <p>
-      url:{' '}
-      <code>
-        <Url />
-      </code>
-    </p>
-  </div>
+  <StatusPage
+    id="not-implemented"
+    title={{
+      en: '501 Function Not Yet Implemented',
+      zh: '501 功能尚未實現',
+    }}
+    page="not-implemented.tsx"
+  />
 )
 
 export default NotImplemented
