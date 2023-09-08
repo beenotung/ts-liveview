@@ -16,13 +16,14 @@ import DemoInputComponents from './pages/demo-inputs.js'
 import NameList from './pages/name-list.js'
 import Editor from './pages/editor.js'
 import Home from './pages/home.js'
-import NotMatch from './pages/not-match.js'
+import NotFoundPageRoute from './pages/not-found.js'
 import Thermostat from './pages/thermostat.js'
 import { then } from '@beenotung/tslib/result.js'
 import DemoLocale from './pages/demo-locale.js'
 import Clock from './pages/clock.js'
 import type { MenuRoute } from './components/menu'
 import DemoUpload from './pages/demo-upload.js'
+import { isPreferZh } from './components/locale.js'
 
 let titles: Record<string, string> = {}
 
@@ -170,18 +171,11 @@ Object.entries(redirectDict).forEach(([url, href]) =>
   }),
 )
 
-export let NotFoundPage: PageRoute = {
-  title: title('Page Not Found'),
-  description: 'This page is not found. Probably due to outdated menu.',
-  node: NotMatch,
-  status: 404,
-}
-
 export function matchRoute(
   context: DynamicContext,
 ): PageRouteMatch | Promise<PageRouteMatch> {
   let match = pageRouter.route(context.url)
-  let route: PageRoute = match ? match.value : NotFoundPage
+  let route: PageRoute = match ? match.value : NotFoundPageRoute
   if (route.streaming === undefined) {
     route.streaming = StreamingByDefault
   }
