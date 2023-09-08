@@ -101,12 +101,7 @@ let routeDict: Routes = {
   ...DemoUpload.routes,
   ...DemoCookieSession.routes,
   ...Chatroom.routes,
-  '/locale': {
-    title: title('Locale Demo'),
-    description: 'Locale demo for multiple languages and timezone (i18n)',
-    menuText: 'Locale',
-    node: <DemoLocale />,
-  },
+  ...DemoLocale.routes,
   '/clock': {
     title: title('Clock'),
     description:
