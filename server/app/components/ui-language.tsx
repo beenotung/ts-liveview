@@ -4,9 +4,7 @@ import { o } from '../jsx/jsx.js'
 import { Raw } from './raw.js'
 
 export function PickLanguage(attrs: { style?: string }, context: Context) {
-  let lang =
-    getContextCookies(context)?.unsignedCookies.lang ||
-    getContextLanguage(context)
+  let lang = getContextLanguage(context)
   return (
     <div style={attrs.style}>
       {lang === 'zh' ? 'Language' : '界面語言'}:{' '}
