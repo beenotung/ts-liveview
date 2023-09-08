@@ -1,3 +1,4 @@
+import { isPreferZh } from '../components/locale.js'
 import SourceCode from '../components/source-code.js'
 import { PickLanguage } from '../components/ui-language.js'
 import { Context, getContextLanguage, getContextTimezone } from '../context.js'
@@ -8,7 +9,7 @@ function DemoLocale(_attrs: {}, context: Context) {
   let timezone = getContextTimezone(context) || 'unknown'
   return (
     <div id="demo-locale">
-      {lang?.includes('zh') ? Zh({ lang, timezone }) : En({ lang, timezone })}
+      {isPreferZh(context) ? Zh({ lang, timezone }) : En({ lang, timezone })}
       <SourceCode page="demo-locale.tsx" />
     </div>
   )
