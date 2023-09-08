@@ -23,7 +23,6 @@ import DemoLocale from './pages/demo-locale.js'
 import Clock from './pages/clock.js'
 import type { MenuRoute } from './components/menu'
 import DemoUpload from './pages/demo-upload.js'
-import { isPreferZh } from './components/locale.js'
 
 let titles: Record<string, string> = {}
 
