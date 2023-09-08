@@ -1,5 +1,4 @@
 import { Context, getContextLanguage } from '../context.js'
-import { getContextCookies } from '../cookie.js'
 import { o } from '../jsx/jsx.js'
 import { Raw } from './raw.js'
 
