@@ -3,7 +3,6 @@ import spdy from 'spdy-fixes'
 import { WebSocketServer } from 'ws'
 import { config } from './config.js'
 import { join } from 'path'
-import compression from 'compression'
 import { debugLog } from './debug.js'
 import { listenWSSConnection } from './ws/wss-lite.js'
 import { attachRoutes, onWsMessage } from './app/app.js'
@@ -44,9 +43,6 @@ app.use((req, res, next) => {
   next()
 })
 
-if (!config.behind_proxy) {
-  app.use(compression())
-}
 if (config.development) {
   app.use('/js', express.static(join('dist', 'client')))
 }
