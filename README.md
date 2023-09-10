@@ -21,7 +21,7 @@ npm init ts-liveview my-app
 
 cd my-app
 
-## auto setup self-signed https cert for local development, install packages and setup sqlite database
+## install packages and setup sqlite database
 ./scripts/init.sh
 
 ## starts the development server
@@ -33,6 +33,9 @@ To setup a cloned project, run `./scripts/init.sh`, which will install packages 
 To update database schema, see [db/README.md](./db/README.md)
 
 To deploy, setup [scripts/config](./scripts/config) then run `./scripts/deploy.sh`, which will build and deploy the server with knex migrate and pm2.
+
+To test https-required functions during development, run `./scripts/caddy-run.sh`, which will start a https reverse proxy.
+You can install caddy with `./scripts/caddy-install.sh` on Mac or Linux, or `./scripts/caddy-install.ps1` on Windows.
 
 Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liveview)
 

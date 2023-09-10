@@ -17,9 +17,6 @@ localhost_*.report.html
 # config
 .env
 .open
-*.cert
-*.key
-*.pem
 
 # MacOS
 .DS_Store
