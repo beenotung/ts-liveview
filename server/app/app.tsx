@@ -32,6 +32,7 @@ import { getWsCookies } from './cookie.js'
 import { PickLanguage } from './components/ui-language.js'
 import Navbar from './components/navbar.js'
 import Sidebar from './components/sidebar.js'
+import { storeRequestLog } from '../../db/store.js'
 
 if (config.development) {
   scanTemplateDir('template')
