@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express'
-import spdy from 'spdy-fixes'
+import http from 'http'
 import { WebSocketServer } from 'ws'
 import { config } from './config.js'
 import { join } from 'path'
@@ -18,7 +18,7 @@ const log = debugLog('index.ts')
 log.enabled = true
 
 const app = express()
-const server = spdy.createServer(config.serverOptions, app)
+const server = http.createServer(app)
 const wss = new WebSocketServer({ server })
 listenWSSCookie(wss)
 listenWSSConnection({
@@ -63,10 +63,9 @@ app.use((error: HttpError, req: Request, res: Response, next: NextFunction) => {
 })
 
 const port = config.port
-const protocol = config.serverOptions.key ? 'https' : 'http'
 server.listen(port, () => {
-  print({ port, protocol })
+  print(port)
   if (config.auto_open) {
-    open(`${protocol}://localhost:${port}`)
+    open(`http://localhost:${port}`)
   }
 })

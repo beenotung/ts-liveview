@@ -1,7 +1,6 @@
 import { config as loadEnv } from 'dotenv'
 import { readFileSync } from 'fs'
 import { populateEnv } from 'populate-env'
-import { ServerOptions } from 'spdy-fixes'
 
 loadEnv()
 
@@ -22,18 +21,6 @@ let env = {
 populateEnv(env, { mode: 'halt' })
 
 let behind_proxy = env.BEHIND_HTTPS_PROXY === 'true'
-
-let serverOptions: ServerOptions =
-  behind_proxy || env.HTTP_VERSION !== 2
-    ? {
-        spdy: {
-          plain: true,
-        },
-      }
-    : {
-        key: readFileSync(env.HTTPS_KEY_FILE),
-        cert: readFileSync(env.HTTPS_CERT_FILE),
-      }
 
 let production = env.NODE_ENV === 'production' || process.argv[2] === '--prod'
 let development = env.NODE_ENV === 'development' || process.argv[2] === '--dev'
@@ -63,7 +50,6 @@ export let config = {
   site_name: 'ts-liveview Demo',
   site_description: 'Demo website of ts-liveview',
   setup_robots_txt: false,
-  serverOptions,
   epoch,
   auto_open: !production && development && epoch === 1,
   upload_dir: env.UPLOAD_DIR,
