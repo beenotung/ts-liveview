@@ -2,7 +2,7 @@ import { Knex } from "knex";
 
 
 export async function up(knex: Knex): Promise<void> {
-  await knex.raw('alter table `user` add column `avatar` text null')
+  await knex.raw('alter table `user` add column `avatar` varchar(256) null')
 }
 
 
