@@ -271,11 +271,25 @@ export let onWsMessage: OnWsMessage = (event, ws, _wss) => {
         ),
       )
     }
+    let req = ws.request
+    storeRequestLog({
+      method: 'ws',
+      url,
+      user_agent: req.headers['user-agent'] || null,
+      user_id: +req.signedCookies.user_id || null,
+    })
   } else if (event[0][0] === '/') {
     event = event as ClientRouteMessage
     eventType = 'route'
     url = event[0]
     args = event.slice(1)
+    let req = ws.request
+    storeRequestLog({
+      method: 'ws',
+      url,
+      user_agent: req.headers['user-agent'] || null,
+      user_id: +req.signedCookies.user_id || null,
+    })
   } else {
     console.log('unknown type of ws message:', event)
     return
