@@ -11,8 +11,8 @@ import open from 'open'
 import { cookieMiddleware } from './app/cookie.js'
 import { listenWSSCookie } from './app/cookie.js'
 import { print } from 'listening-on'
-import { storeRequestLog } from '../db/store.js'
 import { HttpError } from './http-error.js'
+import { logRequest } from './app/log.js'
 
 const log = debugLog('index.ts')
 log.enabled = true
@@ -35,11 +35,7 @@ listenWSSConnection({
 })
 
 app.use((req, res, next) => {
-  storeRequestLog({
-    method: req.method,
-    url: req.url,
-    user_agent: req.headers['user-agent'] || null,
-  })
+  logRequest(req, req.method, req.url)
   next()
 })
 
