@@ -52,6 +52,10 @@ export function renderIndexTemplate(
         border: 1px solid black;
         border-radius: 0.2em;
       }
+      #ws_status:hover {
+        opacity: 0.2;
+        user-select: none;
+      }
       abbr[title]:after {
         content: ' (' attr(title) ')';
       }
