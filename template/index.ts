@@ -43,6 +43,9 @@ export function renderIndexTemplate(
       interactive when javascript is enabled.
     </div>
     <style>
+      body {
+        padding-bottom: 2.5rem;
+      }
       #ws_status {
         position: fixed;
         bottom: 1em;
