@@ -35,6 +35,8 @@ else
     db/migrations \
     db/knexfile.ts \
     db/db.ts \
+    db/proxy.ts \
+    db/seed.ts \
     "$user@$host:$root_dir/db"
   if [ "$MODE" == "first" ]; then
     ssh "$user@$host" "
