@@ -54,6 +54,7 @@ export function renderIndexTemplate(
         background: white;
         border: 1px solid black;
         border-radius: 0.2em;
+        z-index: 1;
       }
       #ws_status:hover {
         opacity: 0.2;
