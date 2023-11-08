@@ -1,5 +1,6 @@
 import { config as loadEnv } from 'dotenv'
 import { populateEnv } from 'populate-env'
+import { cwd } from 'process'
 
 loadEnv()
 
@@ -22,6 +23,9 @@ let development = env.NODE_ENV === 'development' || process.argv[2] === '--dev'
 if (production && env.COOKIE_SECRET == ' ') {
   console.error('Missing COOKIE_SECRET in env')
   process.exit(1)
+}
+if (env.COOKIE_SECRET == ' ') {
+  env.COOKIE_SECRET = cwd()
 }
 
 function fixEpoch() {
