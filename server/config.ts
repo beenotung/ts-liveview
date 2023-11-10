@@ -1,5 +1,4 @@
 import { config as loadEnv } from 'dotenv'
-import { readFileSync } from 'fs'
 import { populateEnv } from 'populate-env'
 
 loadEnv()
