@@ -2,7 +2,7 @@ import { config, title } from '../../config.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 import { Request, Response, NextFunction, Router } from 'express'
-import { createUploadForm, toFiles } from '../upload.js'
+import { createUploadForm } from '../upload.js'
 import { Raw } from '../components/raw.js'
 import Style from '../components/style.js'
 import { KB } from '@beenotung/tslib/size.js'
@@ -201,18 +201,15 @@ function triggerAutoDelete(file: string) {
   }, deleteInterval)
 }
 
-function handleUpload(req: Request, res: Response, next: NextFunction) {
-  let form = createUploadForm({
-    mimeTypeRegex: /^image\/.*/,
-    maxFileSize,
-    maxFiles,
-  })
-  form.parse(req, (err, fields, files) => {
-    if (err) {
-      next(err)
-      return
-    }
-    let images = toFiles(files.image)
+async function handleUpload(req: Request, res: Response, next: NextFunction) {
+  try {
+    let form = createUploadForm({
+      mimeTypeRegex: /^image\/.*/,
+      maxFileSize,
+      maxFiles,
+    })
+    let [_fields, files] = await form.parse(req)
+    let images = files.image || []
     let context: Context = {
       type: 'express',
       req,
@@ -226,7 +223,9 @@ function handleUpload(req: Request, res: Response, next: NextFunction) {
     )
     res.setHeader('Content-Type', 'text/html')
     res.end(html)
-  })
+  } catch (error) {
+    next(error)
+  }
 }
 
 let routes: Routes = {
