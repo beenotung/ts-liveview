@@ -6,7 +6,7 @@ export type Raw = ['raw', html]
 export type Fragment = [VNodeList]
 
 export type selector = string
-export type attrs = Record<string, string | number | boolean>
+export type attrs = Record<string, string | number | boolean | undefined | null>
 export type props = Record<string, string | number | boolean>
 
 export type html = string
