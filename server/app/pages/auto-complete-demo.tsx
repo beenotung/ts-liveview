@@ -6,7 +6,7 @@ import { Update } from '../components/update.js'
 import { distance } from 'fastest-levenshtein'
 import SourceCode from '../components/source-code.js'
 import { getContextSearchParams } from '../routes.js'
-import type { Context, WsContext } from '../context'
+import type { Context } from '../context'
 
 const wordSet = new Set<string>()
 const dictDir = '/usr/share/dict'

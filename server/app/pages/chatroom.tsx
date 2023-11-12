@@ -147,7 +147,11 @@ class ChatroomState {
 class ChatUserSession {
   static nextId = 1
   span: NameSpan
-  constructor(public room: ChatroomState, public id: string, nickname: string) {
+  constructor(
+    public room: ChatroomState,
+    public id: string,
+    nickname: string,
+  ) {
     this.span = ['span', { id }, [nickname]]
     room.addOnline(this.span)
   }

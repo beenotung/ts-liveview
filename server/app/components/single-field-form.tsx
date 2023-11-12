@@ -69,7 +69,7 @@ export function newSingleFieldForm<
         : {
             [name]: string({ trim: true, nonEmpty: true }),
           },
-    ) as Parser<any>)
+    ) as Parser<object> as Parser<Input>)
   let updateMessageLabel = attrs.updateMessageLabel ?? label
   let description = attrs.description || `update ${label}`
 
@@ -141,7 +141,9 @@ export function newSingleFieldForm<
 
     if (updateMessageLabel && context.type === 'ws') {
       let id = updateKeyField
-        ? defaultUpdateMessageId + '-' + (input as any)[updateKeyField]
+        ? defaultUpdateMessageId +
+          '-' +
+          (input as Record<UpdateKeyField, string>)[updateKeyField]
         : defaultUpdateMessageId
       sendUpdateMessage(
         { label: updateMessageLabel, selector: '#' + id },

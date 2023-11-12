@@ -21,7 +21,7 @@ export function createUploadForm(options: {
     maxFileSize: options.maxFileSize || 300 * KB,
     maxFiles: options.maxFiles || 1,
     multiples: options.maxFiles! > 1,
-    filename(name, ext, part, form): string {
+    filename(_name, _ext, part, _form): string {
       let extname = part.mimetype?.split('/').pop()
       for (let i = 0; i < maxTrial; i++) {
         let filename = randomUUID() + '.' + extname

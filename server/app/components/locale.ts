@@ -1,13 +1,13 @@
 import { Context, getContextLanguage } from '../context.js'
 
-export type LocaleVariants = {
-  en: any
-  zh: any
+export type LocaleVariants<T = string> = {
+  en: T
+  zh: T
 }
 
-export function LocaleContent(
+export function LocaleContent<T>(
   attrs: {
-    variants: LocaleVariants
+    variants: LocaleVariants<T>
   },
   context: Context,
 ) {

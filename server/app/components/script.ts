@@ -24,11 +24,11 @@ export function Script(js: string): Element {
 
 // use iife (Immediately Invoked Function Expression) to avoid name clash with other parts of the page.
 export function iife<F extends () => void>(fn: F): Element
-export function iife<F extends (...args: any[]) => void>(
+export function iife<F extends (...args: unknown[]) => void>(
   fn: F,
   args: Parameters<F>,
 ): Element
-export function iife<F extends (...args: any[]) => void>(
+export function iife<F extends (...args: unknown[]) => void>(
   fn: F,
   args?: Parameters<F>,
 ): Element {

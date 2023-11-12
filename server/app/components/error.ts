@@ -1,4 +1,5 @@
 import type { VNode } from '../../../client/jsx/types'
+import { HttpError } from '../../http-error'
 import type { Context } from '../context'
 import { ErrorNode } from '../helpers'
 import { Node } from '../jsx/types'
@@ -25,7 +26,7 @@ export function renderErrorNode(error: ErrorNode, context: Context): Node {
 
 function getErrorStatusCode(error: unknown): number {
   if (error != null && typeof error == 'object') {
-    let object = error as any
+    let object = error as HttpError & { status: number }
     return object.statusCode || object.status || defaultErrorStatusCode
   }
   return defaultErrorStatusCode

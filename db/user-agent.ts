@@ -122,14 +122,14 @@ set count = 0
 let reset_stats_part_2 = db.prepare('update ua_type set count = 0')
 let reset_stats_part_3 = db.prepare('update ua_bot set count = 0')
 
-let resetStats = db.transaction(() => {
+let _resetStats = db.transaction(() => {
   reset_stats_part_1.run()
   reset_stats_part_2.run()
   reset_stats_part_3.run()
   ua_stat.last_request_log_id = last_request_log_id = 0
 })
 
-// resetStats() // TODO remove after dev
+// _resetStats() // TODO remove after dev
 
 let other_type_id = getUaTypeId('Other')
 
