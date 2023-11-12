@@ -14,7 +14,7 @@ export function renderIndexTemplate(
   stream: HTMLStream,
   options: IndexOptions,
 ): void {
-  stream.write(/* html */ `<!DOCTYPE html>
+  stream.write(/* html */ `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
