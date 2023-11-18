@@ -15,7 +15,7 @@ import { getAuthUserId, writeUserIdToCookie } from '../auth/user.js'
 
 let LoginPage = (
   <div id="login">
-    <h2>Login to {config.short_site_name}</h2>
+    <h1>Login to {config.short_site_name}</h1>
     <p>{commonTemplatePageText}</p>
     <Main />
   </div>
