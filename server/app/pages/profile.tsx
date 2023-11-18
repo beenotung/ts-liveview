@@ -35,7 +35,7 @@ let ProfilePage = (_attrs: {}, context: DynamicContext) => {
   return (
     <div id="profile">
       {style}
-      <h2>Profile Page</h2>
+      <h1>Profile Page</h1>
       <p>{commonTemplatePageText}</p>
       {user_id ? (
         renderProfile(user_id, context)
