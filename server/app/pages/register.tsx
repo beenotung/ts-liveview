@@ -73,7 +73,7 @@ let style = Style(/* css */ `
 let RegisterPage = (
   <div id="register">
     {style}
-    <h2>Register on {config.short_site_name}</h2>
+    <h1>Register on {config.short_site_name}</h1>
     <p>{commonTemplatePageText}</p>
     <p>
       Welcome to {config.short_site_name}!
