@@ -9,7 +9,9 @@ function getDataDir(): string {
   throw new Error('Could not find data directory')
 }
 
-export let dbFile = join(getDataDir(), 'db.sqlite3')
+export let dataDir = getDataDir()
+
+export let dbFile = join(dataDir, 'db.sqlite3')
 
 export let db: DBInstance = newDB({
   path: dbFile,
