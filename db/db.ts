@@ -1,7 +1,15 @@
 import { DBInstance, newDB } from 'better-sqlite3-schema'
+import { existsSync } from 'fs'
 import { join } from 'path'
 
-export let dbFile = join('data', 'db.sqlite3')
+function getDataDir(): string {
+  let dir = 'data'
+  if (!existsSync(dir)) dir = join('..', dir)
+  if (existsSync(dir)) return dir
+  throw new Error('Could not find data directory')
+}
+
+export let dbFile = join(getDataDir(), 'db.sqlite3')
 
 export let db: DBInstance = newDB({
   path: dbFile,
