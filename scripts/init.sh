@@ -12,11 +12,17 @@ install="pnpm i --prefer-offline --no-optional"
 cd db
 echo "running '$install' in $(pwd)"
 $install
+if [[ "$install" == *no-optional* ]]; then
+  $install
+fi
 npm run migrate
 
 cd ..
 echo "running '$install' in $(pwd)"
 $install
+if [[ "$install" == *no-optional* ]]; then
+  $install
+fi
 
 echo
 echo "Ready to go!"
