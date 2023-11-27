@@ -9,7 +9,7 @@
   "main": "index.js",
   "scripts": {
     "update": "run-s gen-migrate migrate gen-proxy",
-    "gen-migrate": "auto-migrate data/db.sqlite3 < erd.txt",
+    "gen-migrate": "auto-migrate ../data/db.sqlite3 < erd.txt",
     "migrate": "knex migrate:latest",
     "gen-proxy": "erd-to-proxy < erd.txt > proxy.ts"
   },
