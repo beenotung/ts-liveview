@@ -68,7 +68,6 @@ let routeDict: Routes = {
     description:
       'Getting Started with ts-liveview - a server-side rendering realtime webapp framework with progressive enhancement',
     menuText: 'Home',
-    menuUrl: '/',
     node: Home,
   },
   '/about/:mode?': {
