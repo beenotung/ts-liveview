@@ -27,7 +27,8 @@ connectWS({
   attachWS(ws) {
     console.debug('attach ws')
 
-    let emit: WindowStub['emit'] = function emit() {
+    function emit(...args: unknown[]): void
+    function emit(): void {
       ws.send(Array.from(arguments) as ClientMessage)
     }
 
