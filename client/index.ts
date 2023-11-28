@@ -53,8 +53,17 @@ connectWS({
     }
 
     function submitForm(form: HTMLFormElement) {
+      let formData = new FormData(form)
+      if (form.method === 'get') {
+        let url = new URL(form.action || location.href)
+        url.search = new URLSearchParams(formData as any).toString()
+        let href = url.href.replace(origin, '')
+        history.pushState(null, document.title, href)
+        emit(href)
+        return
+      }
       let data = {} as Record<string, FormDataEntryValue | FormDataEntryValue[]>
-      new FormData(form).forEach((value, key) => {
+      formData.forEach((value, key) => {
         if (key in data) {
           let prevValue = data[key]
           if (Array.isArray(prevValue)) {
