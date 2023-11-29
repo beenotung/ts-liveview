@@ -23,6 +23,7 @@ import DemoLocale from './pages/demo-locale.js'
 import Clock from './pages/clock.js'
 import type { MenuRoute } from './components/menu'
 import DemoUpload from './pages/demo-upload.js'
+import DemoToast from './pages/demo-toast.js'
 
 let titles: Record<string, string> = {}
 
@@ -97,6 +98,7 @@ let routeDict: Routes = {
   ...DemoForm.routes,
   ...DemoInputComponents.routes,
   ...NameList.routes,
+  ...DemoToast.routes,
   ...DemoUpload.routes,
   ...DemoCookieSession.routes,
   ...Chatroom.routes,
