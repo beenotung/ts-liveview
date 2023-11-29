@@ -32,3 +32,8 @@ set -x
 
 git push origin master v5-demo
 git push origin -f v5-minimal-template v5-auth-template
+
+git checkout master
+git branch -D v5-demo
+git branch -D v5-minimal-template
+git branch -D v5-auth-template
