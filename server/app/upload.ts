@@ -49,3 +49,12 @@ export function createUploadForm(options: {
   })
   return form
 }
+
+export function toUploadedUrl(
+  url: string | undefined | null,
+): string | undefined {
+  if (!url) return undefined
+  if (url.startsWith('https://')) return url
+  if (url.startsWith('http://')) return url
+  return '/' + join(uploadDir, url)
+}
