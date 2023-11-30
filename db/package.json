@@ -8,6 +8,7 @@
   "license": "BSD-2-Clause",
   "main": "index.js",
   "scripts": {
+    "dev": "run-s migrate update",
     "update": "run-s gen-migrate migrate gen-proxy",
     "gen-migrate": "auto-migrate ../data/db.sqlite3 < erd.txt",
     "migrate": "knex migrate:latest",
