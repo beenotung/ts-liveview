@@ -67,6 +67,12 @@ last_request_log_id integer
 
 # zoom: 1.000
 # view: (0, 0)
+# text-bg: #6495ed
+# text-color: #000000
+# diagram-bg: #f5f5f5
+# diagram-text: #000000
+# table-bg: #ffffff
+# table-text: #000000
 # request_log (74, 55)
 # method (448, 16)
 # url (450, 131)
