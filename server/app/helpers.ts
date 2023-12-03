@@ -46,11 +46,10 @@ export function setNoCache(res: express.Response) {
   res.setHeader('Surrogate-Control', 'no-store')
 }
 
-export function getStringCasual(
-  body: undefined | Record<string, unknown>,
-  key: string,
-): string {
+type FormBody = Record<string, string[] | string>
+
+export function getStringCasual(body: FormBody | unknown, key: string): string {
   if (!body || typeof body !== 'object') return ''
-  let value = body[key]
+  let value = (body as FormBody)[key]
   return typeof value === 'string' ? value : ''
 }

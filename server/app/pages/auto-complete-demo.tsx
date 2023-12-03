@@ -37,6 +37,7 @@ function loadWordsFromPackage() {
     .toString()
     .match(/"(.*?)"/g)
     ?.map(s => s.slice(1, -1)) // remove double quotes
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     .filter(s => !(+s.at(-1)! + 1)) // skip package versions
     .filter(s => !s.includes('.com')) // skip email address
     .forEach(s => wordSet.add(s))

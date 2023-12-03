@@ -22,13 +22,17 @@ export function Script(js: string): Element {
   return ['script', undefined, [raw]]
 }
 
-// use iife (Immediately Invoked Function Expression) to avoid name clash with other parts of the page.
+/**
+ * @description use iife (Immediately Invoked Function Expression) to avoid name clash with other parts of the page.
+ * */
 export function iife<F extends () => void>(fn: F): Element
-export function iife<F extends (...args: unknown[]) => void>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function iife<F extends (...args: any[]) => void>(
   fn: F,
   args: Parameters<F>,
 ): Element
-export function iife<F extends (...args: unknown[]) => void>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function iife<F extends (...args: any[]) => void>(
   fn: F,
   args?: Parameters<F>,
 ): Element {

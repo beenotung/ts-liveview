@@ -256,7 +256,7 @@ function createChild(e: Element, node: VNode) {
     case null:
     case undefined:
     case false:
-      // case true:
+    case true:
       return
   }
   switch (typeof node) {
