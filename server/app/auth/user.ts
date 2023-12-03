@@ -8,7 +8,9 @@ const auto_logout_interval = 90 * DAY
 const auto_renew_interval = 30 * DAY
 
 export function getAuthUserId(context: Context): number | null {
-  let id = +getContextCookies(context)?.signedCookies?.user_id!
+  let idStr = getContextCookies(context)?.signedCookies?.user_id
+  if (!idStr) return null
+  let id = +idStr
   return id && id in proxy.user ? id : null
 }
 
