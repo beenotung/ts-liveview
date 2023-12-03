@@ -9,3 +9,6 @@ template/index.ts
 
 # lighthouse report
 localhost_*.report.html
+
+# library
+public/lib/
