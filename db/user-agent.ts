@@ -155,6 +155,7 @@ function stepRequestLogStats(log: RequestLog) {
       let type_id = getUaTypeId(type)
       ua.ua_type_id = type_id
     }
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     ua.ua_type!.count++
   }
 
@@ -163,6 +164,7 @@ function stepRequestLogStats(log: RequestLog) {
       let bot_id = getUaBotId(bot)
       ua.ua_bot_id = bot_id
     }
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     ua.ua_bot!.count++
   }
 }

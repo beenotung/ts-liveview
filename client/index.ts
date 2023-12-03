@@ -56,7 +56,7 @@ connectWS({
       let formData = new FormData(form)
       if (form.method === 'get') {
         let url = new URL(form.action || location.href)
-        url.search = new URLSearchParams(formData as any).toString()
+        url.search = new URLSearchParams(formData as {}).toString()
         let href = url.href.replace(origin, '')
         history.pushState(null, document.title, href)
         emit(href)
