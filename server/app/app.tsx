@@ -18,7 +18,7 @@ import DemoCookieSession from './pages/demo-cookie-session.js'
 import { Flush } from './components/flush.js'
 import { config } from '../config.js'
 import Stats from './stats.js'
-import { MuteConsole } from './components/script.js'
+import { MuteConsole, Script } from './components/script.js'
 import { matchRoute, menuRoutes, PageRouteMatch } from './routes.js'
 import Chatroom from './pages/chatroom.js'
 import { redirectDict } from './routes.js'
@@ -33,6 +33,7 @@ import { PickLanguage } from './components/ui-language.js'
 import Navbar from './components/navbar.js'
 import Sidebar from './components/sidebar.js'
 import { logRequest } from './log.js'
+import { WindowStub } from '../../client/internal.js'
 
 if (config.development) {
   scanTemplateDir('template')
@@ -51,11 +52,23 @@ function renderTemplate(
   })
 }
 
+function CurrentNavigationMetaData(attrs: {}, context: Context) {
+  let js = `_navigation_type_="${context.type}";`
+  if (context.type == 'express') {
+    js += `_navigation_method_="${context.req.method}";`
+  }
+  return Script(js)
+}
+
 let scripts = config.development ? (
-  <script src="/js/index.js" type="module" defer></script>
+  <>
+    <CurrentNavigationMetaData />
+    <script src="/js/index.js" type="module" defer></script>
+  </>
 ) : (
   <>
     {MuteConsole}
+    <CurrentNavigationMetaData />
     <script src="/js/bundle.min.js" type="module" defer></script>
   </>
 )
@@ -251,6 +264,8 @@ export let onWsMessage: OnWsMessage = (event, ws, _wss) => {
   let url: string
   let args: unknown[] | undefined
   let session = getWSSession(ws)
+  let navigation_type: WindowStub['_navigation_type_']
+  let navigation_method: WindowStub['_navigation_method_']
   if (event[0] === 'mount') {
     event = event as ClientMountMessage
     eventType = 'mount'
@@ -272,6 +287,8 @@ export let onWsMessage: OnWsMessage = (event, ws, _wss) => {
         ),
       )
     }
+    navigation_type = event[6]
+    navigation_method = event[7]
     logRequest(ws.request, 'ws', url)
   } else if (event[0][0] === '/') {
     event = event as ClientRouteMessage
@@ -294,6 +311,7 @@ export let onWsMessage: OnWsMessage = (event, ws, _wss) => {
   }
   then(matchRoute(context), route => {
     let node = App(route)
+    if (navigation_type === 'express' && navigation_method !== 'GET') return
     dispatchUpdate(context, node, route.title)
   })
 }

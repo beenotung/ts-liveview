@@ -107,6 +107,8 @@ connectWS({
         timeZone,
         timezoneOffset,
         document.cookie,
+        win._navigation_type_,
+        win._navigation_method_,
       ]
       ws.send(message)
     }

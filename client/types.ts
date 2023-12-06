@@ -1,3 +1,4 @@
+import type { WindowStub } from './internal'
 import type {
   attrs,
   props,
@@ -14,6 +15,8 @@ export type ClientMountMessage = [
   timeZone: string | undefined,
   timezoneOffset: number,
   cookie: string,
+  navigation_type: WindowStub['_navigation_type_'],
+  navigation_method: WindowStub['_navigation_method_'],
 ]
 type Prefix<K extends string, T extends string> = `${K}${T}`
 export type ClientRouteMessage = [url: Prefix<'/', string>, data?: unknown]
