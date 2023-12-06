@@ -7,4 +7,6 @@ export type WindowStub = {
   del(url: string): Promise<Response>
   upload(event: Event): Promise<Response>
   remount(): void
+  _navigation_type_: 'static' | 'express' | 'ws'
+  _navigation_method_: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 }
