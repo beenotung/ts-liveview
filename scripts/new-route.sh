@@ -15,14 +15,36 @@ file="server/app/pages/$name.tsx"
 echo "import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 import { apiEndpointTitle, title } from '../../config.js'
+import Style from '../components/style.js'
+import { Context } from '../context.js'
+import { mapArray } from '../components/fragment.js'
 
-function $Name() {
-  return <div id='$name'>
+let style = Style(/* css */ \`
+#$name {
+
+}
+\`)
+
+let page = (
+  <div id='$name'>
+    {style}
     <h1>$Name</h1>
+    <Main/>
   </div>
+)
+
+function Main(attrs: {}, context: Context) {
+  let items = [1, 2, 3]
+  return (
+    <ul>
+      {mapArray(items, item => (
+        <li>item {item}</li>
+      ))}
+    </ul>
+  )
 }
 
-function submit() {
+function Submit() {
   return 'TODO'
 }
 
@@ -31,12 +53,12 @@ let routes: Routes = {
     title: title('$Name'),
     description: 'TODO',
     menuText: '$Name',
-    node: <$Name/>,
+    node: page,
   },
   '/$name/submit': {
     title: apiEndpointTitle,
     description: 'TODO',
-    node: [submit],
+    node: <Submit/>,
     streaming: false,
   },
 }
