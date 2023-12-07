@@ -76,3 +76,10 @@ export default { routes }" > "$file"
 
 echo "saved to $file"
 code "$file"
+
+file="server/app/routes.tsx"
+echo "import $Name from './pages/$name.js'" > "$file.tmp"
+cat "$file" >> "$file.tmp"
+mv "$file.tmp" "$file"
+sed -i "s/let routeDict: Routes = {/let routeDict: Routes = {\n  ...$Name.routes,/" "$file"
+echo "updated $file"
