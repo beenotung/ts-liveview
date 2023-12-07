@@ -22,10 +22,13 @@ fi
 echo "import { o } from '../jsx/jsx.js'
 
 function $name() {
-  return <div id='$name'>
-    <h1>$name</h1>
-  </div>
+  return (
+    <div id='$name'>
+      <h1>$name</h1>
+    </div>
+  )
 }
+
 export default $name" > "$file"
 
 echo "saved to $file"
