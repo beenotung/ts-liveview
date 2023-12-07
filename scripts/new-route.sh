@@ -12,6 +12,15 @@ Name=$(echo "$name" | sed 's/^\(.\)/\U\1/')
 
 file="server/app/pages/$name.tsx"
 
+if [ -f "$file" ]; then
+  echo >&2 "File already exist: $file"
+  read -p "Overwrite? [y/N] " ans
+  if [[ $ans != y* ]]; then
+    echo >&2 "Cancelled."
+    exit
+  fi
+fi
+
 echo "import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 import { apiEndpointTitle, title } from '../../config.js'
