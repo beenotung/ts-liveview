@@ -7,7 +7,7 @@ import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 
 let style = Style(/* css */ `
-#name-list legend {
+#user-list legend {
   margin-bottom: 0.75rem;
 }
 `)
@@ -19,7 +19,7 @@ let users = [
 ]
 
 let Nickname = newSingleFieldForm({
-  action: '/name-list/update',
+  action: '/user-list/update',
   label: 'Nickname',
   name: 'nickname',
   updateKeyName: 'id',
@@ -34,7 +34,7 @@ let Nickname = newSingleFieldForm({
 })
 
 let content = (
-  <div id="name-list">
+  <div id="user-list">
     {style}
     <h1>List Editing Demo</h1>
     <p>This page demo how to use multiple instances of SingleFieldForm.</p>
@@ -45,7 +45,7 @@ let content = (
     </p>
     <p>Below are 3 instances of Nickname.Form mapped over an array of users.</p>
     <View />
-    <SourceCode page="name-list.tsx" />
+    <SourceCode page="user-list.tsx" />
   </div>
 )
 
@@ -59,7 +59,7 @@ function View() {
 }
 
 let routes: Routes = {
-  '/name-list': {
+  '/user-list': {
     title: title('Demo List Editing'),
     description:
       'Demo list editing with newSingleFieldForm powered by ts-liveview',
