@@ -7,8 +7,14 @@ import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 
 let style = Style(/* css */ `
+#user-list fieldset {
+  max-width: 20rem;
+}
 #user-list legend {
   margin-bottom: 0.75rem;
+}
+#user-list .inline-code {
+  background-color: #dddb;
 }
 `)
 
@@ -40,10 +46,15 @@ let content = (
     <p>This page demo how to use multiple instances of SingleFieldForm.</p>
     <p>Each instance can be distinguished by the "key" attribute.</p>
     <p>
-      Example attribute value are index of array and primary key of database
+      Usually the attribute value is index of array, or primary key of database
       record.
     </p>
-    <p>Below are 3 instances of Nickname.Form mapped over an array of users.</p>
+    <p>
+      In below example, <code class="inline-code">{'Nickname'}</code> is created
+      from <code class="inline-code">{'newSingleFieldForm()'}</code>. Then 3
+      instances of <code class="inline-code">{'<Nickname.Form />'}</code> are
+      mapped over an array of users.
+    </p>
     <View />
     <SourceCode page="user-list.tsx" />
   </div>
