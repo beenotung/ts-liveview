@@ -1,4 +1,4 @@
-## Updating database schema
+## Updating database schema (migration)
 
 Remark: cd to `db` if not done already
 
@@ -14,6 +14,10 @@ Manual mode:
 3. review the generated migration script in the `migrations` directory
 4. run `npm run migrate`
 5. run `npm run gen-proxy`
+
+## Populating database (seeding)
+
+You can setup configuration data and sample data in `seed.ts`, then run it with `npx ts-node seed`.
 
 ## Why a separate package?
 
