@@ -61,8 +61,8 @@ function renderProfile(user_id: number, context: DynamicContext) {
     <>
       <p>Welcome back, {user.username}</p>
       <form
-        action="/avatar"
         method="POST"
+        action="/avatar"
         enctype="multipart/form-data"
         style="margin-bottom: 1rem"
       >
