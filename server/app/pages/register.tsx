@@ -105,7 +105,7 @@ let guestView = (
       </div>
     </div>
     <div class="or-line flex-center">or</div>
-    <form onsubmit="emitForm(event)" action="/register/submit" method="POST">
+    <form method="POST" action="/register/submit" onsubmit="emitForm(event)">
       <Field
         label="Username"
         name="username"
