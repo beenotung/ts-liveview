@@ -11,9 +11,15 @@ let transport = createTransport({
   },
 })
 
-export async function sendEmail(
-  options: SendMailOptions,
-): Promise<nodemailer.SentMessageInfo> {
+export interface SentMessageInfo {
+  accepted: string[]
+  rejected: string[]
+  response: string // e.g. '250 2.0.0 OK  1703241394 b11-xxxx.299 - gsmtp',
+  envelope: { from: string; to: string[] }
+  messageId: string
+}
+
+export async function sendEmail(options: SendMailOptions) {
   let info = await transport.sendMail(options)
-  return info
+  return info as SentMessageInfo
 }
