@@ -130,22 +130,4 @@ let routes: Routes = {
   },
 }
 
-function attachRoutes(app: Router) {
-  // app.post('/verify/email', async (req, res, next) => {
-  //   try {
-  //     let input = verifyEmailParser.parse(req, { name: 'req' })
-  //     let context: ExpressContext = {
-  //       type: 'express',
-  //       req,
-  //       res,
-  //       next,
-  //       url: req.url,
-  //     }
-  //     res.json(json)
-  //   } catch (error) {
-  //     next(error)
-  //   }
-  // })
-}
-
-export default { attachRoutes, routes }
+export default { routes }
