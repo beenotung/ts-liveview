@@ -17,6 +17,7 @@ import { verificationCodeEmail } from '../components/verification-code.js'
 import { Routes, StaticPageRoute } from '../routes.js'
 import { Verify } from 'crypto'
 import { o } from '../jsx/jsx.js'
+import { Redirect } from '../components/router.js'
 import { env } from '../../env.js'
 
 export const PasscodeLength = 6
@@ -49,6 +50,7 @@ function generatePasscode(): string {
     // retry if clash with active passcode
     let count = check_passcode_clash.get({
       request_time: Date.now() - PasscodeExpireDuration,
+      passcode,
     }) as number
     if (count > 0) continue
 
@@ -76,8 +78,13 @@ export async function requestEmailVerification(
     html,
     text,
   })
-  console.log('send email info:')
-  console.dir(info, { depth: 20 })
+  if (info.accepted[0] === input.email) {
+    console.log('sent email successfully')
+  } else {
+    console.log('failed to send email?')
+    console.log('send email info:')
+    console.dir(info, { depth: 20 })
+  }
   let expire_time = request_time + PasscodeExpireDuration
   return { expire_time }
 }
@@ -96,16 +103,31 @@ function VerifyEmail(attrs: {}, context: DynamicContext) {
 
 let routes: Routes = {
   '/verify/email': {
+    streaming: false,
     async resolve(context): Promise<StaticPageRoute> {
       let body = getContextFormBody(context)
       let input = verifyEmailParser.parse(body, { name: 'body' })
       let json = await requestEmailVerification({ email: input.email }, context)
       return {
         title: title('Email Verification'),
-        description: 'Verify email for authentication',
-        node: <VerifyEmail />,
+        description: 'API Endpoint to verify email for authentication',
+        node: (
+          <Redirect
+            href={
+              '/verify/email/result?' +
+              new URLSearchParams({
+                expire_time: json.expire_time.toString(),
+              })
+            }
+          />
+        ),
       }
     },
+  },
+  '/verify/email/result': {
+    title: title('Email Verification'),
+    description: 'Result page of email verification for authentication',
+    node: <VerifyEmail />,
   },
 }
 
