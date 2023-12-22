@@ -16,6 +16,7 @@ import { then } from '@beenotung/tslib/result.js'
 import Login from './pages/login.js'
 import Register from './pages/register.js'
 import Profile from './pages/profile.js'
+import VerificationCode from './pages/verification-code.js'
 import type { MenuRoute } from './components/menu'
 import DemoToast from './pages/demo-toast.js'
 import appHome from './pages/app-home.js'
@@ -94,6 +95,7 @@ let routeDict: Routes = {
   ...Login.routes,
   ...Register.routes,
   ...Profile.routes,
+  ...VerificationCode.routes,
   ...appHome.routes,
   ...appCharacter.routes,
   ...appAbout.routes,

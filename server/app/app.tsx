@@ -197,7 +197,6 @@ function Footer(attrs: { style?: string }) {
 export function attachRoutes(app: Router) {
   // ajax/upload/middleware routes
   app.use(renewAuthCookieMiddleware)
-  verificationCode.attachRoutes(app)
   Profile.attachRoutes(app)
 
   // redirect routes
