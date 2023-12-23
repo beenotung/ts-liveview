@@ -7,9 +7,10 @@ import { isPreferZh } from '../components/locale.js'
 let NotFoundPageNode = (
   <StatusPage
     id="not-match"
+    status={404}
     title={{
-      en: '404 Page Not Found',
-      zh: '404 找不到頁面',
+      en: 'Page Not Found',
+      zh: '找不到頁面',
     }}
     page="not-found.tsx"
   />
