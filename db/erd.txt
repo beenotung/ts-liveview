@@ -88,9 +88,18 @@ avatar varchar(256) NULL
 verification_code
 -----------------
 id integer PK
-passcode char(6) NULL
+passcode char(6)
 email varchar(320)
 request_time integer
+revoke_time integer NULL
+
+
+verification_attempt
+--------------------
+id integer PK
+passcode char(6)
+email varchar(320)
+match_id integer NULL FK >0- verification_code.id
 
 
 # zoom: 1.000
@@ -111,3 +120,4 @@ request_time integer
 # request_session (450, 445)
 # user (450, 680)
 # verification_code (50, 500)
+# verification_attempt (50, 700)
