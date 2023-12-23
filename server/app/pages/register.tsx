@@ -89,22 +89,31 @@ function Main(_attrs: {}, context: Context) {
   return user_id ? <UserMessageInGuestView user_id={user_id} /> : guestView
 }
 
+let useSocialLogin = true
+
 let guestView = (
   <>
     <p>
       Already have an account? <Link href="/login">Login</Link>
     </p>
-    <div class="flex-center flex-column">
-      <div>Register with:</div>
-      <div class="oauth-provider-list">
-        <a>{googleLogo}&nbsp;Google</a>
-        <a>{appleLogo}&nbsp;Apple</a>
-        <a>{githubLogo}&nbsp;GitHub</a>
-        <a>{facebookLogo}&nbsp;Facebook</a>
-        <a>{instagramLogo}&nbsp;Instagram</a>
-      </div>
-    </div>
-    <div class="or-line flex-center">or</div>
+    <div class="flex-center flex-column"></div>
+    <div>Register with:</div>
+    {useSocialLogin ? (
+      <>
+        <div class="flex-center flex-column">
+          <div class="oauth-provider-list">
+            <a>{googleLogo}&nbsp;Google</a>
+            <a>{appleLogo}&nbsp;Apple</a>
+            <a>{githubLogo}&nbsp;GitHub</a>
+            <a>{facebookLogo}&nbsp;Facebook</a>
+            <a>{instagramLogo}&nbsp;Instagram</a>
+          </div>
+        </div>
+        <div class="or-line flex-center">or</div>
+      </>
+    ) : (
+      <div style="height: 0.5rem"></div>
+    )}
     <form
       method="POST"
       action="/verify/email/submit"
@@ -118,6 +127,12 @@ let guestView = (
         oninput="emit('/register/check-email', this.value)"
         autocomplete="email"
       />
+      <div class="field">
+        <label>
+          <input type="checkbox" name="include_link" /> Include magic link (more
+          convince but may be treated as spam)
+        </label>
+      </div>
       <input type="submit" value="Verify" />
     </form>
     <div class="or-line flex-center">or</div>
