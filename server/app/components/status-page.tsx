@@ -6,12 +6,16 @@ import SourceCode from './source-code.js'
 
 function StatusPage(
   attrs: {
+    status: number
     id: string
     title: LocaleVariants
     page?: string
   },
   context: Context,
 ): Node {
+  if (context.type === 'express' && !context.res.headersSent) {
+    context.res.status(attrs.status)
+  }
   let zh = isPreferZh(context)
   return (
     <div id={attrs.id}>
