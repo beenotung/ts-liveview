@@ -7,6 +7,7 @@ import { EarlyTerminate } from '../helpers.js'
 import { setSessionUrl } from '../session.js'
 
 export type LinkAttrs = {
+  'tagName'?: string
   'no-history'?: boolean
   'href': string
   'onclick'?: never
@@ -15,17 +16,19 @@ export type LinkAttrs = {
 }
 
 export function Link(attrs: LinkAttrs) {
-  const { 'no-history': quiet, children, ...aAttrs } = attrs
+  const {
+    'tagName': _tagName,
+    'no-history': quiet,
+    children,
+    ...aAttrs
+  } = attrs
+  const tagName = _tagName || 'a'
   const onclick = quiet ? `emitHref(event,'q')` : `emitHref(event)`
-  if (!children) {
+  if (!children && tagName == 'a') {
     console.warn('Link attrs:', attrs)
     console.warn(new Error('Link with empty content'))
   }
-  return (
-    <a onclick={onclick} {...aAttrs}>
-      {children ? Fragment(children) : null}
-    </a>
-  )
+  return [tagName, { onclick, ...aAttrs }, children]
 }
 
 export function Redirect(
