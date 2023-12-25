@@ -16,7 +16,7 @@ import { EarlyTerminate } from './helpers.js'
 import { getWSSession } from './session.js'
 import DemoCookieSession from './pages/demo-cookie-session.js'
 import { Flush } from './components/flush.js'
-import { config } from '../config.js'
+import { LayoutType, config } from '../config.js'
 import Stats from './stats.js'
 import { MuteConsole, Script } from './components/script.js'
 import {
@@ -29,7 +29,8 @@ import Chatroom from './pages/chatroom.js'
 import type { ClientMountMessage, ClientRouteMessage } from '../../client/types'
 import { then } from '@beenotung/tslib/result.js'
 import { appStyle } from './app-style.js'
-import { renderIndexTemplate } from '../../template/index.js'
+import { renderWebTemplate } from '../../template/web.js'
+import { renderIonicTemplate } from '../../template/ionic.js'
 import { HTMLStream } from './jsx/stream.js'
 import DemoUpload from './pages/demo-upload.js'
 import { getWsCookies } from './cookie.js'
@@ -48,7 +49,7 @@ function renderTemplate(
   options: { title: string; description: string; app: Node },
 ) {
   const app = options.app
-  renderIndexTemplate(stream, {
+  renderAppTemplate(stream, {
     title: escapeHTMLTextContent(options.title),
     description: unquote(escapeHTMLAttributeValue(options.description)),
     app:
@@ -89,8 +90,18 @@ let brand = (
   </div>
 )
 
-let App = NavbarApp
-// export let App = SidebarApp
+type Layout = (route: PageRouteMatch) => Element
+
+let layouts: Record<LayoutType, Layout> = {
+  [LayoutType.navbar]: NavbarApp,
+  [LayoutType.sidebar]: SidebarApp,
+  [LayoutType.ionic]: IonicApp,
+}
+
+let App = layouts[config.layout_type]
+
+let renderAppTemplate =
+  App == IonicApp ? renderIonicTemplate : renderWebTemplate
 
 function NavbarApp(route: PageRouteMatch): Element {
   // you can write the AST direct for more compact wire-format
@@ -133,6 +144,24 @@ function SidebarApp(route: PageRouteMatch): Element {
             <Footer style="padding: 0.5rem;" />
           </div>
         </div>
+        <Flush />
+      </>,
+    ],
+  ]
+}
+
+function IonicApp(route: PageRouteMatch): Element {
+  // you can write the AST direct for more compact wire-format
+  return [
+    'div.app',
+    {},
+    [
+      // or you can write in JSX for better developer-experience (if you're coming from React)
+      <>
+        {appStyle}
+        {scripts}
+        <Flush />
+        <ion-app>{route.node}</ion-app>
         <Flush />
       </>,
     ],

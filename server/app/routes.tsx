@@ -1,6 +1,6 @@
 import { capitalize } from '@beenotung/tslib/string.js'
 import { Router } from 'url-router.ts'
-import { config, title } from '../config.js'
+import { LayoutType, config, title } from '../config.js'
 import { Redirect } from './components/router.js'
 import type { DynamicContext } from './context'
 import { o } from './jsx/jsx.js'
@@ -24,6 +24,9 @@ import Clock from './pages/clock.js'
 import type { MenuRoute } from './components/menu'
 import DemoUpload from './pages/demo-upload.js'
 import DemoToast from './pages/demo-toast.js'
+import appHome from './pages/app-home.js'
+import appAbout from './pages/app-about.js'
+import appCharacter from './pages/app-character.js'
 
 let titles: Record<string, string> = {}
 
@@ -128,6 +131,19 @@ let routeDict: Routes = {
       'ts-liveview is a free open source project licensed under the BSD 2-Clause License',
     node: License,
   },
+}
+if (config.layout_type === LayoutType.ionic) {
+  routeDict = {
+    ...appHome.routes,
+    ...appCharacter.routes,
+    ...appAbout.routes,
+    '/user-agents': {
+      title: title('User Agents of Visitors'),
+      description: "User agents of this site's visitors",
+      menuText: 'User Agents',
+      node: UserAgents,
+    },
+  }
 }
 
 export let redirectDict: Record<string, string> = {

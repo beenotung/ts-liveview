@@ -4,15 +4,15 @@ interface HTMLStream {
 }
 type HTMLFunc = (stream: HTMLStream) => void
 
-export type IndexOptions = {
+export type WebOptions = {
   title: string | HTMLFunc
   description: string | HTMLFunc
   app: string | HTMLFunc
 }
 
-export function renderIndexTemplate(
+export function renderWebTemplate(
   stream: HTMLStream,
-  options: IndexOptions,
+  options: WebOptions,
 ): void {
   stream.write(/* html */ `<!doctype html>
 <html lang="en">
