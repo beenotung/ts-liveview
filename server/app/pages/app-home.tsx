@@ -20,6 +20,8 @@ let homePage = (
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
+      <p>You can get started by replacing the contents in this page</p>
+      <hr style="height:1px; background-color:black;" />
       <div>
         Fictional characters commonly used as placeholders in discussions about
         cryptographic systems and protocols:
