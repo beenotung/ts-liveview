@@ -2,6 +2,7 @@ import { config, title } from '../../config.js'
 import { mapArray } from '../components/fragment.js'
 import { Link } from '../components/router.js'
 import { wsStatus } from '../components/ws-status.js'
+import { prerender } from '../jsx/html.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 import { characters } from './app-character.js'
@@ -34,6 +35,9 @@ let homePage = (
     </ion-content>
   </>
 )
+
+// pre-render into html to reduce time to first contentful paint (FCP)
+homePage = prerender(homePage)
 
 let routes: Routes = {
   '/': {
