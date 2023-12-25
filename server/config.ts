@@ -35,6 +35,12 @@ function fixEpoch() {
 
 let epoch = fixEpoch()
 
+export enum LayoutType {
+  navbar = 'navbar',
+  sidebar = 'sidebar',
+  ionic = 'ionic',
+}
+
 export let config = {
   production,
   development,
@@ -47,6 +53,7 @@ export let config = {
   auto_open: !production && development && epoch === 1,
   upload_dir: env.UPLOAD_DIR,
   client_target: 'es2020',
+  layout_type: LayoutType.ionic,
 }
 
 const titleSuffix = ' | ' + config.site_name
