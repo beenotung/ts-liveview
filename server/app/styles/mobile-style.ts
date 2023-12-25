@@ -1,5 +1,6 @@
 export let MobileStyle = /* css */ `
 .page {
+  min-height: 100%;
   transition: all 0.3s ease;
   opacity: 1;
 }

@@ -162,9 +162,7 @@ function IonicApp(route: PageRouteMatch): Element {
         {scripts}
         <Flush />
         <ion-app>
-          <div class="page" style="height: 100%">
-            {route.node}
-          </div>
+          <div class="page">{route.node}</div>
         </ion-app>
         {Script(`
 document.querySelector('.page')?.classList.add('hide')
