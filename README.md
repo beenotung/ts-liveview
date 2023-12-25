@@ -90,6 +90,11 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
 - [x] Work well with express.js [[7]](#feature-7)
 - [x] Built-in locale support (language and timezone)
 - [x] Fully customizable [[8]](#feature-8)
+- [x] Multiple starter template
+  - [x] v5-demo (kitchen sink demos)
+  - [x] v5-minimal-template (mobile-responsive webapp)
+  - [x] v5-ionic-template (mobile-first webapp)
+  - [x] v5-auth-template (includes user login/register and protected routes)
 
 **Remarks**:
 
