@@ -24,7 +24,7 @@ import Chatroom from './pages/chatroom.js'
 import { redirectDict } from './routes.js'
 import type { ClientMountMessage, ClientRouteMessage } from '../../client/types'
 import { then } from '@beenotung/tslib/result.js'
-import { style } from './app-style.js'
+import { appStyle } from './app-style.js'
 import { renderIndexTemplate } from '../../template/index.js'
 import { HTMLStream } from './jsx/stream.js'
 import DemoUpload from './pages/demo-upload.js'
@@ -96,7 +96,7 @@ export function NavbarApp(route: PageRouteMatch): Element {
     [
       // or you can write in JSX for better developer-experience (if you're coming from React)
       <>
-        {style}
+        {appStyle}
         <Navbar brand={brand} menuRoutes={menuRoutes} />
         <hr />
         {scripts}
@@ -116,7 +116,7 @@ export function SidebarApp(route: PageRouteMatch): Element {
     [
       // or you can write in JSX for better developer-experience (if you're coming from React)
       <>
-        {style}
+        {appStyle}
         {scripts}
         {Sidebar.style}
         <div class={Sidebar.containerClass}>

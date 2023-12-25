@@ -4,7 +4,7 @@ import { SourceCodeStyle } from './components/source-code.js'
 import Style from './components/style.js'
 import { UpdateMessageStyle } from './components/update-message.js'
 
-export let style = Style(/* css */ `
+export let appStyle = Style(/* css */ `
 ${SourceCodeStyle}
 ${ErrorStyle}
 ${UpdateMessageStyle}
