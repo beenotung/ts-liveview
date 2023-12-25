@@ -16,6 +16,12 @@ git branch -D v5-minimal-template
 git checkout -b v5-minimal-template
 git cherry-pick origin/v5-minimal-template
 
+git checkout v5-minimal-template
+git branch -D v5-ionic-template
+git checkout -b v5-ionic-template
+git cherry-pick origin/v5-minimal-template..origin/v5-ionic-template
+
+git checkout v5-minimal-template
 git branch -D v5-auth-template
 git checkout -b v5-auth-template
 git cherry-pick origin/v5-minimal-template..origin/v5-auth-template
@@ -31,9 +37,13 @@ fi
 set -x
 
 git push origin master v5-demo
-git push origin -f v5-minimal-template v5-auth-template
+git push origin -f \
+  v5-minimal-template \
+  v5-ionic-template \
+  v5-auth-template
 
 git checkout master
 git branch -D v5-demo
 git branch -D v5-minimal-template
+git branch -D v5-ionic-template
 git branch -D v5-auth-template
