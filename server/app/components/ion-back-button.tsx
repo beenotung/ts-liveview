@@ -12,26 +12,25 @@ export function IonBackButton(attrs: {
   className = className ? className + ' ' : ''
   backText ??= 'Back'
   buttonsSlot ??= 'start'
+  let onclick = "document.body.classList.add('back')"
   let button = (
-    <>
-      <Link
-        tagName="ion-button"
-        href={href}
+    <Link href={href}>
+      <ion-button
+        onclick={onclick}
         class={className + 'md-only'}
         {...extraAttrs}
       >
         <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
-      </Link>
-      <Link
-        tagName="ion-button"
-        href={href}
+      </ion-button>
+      <ion-button
+        onclick={onclick}
         class={className + 'ios-only'}
         {...extraAttrs}
       >
         <ion-icon name="chevron-back-outline"></ion-icon>
         <span>{backText}</span>
-      </Link>
-    </>
+      </ion-button>
+    </Link>
   )
   if (buttonsSlot) {
     return <ion-buttons slot={buttonsSlot}>{button}</ion-buttons>
