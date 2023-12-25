@@ -4,6 +4,7 @@ set -o pipefail
 set -x
 
 git checkout v5-auth-template
+git checkout v5-ionic-template
 git checkout v5-minimal-template
 git checkout v5-demo
 git checkout master
