@@ -14,4 +14,5 @@ function reset {
 reset master
 reset v5-demo
 reset v5-minimal-template
+reset v5-ionic-template
 reset v5-auth-template
