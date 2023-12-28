@@ -65,7 +65,7 @@ export type UaStat = {
 
 export type User = {
   id?: null | number
-  username: string
+  username: null | string
   password_hash: null | string // char(60)
   email: null | string
   tel: null | string
@@ -104,9 +104,18 @@ export type ErrorLog = {
 
 export type VerificationCode = {
   id?: null | number
-  passcode: null | string // char(6)
+  passcode: string // char(6)
   email: string
   request_time: number
+  revoke_time: null | number
+}
+
+export type VerificationAttempt = {
+  id?: null | number
+  passcode: string // char(6)
+  email: string
+  match_id: null | number
+  match?: VerificationCode
 }
 
 export type DBProxy = {
@@ -123,6 +132,7 @@ export type DBProxy = {
   request_log: RequestLog[]
   error_log: ErrorLog[]
   verification_code: VerificationCode[]
+  verification_attempt: VerificationAttempt[]
 }
 
 export let proxy = proxySchema<DBProxy>({
@@ -158,5 +168,9 @@ export let proxy = proxySchema<DBProxy>({
       ['request_log', { field: 'request_log_id', table: 'request_log' }],
     ],
     verification_code: [],
+    verification_attempt: [
+      /* foreign references */
+      ['match', { field: 'match_id', table: 'verification_code' }],
+    ],
   },
 })
