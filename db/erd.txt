@@ -93,7 +93,7 @@ timezone_offset integer NULL
 user
 ----
 id integer PK
-username varchar(32) unique
+username varchar(32) NULL unique
 password_hash char(60) NULL
 email varchar(320) NULL unique
 tel varchar(16) NULL unique

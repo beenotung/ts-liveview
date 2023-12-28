@@ -2,12 +2,17 @@ import { Random, digits } from '@beenotung/tslib/random.js'
 import { MINUTE } from '@beenotung/tslib/time.js'
 import { db } from '../../../db/db.js'
 import { HttpError } from '../../http-error.js'
-import { proxy } from '../../../db/proxy.js'
-import { email, object, string } from 'cast.ts'
+import { VerificationAttempt, proxy } from '../../../db/proxy.js'
+import { boolean, email, object, optional, string } from 'cast.ts'
 import { sendEmail } from '../../email.js'
-import { config, title } from '../../config.js'
-import { Context, DynamicContext, getContextFormBody } from '../context.js'
-import { Routes, StaticPageRoute } from '../routes.js'
+import { apiEndpointTitle, config, title } from '../../config.js'
+import {
+  Context,
+  DynamicContext,
+  ExpressContext,
+  getContextFormBody,
+} from '../context.js'
+import { Routes, StaticPageRoute, getContextSearchParams } from '../routes.js'
 import { o } from '../jsx/jsx.js'
 import { Link, Redirect } from '../components/router.js'
 import { nodeToHTML } from '../jsx/html.js'
@@ -16,6 +21,9 @@ import Style from '../components/style.js'
 import { Node } from '../jsx/types.js'
 import { renderError } from '../components/error.js'
 import { debugLog } from '../../debug.js'
+import { filter, find, seedRow } from 'better-sqlite3-proxy'
+import { getContextCookies } from '../cookie.js'
+import { getAuthUserId, writeUserIdToCookie } from '../auth/user.js'
 
 let log = debugLog('app:verification-code')
 log.enabled = true
@@ -62,6 +70,7 @@ function generatePasscode(): string {
 
 let requestEmailVerificationParser = object({
   email: email(),
+  include_link: optional(boolean()),
 })
 
 async function requestEmailVerification(
@@ -70,8 +79,6 @@ async function requestEmailVerification(
   try {
     let body = getContextFormBody(context)
     let input = requestEmailVerificationParser.parse(body, { name: 'body' })
-    let search = context.routerMatch?.search
-    let include_link = search && new URLSearchParams(search).has('include_link')
 
     let passcode = generatePasscode()
     let request_time = Date.now()
@@ -79,9 +86,10 @@ async function requestEmailVerification(
       passcode,
       email: input.email,
       request_time,
+      revoke_time: null,
     })
     let { html, text } = verificationCodeEmail(
-      { passcode, email: include_link ? input.email : null },
+      { passcode, email: input.include_link ? input.email : null },
       context,
     )
     let info = await sendEmail({
@@ -198,13 +206,14 @@ let style = Style(/* css */ `
 function VerifyEmailPage(attrs: {}, context: DynamicContext) {
   let params = new URLSearchParams(context.routerMatch?.search)
   let error = params.get('error')
+  let title = params.get('title')
   return (
     <div id="verifyEmailPage">
       {style}
       <h1>Email Verification</h1>
       {error ? (
         <>
-          <p>Failed to send verification code to your email.</p>
+          <p>{title || 'Failed to send verification code to your email'}.</p>
           {renderError(error, context)}
           <p>
             You can request another verification code in the{' '}
@@ -244,7 +253,7 @@ function VerifyEmailForm(attrs: { params: URLSearchParams }) {
             name="email"
             value={email}
             readonly
-            style={`width: ${email?.length}ch`}
+            style={email ? `width: ${email.length}ch` : undefined}
           />
         }
       />
@@ -259,7 +268,7 @@ function VerifyEmailForm(attrs: { params: URLSearchParams }) {
             name="code"
             placeholder={'x'.repeat(PasscodeLength)}
             required
-            value={code || ''}
+            value={code}
           />
         }
       />
@@ -292,13 +301,76 @@ let checkEmailVerificationCodeParser = object({
 async function checkEmailVerificationCode(
   context: DynamicContext,
 ): Promise<StaticPageRoute> {
+  let res = (context as ExpressContext).res
+  let email: string | null = null
   try {
-  } catch (error) {}
-  return {
-    title: title('Email Verification'),
-    description:
-      'API Endpoint to submit email verification code for authentication',
-    node: <Redirect href="/verify" />,
+    let body = getContextFormBody(context)
+    let input = checkEmailVerificationCodeParser.parse(body)
+    email = input.email
+    let is_expired = false
+    let attempt: VerificationAttempt = db.transaction(() => {
+      let verification_code_rows = filter(proxy.verification_code, {
+        passcode: input.code,
+        email: input.email,
+        revoke_time: null,
+      })
+      let now = Date.now()
+      let match_id: number | null = null
+      for (let verification_code of verification_code_rows) {
+        if (now - verification_code.request_time >= PasscodeExpireDuration) {
+          verification_code.revoke_time = now
+          is_expired = true
+          continue
+        }
+        match_id = verification_code.id!
+        verification_code.revoke_time = now
+        break
+      }
+      let attempt_id = proxy.verification_attempt.push({
+        passcode: input.code,
+        email: input.email,
+        match_id,
+      })
+      let attempt = proxy.verification_attempt[attempt_id]
+      return attempt
+    })()
+    if (!attempt.match_id) {
+      throw new HttpError(
+        400,
+        is_expired
+          ? 'Verification code expired.'
+          : 'Verification code not matched.',
+      )
+    }
+    let user_id = seedRow(
+      proxy.user,
+      { email: input.email },
+      {
+        username: null,
+        password_hash: null,
+        tel: null,
+        avatar: null,
+      },
+    )
+    writeUserIdToCookie(res, user_id)
+    return {
+      title: apiEndpointTitle,
+      description:
+        'API Endpoint to submit email verification code for authentication',
+      node: <Redirect href="/login?code=ok" />,
+    }
+  } catch (error) {
+    let params = new URLSearchParams({
+      title: 'Failed to verify email',
+      error: String(error),
+    })
+    if (email) params.set('email', email)
+    return {
+      title: apiEndpointTitle,
+      description:
+        'API Endpoint to submit email verification code for authentication',
+      node: <Redirect href={'/verify/email/result?' + params} />,
+    }
   }
 }
 
@@ -313,15 +385,8 @@ let routes: Routes = {
     node: <VerifyEmailPage />,
   },
   '/verify/email/code/submit': {
-    title: title('Email Verification'),
-    description: 'API Endpoint to submit email verification code',
     streaming: false,
-    node: NotImplemented,
-  },
-  '/verify/email/code/result': {
-    title: title('Email Verification'),
-    description: 'Submit result of email verification code for authentication',
-    node: NotImplemented,
+    resolve: checkEmailVerificationCode,
   },
 }
 

@@ -59,7 +59,7 @@ function renderProfile(user_id: number, context: DynamicContext) {
   let error = params.get('error')
   return (
     <>
-      <p>Welcome back, {user.username}</p>
+      <p>Welcome back, {user.username || user.email}</p>
       <form
         method="POST"
         action="/avatar"
@@ -122,11 +122,11 @@ function Logout(_attrs: {}, context: ExpressContext) {
 }
 
 export function UserMessageInGuestView(attrs: { user_id: number }) {
-  let username = proxy.user[attrs.user_id].username
+  let user = proxy.user[attrs.user_id]
   return (
     <>
       <p>
-        You have login as <b>{username}</b>.
+        You have login as <b>{user.username || user.email}</b>.
       </p>
       <p>
         You can go to <Link href="/profile">profile page</Link> to manage your
