@@ -162,7 +162,7 @@ function Profile() {
     <>
       <p>
         Welcome back,
-				<span id="greet_name">{user.username}</span>.
+        <span id="greet_name">{user.username}</span>.
       </p>
       <Username.Form value={user.username} />
       <FavoriteFruit.Form
