@@ -31,9 +31,12 @@ export function escapeHTMLTextContent(str: string): string {
 }
 
 export function escapeHTMLAttributeValue(
-  str: string | number | boolean,
+  value: string | number | boolean,
 ): string {
-  return JSON.stringify(str)
+  if (typeof value === 'string' && value.includes('"')) {
+    return '"' + value.replace(/&/g, '&amp;').replace(/"/g, '&quot;') + '"'
+  }
+  return JSON.stringify(value)
 }
 
 // to be used in template that has already wrapped the attribute value in double quotes
