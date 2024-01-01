@@ -4,6 +4,8 @@ import hljs_markdown from 'highlight.js/lib/languages/markdown'
 import hljs_javascript from 'highlight.js/lib/languages/javascript'
 import { Raw } from './raw.js'
 import { fullyEscapeHTMLAttributeValue } from '../jsx/html.js'
+import Prism from 'prismjs'
+import { readFileSync } from 'fs'
 
 hljs.registerLanguage('markdown', hljs_markdown)
 hljs.registerLanguage('javascript', hljs_javascript)
@@ -132,6 +134,7 @@ let darkStyle = /* css */ `
 }
 code.code-block {
   background-color: #232327;
+  color: #eaeaea;
 }
 /* reference: node_modules/highlight.js/styles/tomorrow-night-bright.css */
 code.code-block.hljs {
@@ -194,8 +197,14 @@ code.code-block {
   display: inline-block !important;
   max-width: 90vw;
 }
-${colorMode === 'light' ? lightStyle : darkStyle}
+${darkStyle}
+${
+  // colorMode === 'light' ? lightStyle : darkStyle
+  readFileSync('node_modules/prismjs/themes/prism-tomorrow.css')
+}
 `
+
+console.log(Object.keys(Prism.languages))
 
 export function CodeBlock(attrs: {
   code: string
@@ -206,8 +215,10 @@ export function CodeBlock(attrs: {
   let className = 'code-block'
   let html: string
   if (attrs.language === 'markdown') {
-    className += ' hljs'
-    html = hljs.highlight(attrs.code, { language: attrs.language }).value
+    // className += ' hljs'
+    // html = hljs.highlight(attrs.code, { language: attrs.language }).value
+    // className += ' language-javascript'
+    html = Prism.highlight(attrs.code, Prism.languages.markdown, 'markdown')
   } else {
     html = highlight(attrs.code)
   }
