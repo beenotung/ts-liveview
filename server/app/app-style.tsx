@@ -1,10 +1,12 @@
 import { config } from '../config.js'
+import { CodeBlockStyle } from './components/code-block.js'
 import { ErrorStyle } from './components/error.js'
 import { SourceCodeStyle } from './components/source-code.js'
 import Style from './components/style.js'
 import { UpdateMessageStyle } from './components/update-message.js'
 
 export let appStyle = Style(/* css */ `
+${CodeBlockStyle}
 ${SourceCodeStyle}
 ${ErrorStyle}
 ${UpdateMessageStyle}

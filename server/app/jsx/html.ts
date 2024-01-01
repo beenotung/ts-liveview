@@ -30,6 +30,18 @@ export function escapeHTMLTextContent(str: string): string {
   return str
 }
 
+export function fullyEscapeHTMLAttributeValue(
+  str: string | number | boolean,
+): string {
+  str = String(str)
+  str = str.replace(/&/g, '&amp;')
+  str = str.replace(/</g, '&lt;')
+  str = str.replace(/>/g, '&gt;')
+  str = str.replace(/"/g, '&quot;')
+  str = str.replace(/'/g, '&#39;')
+  return str
+}
+
 export function escapeHTMLAttributeValue(
   str: string | number | boolean,
 ): string {
