@@ -25,8 +25,8 @@ let content = (
     <p>This page demo component based input fields.</p>
 
     {style}
-    <link rel="stylesheet" href="/lib/prism/prism.css" />
-    <script src="/lib/prism/prism.js"></script>
+    {/* <link rel="stylesheet" href="/lib/prism/prism.css" /> */}
+    {/* <script src="/lib/prism/prism.js"></script> */}
 
     <SourceCode page="demo-inputs.tsx" />
 
