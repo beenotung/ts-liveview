@@ -6,14 +6,34 @@ import { prerender } from '../jsx/html.js'
 import { Menu } from '../components/menu.js'
 import SourceCode from '../components/source-code.js'
 import { markdownToHtml } from '../format/markdown.js'
+import hljs from 'highlight.js/lib/core'
+import hljs_markdown from 'highlight.js/lib/languages/markdown'
+import { CodeBlock } from '../components/code-block.js'
+
+hljs.registerLanguage('markdown', hljs_markdown)
 
 let text = readFileSync('README.md').toString()
 
 let html = Raw(await markdownToHtml(text))
-let markdown = <pre style="white-space: break-spaces">{text}</pre>
+let markdown = (
+  <pre style="white-space: break-spaces; color: white">
+    <code class="code-block">{text}</code>
+  </pre>
+)
 markdown = (
   <pre>
-    <code class="language-markdown">{text}</code>
+    <link
+      rel="stylesheet"
+      href="/libs/highlight.js/styles/atom-one-dark-reasonable.css"
+    />
+    <code class="code-block hljs" style="color: white1">
+      {Raw(hljs.highlight(text, { language: 'markdown' }).value)}
+    </code>
+  </pre>
+)
+markdown = (
+  <pre>
+    <CodeBlock code={text} language="markdown" />
   </pre>
 )
 

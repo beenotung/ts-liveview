@@ -3,6 +3,7 @@ import code from '../../components/inline-code.js'
 import { Script } from '../../components/script.js'
 import { Select } from '../../components/select.js'
 import SourceCode from '../../components/source-code.js'
+import { CodeBlock } from '../../components/code-block.js'
 import { o } from '../../jsx/jsx.js'
 
 let select = code('<select>')
@@ -35,8 +36,9 @@ let content = (
     <div class="code-demo">
       <fieldset>
         <legend>Example Source Code</legend>
-        <code class="language-tsx" style="padding: 0.5rem">
-          {
+        <CodeBlock
+          style="padding: 0.5rem"
+          code={
             /* html */ `
 <form>
   <Select
@@ -48,7 +50,7 @@ let content = (
 </form>
 `.trim()
           }
-        </code>
+        ></CodeBlock>
       </fieldset>
       <fieldset>
         <legend>Preview</legend>
@@ -75,8 +77,9 @@ let content = (
     <div class="code-demo">
       <fieldset>
         <legend>Example Source Code</legend>
-        <code class="language-tsx" style="padding: 0.5rem">
-          {
+        <CodeBlock
+          style="padding: 0.5rem"
+          code={
             /* html */ `
 <select autocomplete="off">
   <option disabled selected value="" >
@@ -88,7 +91,7 @@ let content = (
 </select>
 `.trim()
           }
-        </code>
+        ></CodeBlock>
       </fieldset>
       <fieldset>
         <legend>Preview</legend>
@@ -115,8 +118,9 @@ let content = (
     <div class="code-demo">
       <fieldset>
         <legend>Example Source Code</legend>
-        <code class="language-tsx" style="padding: 0.5rem">
-          {
+        <CodeBlock
+          style="padding: 0.5rem"
+          code={
             /* html */ `
  <form id="demoForm">
   <select name="fruit">
@@ -128,7 +132,7 @@ let content = (
 {Script(\`demoForm.fruit.value=\${JSON.stringify(record.fruit)}\`)}
 `.trim()
           }
-        </code>
+        ></CodeBlock>
       </fieldset>
       <fieldset>
         <legend>Preview</legend>
@@ -151,8 +155,9 @@ let content = (
     <div class="code-demo">
       <fieldset>
         <legend>Example Source Code</legend>
-        <code class="language-tsx" style="padding: 0.5rem">
-          {
+        <CodeBlock
+          style="padding: 0.5rem"
+          code={
             /* html */ `
  <form>
   <select name="fruit">
@@ -165,7 +170,7 @@ let content = (
 </form>
 `.trim()
           }
-        </code>
+        ></CodeBlock>
       </fieldset>
       <fieldset>
         <legend>Preview</legend>
@@ -187,8 +192,9 @@ let content = (
     <div class="code-demo">
       <fieldset>
         <legend>Example Source Code</legend>
-        <code class="language-tsx" style="padding: 0.5rem">
-          {
+        <CodeBlock
+          style="padding: 0.5rem"
+          code={
             /* html */ `
  <form>
   <select name="fruit">
@@ -204,7 +210,7 @@ let content = (
 </form>
 `.trim()
           }
-        </code>
+        ></CodeBlock>
       </fieldset>
       <fieldset>
         <legend>Preview</legend>

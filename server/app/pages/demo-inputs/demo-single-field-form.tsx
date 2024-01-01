@@ -2,6 +2,7 @@ import { color, id, object } from 'cast.ts'
 import code from '../../components/inline-code.js'
 import { newSingleFieldForm } from '../../components/single-field-form.js'
 import SourceCode from '../../components/source-code.js'
+import { CodeBlock } from '../../components/code-block.js'
 import Style from '../../components/style.js'
 import { o } from '../../jsx/jsx.js'
 import { Routes } from '../../routes.js'
@@ -114,8 +115,9 @@ let content = (
     <div class="code-demo">
       <fieldset>
         <legend>Example Source Code</legend>
-        <code class="language-tsx" style="padding: 0.5rem">
-          {`
+        <CodeBlock
+          style="padding: 0.5rem"
+          code={`
 let Username = newSingleFieldForm({
   action: '/profile/update-username',
   label: 'Username',
@@ -162,7 +164,7 @@ function Profile() {
     <>
       <p>
         Welcome back,
-				<span id="greet_name">{user.username}</span>.
+        <span id="greet_name">{user.username}</span>.
       </p>
       <Username.Form value={user.username} />
       <FavoriteFruit.Form
@@ -190,7 +192,7 @@ let routes: Routes = {
 
 export default { routes, content }
 `.trim()}
-        </code>
+        ></CodeBlock>
       </fieldset>
       <fieldset>
         <legend>Preview</legend>
