@@ -9,7 +9,7 @@ import { markdownToHtml } from '../format/markdown.js'
 
 let text = readFileSync('README.md').toString()
 
-let html = Raw(markdownToHtml(text))
+let html = Raw(await markdownToHtml(text))
 let markdown = <pre style="white-space: break-spaces">{text}</pre>
 markdown = (
   <pre>
