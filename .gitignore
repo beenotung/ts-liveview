@@ -29,3 +29,6 @@ uploads/
 
 # git files
 *.orig
+
+# data files
+data/*.tmp.*
