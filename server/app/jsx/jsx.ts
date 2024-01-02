@@ -28,5 +28,11 @@ function fixProps(props: attrs) {
     props.class = props.className
     delete props.className
   }
+  if ('style' in props) {
+    let style = props.style
+    if (typeof style === 'string') {
+      props.style = style.replace(/\s*\n\s*/g, ' ').trim()
+    }
+  }
   return props
 }
