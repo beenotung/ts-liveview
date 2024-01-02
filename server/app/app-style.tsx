@@ -26,6 +26,19 @@ h1,h2,h3,h4,h5,h6 { margin: 1em 0 0.5em }
   width: max-content;
 }
 
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.flex-column {
+  flex-direction: column;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
 [hidden] {
   display: none !important;
 }
