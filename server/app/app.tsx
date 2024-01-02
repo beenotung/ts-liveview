@@ -19,9 +19,13 @@ import { Flush } from './components/flush.js'
 import { config } from '../config.js'
 import Stats from './stats.js'
 import { MuteConsole, Script } from './components/script.js'
-import { matchRoute, menuRoutes, PageRouteMatch } from './routes.js'
+import {
+  matchRoute,
+  menuRoutes,
+  PageRouteMatch,
+  redirectDict,
+} from './routes.js'
 import Chatroom from './pages/chatroom.js'
-import { redirectDict } from './routes.js'
 import type { ClientMountMessage, ClientRouteMessage } from '../../client/types'
 import { then } from '@beenotung/tslib/result.js'
 import { appStyle } from './app-style.js'
