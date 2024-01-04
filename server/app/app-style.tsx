@@ -25,7 +25,20 @@ h1,h2,h3,h4,h5,h6 { margin: 1em 0 0.5em }
   display: inline-block;
   width: max-content;
 }
+.text-center {
+  text-align: center;
+}
 
+.d-flex {
+  display: flex;
+}
+.flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+.flex-grow {
+  flex-grow: 1;
+}
 .flex-center {
   display: flex;
   justify-content: center;
