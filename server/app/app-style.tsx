@@ -67,4 +67,9 @@ code.inline-code {
   border-radius: 0.25rem;
   font-family: monospace;
 }
+
+.app {
+  max-width: 1089px;
+  margin: auto;
+}
 `)
