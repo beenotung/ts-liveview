@@ -58,7 +58,7 @@ else
     cd $root_dir
     pnpm i -r
     cd db
-    npm run migrate
+    npx knex migrate:latest
     $pm2_cmd
   "
 fi

@@ -1,7 +1,7 @@
 {
   "name": "db",
   "version": "1.0.0",
-  "type": "commonjs",
+  "type": "module",
   "description": "",
   "keywords": [],
   "author": "Beeno Tung",
@@ -11,8 +11,9 @@
     "dev": "run-s migrate update",
     "update": "run-s gen-migrate migrate gen-proxy",
     "gen-migrate": "auto-migrate ../data/db.sqlite3 < erd.txt",
-    "migrate": "knex migrate:latest",
-    "gen-proxy": "erd-to-proxy < erd.txt > proxy.ts"
+    "migrate": "tsx knex-cli.ts migrate:latest",
+    "gen-proxy": "erd-to-proxy < erd.txt > proxy.ts",
+    "knex": "tsx knex-cli.ts"
   },
   "dependencies": {
     "better-sqlite3-proxy": "^2.5.2",
