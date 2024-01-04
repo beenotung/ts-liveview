@@ -13,6 +13,8 @@ export function Swiper(attrs: {
   width?: string | number
   height?: string | number
   interval?: number
+  showArrow?: boolean
+  showPagination?: boolean
 }) {
   let css = /* css */ `
 .swiper-wrapper {
@@ -49,16 +51,28 @@ export function Swiper(attrs: {
             <div class="swiper-slide">{content}</div>
           ))}
         </div>
-        <div class="swiper-pagination swiper-pagination-bullets swiper-pagination-horizontal">
-          {mapArray(attrs.slides, (slide, i) => (
-            <span
-              class="swiper-pagination-bullet"
-              onclick={`swiperSlide(this, '${i}')`}
-            ></span>
-          ))}
-        </div>
-        <div class="swiper-button-prev" onclick="swiperSlide(this, -1)"></div>
-        <div class="swiper-button-next" onclick="swiperSlide(this, +1)"></div>
+        {attrs.showPagination ? (
+          <div class="swiper-pagination swiper-pagination-bullets swiper-pagination-horizontal">
+            {mapArray(attrs.slides, (slide, i) => (
+              <span
+                class="swiper-pagination-bullet"
+                onclick={`swiperSlide(this, '${i}')`}
+              ></span>
+            ))}
+          </div>
+        ) : null}
+        {attrs.showArrow ? (
+          <>
+            <div
+              class="swiper-button-prev"
+              onclick="swiperSlide(this, -1)"
+            ></div>
+            <div
+              class="swiper-button-next"
+              onclick="swiperSlide(this, +1)"
+            ></div>
+          </>
+        ) : null}
       </div>
       {Raw(/* html */ `
 <script>
