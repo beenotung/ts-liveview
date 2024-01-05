@@ -8,7 +8,8 @@ else
   name="$1"
 fi
 
-Name=$(echo "$name" | sed 's/^\(.\)/\U\1/')
+Name=$(echo "$name" | sed 's/^\(.\)/\U\1/' | sed 's/-\(.\)/\U\1/g')
+Title=$(echo "$name" | sed 's/^\(.\)/\U\1/' | sed 's/-\(.\)/ \U\1/g')
 
 file="server/app/pages/$name.tsx"
 
@@ -28,6 +29,8 @@ import Style from '../components/style.js'
 import { Context } from '../context.js'
 import { mapArray } from '../components/fragment.js'
 
+let pageTitle = '$Title'
+
 let style = Style(/* css */ \`
 #$name {
 
@@ -37,7 +40,7 @@ let style = Style(/* css */ \`
 let page = (
   <div id='$name'>
     {style}
-    <h1>$Name</h1>
+    <h1>{pageTitle}</h1>
     <Main/>
   </div>
 )
@@ -59,9 +62,9 @@ function Submit() {
 
 let routes: Routes = {
   '/$name': {
-    title: title('$Name'),
+    title: title(pageTitle),
     description: 'TODO',
-    menuText: '$Name',
+    menuText: pageTitle,
     node: page,
   },
   '/$name/submit': {
