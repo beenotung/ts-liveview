@@ -15,8 +15,12 @@ export function Swiper(attrs: {
   interval?: number
   showArrow?: boolean
   showPagination?: boolean
+  keepTallest?: boolean
 }) {
   let css = /* css */ `
+.swiper {
+  transition: max-height 0.3s;
+}
 .swiper-wrapper {
   transition: transform 0.3s;
 }
@@ -87,6 +91,12 @@ function swiperSlide(swiper, dir) {
   index = (index + n) % n
   wrapper.dataset.index = index
   wrapper.style.transform = 'translateX(-' + index + '00%)'
+  if (${!(attrs.keepTallest || false)}) {
+    let slide = slides[index]
+    swiper.style.maxHeight = 'auto'
+    let rect = slide.getBoundingClientRect()
+    swiper.style.maxHeight = rect.height + 'px'
+  }
   swiper.querySelectorAll('.swiper-pagination-bullet').forEach((e, i) => {
     if (i == index) {
       e.setAttribute('aria-current', 'true')
