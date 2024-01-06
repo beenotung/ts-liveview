@@ -7,15 +7,12 @@ loadEnv()
 let env = {
   NODE_ENV: 'development',
   PORT: 8100,
-  BEHIND_HTTPS_PROXY: 'false',
   COOKIE_SECRET: ' ',
   EPOCH: 1, // to distinct initial run or restart in serve mode
   UPLOAD_DIR: 'uploads',
 }
 
 populateEnv(env, { mode: 'halt' })
-
-let behind_proxy = env.BEHIND_HTTPS_PROXY === 'true'
 
 let production = env.NODE_ENV === 'production' || process.argv[2] === '--prod'
 let development = env.NODE_ENV === 'development' || process.argv[2] === '--dev'
@@ -42,8 +39,6 @@ export let config = {
   production,
   development,
   port: env.PORT,
-  require_https: !behind_proxy && production,
-  behind_proxy,
   cookie_secret: env.COOKIE_SECRET,
   site_name: 'ts-liveview Demo',
   site_description: 'Demo website of ts-liveview',
