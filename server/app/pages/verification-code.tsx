@@ -342,16 +342,15 @@ async function checkEmailVerificationCode(
           : 'Verification code not matched.',
       )
     }
-    let user_id = seedRow(
-      proxy.user,
-      { email: input.email },
-      {
+    let user_id =
+      find(proxy.user, { email: input.email })?.id ||
+      proxy.user.push({
+        email: input.email,
         username: null,
         password_hash: null,
         tel: null,
         avatar: null,
-      },
-    )
+      })
     writeUserIdToCookie(res, user_id)
     return {
       title: apiEndpointTitle,
