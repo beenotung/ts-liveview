@@ -176,7 +176,7 @@ function checkPassword (form) {
   confirmPasswordMsg.style.color = 'green'
 }
 </script>`)}
-      <input type="submit" value="Submit" />
+      <input type="submit" value="Register" />
       <ClearInputContext />
     </form>
     <div class="hint">
