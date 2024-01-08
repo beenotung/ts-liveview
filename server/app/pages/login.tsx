@@ -12,9 +12,18 @@ import { getStringCasual } from '../helpers.js'
 import { comparePassword } from '../../hash.js'
 import { UserMessageInGuestView } from './profile.js'
 import { getAuthUserId, writeUserIdToCookie } from '../auth/user.js'
+import Style from '../components/style.js'
+
+let style = Style(/* css */ `
+#login .field {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+`)
 
 let LoginPage = (
   <div id="login">
+    {style}
     <h1>Login to {config.short_site_name}</h1>
     <p>{commonTemplatePageText}</p>
     <Main />
@@ -28,7 +37,30 @@ function Main(_attrs: {}, context: Context) {
 
 let guestView = (
   <>
-    <form method="post" action="/login/submit">
+    <div>Login with:</div>
+    <form
+      method="POST"
+      action="/verify/email/submit"
+      // onsubmit="emitForm(event)"
+    >
+      <div class="field">
+        <label>
+          Email
+          <div class="input-container">
+            <input name="email" type="email" autocomplete="email" />
+          </div>
+        </label>
+      </div>
+      <div class="field">
+        <label>
+          <input type="checkbox" name="include_link" /> Include magic link (more
+          convince but may be treated as spam)
+        </label>
+      </div>
+      <input type="submit" value="Verify" />
+    </form>
+    <div class="or-line flex-center">or</div>
+    <form method="post" action="/login/with/password/submit">
       <label>
         Username or email address
         <div class="input-container">
