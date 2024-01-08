@@ -113,6 +113,15 @@ let homePage = (
             Show Side Menu
           </ion-button>
         </ion-menu-toggle>
+        <Link
+          tagName="ion-button"
+          href="/login"
+          fill="block"
+          color="primary"
+          class="ion-margin-top"
+        >
+          Login
+        </Link>
         {wsStatus.safeArea}
       </ion-content>
     </div>
