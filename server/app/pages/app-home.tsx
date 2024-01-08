@@ -66,6 +66,15 @@ let homePage = (
       >
         Show Alert
       </ion-button>
+      <Link
+        tagName="ion-button"
+        href="/login"
+        fill="block"
+        color="primary"
+        class="ion-margin-top"
+      >
+        Login
+      </Link>
       {wsStatus.safeArea}
     </ion-content>
     <ion-footer>
