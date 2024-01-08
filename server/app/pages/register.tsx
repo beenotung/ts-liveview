@@ -26,13 +26,6 @@ import { getAuthUserId } from '../auth/user.js'
 import { UserMessageInGuestView } from './profile.js'
 
 let style = Style(/* css */ `
-.or-line::before,
-.or-line::after {
-  content: '';
-  flex: 1;
-  border-bottom: 1px solid #888;
-  margin: 1rem 0.75rem;
-}
 .oauth-provider-list a {
   display: inline-flex;
   align-items: center;
