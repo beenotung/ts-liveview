@@ -26,28 +26,6 @@ export function Field(
 ) {
   let value = context.values?.[attrs.name]
   let validateResult = context.contextError?.[attrs.msgId]
-  if (config.layout_type === LayoutType.ionic) {
-    return (
-      <>
-        <ion-item>
-          <ion-input
-            type={attrs.type}
-            name={attrs.name}
-            oninput={attrs.oninput}
-            value={value}
-            autocomplete={attrs.autocomplete}
-            label={attrs.label}
-            label-placement="floating"
-            required={attrs.required}
-            onchange={attrs.onchange}
-          />
-        </ion-item>
-        <div style="margin-inline-start: 1rem">
-          {renderErrorMessage(attrs.msgId, validateResult)}
-        </div>
-      </>
-    )
-  }
   return (
     <div class="field">
       <label>

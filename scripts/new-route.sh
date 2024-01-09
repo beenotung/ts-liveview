@@ -9,8 +9,7 @@ else
   echo "page name: $name"
 fi
 
-read -p "template [hybrid/web/ionic]: " template
-template_file="server/app/pages/route-template-$template.tsx"
+template_file="server/app/pages/route-template-web.tsx"
 if [ ! -f "$template_file" ]; then
   echo >&2 "Template file not found: $template_file"
   exit 1

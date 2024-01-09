@@ -29,10 +29,8 @@ import {
 } from './routes.js'
 import type { ClientMountMessage, ClientRouteMessage } from '../../client/types'
 import { then } from '@beenotung/tslib/result.js'
-import { webAppStyle, ionicAppStyle } from './app-style.js'
-import { preIonicAppScript, postIonicAppScript } from './styles/mobile-style.js'
+import { webAppStyle } from './app-style.js'
 import { renderWebTemplate } from '../../template/web.js'
-import { renderIonicTemplate } from '../../template/ionic.js'
 import { HTMLStream } from './jsx/stream.js'
 import { renewAuthCookieMiddleware } from './auth/user.js'
 import { getWsCookies } from './cookie.js'
@@ -59,9 +57,7 @@ function renderTemplate(
   let layout_type = route.layout_type || config.layout_type
   let App = layouts[layout_type]
   let app = App(route)
-  let render =
-    route.renderTemplate ||
-    (App == IonicApp ? renderIonicTemplate : renderWebTemplate)
+  let render = route.renderTemplate || renderWebTemplate
   render(stream, {
     site_name: config.site_name,
     title: escapeHTMLTextContent(route.title),
@@ -119,7 +115,6 @@ type Layout = (route: PageRouteMatch) => Element
 let layouts: Record<LayoutType, Layout> = {
   [LayoutType.navbar]: NavbarApp,
   [LayoutType.sidebar]: SidebarApp,
-  [LayoutType.ionic]: IonicApp,
 }
 
 function NavbarApp(route: PageRouteMatch): Element {
@@ -165,26 +160,6 @@ function SidebarApp(route: PageRouteMatch): Element {
             <Footer style="padding: 0.5rem;" />
           </div>
         </div>
-        <Flush />
-      </>,
-    ],
-  ]
-}
-
-function IonicApp(route: PageRouteMatch): Element {
-  // you can write the AST direct for more compact wire-format
-  return [
-    'div.app',
-    {},
-    [
-      // or you can write in JSX for better developer-experience (if you're coming from React)
-      <>
-        {ionicAppStyle}
-        {scripts}
-        {preIonicAppScript}
-        <Flush />
-        <ion-app>{route.node}</ion-app>
-        {postIonicAppScript}
         <Flush />
       </>,
     ],
