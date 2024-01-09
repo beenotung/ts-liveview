@@ -29,7 +29,6 @@ import { renderError } from '../components/error.js'
 import { getWsCookies } from '../cookie.js'
 import { getAuthUserId } from '../auth/user.js'
 import { UserMessageInGuestView } from './profile.js'
-import { IonBackButton } from '../components/ion-back-button.js'
 import { wsStatus } from '../components/ws-status.js'
 import { formatTel } from '../components/tel.js'
 import { validateUsername, ValidateUserResult } from '../validate/user.js'
@@ -85,30 +84,6 @@ let RegisterPage = (
     <Main />
   </div>
 )
-if (config.layout_type === LayoutType.ionic) {
-  RegisterPage = (
-    <>
-      {style}
-      <ion-header>
-        <ion-toolbar color="primary">
-          <IonBackButton href="/" backText="Home" color="light" />
-          <ion-title>Register</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <div id="register">
-          <p hidden>{commonTemplatePageText}</p>
-          <p>
-            Welcome to {config.short_site_name}!
-            <br />
-            Let's begin the adventure~
-          </p>
-          <Main />
-        </div>
-      </ion-content>
-    </>
-  )
-}
 
 function Main(_attrs: {}, context: Context) {
   let user_id = getAuthUserId(context)
@@ -133,33 +108,13 @@ let verifyFormBody = (
       oninput="emit('/register/check-tel', this.value)"
       autocomplete="tel"
     />
-    {config.layout_type !== LayoutType.ionic ? (
-      <div class="field">
-        <label>
-          <input type="checkbox" name="include_link" /> Include magic link (more
-          convince but may be treated as spam)
-        </label>
-      </div>
-    ) : (
-      <ion-item>
-        <ion-checkbox slot="start" name="include_link" />
-        <ion-label>
-          Include magic link (more convince but may be treated as spam)
-        </ion-label>
-      </ion-item>
-    )}
-    {config.layout_type !== LayoutType.ionic ? (
-      <input type="submit" value="Verify" />
-    ) : (
-      <ion-button
-        type="submit"
-        class="ion-margin"
-        fill="block"
-        color="tertiary"
-      >
-        Verify
-      </ion-button>
-    )}
+    <div class="field">
+      <label>
+        <input type="checkbox" name="include_link" /> Include magic link (more
+        convince but may be treated as spam)
+      </label>
+    </div>
+    <input type="submit" value="Verify" />
   </>
 )
 
@@ -234,18 +189,7 @@ function checkPassword (form) {
   confirmPasswordMsg.style.color = 'green'
 }
 </script>`)}
-      {config.layout_type !== LayoutType.ionic ? (
-        <input type="submit" value="Register" />
-      ) : (
-        <ion-button
-          type="submit"
-          class="ion-margin"
-          fill="block"
-          color="primary"
-        >
-          Register
-        </ion-button>
-      )}
+      <input type="submit" value="Register" />
       <ClearInputContext />
     </form>
     <div class="hint">
@@ -274,26 +218,6 @@ function Field(
 ) {
   let value = context.values?.[attrs.name]
   let validateResult = context.contextError?.[attrs.msgId]
-  if (config.layout_type === LayoutType.ionic) {
-    return (
-      <>
-        <ion-item>
-          <ion-input
-            type={attrs.type}
-            name={attrs.name}
-            oninput={attrs.oninput}
-            value={value}
-            autocomplete={attrs.autocomplete}
-            label={attrs.label}
-            label-placement="floating"
-          />
-        </ion-item>
-        <div style="margin-inline-start: 1rem">
-          {renderErrorMessage(attrs.msgId, validateResult)}
-        </div>
-      </>
-    )
-  }
   return (
     <div class="field">
       <label>
