@@ -20,7 +20,17 @@ let homePage = (
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <p>You can get started by replacing the contents in this page</p>
+      <p>
+        You can get started by replacing the contents of this page in{' '}
+        <code class="inline-code">app-home.tsx</code>.
+      </p>
+      <p>
+        Hint: you can search a file by name in <b>vscode</b> by pressing{' '}
+        <code class="inline-code keyboard">Ctrl + P</code> or{' '}
+        <code class="inline-code keyboard">Cmd + P</code>.
+        <br />
+        <ion-note>(Cmd key looks like: ⌘)</ion-note>
+      </p>
       <hr style="height:1px; background-color:black;" />
       <div>
         Fictional characters commonly used as placeholders in discussions about
