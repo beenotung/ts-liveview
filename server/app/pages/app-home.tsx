@@ -33,6 +33,15 @@ let homePage = (
           </Link>
         ))}
       </ion-list>
+      <Link
+        tagName="ion-button"
+        href="/about"
+        fill="block"
+        color="primary"
+        class="ion-margin-top"
+      >
+        Hide hint
+      </Link>
       {wsStatus.safeArea}
     </ion-content>
   </>
