@@ -18,7 +18,16 @@ function showToast(title: SweetAlertOptions['title'], icon: SweetAlertIcon) {
   })
 }
 
+function showAlert(title: SweetAlertOptions['title'], icon: SweetAlertIcon) {
+  Swal.fire({
+    title,
+    icon,
+    heightAuto: false,
+  })
+}
+
 Object.assign(window, {
   Swal,
   showToast,
+  showAlert,
 })
