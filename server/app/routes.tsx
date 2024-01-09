@@ -134,15 +134,10 @@ let routeDict: Routes = {
 }
 if (config.layout_type === LayoutType.ionic) {
   routeDict = {
+    ...routeDict,
     ...appHome.routes,
     ...appCharacter.routes,
     ...appAbout.routes,
-    '/user-agents': {
-      title: title('User Agents of Visitors'),
-      description: "User agents of this site's visitors",
-      menuText: 'User Agents',
-      node: UserAgents,
-    },
   }
 }
 
