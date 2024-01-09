@@ -1,3 +1,5 @@
+import { readFileSync } from 'fs'
+
 export let MobileStyle = /* css */ `
 .page {
   min-height: 100%;
@@ -23,5 +25,21 @@ export let MobileStyle = /* css */ `
   .md .back .page.hide {
     transform: translate(0,-100%);
   }
+}
+
+${readFileSync('public/theme.css')}
+
+/* fix */
+ion-button[fill][color="primary"] {
+  --background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+}
+ion-button[fill][color="tertiary"] {
+  --background: var(--ion-color-tertiary);
+  color: var(--ion-color-tertiary-contrast);
+}
+ion-button[fill][color="success"] {
+  --background: var(--ion-color-success);
+  color: var(--ion-color-success-contrast);
 }
 `
