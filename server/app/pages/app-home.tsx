@@ -1,3 +1,4 @@
+import { loadClientPlugin } from '../../client-plugin.js'
 import { config, title } from '../../config.js'
 import { mapArray } from '../components/fragment.js'
 import { Link } from '../components/router.js'
@@ -43,15 +44,23 @@ let homePage = (
           </Link>
         ))}
       </ion-list>
-      <Link
-        tagName="ion-button"
-        href="/about"
+      {loadClientPlugin({ entryFile: 'dist/client/sweetalert.js' }).node}
+      <ion-button
         fill="block"
         color="primary"
         class="ion-margin-top"
+        onclick="showToast('sample toast message','info')"
       >
-        Hide hint
-      </Link>
+        Show Toast
+      </ion-button>
+      <ion-button
+        fill="block"
+        color="primary"
+        class="ion-margin-top"
+        onclick="showAlert('sample alert message','info')"
+      >
+        Show Alert
+      </ion-button>
       {wsStatus.safeArea}
     </ion-content>
   </>
