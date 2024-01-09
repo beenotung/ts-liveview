@@ -43,9 +43,6 @@ export function renderIonicTemplate(
       interactive when javascript is enabled.
     </div>
     <style>
-      body {
-        padding-bottom: 2.5rem;
-      }
       #noscript {
         display: none;
       }
