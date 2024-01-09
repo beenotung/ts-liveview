@@ -1,7 +1,17 @@
 import { o } from '../jsx/jsx.js'
 import { NodeList } from '../jsx/types.js'
-import { ThemeColor } from './page.js'
 import { Link } from './router.js'
+
+type ThemeColor =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'success'
+  | 'warning'
+  | 'danger'
+  | 'light'
+  | 'medium'
+  | 'dark'
 
 export function IonButton(
   attrs: {
