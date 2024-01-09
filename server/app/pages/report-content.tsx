@@ -18,7 +18,7 @@ import { Locale, Title } from '../components/locale.js'
 import { Page } from '../components/page.js'
 import { toRouteUrl } from '../../url.js'
 import { ContentReport, proxy } from '../../../db/proxy.js'
-import { BackToLink } from '../components/back-to-link.js'
+import { BackToLink, GoToLink } from '../components/back-to-link.js'
 import { Script } from '../components/script.js'
 import { db } from '../../../db/db.js'
 import { IonButton } from '../components/ion-button.js'
@@ -195,20 +195,14 @@ function ReportPage(attrs: {}, context: Context) {
   let return_url = params?.get('return_url') // required
   let return_title = params?.get('return_title') // optional
   return (
-    <Page
-      id="ReportContent"
-      title={pageTitle}
-      toolbarExtra={
-        role == 'admin' ? (
-          <ion-buttons slot="end">
-            <IonButton url={toRouteUrl(routes, '/report-content/review')}>
-              <Locale en="Review" zh_hk="審查" zh_cn="审查" />
-            </IonButton>
-          </ion-buttons>
-        ) : null
-      }
-    >
+    <Page id="ReportContent" title={pageTitle}>
       {ionicStyle}
+      {role == 'admin' && (
+        <GoToLink
+          href={toRouteUrl(routes, '/report-content/review')}
+          title={<Locale en="Review" zh_hk="審查" zh_cn="审查" />}
+        />
+      )}
       <p>
         <ion-icon name="warning" color="warning" size="large" />{' '}
         <Locale
