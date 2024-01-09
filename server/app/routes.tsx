@@ -15,11 +15,7 @@ import NotFoundPageRoute from './pages/not-found.js'
 import { then } from '@beenotung/tslib/result.js'
 import type { MenuRoute } from './components/menu'
 import DemoToast from './pages/demo-toast.js'
-import appHome from './pages/app-home.js'
-import appAbout from './pages/app-about.js'
-import appCharacter from './pages/app-character.js'
 import type { renderWebTemplate } from '../../template/web.js'
-import type { renderIonicTemplate } from '../../template/ionic.js'
 import { VNode } from '../../client/jsx/types.js'
 
 let titles: Record<string, string> = {}
@@ -33,7 +29,7 @@ const StreamingByDefault = true
 
 export type PageRoute = PageRouteOptions & (StaticPageRoute | DynamicPageRoute)
 
-type TemplateFn = typeof renderWebTemplate | typeof renderIonicTemplate
+type TemplateFn = typeof renderWebTemplate
 
 type RenderOptions = {
   layout_type?: LayoutType
@@ -88,9 +84,6 @@ let routeDict: Routes = {
     menuText: 'User Agents',
     node: UserAgents,
   },
-  ...appHome.routes,
-  ...appCharacter.routes,
-  ...appAbout.routes,
 }
 
 export let redirectDict: Record<string, string> = {
