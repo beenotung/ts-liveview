@@ -1,5 +1,5 @@
 import { loadClientPlugin } from '../../client-plugin.js'
-import { LayoutType, title } from '../../config.js'
+import { title } from '../../config.js'
 import { appIonTabBar } from '../components/app-tab-bar.js'
 import { mapArray } from '../components/fragment.js'
 import { Link } from '../components/router.js'
@@ -87,7 +87,6 @@ let routes: Routes = {
     menuText: 'Ionic App',
     menuFullNavigate: true,
     node: homePage,
-    layout_type: LayoutType.ionic,
   },
 }
 
