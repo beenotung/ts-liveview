@@ -53,7 +53,7 @@ export let config = {
   auto_open: !production && development && epoch === 1,
   upload_dir: env.UPLOAD_DIR,
   client_target: 'es2020',
-  layout_type: LayoutType.ionic,
+  layout_type: LayoutType.navbar,
 }
 
 const titleSuffix = ' | ' + config.site_name
