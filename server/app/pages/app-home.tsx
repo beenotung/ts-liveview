@@ -56,7 +56,6 @@ let homePage = (
       <ion-button
         fill="block"
         color="primary"
-        class="ion-margin-top"
         onclick="showAlert('sample alert message','info')"
       >
         Show Alert
