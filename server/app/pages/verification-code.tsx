@@ -5,7 +5,7 @@ import { EarlyTerminate, HttpError, MessageException } from '../../exception.js'
 import { proxy } from '../../../db/proxy.js'
 import { boolean, email, literal, object, optional, or, string } from 'cast.ts'
 import { sendEmail } from '../../email.js'
-import { LayoutType, apiEndpointTitle, config, title } from '../../config.js'
+import { apiEndpointTitle, config, title } from '../../config.js'
 import {
   Context,
   DynamicContext,
@@ -541,23 +541,6 @@ function VerifyEmailPage(attrs: {}, context: DynamicContext) {
       <VerifyEmailForm uuid={uuid!} email={email!} code={code} />
     </>
   )
-  if (config.layout_type == LayoutType.ionic) {
-    return (
-      <>
-        {style}
-        <ion-header>
-          <ion-toolbar>
-            <ion-title role="heading" aria-level="1">
-              {pageTitle}
-            </ion-title>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content id="verifyEmailPage" class="ion-padding">
-          {node}
-        </ion-content>
-      </>
-    )
-  }
   return (
     <>
       {style}
@@ -594,7 +577,7 @@ function VerifyEmailForm(attrs: {
         label={<Locale en="Verification code" zh_hk="驗證碼" zh_cn="验证码" />}
         input={
           <input
-            style={`font-family: monospace; width: ${config.layout_type == LayoutType.ionic ? '8ch' : '6ch'}; padding: 0.5ch`}
+            style="font-family: monospace; width: 6ch; padding: 0.5ch"
             minlength={PasscodeLength}
             maxlength={PasscodeLength}
             inputmode="numeric"
@@ -687,23 +670,6 @@ function VerifySMSPage(attrs: {}, context: DynamicContext) {
       <VerifySMSForm uuid={uuid!} tel={tel!} code={code} />
     </>
   )
-  if (config.layout_type == LayoutType.ionic) {
-    return (
-      <>
-        {style}
-        <ion-header>
-          <ion-toolbar>
-            <ion-title role="heading" aria-level="1">
-              {pageTitle}
-            </ion-title>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content id="verifySMSPage" class="ion-padding">
-          {node}
-        </ion-content>
-      </>
-    )
-  }
   return (
     <>
       {style}
@@ -740,7 +706,7 @@ function VerifySMSForm(attrs: {
         label={<Locale en="Verification code" zh_hk="驗證碼" zh_cn="验证码" />}
         input={
           <input
-            style={`font-family: monospace; width: ${config.layout_type == LayoutType.ionic ? '8ch' : '6ch'}; padding: 0.5ch`}
+            style={`font-family: monospace; width: 6ch; padding: 0.5ch`}
             minlength={PasscodeLength}
             maxlength={PasscodeLength}
             inputmode="numeric"

@@ -16,7 +16,6 @@ let epoch = fixEpoch()
 export enum LayoutType {
   navbar = 'navbar',
   sidebar = 'sidebar',
-  ionic = 'ionic',
 }
 
 export let config = {
