@@ -2,6 +2,9 @@
 set -e
 set -o pipefail
 
+type="$(sed -nr 's/\s+layout_type: LayoutType\.(\w+).*/\1/p' server/config.ts)"
+echo "page type: $type"
+
 if [ $# == 0 ]; then
   read -p "page name: " name
 else
@@ -22,13 +25,19 @@ if [ -f "$file" ]; then
   fi
 fi
 
+if [ "$type" == "ionic" ]; then
+  source ./scripts/route-template-ionic.sh
+else
+  source ./scripts/route-template-web.sh
+fi
+
 echo "import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 import { apiEndpointTitle, title } from '../../config.js'
 import Style from '../components/style.js'
 import { Context } from '../context.js'
 import { mapArray } from '../components/fragment.js'
-
+$template_import
 let pageTitle = '$Title'
 
 let style = Style(/* css */ \`
@@ -36,26 +45,7 @@ let style = Style(/* css */ \`
 
 }
 \`)
-
-let page = (
-  <div id='$name'>
-    {style}
-    <h1>{pageTitle}</h1>
-    <Main/>
-  </div>
-)
-
-function Main(attrs: {}, context: Context) {
-  let items = [1, 2, 3]
-  return (
-    <ul>
-      {mapArray(items, item => (
-        <li>item {item}</li>
-      ))}
-    </ul>
-  )
-}
-
+$template_main
 function Submit() {
   return 'TODO'
 }
