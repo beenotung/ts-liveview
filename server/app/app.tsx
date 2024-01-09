@@ -164,7 +164,7 @@ function IonicApp(route: PageRouteMatch): Element {
         <ion-app>
           <div class="page">{route.node}</div>
         </ion-app>
-        {Script(`
+        {Script(/* javascript */ `
 document.querySelector('.page')?.classList.add('hide')
 setTimeout(()=>{
   document.querySelector('.page')?.classList.remove('hide')
