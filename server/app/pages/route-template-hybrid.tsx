@@ -9,11 +9,10 @@ import {
   throwIfInAPI,
 } from '../context.js'
 import { mapArray } from '../components/fragment.js'
+import { config } from '../../config.js'
 import { object, string } from 'cast.ts'
 import { Link, Redirect } from '../components/router.js'
 import { renderError } from '../components/error.js'
-import { Content, Page } from '../components/page.js'
-import { BackToLink } from '../components/back-to-link.js'
 
 let pageTitle = '__title__'
 let addPageTitle = 'Add __title__'
@@ -27,10 +26,10 @@ let style = Style(/* css */ `
 let page = (
   <>
     {style}
-    <Page id="__id__" title={pageTitle} backHref="/" backText="Home">
-      <Content ionic="Items" />
+    <div id="__id__">
+      <h1>{pageTitle}</h1>
       <Main />
-    </Page>
+    </div>
   </>
 )
 
@@ -41,41 +40,23 @@ let items = [
 
 function Main(attrs: {}, context: Context) {
   return (
-    <Content
-      web={
-        <>
-          <ul>
-            {mapArray(items, item => (
-              <li>
-                {item.title} ({item.slug})
-              </li>
-            ))}
-          </ul>
-          <Link href="/__url__/add">
-            <button>{addPageTitle}</button>
-          </Link>
-        </>
-      }
-      ionic={
-        <>
-          <ion-list>
-            {mapArray(items, item => (
-              <ion-item>
-                {item.title} ({item.slug})
-              </ion-item>
-            ))}
-          </ion-list>
-          <Link href="/__url__/add" tagName="ion-button">
-            {addPageTitle}
-          </Link>
-        </>
-      }
-    />
+    <>
+      <ul>
+        {mapArray(items, item => (
+          <li>
+            {item.title} ({item.slug})
+          </li>
+        ))}
+      </ul>
+      <Link href="/__url__/add">
+        <button>{addPageTitle}</button>
+      </Link>
+    </>
   )
 }
 
-let addPage_web = (
-  <>
+let addPage = (
+  <div id="Add__id__">
     {Style(/* css */ `
 #Add__id__ .field {
   margin-block-end: 1rem;
@@ -89,91 +70,37 @@ let addPage_web = (
   margin-block-start: 0.25rem;
 }
 `)}
-    <div class="field">
-      <label>
-        Title*:
-        <input name="title" required minlength="3" maxlength="50" />
-        <p class="hint">(3-50 characters)</p>
-      </label>
-    </div>
-    <div class="field">
-      <label>
-        Slug*:
-        <input
-          name="slug"
-          required
-          placeholder="should be unique"
-          pattern="(\w|-|\.){1,32}"
-        />
-        <p class="hint">
-          (1-32 characters of: <code>a-z A-Z 0-9 - _ .</code>)
-        </p>
-      </label>
-    </div>
-    <input type="submit" value="Submit" />
-    <p>
-      Remark:
-      <br />
-      *: mandatory fields
-    </p>
-    <p id="add-message"></p>
-  </>
-)
-let addPage_ionic = (
-  <>
-    {Style(/* css */ `
-#Add__id__ .hint {
-  margin-inline-start: 1rem;
-  margin-block: 0.25rem;
-}
-`)}
-    <ion-list>
-      <ion-item>
-        <ion-input
-          name="title"
-          label="Title*:"
-          label-placement="floating"
-          required
-          minlength="3"
-          maxlength="50"
-        />
-      </ion-item>
-      <p class="hint">(3-50 characters)</p>
-      <ion-item>
-        <ion-input
-          name="slug"
-          label="Slug*: (unique url)"
-          label-placement="floating"
-          required
-          pattern="(\w|-|\.){1,32}"
-        />
-      </ion-item>
-      <p class="hint">
-        (1-32 characters of: <code>a-z A-Z 0-9 - _ .</code>)
-      </p>
-    </ion-list>
-    <div style="margin-inline-start: 1rem">
-      <ion-button type="submit">Submit</ion-button>
-    </div>
-    <p>
-      Remark:
-      <br />
-      *: mandatory fields
-    </p>
-    <p id="add-message"></p>
-  </>
-)
-let addPage = (
-  <Page
-    id="Add__id__"
-    title={addPageTitle}
-    backHref="/__url__"
-    backText={pageTitle}
-  >
+    <h1>{addPageTitle}</h1>
     <form method="POST" action="/__url__/add/submit" onsubmit="emitForm(event)">
-      <Content web={addPage_web} ionic={addPage_ionic} />
+      <div class="field">
+        <label>
+          Title*:
+          <input name="title" required minlength="3" maxlength="50" />
+          <p class="hint">(3-50 characters)</p>
+        </label>
+      </div>
+      <div class="field">
+        <label>
+          Slug*:
+          <input
+            name="slug"
+            required
+            placeholder="should be unique"
+            pattern="(\w|-|\.){1,32}"
+          />
+          <p class="hint">
+            (1-32 characters of: <code>a-z A-Z 0-9 - _ .</code>)
+          </p>
+        </label>
+      </div>
+      <input type="submit" value="Submit" />
+      <p>
+        Remark:
+        <br />
+        *: mandatory fields
+      </p>
     </form>
-  </Page>
+  </div>
 )
 
 let submitParser = object({
@@ -191,7 +118,6 @@ function Submit(attrs: {}, context: DynamicContext) {
     })
     return <Redirect href={`/__url__/result?id=${id}`} />
   } catch (error) {
-    throwIfInAPI(error, '#add-message', context)
     return (
       <Redirect
         href={
@@ -207,21 +133,18 @@ function SubmitResult(attrs: {}, context: DynamicContext) {
   let error = params.get('error')
   let id = params.get('id')
   return (
-    <Page
-      id="Add__id__"
-      backHref="/__url__/add"
-      backText="Form"
-      title={'Submitted ' + pageTitle}
-    >
+    <div>
       {error ? (
         renderError(error, context)
       ) : (
         <>
           <p>Your submission is received (#{id}).</p>
-          <BackToLink href="/__url__" title={pageTitle} />
+          <p>
+            Back to <Link href="/__url__">{pageTitle}</Link>
+          </p>
         </>
       )}
-    </Page>
+    </div>
   )
 }
 
