@@ -25,8 +25,7 @@ import { formatTel } from '../components/tel.js'
 import { validateNickname, validateUsername } from '../validate/user.js'
 import { object, string } from 'cast.ts'
 import { MessageException } from '../../exception.js'
-import { Content, Page } from '../components/page.js'
-import { IonButton } from '../components/ion-button.js'
+import { Page } from '../components/page.js'
 import { Locale, Title } from '../components/locale.js'
 
 let pageTitle = <Locale en="Profile" zh_hk="帳戶" zh_cn="账户" />
@@ -305,18 +304,9 @@ ${toastPlugin.script}
       </form>
       <hr style="margin-bottom: 2rem" />
       {/* TODO make a popup confirm for logout */}
-      <Content
-        web={
-          <a href="/logout" rel="nofollow">
-            <Locale en="Logout" zh_hk="登出" zh_cn="登出" />
-          </a>
-        }
-        ionic={
-          <IonButton url="/logout" rel="nofollow" color="dark" expand="block">
-            <Locale en="Logout" zh_hk="登出" zh_cn="登出" />
-          </IonButton>
-        }
-      ></Content>
+      <a href="/logout" rel="nofollow">
+        <Locale en="Logout" zh_hk="登出" zh_cn="登出" />
+      </a>
     </>
   )
 }

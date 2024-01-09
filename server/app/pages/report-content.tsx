@@ -11,22 +11,20 @@ import {
 } from '../context.js'
 import { mapArray } from '../components/fragment.js'
 import { object, string, values } from 'cast.ts'
-import { Redirect } from '../components/router.js'
+import { Link, LinkAttrs, Redirect } from '../components/router.js'
 import { renderError } from '../components/error.js'
 import { getAuthUser, getAuthUserRole } from '../auth/user.js'
 import { Locale, Title } from '../components/locale.js'
-import { Content, Page } from '../components/page.js'
+import { Page } from '../components/page.js'
 import { toRouteUrl } from '../../url.js'
 import { ContentReport, proxy } from '../../../db/proxy.js'
 import { BackToLink } from '../components/back-to-link.js'
 import { Script } from '../components/script.js'
 import { db } from '../../../db/db.js'
-import { IonButton } from '../components/ion-button.js'
 import DateTimeText from '../components/datetime.js'
 import { getDisplayName } from './profile.js'
 import { HttpError, MessageException } from '../../exception.js'
 import httpStatus from 'http-status'
-import { ionicStyle } from '../styles/ionic-style.js'
 
 let pageTitle = <Locale en="Report Content" zh_hk="檢舉內容" zh_cn="检举内容" />
 
@@ -200,7 +198,7 @@ let reasonCategories: ReasonCategory[] = [
   },
 ]
 
-let webStyle = Style(/* css */ `
+let style = Style(/* css */ `
 .report-type--label {
   display: block;
   margin-inline-start: 1rem;
@@ -208,7 +206,7 @@ let webStyle = Style(/* css */ `
 }
 `)
 
-let webScript = Script(/* js */ `
+let script = Script(/* js */ `
 ReportContentForm.addEventListener('change', event => {
   if (event.target.name != 'type') return
   let form = event.target.closest('form')
@@ -217,37 +215,15 @@ ReportContentForm.addEventListener('change', event => {
 })
 `)
 
-let ionicScript = Script(/* js */ `
-ReportContentForm.addEventListener('ionChange', event => {
-  if (event.target.name != 'type') return
-  let form = event.target.closest('form')
-  let submitButton = form.querySelector('ion-button[type="submit"]')
-  submitButton.disabled = !event.detail.value
-})
-`)
-
 // TODO obtain foreign key from url
 // TODO implement web version
 function ReportPage(attrs: {}, context: Context) {
-  let role = getAuthUserRole(context)
   let params = getContextSearchParams(context)
   let return_url = params?.get('return_url') // required
   let return_title = params?.get('return_title') // optional
   return (
-    <Page
-      id="ReportContent"
-      title={pageTitle}
-      toolbarExtra={
-        role == 'admin' ? (
-          <ion-buttons slot="end">
-            <IonButton url={toRouteUrl(routes, '/report-content/review')}>
-              <Locale en="Review" zh_hk="審查" zh_cn="审查" />
-            </IonButton>
-          </ion-buttons>
-        ) : null
-      }
-    >
-      <Content web={webStyle} ionic={ionicStyle} />
+    <Page id="ReportContent" title={pageTitle}>
+      {style}
       <p>
         <ion-icon name="warning" color="warning" size="large" />{' '}
         <Locale
@@ -265,137 +241,45 @@ function ReportPage(attrs: {}, context: Context) {
       >
         <input type="hidden" name="return_url" value={return_url} />
         <input type="hidden" name="return_title" value={return_title} />
-        <Content
-          web={
-            <>
-              <div>
-                {mapArray(reasonCategories, category => (
-                  <details>
-                    <summary>
-                      <Locale
-                        en={category.en}
-                        zh_hk={category.zh_hk}
-                        zh_cn={category.zh_cn}
-                      />
-                    </summary>
-                    {mapArray(category.types, type => (
-                      <label class="report-type--label">
-                        <input type="radio" name="type" value={type.code} />{' '}
-                        <Locale
-                          en={type.en}
-                          zh_hk={type.zh_hk}
-                          zh_cn={type.zh_cn}
-                        />
-                      </label>
-                    ))}
-                  </details>
-                ))}
-              </div>
-              <div>
-                <label>
-                  <Locale
-                    en="Additional Details"
-                    zh_hk="補充資料"
-                    zh_cn="补充资料"
-                  />
-                  <br />
-                  <textarea
-                    name="remark"
-                    placeholder={Locale(
-                      {
-                        en: 'Any details that can help us review this report',
-                        zh_hk: '任何有助我們審視此檢舉的資料',
-                        zh_cn: '任何有助我们审视此检举的资料',
-                      },
-                      context,
-                    )}
-                  ></textarea>
+        <div>
+          {mapArray(reasonCategories, category => (
+            <details>
+              <summary>
+                <Locale
+                  en={category.en}
+                  zh_hk={category.zh_hk}
+                  zh_cn={category.zh_cn}
+                />
+              </summary>
+              {mapArray(category.types, type => (
+                <label class="report-type--label">
+                  <input type="radio" name="type" value={type.code} />{' '}
+                  <Locale en={type.en} zh_hk={type.zh_hk} zh_cn={type.zh_cn} />
                 </label>
-              </div>
-              <button type="submit" disabled>
-                <Locale en="Submit Report" zh_hk="發送回報" zh_cn="发送报告" />
-              </button>
-            </>
-          }
-          ionic={
-            <>
-              <ion-list>
-                <ion-list-header>
-                  <Locale
-                    en="Problem Categories"
-                    zh_hk="問題分類"
-                    zh_cn="问题分类"
-                  />
-                </ion-list-header>
-                <ion-radio-group name="type">
-                  <ion-accordion-group>
-                    {mapArray(reasonCategories, category => (
-                      <ion-accordion value={category.code}>
-                        <ion-item slot="header">
-                          <ion-icon
-                            slot="start"
-                            name={category.icon}
-                            size="small"
-                            color="medium"
-                          />
-                          <ion-label>
-                            <Locale
-                              en={category.en}
-                              zh_hk={category.zh_hk}
-                              zh_cn={category.zh_cn}
-                            />
-                          </ion-label>
-                        </ion-item>
-                        {mapArray(category.types, type => (
-                          <ion-item slot="content">
-                            <ion-icon
-                              slot="start"
-                              name={type.icon}
-                              size="small"
-                              color="warning"
-                            />
-                            <ion-radio value={type.code} color="warning">
-                              <span class="ion-text-wrap">
-                                <Locale
-                                  en={type.en}
-                                  zh_hk={type.zh_hk}
-                                  zh_cn={type.zh_cn}
-                                />
-                              </span>
-                            </ion-radio>
-                          </ion-item>
-                        ))}
-                      </ion-accordion>
-                    ))}
-                  </ion-accordion-group>
-                </ion-radio-group>
-                <ion-list-header>
-                  <Locale
-                    en="Additional Details"
-                    zh_hk="補充資料"
-                    zh_cn="补充资料"
-                  />
-                </ion-list-header>
-                <ion-item>
-                  <ion-textarea
-                    name="remark"
-                    placeholder={Locale(
-                      {
-                        en: 'Any details that can help us review this report',
-                        zh_hk: '任何有助我們審視此檢舉的資料',
-                        zh_cn: '任何有助我们审视此检举的资料',
-                      },
-                      context,
-                    )}
-                  ></ion-textarea>
-                </ion-item>
-              </ion-list>
-              <ion-button shape="round" expand="full" type="submit" disabled>
-                <Locale en="Submit Report" zh_hk="發送回報" zh_cn="发送报告" />
-              </ion-button>{' '}
-            </>
-          }
-        />
+              ))}
+            </details>
+          ))}
+        </div>
+        <div>
+          <label>
+            <Locale en="Additional Details" zh_hk="補充資料" zh_cn="补充资料" />
+            <br />
+            <textarea
+              name="remark"
+              placeholder={Locale(
+                {
+                  en: 'Any details that can help us review this report',
+                  zh_hk: '任何有助我們審視此檢舉的資料',
+                  zh_cn: '任何有助我们审视此检举的资料',
+                },
+                context,
+              )}
+            ></textarea>
+          </label>
+        </div>
+        <button type="submit" disabled>
+          <Locale en="Submit Report" zh_hk="發送回報" zh_cn="发送报告" />
+        </button>
       </form>
 
       <p>
@@ -406,7 +290,7 @@ function ReportPage(attrs: {}, context: Context) {
           zh_cn="我们会审查您的报告，如发现用户的内容违规，我们将会作出适当处理。请放心，报告的资料会保密处理。与此同时，我们也可能会联系阁下以便跟进问题。"
         />
       </p>
-      <Content web={webScript} ionic={ionicScript} />
+      {script}
     </Page>
   )
 }
@@ -568,7 +452,7 @@ function ReviewPage(attrs: {}, context: DynamicContext) {
   let reports = selectPendingReports()
   return (
     <Page id="Review" title={ReviewPageTitle} class="ion-padding-vertical">
-      <Content web={webReviewStyle} ionic={ionicStyle} />
+      {webReviewStyle}
       {reviewStyle}
       <p class="ion-padding-horizontal">
         Total <span class="pending-count">{countPendingReports()}</span> reports
@@ -663,6 +547,26 @@ function ReviewPage(attrs: {}, context: DynamicContext) {
         })}
       </ion-list>
     </Page>
+  )
+}
+
+// using simplified css, not the actual ionic component
+function IonButton(
+  attrs: {
+    url: string
+  } & Omit<LinkAttrs, 'tagName' | 'href'> &
+    object,
+) {
+  let { url, children, disabled, ...rest } = attrs
+  return (
+    <Link
+      tagName="ion-button"
+      href={url}
+      disabled={disabled ? '' : undefined}
+      {...rest}
+    >
+      {[children]}
+    </Link>
   )
 }
 

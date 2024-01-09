@@ -21,14 +21,12 @@ import { renderError } from '../components/error.js'
 import { getWsCookies } from '../cookie.js'
 import { getAuthUserId } from '../auth/user.js'
 import { UserMessageInGuestView } from './profile.js'
-import { wsStatus } from '../components/ws-status.js'
 import { formatTel } from '../components/tel.js'
 import { validateUsername, ValidateUserResult } from '../validate/user.js'
 import { oauthProviderList } from '../components/oauth.js'
 import { ClearInputContext, Field, InputContext } from '../components/field.js'
 import { loadClientPlugin } from '../../client-plugin.js'
-import { is_ionic, is_web, Page } from '../components/page.js'
-import { IonButton } from '../components/ion-button.js'
+import { Page } from '../components/page.js'
 import { Locale, Title } from '../components/locale.js'
 
 let style = Style(/* css */ `
@@ -66,8 +64,6 @@ let RegisterPage = (
       title={<Title t={<Locale en="Register" zh_hk="註冊" zh_cn="注册" />} />}
       backHref="/"
       backText={<Locale en="Home" zh_hk="主頁" zh_cn="主页" />}
-      backColor="light"
-      headerColor="primary"
     >
       <p>
         <Locale
@@ -83,7 +79,6 @@ let RegisterPage = (
         />
       </p>
       <Main />
-      {is_ionic && wsStatus.safeArea}
     </Page>
     {sweetAlertPlugin.node}
   </>
@@ -112,17 +107,11 @@ let verifyFormBody = (
         }
       />
     )}
-    {config.enable_email &&
-      config.enable_sms &&
-      (is_web ? (
-        <div style="margin: 0.5rem 0">
-          <Locale en="or" zh_hk="或" zh_cn="或" />
-        </div>
-      ) : (
-        <div style="margin-inline-start: 1rem; margin-top: 1rem">
-          <Locale en="or" zh_hk="或" zh_cn="或" />
-        </div>
-      ))}
+    {config.enable_email && config.enable_sms && (
+      <div style="margin: 0.5rem 0">
+        <Locale en="or" zh_hk="或" zh_cn="或" />
+      </div>
+    )}
     {config.enable_sms && (
       <Field
         label={<Locale en="Phone number" zh_hk="電話號碼" zh_cn="电话号码" />}
@@ -139,53 +128,20 @@ let verifyFormBody = (
         }
       />
     )}
-    {is_web ? (
-      <div class="field">
-        <label>
-          <input type="checkbox" name="include_link" />{' '}
-          <Locale
-            en="Include magic link (more convenient but may be treated as spam)"
-            zh_hk="包含登入鏈接 (更方便但可能被視為垃圾郵件)"
-            zh_cn="包含登录链接 (更方便但可能被视为垃圾邮件)"
-          />
-        </label>
-      </div>
-    ) : (
-      <>
-        <ion-item>
-          <ion-checkbox slot="start" name="include_link" />
-          <ion-label style="pointer-events: none">
-            <Locale
-              en="Include magic link"
-              zh_hk="包含登入鏈接"
-              zh_cn="包含登录链接"
-            />
-          </ion-label>
-        </ion-item>
-        <ion-note color="dark">
-          <Locale
-            en="(More convenient but may be treated as spam)"
-            zh_hk="(更方便但可能被視為垃圾郵件)"
-            zh_cn="(更方便但可能被视为垃圾邮件)"
-          />
-        </ion-note>
-      </>
-    )}
-    {is_web ? (
-      <input
-        type="submit"
-        value={<Locale en="Verify" zh_hk="驗證" zh_cn="验证" />}
-      />
-    ) : (
-      <ion-button
-        type="submit"
-        class="ion-margin"
-        fill="block"
-        color="tertiary"
-      >
-        <Locale en="Verify" zh_hk="驗證" zh_cn="验证" />
-      </ion-button>
-    )}
+    <div class="field">
+      <label>
+        <input type="checkbox" name="include_link" />{' '}
+        <Locale
+          en="Include magic link (more convenient but may be treated as spam)"
+          zh_hk="包含登入鏈接 (更方便但可能被視為垃圾郵件)"
+          zh_cn="包含登录链接 (更方便但可能被视为垃圾邮件)"
+        />
+      </label>
+    </div>
+    <input
+      type="submit"
+      value={<Locale en="Verify" zh_hk="驗證" zh_cn="验证" />}
+    />
   </>
 )
 
@@ -298,21 +254,10 @@ function checkPassword (form) {
   confirmPasswordMsg.style.color = 'green'
 }
 </script>`)}
-      {is_web ? (
-        <input
-          type="submit"
-          value={<Locale en="Register" zh_hk="註冊" zh_cn="注册" />}
-        />
-      ) : (
-        <ion-button
-          type="submit"
-          class="ion-margin"
-          expand="block"
-          color="primary"
-        >
-          <Locale en="Register" zh_hk="註冊" zh_cn="注册" />
-        </ion-button>
-      )}
+      <input
+        type="submit"
+        value={<Locale en="Register" zh_hk="註冊" zh_cn="注册" />}
+      />
       <ClearInputContext />
     </form>
     <div class="hint-block">
@@ -360,20 +305,9 @@ function checkPassword (form) {
       />
     </div>
     <div style="margin-bottom: 1rem">
-      {is_web ? (
-        <Link href="/login">
-          <Locale en="Login" zh_hk="登入" zh_cn="登录" />
-        </Link>
-      ) : (
-        <IonButton
-          url="/login"
-          expand="block"
-          class="ion-margin"
-          color="secondary"
-        >
-          <Locale en="Login" zh_hk="登入" zh_cn="登录" />
-        </IonButton>
-      )}
+      <Link href="/login">
+        <Locale en="Login" zh_hk="登入" zh_cn="登录" />
+      </Link>
     </div>
   </>
 )
