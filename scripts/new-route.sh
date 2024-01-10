@@ -30,6 +30,7 @@ if [ "$type" == "ionic" ]; then
 else
   source ./scripts/route-template-web.sh
 fi
+source ./scripts/route-template-hybrid.sh
 
 echo "import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
