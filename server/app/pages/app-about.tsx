@@ -1,4 +1,5 @@
 import { config, title } from '../../config.js'
+import { mapArray } from '../components/fragment.js'
 import { IonBackButton } from '../components/ion-back-button.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
@@ -30,6 +31,25 @@ let aboutPage = (
         reduce loading time and support{' '}
         <abbr title="Search Engine Optimization">SEO</abbr>.
       </p>
+      <h2>Theme Color</h2>
+      <div>
+        {mapArray(
+          [
+            'primary',
+            'secondary',
+            'tertiary',
+            'success',
+            'warning',
+            'danger',
+            'light',
+            'medium',
+            'dark',
+          ],
+          color => (
+            <ion-button color={color}>{color}</ion-button>
+          ),
+        )}
+      </div>
     </ion-content>
   </>
 )
