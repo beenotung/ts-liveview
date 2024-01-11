@@ -92,8 +92,9 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
 - [x] Fully customizable [[8]](#feature-8)
 - [x] Multiple starter template
   - [x] v5-demo (kitchen sink demos)
-  - [x] v5-minimal-template (mobile-responsive webapp)
+  - [x] v5-web-template (mobile-responsive webapp)
   - [x] v5-ionic-template (mobile-first webapp)
+  - [x] v5-hybrid-template (switchable between of web and ionic template)
   - [x] v5-auth-template (includes user login/register and protected routes)
 
 **Remarks**:
