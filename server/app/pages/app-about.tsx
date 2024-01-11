@@ -8,7 +8,9 @@ let aboutPage = (
     <ion-header>
       <ion-toolbar>
         <IonBackButton href="/" backText="Home" />
-        <ion-title>About</ion-title>
+        <ion-title role="heading" aria-level="1">
+          About
+        </ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
