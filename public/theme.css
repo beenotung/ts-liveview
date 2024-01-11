@@ -1,4 +1,5 @@
 /* theme color */
+/* color generator: https://ionicframework.com/docs/theming/color-generator */
 :root {
   --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;
@@ -42,12 +43,12 @@
   --ion-color-danger-shade: #cf3c4f;
   --ion-color-danger-tint: #ed576b;
 
-  --ion-color-light: #f4f5f8;
-  --ion-color-light-rgb: 244, 245, 248;
+  --ion-color-light: #e0e3eb;
+  --ion-color-light-rgb: 224, 227, 235;
   --ion-color-light-contrast: #000000;
   --ion-color-light-contrast-rgb: 0, 0, 0;
-  --ion-color-light-shade: #d7d8da;
-  --ion-color-light-tint: #f5f6f9;
+  --ion-color-light-shade: #c5c8cf;
+  --ion-color-light-tint: #e3e6ed;
 
   --ion-color-medium: #c9cacf;
   --ion-color-medium-rgb: 201, 202, 207;

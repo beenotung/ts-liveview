@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs'
 
 export let MobileStyle = /* css */ `
+/* animation */
 .page {
   min-height: 100%;
   transition: all 0.3s ease;
@@ -27,19 +28,23 @@ export let MobileStyle = /* css */ `
   }
 }
 
-${readFileSync('public/theme.css')}
-
-/* fix */
-ion-button[fill][color="primary"] {
-  --background: var(--ion-color-primary);
-  color: var(--ion-color-primary-contrast);
-}
-ion-button[fill][color="tertiary"] {
-  --background: var(--ion-color-tertiary);
-  color: var(--ion-color-tertiary-contrast);
-}
-ion-button[fill][color="success"] {
-  --background: var(--ion-color-success);
-  color: var(--ion-color-success-contrast);
-}
 `
+
+let themeStyle = readFileSync('public/theme.css').toString()
+MobileStyle += themeStyle
+
+export let themeColorNames: string[] = []
+
+MobileStyle += /* css */ `
+/* fix */`
+
+themeStyle.match(/--ion-color-(\w+):/g)?.forEach(part => {
+  let name = part.match(/--ion-color-(\w+):/)![1]
+  if (themeColorNames.includes(name)) return
+  themeColorNames.push(name)
+  MobileStyle += /* css */ `
+ion-button[fill][color="${name}"] {
+  --background: var(--ion-color-${name});
+  color: var(--ion-color-${name}-contrast);
+}`
+})
