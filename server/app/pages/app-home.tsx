@@ -12,7 +12,9 @@ let homePage = (
   <>
     <ion-header>
       <ion-toolbar color="primary">
-        <ion-title>Home</ion-title>
+        <ion-title role="heading" aria-level="1">
+          Home
+        </ion-title>
         <ion-buttons slot="end">
           <Link tagName="ion-button" href="/about" color="light">
             About

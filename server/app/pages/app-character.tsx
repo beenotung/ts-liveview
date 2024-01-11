@@ -70,7 +70,7 @@ function DetailPage(attrs: { item: Character }, context: DynamicContext) {
   return (
     <>
       <ion-header>
-        <ion-toolbar>
+        <ion-toolbar role="heading" aria-level="1">
           <IonBackButton
             href="/"
             buttonsSlot="start"
