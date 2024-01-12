@@ -15,9 +15,11 @@ fi
 function clean_up {
   rm -rf \
     "$1/node_modules" \
-    "$1/db" \
+    "$1/pnpm-lock.yaml" \
+    "$1/db/node_modules" \
+    "$1/db/pnpm-lock.yaml" \
     "$1/build" \
-    "$1/dist" \
+    "$1/dist"
 }
 
 clean_up .
