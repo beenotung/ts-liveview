@@ -1,6 +1,5 @@
 import { loadClientPlugin } from '../../client-plugin.js'
 import { title } from '../../config.js'
-import { sweetAlertAssets } from '../components/sweetalert.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 
