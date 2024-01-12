@@ -79,9 +79,10 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
   - [x] Sync / async routes
   - [x] Static / dynamic document title and description meta
 - [x] Enable interactive UI with minimal amount of javascript to be downloaded
-- [x] Support per-page client-side plugin
+- [x] Only load client-side library on used pages
   - [x] image compression
   - [x] sweetalert
+  - [x] swiper
 - [x] Still functional when javascript is disabled on client device [[5]](#feature-5)
 - [x] Support to develop with [JSX](#jsx), AST, or html template
 - [x] Auto-minify with esbuild
