@@ -6,13 +6,16 @@ import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 import { themeColorNames } from '../styles/mobile-style.js'
 
+let pageTitle = 'About'
+
+
 let aboutPage = (
   <>
     <ion-header>
       <ion-toolbar>
         <IonBackButton href="/" backText="Home" />
         <ion-title role="heading" aria-level="1">
-          About
+          {pageTitle}
         </ion-title>
       </ion-toolbar>
     </ion-header>
@@ -69,7 +72,7 @@ let aboutPage = (
 
 let routes: Routes = {
   '/about': {
-    title: title('About'),
+    title: title(pageTitle),
     description: `Demo using ionic and ts-liveview to build mobile-first SSR webapp`,
     node: aboutPage,
   },
