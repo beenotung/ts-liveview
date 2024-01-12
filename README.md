@@ -81,7 +81,7 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
 - [x] Enable interactive UI with minimal amount of javascript to be downloaded
 - [x] Only load client-side library on used pages
   - [x] image compression
-  - [x] sweetalert
+  - [x] sweetalert (unrestricted)
   - [x] swiper
 - [x] Still functional when javascript is disabled on client device [[5]](#feature-5)
 - [x] Support to develop with [JSX](#jsx), AST, or html template
