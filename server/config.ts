@@ -7,23 +7,21 @@ loadEnv()
 let env = {
   NODE_ENV: 'development',
   PORT: 8100,
-  COOKIE_SECRET: ' ',
+  COOKIE_SECRET: '',
   EPOCH: 1, // to distinct initial run or restart in serve mode
   UPLOAD_DIR: 'uploads',
+}
+applyDefaultEnv()
+
+function applyDefaultEnv() {
+  if (process.env.NODE_ENV === 'production') return
+  env.COOKIE_SECRET ||= process.env.COOKIE_SECRET || cwd()
 }
 
 populateEnv(env, { mode: 'halt' })
 
-let production = env.NODE_ENV === 'production' || process.argv[2] === '--prod'
-let development = env.NODE_ENV === 'development' || process.argv[2] === '--dev'
-
-if (production && env.COOKIE_SECRET == ' ') {
-  console.error('Missing COOKIE_SECRET in env')
-  process.exit(1)
-}
-if (env.COOKIE_SECRET == ' ') {
-  env.COOKIE_SECRET = cwd()
-}
+let production = env.NODE_ENV === 'production'
+let development = env.NODE_ENV === 'development'
 
 function fixEpoch() {
   // workaround of initial build twice since esbuild v0.17
