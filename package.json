@@ -27,7 +27,6 @@
     "size:compress": "gzip -kf build/bundle.min.js",
     "size:report": "ls -l build/bundle.*",
     "size:report-h": "ls -lh build/bundle.*",
-    "production": "node dist/server/index.js --prod",
     "start": "run-s watch:*",
     "watch:server": "node scripts/dev.js serve",
     "watch:client": "npm run build:client -- --watch"
