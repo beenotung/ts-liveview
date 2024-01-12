@@ -47,7 +47,7 @@
     "marked": "^11.1.1",
     "open": "^10.0.2",
     "sanitize-html": "^2.11.0",
-    "sweetalert2": "^11.10.2",
+    "sweetalert2-unrestricted": "^11.10.5",
     "timezone-date.ts": "^2.0.1",
     "url-router.ts": "^1.2.0",
     "ws": "^8.16.0"
