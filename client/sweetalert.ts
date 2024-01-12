@@ -1,4 +1,7 @@
-import Swal, { SweetAlertIcon, SweetAlertOptions } from 'sweetalert2-unrestricted'
+import Swal, {
+  SweetAlertIcon,
+  SweetAlertOptions,
+} from 'sweetalert2-unrestricted'
 
 function showToast(title: SweetAlertOptions['title'], icon: SweetAlertIcon) {
   const Toast = Swal.mixin({

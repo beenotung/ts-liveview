@@ -8,7 +8,6 @@ import { themeColorNames } from '../styles/mobile-style.js'
 
 let pageTitle = 'About'
 
-
 let aboutPage = (
   <>
     <ion-header>
