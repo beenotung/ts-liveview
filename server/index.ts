@@ -35,7 +35,7 @@ listenWSSConnection({
 })
 
 app.use((req, res, next) => {
-  logRequest(req, req.method, req.url)
+  logRequest(req, req.method, req.url, null)
   next()
 })
 

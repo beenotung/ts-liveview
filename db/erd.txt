@@ -21,6 +21,7 @@ id integer PK
 method_id integer FK >- method.id
 url_id integer FK >- url.id
 user_agent_id integer NULL FK >- user_agent.id
+request_session_id integer NULL FK >0- request_session.id
 timestamp integer
 
 
@@ -65,6 +66,14 @@ id integer PK
 last_request_log_id integer
 
 
+request_session
+-------
+id integer PK
+language text NULL
+timezone text NULL
+timezone_offset integer NULL
+
+
 # zoom: 1.000
 # view: (0, 0)
 # text-bg: #6495ed
@@ -73,10 +82,11 @@ last_request_log_id integer
 # diagram-text: #000000
 # table-bg: #ffffff
 # table-text: #000000
-# request_log (74, 55)
-# method (448, 16)
-# url (450, 131)
-# user_agent (448, 243)
-# ua_type (901, 232)
-# ua_bot (901, 385)
-# ua_stat (714, 62)
+# request_log (50, 120)
+# method (450, 15)
+# url (450, 130)
+# user_agent (450, 245)
+# ua_type (845, 250)
+# ua_bot (845, 410)
+# ua_stat (715, 60)
+# request_session (450, 445)
