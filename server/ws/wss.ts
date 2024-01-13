@@ -7,6 +7,7 @@ export type ManagedWebsocket = {
   ws: WebSocket
   wss: Server
   request: Request
+  session_id: number
   send(event: ServerMessage): void
   close(code?: number, reason?: Buffer): void
 }

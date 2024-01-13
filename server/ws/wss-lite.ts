@@ -4,6 +4,7 @@ import { debugLog } from '../debug.js'
 import type { ManagedWebsocket, OnWsMessage } from './wss'
 import type { ServerMessage } from '../../client/types'
 import { Request } from 'express'
+import { newRequestSession } from '../../db/store.js'
 
 let log = debugLog('wss-lite.ts')
 log.enabled = true
@@ -56,6 +57,7 @@ export function listenWSSConnection(options: {
       ws,
       wss,
       request: request as Request,
+      session_id: newRequestSession(),
       send,
       close,
     }
