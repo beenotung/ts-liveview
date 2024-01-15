@@ -36,7 +36,7 @@ export function escapeHTMLAttributeValue(
   if (typeof value === 'string' && value.includes('"')) {
     return '"' + value.replace(/&/g, '&amp;').replace(/"/g, '&quot;') + '"'
   }
-  return JSON.stringify(value)
+  return JSON.stringify(value).replaceAll('\\\\', '\\')
 }
 
 // to be used in template that has already wrapped the attribute value in double quotes
