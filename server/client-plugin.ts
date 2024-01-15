@@ -31,7 +31,7 @@ export function loadClientPlugin(options: {
   })
 
   // e.g. js/image.bundle.js
-  let scriptSrc = 'js/' + outFilename
+  let scriptSrc = '/js/' + outFilename
 
   let script = /* html */ `<script src="${scriptSrc}"></script>`
 
