@@ -118,6 +118,8 @@ passcode char(6)
 email varchar(320)
 request_time integer
 revoke_time integer NULL
+match_id integer NULL FK >0- verification_attempt.id
+user_id integer NULL FK >0- user.id
 
 
 verification_attempt
@@ -125,7 +127,6 @@ verification_attempt
 id integer PK
 passcode char(6)
 email varchar(320)
-match_id integer NULL FK >0- verification_code.id
 
 
 # zoom: 1.000
@@ -148,5 +149,5 @@ match_id integer NULL FK >0- verification_code.id
 # request_session (450, 445)
 # user (450, 680)
 # error_log (627, 158)
-# verification_code (50, 500)
-# verification_attempt (50, 700)
+# verification_code (50, 550)
+# verification_attempt (50, 400)

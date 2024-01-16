@@ -2,7 +2,7 @@ import { Random, digits } from '@beenotung/tslib/random.js'
 import { MINUTE } from '@beenotung/tslib/time.js'
 import { db } from '../../../db/db.js'
 import { HttpError } from '../../http-error.js'
-import { VerificationAttempt, proxy } from '../../../db/proxy.js'
+import { VerificationAttempt, VerificationCode, proxy } from '../../../db/proxy.js'
 import { boolean, email, object, optional, string } from 'cast.ts'
 import { sendEmail } from '../../email.js'
 import { apiEndpointTitle, config, title } from '../../config.js'
@@ -87,6 +87,8 @@ async function requestEmailVerification(
       email: input.email,
       request_time,
       revoke_time: null,
+      match_id: null,
+      user_id: find(proxy.user, {email: input.email})?.id || null,
     })
     let { html, text } = verificationCodeEmail(
       { passcode, email: input.include_link ? input.email : null },
@@ -308,33 +310,45 @@ async function checkEmailVerificationCode(
     let input = checkEmailVerificationCodeParser.parse(body)
     email = input.email
     let is_expired = false
-    let attempt: VerificationAttempt = db.transaction(() => {
+    let matched_verification_code: VerificationCode | null = null
+    let user_id : number | null = null
+    db.transaction(() => {
       let verification_code_rows = filter(proxy.verification_code, {
         passcode: input.code,
         email: input.email,
         revoke_time: null,
+        match_id: null
       })
       let now = Date.now()
-      let match_id: number | null = null
       for (let verification_code of verification_code_rows) {
         if (now - verification_code.request_time >= PasscodeExpireDuration) {
           verification_code.revoke_time = now
           is_expired = true
           continue
         }
-        match_id = verification_code.id!
+        matched_verification_code = verification_code
         verification_code.revoke_time = now
         break
       }
       let attempt_id = proxy.verification_attempt.push({
         passcode: input.code,
         email: input.email,
-        match_id,
       })
-      let attempt = proxy.verification_attempt[attempt_id]
-      return attempt
+      if (matched_verification_code) {
+        matched_verification_code.match_id = attempt_id
+        user_id =
+          find(proxy.user, { email: input.email })?.id ||
+          proxy.user.push({
+            email: input.email,
+            username: null,
+            password_hash: null,
+            tel: null,
+            avatar: null,
+          })
+        matched_verification_code.user_id = user_id
+      }
     })()
-    if (!attempt.match_id) {
+    if (!user_id) {
       throw new HttpError(
         400,
         is_expired
@@ -342,15 +356,6 @@ async function checkEmailVerificationCode(
           : 'Verification code not matched.',
       )
     }
-    let user_id =
-      find(proxy.user, { email: input.email })?.id ||
-      proxy.user.push({
-        email: input.email,
-        username: null,
-        password_hash: null,
-        tel: null,
-        avatar: null,
-      })
     writeUserIdToCookie(res, user_id)
     return {
       title: apiEndpointTitle,

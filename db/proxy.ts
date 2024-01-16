@@ -96,20 +96,22 @@ export type ErrorLog = {
   request_log?: RequestLog
 }
 
+export type VerificationAttempt = {
+  id?: null | number
+  passcode: string // char(6)
+  email: string
+}
+
 export type VerificationCode = {
   id?: null | number
   passcode: string // char(6)
   email: string
   request_time: number
   revoke_time: null | number
-}
-
-export type VerificationAttempt = {
-  id?: null | number
-  passcode: string // char(6)
-  email: string
   match_id: null | number
-  match?: VerificationCode
+  match?: VerificationAttempt
+  user_id: null | number
+  user?: User
 }
 
 export type DBProxy = {
@@ -125,8 +127,8 @@ export type DBProxy = {
   user: User[]
   request_log: RequestLog[]
   error_log: ErrorLog[]
-  verification_code: VerificationCode[]
   verification_attempt: VerificationAttempt[]
+  verification_code: VerificationCode[]
 }
 
 export let proxy = proxySchema<DBProxy>({
@@ -161,10 +163,11 @@ export let proxy = proxySchema<DBProxy>({
       ['api_url', { field: 'api_url_id', table: 'url' }],
       ['request_log', { field: 'request_log_id', table: 'request_log' }],
     ],
-    verification_code: [],
-    verification_attempt: [
+    verification_attempt: [],
+    verification_code: [
       /* foreign references */
-      ['match', { field: 'match_id', table: 'verification_code' }],
+      ['match', { field: 'match_id', table: 'verification_attempt' }],
+      ['user', { field: 'user_id', table: 'user' }],
     ],
   },
 })
