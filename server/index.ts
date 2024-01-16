@@ -13,6 +13,7 @@ import { listenWSSCookie } from './app/cookie.js'
 import { print } from 'listening-on'
 import { HttpError } from './http-error.js'
 import { logRequest } from './app/log.js'
+import { clearInvalidUserId } from './app/auth/user.js'
 import { env } from './env.js'
 
 const log = debugLog('index.ts')
@@ -36,6 +37,7 @@ listenWSSConnection({
 })
 
 app.use(cookieMiddleware)
+app.use(clearInvalidUserId)
 app.use((req, res, next) => {
   logRequest(req, req.method, req.url, null)
   next()
