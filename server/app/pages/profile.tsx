@@ -137,36 +137,38 @@ export function UserMessageInGuestView(attrs: { user_id: number }) {
 }
 
 function attachRoutes(app: Router) {
-  app.post('/avatar', (req, res, next) => {
-    let reject = (status: number, error: string) => {
-      res.redirect('/profile?' + new URLSearchParams({ error }))
-    }
+  app.post('/avatar', async (req, res, next) => {
+    try {
+      let user_id = getAuthUserId({
+        type: 'express',
+        req,
+        res,
+        next,
+        url: req.url,
+      })
+      if (!user_id) throw 'not login'
 
-    let user_id = getAuthUserId({
-      type: 'express',
-      req,
-      res,
-      next,
-      url: req.url,
-    })
-    if (!user_id) return reject(403, 'not login')
+      let user = proxy.user[user_id]
+      if (!user) throw 'user not found'
 
-    let user = proxy.user[user_id]
-    if (!user) return reject(404, 'user not found')
-
-    let form = createUploadForm({
-      mimeTypeRegex: /^image\/.+/,
-      maxFileSize: 300 * 1024,
-    })
-    form.parse(req, (err, fields, files) => {
-      if (err) return next(err)
+      let form = createUploadForm({
+        mimeTypeRegex: /^image\/.+/,
+        maxFileSize: 300 * 1024,
+      })
+      let [fields, files] = await form.parse(req)
 
       let file = files.avatar?.[0]
-      if (!file) return reject(400, 'missing avatar file')
+      if (!file) throw 'missing avatar file'
 
       user.avatar = file.newFilename
+
       res.redirect('/profile')
-    })
+    } catch (error) {
+      if (typeof error !== 'string') {
+        console.error(error)
+      }
+      res.redirect('/profile?' + new URLSearchParams({ error: String(error) }))
+    }
   })
 }
 
