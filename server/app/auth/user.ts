@@ -3,6 +3,10 @@ import { Request, Response, NextFunction } from 'express'
 import { Context } from '../context.js'
 import { getContextCookies, mustCookieSecure } from '../cookie.js'
 import { proxy } from '../../../db/proxy.js'
+import { debugLog } from '../../debug.js'
+
+let log = debugLog('user.ts')
+log.enabled = true
 
 const auto_logout_interval = 90 * DAY
 const auto_renew_interval = 30 * DAY
@@ -29,6 +33,20 @@ export function writeUserIdToCookie(res: Response, user_id: number) {
 export function eraseUserIdFromCookie(res: Response) {
   res.clearCookie('user_id')
   res.clearCookie('renew_after')
+  delete res.req.signedCookies.user_id
+}
+
+export function clearInvalidUserId(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  let user_id = req.signedCookies.user_id
+  if (user_id && !(user_id in proxy.user)) {
+    log('erase invalid user_id:', user_id)
+    eraseUserIdFromCookie(res)
+  }
+  next()
 }
 
 export function renewAuthCookieMiddleware(

@@ -12,6 +12,7 @@ import { cookieMiddleware } from './app/cookie.js'
 import { listenWSSCookie } from './app/cookie.js'
 import { print } from 'listening-on'
 import { logRequest } from './app/log.js'
+import { clearInvalidUserId } from './app/auth/user.js'
 import { env } from './env.js'
 import { HttpError, EarlyTerminate } from './exception.js'
 import { setCaddy } from './caddy.js'
@@ -41,6 +42,7 @@ listenWSSConnection({
 })
 
 app.use(cookieMiddleware)
+app.use(clearInvalidUserId)
 app.use((req, res, next) => {
   logRequest(req, req.method, req.url, null)
   next()
