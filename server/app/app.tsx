@@ -194,7 +194,7 @@ function Footer(attrs: { style?: string }) {
 
 // prefer flat router over nested router for less overhead
 export function attachRoutes(app: Router) {
-  // ajax/middleware routes
+  // ajax/upload/middleware routes
   DemoCookieSession.attachRoutes(app)
   Chatroom.attachRoutes(app)
   DemoUpload.attachRoutes(app)
