@@ -35,3 +35,4 @@ export type ServerMessage =
   | ['batch', ServerMessage[]]
   | ['set-cookie', string]
   | ['set-title', title]
+  | ['eval', string]
