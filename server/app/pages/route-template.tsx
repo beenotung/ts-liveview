@@ -74,15 +74,21 @@ function Main(attrs: {}, context: Context) {
     <>
       <ion-list>
         {mapArray(items, item => (
-          <ion-item>item {item}</ion-item>
+          <ion-item>
+            {item.title} ({item.slug})
+          </ion-item>
         ))}
       </ion-list>
-      <ion-button>Add Item</ion-button>
+      <Link href="/__url__/add" tagName="ion-button">
+        Add Item
+      </Link>
     </>
   )
 }
 
-let addStyle = Style(/* css */ `
+let addPage = (
+  <div id="Add__id__">
+    {Style(/* css */ `
 #Add__id__ .field {
   margin-block-end: 1rem;
 }
@@ -94,10 +100,7 @@ let addStyle = Style(/* css */ `
   display: block;
   margin-block-start: 0.25rem;
 }
-`)
-let addPage = (
-  <div id="Add__id__">
-    {addStyle}
+`)}
     <h1>{addPageTitle}</h1>
     <form method="POST" action="/__url__/add/submit" onsubmit="emitForm(event)">
       <div class="field">
@@ -130,6 +133,67 @@ let addPage = (
     </form>
   </div>
 )
+if (config.layout_type === LayoutType.ionic) {
+  addPage = (
+    <>
+      {Style(/* css */ `
+#Add__id__ .hint {
+  margin-inline-start: 1rem;
+  margin-block: 0.25rem;
+}
+`)}
+      <ion-header>
+        <ion-toolbar>
+          <IonBackButton href="/__url__" backText={pageTitle} />
+          <ion-title role="heading" aria-level="1">
+            {addPageTitle}
+          </ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content id="Add__id__" class="ion-padding">
+        <form
+          method="POST"
+          action="/__url__/add/submit"
+          onsubmit="emitForm(event)"
+        >
+          <ion-list>
+            <ion-item>
+              <ion-input
+                name="title"
+                label="Title*:"
+                label-placement="floating"
+                required
+                minlength="3"
+                maxlength="50"
+              />
+            </ion-item>
+            <p class="hint">(3-50 characters)</p>
+            <ion-item>
+              <ion-input
+                name="slug"
+                label="Slug*: (unique url)"
+                label-placement="floating"
+                required
+                pattern="(\w|-|\.){1,32}"
+              />
+            </ion-item>
+            <p class="hint">
+              (1-32 characters of: <code>a-z A-Z 0-9 - _ .</code>)
+            </p>
+          </ion-list>
+          <div style="margin-inline-start: 1rem">
+            <ion-button type="submit">Submit</ion-button>
+          </div>
+          <p>
+            Remark:
+            <br />
+            *: mandatory fields
+          </p>
+        </form>
+      </ion-content>
+    </>
+  )
+}
 
 let submitParser = object({
   title: string({ minLength: 3, maxLength: 50 }),
@@ -160,18 +224,41 @@ function SubmitResult(attrs: {}, context: DynamicContext) {
   let params = new URLSearchParams(context.routerMatch?.search)
   let error = params.get('error')
   let id = params.get('id')
-  return (
+  let content = (
     <div>
       {error ? (
         renderError(error, context)
       ) : (
         <>
           <p>Your submission is received (#{id}).</p>
-          <Link href="/__url__">Back</Link>
+          <p>
+            Back to <Link href="/__url__">{pageTitle}</Link>
+          </p>
         </>
       )}
     </div>
   )
+  if (config.layout_type === LayoutType.ionic) {
+    return (
+      <>
+        <ion-header>
+          <ion-toolbar>
+            <IonBackButton href="/__url__/add" backText="Form" />
+            <ion-title role="heading" aria-level="1">
+              Submitted {pageTitle}
+            </ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content id="Add__id__" class="ion-padding">
+          <p>Your submission is received (#{id}).</p>
+          <Link href="/__url__" tagName="ion-button">
+            Back to {pageTitle}
+          </Link>
+        </ion-content>
+      </>
+    )
+  }
+  return content
 }
 
 let routes: Routes = {
