@@ -31,7 +31,7 @@ if [ -f "$file" ]; then
   fi
 fi
 
-cat "server/app/pages/template.tsx" \
+cat "server/app/pages/route-template.tsx" \
   | sed "s/__id__/$id/" \
   | sed "s/__title__/$title/" \
   | sed "s/__url__/$url/" \
