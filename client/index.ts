@@ -173,6 +173,9 @@ function onServerMessage(message: ServerMessage) {
     case 'set-title':
       document.title = message[1]
       break
+    case 'redirect':
+      location.href = message[1]
+      break
     case 'eval':
       eval(message[1])
       break

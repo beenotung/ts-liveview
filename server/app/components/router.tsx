@@ -48,6 +48,8 @@ export function Redirect(
   }
   if (context.type === 'ws') {
     setSessionUrl(context.ws, attrs.href)
+    context.ws.send(['redirect', attrs.href])
+    throw EarlyTerminate
   }
   return (
     <a href={href} data-live="redirect">
