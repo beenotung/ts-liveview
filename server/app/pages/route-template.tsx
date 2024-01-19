@@ -224,41 +224,46 @@ function SubmitResult(attrs: {}, context: DynamicContext) {
   let params = new URLSearchParams(context.routerMatch?.search)
   let error = params.get('error')
   let id = params.get('id')
-  let content = (
-    <div>
-      {error ? (
-        renderError(error, context)
-      ) : (
-        <>
-          <p>Your submission is received (#{id}).</p>
-          <p>
-            Back to <Link href="/__url__">{pageTitle}</Link>
-          </p>
-        </>
-      )}
-    </div>
-  )
-  if (config.layout_type === LayoutType.ionic) {
+  if (config.layout_type !== LayoutType.ionic) {
     return (
-      <>
-        <ion-header>
-          <ion-toolbar>
-            <IonBackButton href="/__url__/add" backText="Form" />
-            <ion-title role="heading" aria-level="1">
-              Submitted {pageTitle}
-            </ion-title>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content id="Add__id__" class="ion-padding">
-          <p>Your submission is received (#{id}).</p>
-          <Link href="/__url__" tagName="ion-button">
-            Back to {pageTitle}
-          </Link>
-        </ion-content>
-      </>
+      <div>
+        {error ? (
+          renderError(error, context)
+        ) : (
+          <>
+            <p>Your submission is received (#{id}).</p>
+            <p>
+              Back to <Link href="/__url__">{pageTitle}</Link>
+            </p>
+          </>
+        )}
+      </div>
     )
   }
-  return content
+  return (
+    <>
+      <ion-header>
+        <ion-toolbar>
+          <IonBackButton href="/__url__/add" backText="Form" />
+          <ion-title role="heading" aria-level="1">
+            Submitted {pageTitle}
+          </ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content id="Add__id__" class="ion-padding">
+        {error ? (
+          renderError(error, context)
+        ) : (
+          <>
+            <p>Your submission is received (#{id}).</p>
+            <Link href="/__url__" tagName="ion-button">
+              Back to {pageTitle}
+            </Link>
+          </>
+        )}
+      </ion-content>
+    </>
+  )
 }
 
 let routes: Routes = {
