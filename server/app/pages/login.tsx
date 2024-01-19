@@ -85,7 +85,7 @@ let guestView = (
       <input type="submit" value="Verify" />
     </form>
     <div class="or-line flex-center">or</div>
-    <form method="post" action="/login/with/password/submit">
+    <form method="post" action="/login/submit">
       <label>
         Username or email address
         <div class="input-container">
@@ -149,7 +149,7 @@ if (config.layout_type === LayoutType.ionic) {
         </div>
       </form>
       <div class="or-line flex-center">or</div>
-      <form method="post" action="/login/with/password/submit">
+      <form method="post" action="/login/submit">
         <ion-list>
           <ion-item>
             <ion-input
