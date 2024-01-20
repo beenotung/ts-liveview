@@ -16,3 +16,5 @@ reset v5-demo
 reset v5-minimal-template
 reset v5-ionic-template
 reset v5-auth-template
+reset v5-auth-web-template
+reset v5-auth-ionic-template
