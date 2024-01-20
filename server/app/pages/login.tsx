@@ -13,6 +13,7 @@ import { UserMessageInGuestView } from './profile.js'
 import { getAuthUserId, writeUserIdToCookie } from '../auth/user.js'
 import Style from '../components/style.js'
 import { IonBackButton } from '../components/ion-back-button.js'
+import { wsStatus } from '../components/ws-status.js'
 
 let style = Style(/* css */ `
 #login .field {
@@ -45,6 +46,7 @@ if (config.layout_type === LayoutType.ionic) {
           <p>{commonTemplatePageText}</p>
           <Main />
         </div>
+        {wsStatus.safeArea}
       </ion-content>
     </>
   )
