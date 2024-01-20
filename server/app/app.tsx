@@ -47,12 +47,12 @@ if (config.development) {
 function renderTemplate(
   stream: HTMLStream,
   context: Context,
-  options: { title: string; description: string; app: Node },
+  route: PageRouteMatch,
 ) {
-  const app = options.app
+  const app = App(route)
   renderAppTemplate(stream, {
-    title: escapeHTMLTextContent(options.title),
-    description: unquote(escapeHTMLAttributeValue(options.description)),
+    title: escapeHTMLTextContent(route.title),
+    description: unquote(escapeHTMLAttributeValue(route.description)),
     app:
       typeof app == 'string' ? app : stream => writeNode(stream, app, context),
   })
@@ -248,11 +248,7 @@ function responseHTML(
   }
 
   try {
-    renderTemplate(stream, context, {
-      title: route.title || config.site_name,
-      description: route.description || config.site_description,
-      app: App(route),
-    })
+    renderTemplate(stream, context, route)
   } catch (error) {
     if (error === EarlyTerminate) {
       return
@@ -277,11 +273,7 @@ function streamHTML(
   route: PageRouteMatch,
 ) {
   try {
-    renderTemplate(res, context, {
-      title: route.title || config.site_name,
-      description: route.description || config.site_description,
-      app: App(route),
-    })
+    renderTemplate(res, context, route)
     res.end()
   } catch (error) {
     if (error === EarlyTerminate) {
