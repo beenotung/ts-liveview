@@ -1,6 +1,6 @@
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
-import { apiEndpointTitle, title } from '../../config.js'
+import { apiEndpointTitle } from '../../config.js'
 import Style from '../components/style.js'
 import {
   Context,
@@ -18,6 +18,8 @@ import { Locale, Title } from '../components/locale.js'
 import { env } from '../../env.js'
 import { Script } from '../components/script.js'
 import { toSlug } from '../format/slug.js'
+import { getAuthUser } from '../auth/user.js'
+import { proxy } from '../../../db/proxy.js'
 
 let pageTitle = <Locale en="__title__" zh_hk="__title__" zh_cn="__title__" />
 let addPageTitle = (
@@ -48,6 +50,7 @@ let items = [
 ]
 
 function Main(attrs: {}, context: Context) {
+  let user = getAuthUser(context)
   return (
     <Content
       web={
@@ -59,9 +62,15 @@ function Main(attrs: {}, context: Context) {
               </li>
             ))}
           </ul>
-          <Link href="/__url__/add">
-            <button>{addPageTitle}</button>
-          </Link>
+          {user ? (
+            <Link href="/__url__/add">
+              <button>{addPageTitle}</button>
+            </Link>
+          ) : (
+            <p>
+              You can add item after <Link href="/register">register</Link>.
+            </p>
+          )}
         </>
       }
       ionic={
@@ -73,9 +82,15 @@ function Main(attrs: {}, context: Context) {
               </ion-item>
             ))}
           </ion-list>
-          <Link href="/__url__/add" tagName="ion-button">
-            {addPageTitle}
-          </Link>
+          {user ? (
+            <Link href="/__url__/add" tagName="ion-button">
+              {addPageTitle}
+            </Link>
+          ) : (
+            <p>
+              You can add item after <Link href="/register">register</Link>.
+            </p>
+          )}
         </>
       }
     />
@@ -259,6 +274,11 @@ let addPage = (
     {addPageScript}
   </Page>
 )
+function AddPage(attrs: {}, context: DynamicContext) {
+  let user = getAuthUser(context)
+  if (!user) return <Redirect href="/login" />
+  return addPage
+}
 
 let submitParser = object({
   title: string({ minLength: 3, maxLength: 50 }),
@@ -267,6 +287,8 @@ let submitParser = object({
 
 function Submit(attrs: {}, context: DynamicContext) {
   try {
+    let user = getAuthUser(context)
+    if (!user) throw 'You must be logged in to submit ' + pageTitle
     let body = getContextFormBody(context)
     let input = submitParser.parse(body)
     let id = items.push({
@@ -325,7 +347,7 @@ let routes = {
   '/__url__/add': {
     title: <Title t={addPageTitle} />,
     description: 'TODO',
-    node: addPage,
+    node: <AddPage />,
     streaming: false,
   },
   '/__url__/add/submit': {
