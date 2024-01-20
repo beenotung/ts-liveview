@@ -99,7 +99,9 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
   - [x] v5-web-template (mobile-responsive webapp)
   - [x] v5-ionic-template (mobile-first webapp)
   - [x] v5-hybrid-template (switchable between of web and ionic template)
-  - [x] v5-auth-template (includes user login/register and email verification and protected routes)
+  - [x] v5-auth-template (extends hybrid-template with user login/register and email verification and protected routes)
+  - [x] v5-auth-web-template (web version auth template)
+  - [x] v5-auth-ionic-template (ionic version auth template)
 
 **Remarks**:
 
