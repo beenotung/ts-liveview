@@ -12,6 +12,7 @@ export type MenuRoute = {
   menuText: string
   menuUrl?: string // optional, default to be same as PageRoute.url
   menuMatchPrefix?: boolean
+  menuFullNavigate?: boolean // default false to enable ws updates
 }
 
 export function isCurrentMenuRoute(
