@@ -6,6 +6,7 @@ pnpm-lock.yaml
 dist/
 build/
 template/*.ts
+db/proxy.ts
 
 # lighthouse report
 localhost_*.report.html
