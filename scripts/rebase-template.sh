@@ -38,12 +38,12 @@ git cherry-pick origin/v5-hybrid-template..origin/v5-auth-template
 git checkout v5-auth-template
 git branch -D v5-auth-web-template
 git checkout -b v5-auth-web-template
-git cherry-pick origin/v5-auth-web-template
+git cherry-pick origin/v5-auth-template..origin/v5-auth-web-template
 
 git checkout v5-auth-template
 git branch -D v5-auth-ionic-template
 git checkout -b v5-auth-ionic-template
-git cherry-pick origin/v5-auth-ionic-template
+git cherry-pick origin/v5-auth-template..origin/v5-auth-ionic-template
 
 set +x
 echo finished cherry-pick.
