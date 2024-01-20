@@ -32,6 +32,7 @@ let LoginPage = (
 if (config.layout_type === LayoutType.ionic) {
   LoginPage = (
     <>
+      {style}
       <ion-header>
         <ion-toolbar color="primary">
           <IonBackButton href="/" backText="Home" color="light" />
@@ -40,7 +41,6 @@ if (config.layout_type === LayoutType.ionic) {
       </ion-header>
       <ion-content class="ion-padding">
         <div id="login">
-          {style}
           <h1>Welcome back to {config.short_site_name}</h1>
           <p>{commonTemplatePageText}</p>
           <Main />
