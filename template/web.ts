@@ -77,6 +77,7 @@ export function renderWebTemplate(
     <script>
       document.getElementById('noscript').remove()
       document.getElementById('ws_status').removeAttribute('hidden')
+      let template_name = 'web'
     </script>
     `)
   typeof options.app == 'function' ? options.app(stream) : stream.write(options.app)

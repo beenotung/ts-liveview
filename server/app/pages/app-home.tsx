@@ -1,7 +1,8 @@
 import { loadClientPlugin } from '../../client-plugin.js'
-import { config, title } from '../../config.js'
+import { LayoutType, title } from '../../config.js'
 import { mapArray } from '../components/fragment.js'
 import { Link } from '../components/router.js'
+import { Script } from '../components/script.js'
 import { wsStatus } from '../components/ws-status.js'
 import { prerender } from '../jsx/html.js'
 import { o } from '../jsx/jsx.js'
@@ -18,7 +19,7 @@ let homePage = (
           {pageTitle}
         </ion-title>
         <ion-buttons slot="end">
-          <Link tagName="ion-button" href="/about" color="light">
+          <Link tagName="ion-button" href="/app/about" color="light">
             About
           </Link>
         </ion-buttons>
@@ -43,7 +44,7 @@ let homePage = (
       </div>
       <ion-list>
         {mapArray(characters, character => (
-          <Link tagName="ion-item" href={'/characters/' + character.id}>
+          <Link tagName="ion-item" href={'/app/characters/' + character.id}>
             {character.name}
           </Link>
         ))}
@@ -73,11 +74,14 @@ let homePage = (
 homePage = prerender(homePage)
 
 let routes: Routes = {
-  '/': {
+  '/app/home': {
     title: title(pageTitle),
     description:
       'List of fictional characters commonly used as placeholders in discussion about cryptographic systems and protocols.',
+    menuText: 'Ionic App',
+    menuFullNavigate: true,
     node: homePage,
+    layout_type: LayoutType.ionic,
   },
 }
 

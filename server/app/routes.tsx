@@ -27,6 +27,8 @@ import DemoToast from './pages/demo-toast.js'
 import appHome from './pages/app-home.js'
 import appAbout from './pages/app-about.js'
 import appCharacter from './pages/app-character.js'
+import type { renderWebTemplate } from '../../template/web.js'
+import type { renderIonicTemplate } from '../../template/ionic.js'
 
 let titles: Record<string, string> = {}
 
@@ -39,19 +41,28 @@ const StreamingByDefault = true
 
 export type PageRoute = PageRouteOptions & (StaticPageRoute | DynamicPageRoute)
 
+type TemplateFn = typeof renderWebTemplate | typeof renderIonicTemplate
+
+type RenderOptions = {
+  layout_type?: LayoutType
+  renderTemplate?: TemplateFn
+}
+
 export type PageRouteOptions = {
   // streaming is enabled by default
   // HTTP headers cannot be set when streaming
   // If you need to set cookies or apply redirection, you may use an express middleware before the generic app route
   streaming?: boolean
-} & Partial<MenuRoute>
+} & Partial<MenuRoute> &
+  RenderOptions
 
 export type StaticPageRoute = {
   title: string
   node: Node
   description: string
   status?: number
-}
+} & RenderOptions
+
 export type DynamicPageRoute = {
   resolve: (context: DynamicContext) => ResolvedPageRoue
 }
@@ -131,14 +142,9 @@ let routeDict: Routes = {
       'ts-liveview is a free open source project licensed under the BSD 2-Clause License',
     node: License,
   },
-}
-if (config.layout_type === LayoutType.ionic) {
-  routeDict = {
-    ...routeDict,
-    ...appHome.routes,
-    ...appCharacter.routes,
-    ...appAbout.routes,
-  }
+  ...appHome.routes,
+  ...appCharacter.routes,
+  ...appAbout.routes,
 }
 
 export let redirectDict: Record<string, string> = {
@@ -163,6 +169,7 @@ Object.entries(routeDict).forEach(([url, route]) => {
       menuText: route.menuText,
       menuUrl: route.menuUrl || url,
       menuMatchPrefix: route.menuMatchPrefix,
+      menuFullNavigate: route.menuFullNavigate,
     })
   }
 })

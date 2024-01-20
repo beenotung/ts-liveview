@@ -28,7 +28,7 @@ import {
 import Chatroom from './pages/chatroom.js'
 import type { ClientMountMessage, ClientRouteMessage } from '../../client/types'
 import { then } from '@beenotung/tslib/result.js'
-import { appStyle } from './app-style.js'
+import { webAppStyle, ionicAppStyle } from './app-style.js'
 import { renderWebTemplate } from '../../template/web.js'
 import { renderIonicTemplate } from '../../template/ionic.js'
 import { HTMLStream } from './jsx/stream.js'
@@ -49,8 +49,14 @@ function renderTemplate(
   context: Context,
   route: PageRouteMatch,
 ) {
-  const app = App(route)
-  renderAppTemplate(stream, {
+  let layout_type = route.layout_type || config.layout_type
+  console.log('route:', { url: route.url, layout_type })
+  let App = layouts[layout_type]
+  let app = App(route)
+  let render =
+    route.renderTemplate ||
+    (App == IonicApp ? renderIonicTemplate : renderWebTemplate)
+  render(stream, {
     title: escapeHTMLTextContent(route.title),
     description: unquote(escapeHTMLAttributeValue(route.description)),
     app:
@@ -99,11 +105,6 @@ let layouts: Record<LayoutType, Layout> = {
   [LayoutType.ionic]: IonicApp,
 }
 
-let App = layouts[config.layout_type]
-
-let renderAppTemplate =
-  App == IonicApp ? renderIonicTemplate : renderWebTemplate
-
 function NavbarApp(route: PageRouteMatch): Element {
   // you can write the AST direct for more compact wire-format
   return [
@@ -112,7 +113,7 @@ function NavbarApp(route: PageRouteMatch): Element {
     [
       // or you can write in JSX for better developer-experience (if you're coming from React)
       <>
-        {appStyle}
+        {webAppStyle}
         <Navbar brand={brand} menuRoutes={menuRoutes} />
         <hr />
         {scripts}
@@ -132,7 +133,7 @@ function SidebarApp(route: PageRouteMatch): Element {
     [
       // or you can write in JSX for better developer-experience (if you're coming from React)
       <>
-        {appStyle}
+        {webAppStyle}
         {scripts}
         {Sidebar.style}
         <div class={Sidebar.containerClass}>
@@ -159,7 +160,7 @@ function IonicApp(route: PageRouteMatch): Element {
     [
       // or you can write in JSX for better developer-experience (if you're coming from React)
       <>
-        {appStyle}
+        {ionicAppStyle}
         {scripts}
         <Flush />
         <ion-app>
@@ -349,6 +350,7 @@ export let onWsMessage: OnWsMessage = async (event, ws, _wss) => {
     await then(
       matchRoute(context),
       route => {
+        let App = layouts[route.layout_type || config.layout_type]
         let node = App(route)
         if (navigation_type === 'express' && navigation_method !== 'GET') return
         dispatchUpdate(context, node, route.title)

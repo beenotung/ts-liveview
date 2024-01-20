@@ -5,7 +5,6 @@ import { o } from '../jsx/jsx.js'
 import { Node } from '../jsx/types.js'
 import { mapArray } from './fragment.js'
 import { MenuRoute, isCurrentMenuRoute } from './menu.js'
-import { Link } from './router.js'
 import Style from './style.js'
 
 let containerClass = 'sidebar-container'
@@ -123,15 +122,16 @@ function Sidebar(
       <div class="sidebar-foldable">
         <div class="sidebar-menu">
           {mapArray(attrs.menuRoutes, route => (
-            <Link
+            <a
               class={flagsToClassName({
                 'sidebar-menu-item': true,
                 'selected': isCurrentMenuRoute(currentUrl, route),
               })}
               href={route.menuUrl || route.url}
+              onclick={route.menuFullNavigate ? undefined : 'emitHref(event)'}
             >
               {route.menuText}
-            </Link>
+            </a>
           ))}
         </div>
       </div>
