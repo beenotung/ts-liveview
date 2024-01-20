@@ -1,4 +1,4 @@
-import { apiEndpointTitle, config, title } from '../../config.js'
+import { LayoutType, apiEndpointTitle, config, title } from '../../config.js'
 import { commonTemplatePageText } from '../components/common-template.js'
 import { Link } from '../components/router.js'
 import Style from '../components/style.js'
@@ -29,6 +29,8 @@ import { renderError } from '../components/error.js'
 import { getContextCookies, getWsCookies } from '../cookie.js'
 import { getAuthUserId } from '../auth/user.js'
 import { UserMessageInGuestView } from './profile.js'
+import { IonBackButton } from '../components/ion-back-button.js'
+import { wsStatus } from '../components/ws-status.js'
 
 let style = Style(/* css */ `
 .oauth-provider-list a {
@@ -72,7 +74,7 @@ let RegisterPage = (
   <div id="register">
     {style}
     <h1>Register on {config.short_site_name}</h1>
-    <p>{commonTemplatePageText}</p>
+    <p hidden>{commonTemplatePageText}</p>
     <p>
       Welcome to {config.short_site_name}!
       <br />
@@ -81,6 +83,30 @@ let RegisterPage = (
     <Main />
   </div>
 )
+if (config.layout_type === LayoutType.ionic) {
+  RegisterPage = (
+    <>
+      {style}
+      <ion-header>
+        <ion-toolbar color="primary">
+          <IonBackButton href="/" backText="Home" color="light" />
+          <ion-title>Register</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <div id="register">
+          <p hidden>{commonTemplatePageText}</p>
+          <p>
+            Welcome to {config.short_site_name}!
+            <br />
+            Let's begin the adventure~
+          </p>
+          <Main />
+        </div>
+      </ion-content>
+    </>
+  )
+}
 
 function Main(_attrs: {}, context: Context) {
   let user_id = getAuthUserId(context)
@@ -88,6 +114,46 @@ function Main(_attrs: {}, context: Context) {
 }
 
 let useSocialLogin = true
+
+let emailFormBody = (
+  <>
+    <Field
+      label="Email"
+      type="email"
+      name="email"
+      msgId="emailMsg"
+      oninput="emit('/register/check-email', this.value)"
+      autocomplete="email"
+    />
+    {config.layout_type !== LayoutType.ionic ? (
+      <div class="field">
+        <label>
+          <input type="checkbox" name="include_link" /> Include magic link (more
+          convince but may be treated as spam)
+        </label>
+      </div>
+    ) : (
+      <ion-item>
+        <ion-checkbox slot="start" name="include_link" />
+        <ion-label>
+          Include magic link (more convince but may be treated as spam)
+        </ion-label>
+      </ion-item>
+    )}
+    {config.layout_type !== LayoutType.ionic ? (
+      <input type="submit" value="Verify" />
+    ) : (
+      <ion-button
+        type="submit"
+        class="ion-margin"
+        fill="block"
+        color="tertiary"
+      >
+        Verify
+      </ion-button>
+    )}
+  </>
+)
 
 let guestView = (
   <>
@@ -117,21 +183,7 @@ let guestView = (
       action="/verify/email/submit"
       // onsubmit="emitForm(event)"
     >
-      <Field
-        label="Email"
-        type="email"
-        name="email"
-        msgId="emailMsg"
-        oninput="emit('/register/check-email', this.value)"
-        autocomplete="email"
-      />
-      <div class="field">
-        <label>
-          <input type="checkbox" name="include_link" /> Include magic link (more
-          convince but may be treated as spam)
-        </label>
-      </div>
-      <input type="submit" value="Verify" />
+      {emailFormBody}
     </form>
     <div class="or-line flex-center">or</div>
     <form method="POST" action="/register/submit" onsubmit="emitForm(event)">
@@ -156,7 +208,7 @@ let guestView = (
         type="password"
         name="confirm_password"
         msgId="confirmPasswordMsg"
-        oninput="checkPassword(this.form)"
+        oninput="checkPassword(this.form||this.closest('form'))"
         autocomplete="new-password"
       />
       {Raw(/* html */ `<script>
@@ -176,7 +228,18 @@ function checkPassword (form) {
   confirmPasswordMsg.style.color = 'green'
 }
 </script>`)}
-      <input type="submit" value="Register" />
+      {config.layout_type !== LayoutType.ionic ? (
+        <input type="submit" value="Register" />
+      ) : (
+        <ion-button
+          type="submit"
+          class="ion-margin"
+          fill="block"
+          color="primary"
+        >
+          Register
+        </ion-button>
+      )}
       <ClearInputContext />
     </form>
     <div class="hint">
@@ -186,6 +249,7 @@ function checkPassword (form) {
       <a href="https://en.wikipedia.org/wiki/Bcrypt">bcrypt algorithm</a> to
       protect your credential against data leak.
     </div>
+    {wsStatus.safeArea}
   </>
 )
 
@@ -202,6 +266,26 @@ function Field(
 ) {
   let value = context.values?.[attrs.name]
   let validateResult = context.contextError?.[attrs.msgId]
+  if (config.layout_type === LayoutType.ionic) {
+    return (
+      <>
+        <ion-item>
+          <ion-input
+            type={attrs.type}
+            name={attrs.name}
+            oninput={attrs.oninput}
+            value={value}
+            autocomplete={attrs.autocomplete}
+            label={attrs.label}
+            label-placement="floating"
+          />
+        </ion-item>
+        <div style="margin-inline-start: 1rem">
+          {renderErrorMessage(attrs.msgId, validateResult)}
+        </div>
+      </>
+    )
+  }
   return (
     <div class="field">
       <label>
