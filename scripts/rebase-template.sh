@@ -33,6 +33,16 @@ git branch -D v5-auth-template
 git checkout -b v5-auth-template
 git cherry-pick origin/v5-hybrid-template..origin/v5-auth-template
 
+git checkout v5-auth-template
+git branch -D v5-auth-web-template
+git checkout -b v5-auth-web-template
+git cherry-pick origin/v5-auth-web-template
+
+git checkout v5-auth-template
+git branch -D v5-auth-ionic-template
+git checkout -b v5-auth-ionic-template
+git cherry-pick origin/v5-auth-ionic-template
+
 set +x
 echo finished cherry-pick.
 
@@ -48,7 +58,9 @@ git push origin -f \
   v5-hybrid-template \
   v5-web-template \
   v5-ionic-template \
-  v5-auth-template
+  v5-auth-template \
+  v5-auth-web-template \
+  v5-auth-ionic-template
 
 git checkout master
 git branch -D v5-demo
@@ -56,3 +68,5 @@ git branch -D v5-hybrid-template
 git branch -D v5-web-template
 git branch -D v5-ionic-template
 git branch -D v5-auth-template
+git branch -D v5-auth-web-template
+git branch -D v5-auth-ionic-template
