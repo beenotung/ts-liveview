@@ -68,7 +68,7 @@ function Main(attrs: {}, context: Context) {
             </Link>
           ) : (
             <p>
-              You can add item after <Link href="/register">register</Link>.
+              You can add __name__ after <Link href="/register">register</Link>.
             </p>
           )}
         </>
@@ -88,7 +88,7 @@ function Main(attrs: {}, context: Context) {
             </Link>
           ) : (
             <p>
-              You can add item after <Link href="/register">register</Link>.
+              You can add __name__ after <Link href="/register">register</Link>.
             </p>
           )}
         </>
