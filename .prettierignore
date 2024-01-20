@@ -5,7 +5,7 @@ pnpm-lock.yaml
 # built files
 dist/
 build/
-template/index.ts
+template/*.ts
 
 # lighthouse report
 localhost_*.report.html
