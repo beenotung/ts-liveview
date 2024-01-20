@@ -8,17 +8,23 @@ else
   name="$@"
 fi
 
-# e.g. user agents
-name="$(echo "$name" | sed -r 's/^ +//g' | sed -r 's/ +$//g')"
+# trim spaces
+# replace spaces to hyphen (-)
+# e.g. user-agents
+name="$(echo "$name" | sed -r 's/^ +//g' | sed -r 's/ +$//g' | sed 's/ /-/g')"
 
+# replace hyphen to space
+# capitalize
 # e.g. User Agents
-title="$(echo "$name" | sed -r 's/-/ /g' | sed -r 's/ (\w)/ \U\1/g' | sed -r 's/^(\w)/\U\1/')"
+title="$(node -p "'$name'.replace(/-/g,' ').replace(/(^| )\w/g,s=>s.toUpperCase())")"
 
+# replace spaces
 # e.g. UserAgents
 id="$(echo "$title" | sed -r 's/ //g')"
 
+# lowercase
 # e.g. user-agents
-url="$(echo "$name" | sed -r 's/ /-/g' | sed -r 's/(\w)/\l\1/g')"
+url="$(echo "$name" | awk '{print tolower($0)}')"
 
 file="server/app/pages/$url.tsx"
 
