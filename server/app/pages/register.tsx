@@ -1,4 +1,4 @@
-import { LayoutType, apiEndpointTitle, config, title } from '../../config.js'
+import { apiEndpointTitle, config, title } from '../../config.js'
 import { commonTemplatePageText } from '../components/common-template.js'
 import { Link } from '../components/router.js'
 import Style from '../components/style.js'
@@ -73,42 +73,27 @@ let style = Style(/* css */ `
 `)
 
 let RegisterPage = (
-  <div id="register">
+  <>
     {style}
-    <h1>Register on {config.short_site_name}</h1>
-    <p hidden>{commonTemplatePageText}</p>
-    <p>
-      Welcome to {config.short_site_name}!
-      <br />
-      Let's begin the adventure~
-    </p>
-    <Main />
-  </div>
+    <ion-header>
+      <ion-toolbar color="primary">
+        <IonBackButton href="/" backText="Home" color="light" />
+        <ion-title>Register</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div id="register">
+        <p hidden>{commonTemplatePageText}</p>
+        <p>
+          Welcome to {config.short_site_name}!
+          <br />
+          Let's begin the adventure~
+        </p>
+        <Main />
+      </div>
+    </ion-content>
+  </>
 )
-if (config.layout_type === LayoutType.ionic) {
-  RegisterPage = (
-    <>
-      {style}
-      <ion-header>
-        <ion-toolbar color="primary">
-          <IonBackButton href="/" backText="Home" color="light" />
-          <ion-title>Register</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <div id="register">
-          <p hidden>{commonTemplatePageText}</p>
-          <p>
-            Welcome to {config.short_site_name}!
-            <br />
-            Let's begin the adventure~
-          </p>
-          <Main />
-        </div>
-      </ion-content>
-    </>
-  )
-}
 
 function Main(_attrs: {}, context: Context) {
   let user_id = getAuthUserId(context)
@@ -133,33 +118,15 @@ let verifyFormBody = (
       oninput="emit('/register/check-tel', this.value)"
       autocomplete="tel"
     />
-    {config.layout_type !== LayoutType.ionic ? (
-      <div class="field">
-        <label>
-          <input type="checkbox" name="include_link" /> Include magic link (more
-          convince but may be treated as spam)
-        </label>
-      </div>
-    ) : (
-      <ion-item>
-        <ion-checkbox slot="start" name="include_link" />
-        <ion-label>
-          Include magic link (more convince but may be treated as spam)
-        </ion-label>
-      </ion-item>
-    )}
-    {config.layout_type !== LayoutType.ionic ? (
-      <input type="submit" value="Verify" />
-    ) : (
-      <ion-button
-        type="submit"
-        class="ion-margin"
-        fill="block"
-        color="tertiary"
-      >
-        Verify
-      </ion-button>
-    )}
+    <ion-item>
+      <ion-checkbox slot="start" name="include_link" />
+      <ion-label>
+        Include magic link (more convince but may be treated as spam)
+      </ion-label>
+    </ion-item>
+    <ion-button type="submit" class="ion-margin" fill="block" color="tertiary">
+      Verify
+    </ion-button>
   </>
 )
 
@@ -238,18 +205,9 @@ function checkPassword (form) {
   confirmPasswordMsg.style.color = 'green'
 }
 </script>`)}
-      {config.layout_type !== LayoutType.ionic ? (
-        <input type="submit" value="Register" />
-      ) : (
-        <ion-button
-          type="submit"
-          class="ion-margin"
-          fill="block"
-          color="primary"
-        >
-          Register
-        </ion-button>
-      )}
+      <ion-button type="submit" class="ion-margin" fill="block" color="primary">
+        Register
+      </ion-button>
       <ClearInputContext />
     </form>
     <div class="hint">
@@ -278,43 +236,23 @@ function Field(
 ) {
   let value = context.values?.[attrs.name]
   let validateResult = context.contextError?.[attrs.msgId]
-  if (config.layout_type === LayoutType.ionic) {
-    return (
-      <>
-        <ion-item>
-          <ion-input
-            type={attrs.type}
-            name={attrs.name}
-            oninput={attrs.oninput}
-            value={value}
-            autocomplete={attrs.autocomplete}
-            label={attrs.label}
-            label-placement="floating"
-          />
-        </ion-item>
-        <div style="margin-inline-start: 1rem">
-          {renderErrorMessage(attrs.msgId, validateResult)}
-        </div>
-      </>
-    )
-  }
   return (
-    <div class="field">
-      <label>
-        {attrs.label}
-        <div>
-          <input
-            type={attrs.type}
-            name={attrs.name}
-            oninput={attrs.oninput}
-            value={value}
-            autocomplete={attrs.autocomplete}
-          />
-        </div>
-      </label>
-      <div class="space"></div>
-      {renderErrorMessage(attrs.msgId, validateResult)}
-    </div>
+    <>
+      <ion-item>
+        <ion-input
+          type={attrs.type}
+          name={attrs.name}
+          oninput={attrs.oninput}
+          value={value}
+          autocomplete={attrs.autocomplete}
+          label={attrs.label}
+          label-placement="floating"
+        />
+      </ion-item>
+      <div style="margin-inline-start: 1rem">
+        {renderErrorMessage(attrs.msgId, validateResult)}
+      </div>
+    </>
   )
 }
 
