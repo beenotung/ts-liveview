@@ -17,7 +17,6 @@ import { comparePassword } from '../../hash.js'
 import { UserMessageInGuestView } from './profile.js'
 import { getAuthUserId, writeUserIdToCookie } from '../auth/user.js'
 import Style from '../components/style.js'
-import { IonBackButton } from '../components/ion-back-button.js'
 import { wsStatus } from '../components/ws-status.js'
 
 let style = Style(/* css */ `
@@ -35,135 +34,56 @@ let LoginPage = (
     <Main />
   </div>
 )
-if (config.layout_type === LayoutType.ionic) {
-  LoginPage = (
-    <>
-      {style}
-      <ion-header>
-        <ion-toolbar color="primary">
-          <IonBackButton href="/" backText="Home" color="light" />
-          <ion-title>Login</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <div id="login">
-          <h1>Welcome back to {config.short_site_name}</h1>
-          <p>{commonTemplatePageText}</p>
-          <Main />
-        </div>
-        {wsStatus.safeArea}
-      </ion-content>
-    </>
-  )
-}
 
 function Main(_attrs: {}, context: Context) {
   let user_id = getAuthUserId(context)
   return user_id ? <UserMessageInGuestView user_id={user_id} /> : guestView
 }
 
-let emailFormBody =
-  config.layout_type !== LayoutType.ionic ? (
-    <>
-      <div class="field">
-        <label>
-          Email
-          <div class="input-container">
-            <input name="email" type="email" autocomplete="email" />
-          </div>
-        </label>
-      </div>
-      <div class="field">
-        <label>
-          <input type="checkbox" name="include_link" /> Include magic link (more
-          convince but may be treated as spam)
-        </label>
-      </div>
-      <input type="submit" value="Verify" />
-    </>
-  ) : (
-    <>
-      <ion-list>
-        <ion-item>
-          <ion-input
-            label="Email"
-            label-placement="floating"
-            type="email"
-            name="email"
-            autocomplete="email"
-          ></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-checkbox name="include_link" slot="start"></ion-checkbox>
-          <ion-label>Include magic link</ion-label>
-        </ion-item>
-        <ion-note color="dark">
-          <div class="ion-padding-horizontal">
-            (More convince but may be treated as spam)
-          </div>
-        </ion-note>
-      </ion-list>
-      <div class="ion-text-center ion-margin">
-        <ion-button type="submit" fill="block" color="tertiary">
-          Verify
-        </ion-button>
-      </div>
-    </>
-  )
+let emailFormBody = (
+  <>
+    <div class="field">
+      <label>
+        Email
+        <div class="input-container">
+          <input name="email" type="email" autocomplete="email" />
+        </div>
+      </label>
+    </div>
+    <div class="field">
+      <label>
+        <input type="checkbox" name="include_link" /> Include magic link (more
+        convince but may be treated as spam)
+      </label>
+    </div>
+    <input type="submit" value="Verify" />
+  </>
+)
 
-let passwordFormBody =
-  config.layout_type !== LayoutType.ionic ? (
-    <>
-      <label>
-        Username or email address
-        <div class="input-container">
-          <input name="loginId" autocomplete="username" />
-        </div>
-      </label>
-      <label>
-        Password
-        <div class="input-container">
-          <input
-            name="password"
-            type="password"
-            autocomplete="current-password"
-          />
-        </div>
-      </label>
+let passwordFormBody = (
+  <>
+    <label>
+      Username or email address
       <div class="input-container">
-        <input type="submit" value="Login" />
+        <input name="loginId" autocomplete="username" />
       </div>
-      <Message />
-    </>
-  ) : (
-    <>
-      <ion-list>
-        <ion-item>
-          <ion-input
-            label="Username or email address"
-            label-placement="floating"
-            name="loginId"
-            autocomplete="username"
-          ></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-input
-            label="Password"
-            label-placement="floating"
-            name="password"
-            type="password"
-            autocomplete="current-password"
-          ></ion-input>
-        </ion-item>
-      </ion-list>
-      <div class="ion-text-center ion-margin">
-        <ion-button type="submit" fill="block" color="primary">
-          Login
-        </ion-button>
+    </label>
+    <label>
+      Password
+      <div class="input-container">
+        <input
+          name="password"
+          type="password"
+          autocomplete="current-password"
+        />
       </div>
-      <Message />
-    </>
-  )
+    </label>
+    <div class="input-container">
+      <input type="submit" value="Login" />
+    </div>
+    <Message />
+  </>
+)
 
 let guestView = (
   <>
