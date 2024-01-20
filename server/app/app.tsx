@@ -12,7 +12,7 @@ import {
 import { sendHTMLHeader } from './express.js'
 import { OnWsMessage } from '../ws/wss.js'
 import { dispatchUpdate } from './jsx/dispatch.js'
-import { EarlyTerminate } from './helpers.js'
+import { EarlyTerminate, MessageException } from './helpers.js'
 import { getWSSession } from './session.js'
 import DemoCookieSession from './pages/demo-cookie-session.js'
 import { Flush } from './components/flush.js'
@@ -354,13 +354,24 @@ export let onWsMessage: OnWsMessage = async (event, ws, _wss) => {
     session,
   }
   try {
-    await then(matchRoute(context), route => {
-      let node = App(route)
-      if (navigation_type === 'express' && navigation_method !== 'GET') return
-      dispatchUpdate(context, node, route.title)
-    })
+    await then(
+      matchRoute(context),
+      route => {
+        let node = App(route)
+        if (navigation_type === 'express' && navigation_method !== 'GET') return
+        dispatchUpdate(context, node, route.title)
+      },
+      onError,
+    )
   } catch (error) {
+    onError(error)
+  }
+  function onError(error: unknown) {
     if (error == EarlyTerminate) {
+      return
+    }
+    if (error instanceof MessageException) {
+      ws.send(error.message)
       return
     }
     console.error(error)
