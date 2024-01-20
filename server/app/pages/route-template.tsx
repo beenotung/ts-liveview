@@ -65,7 +65,7 @@ function Main(attrs: {}, context: Context) {
           ))}
         </ul>
         <Link href="/__url__/add">
-          <button>Add Item</button>
+          <button>{addPageTitle}</button>
         </Link>
       </>
     )
@@ -80,7 +80,7 @@ function Main(attrs: {}, context: Context) {
         ))}
       </ion-list>
       <Link href="/__url__/add" tagName="ion-button">
-        Add Item
+        {addPageTitle}
       </Link>
     </>
   )

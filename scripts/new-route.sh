@@ -9,22 +9,22 @@ else
 fi
 
 # trim spaces
-# replace spaces to hyphen (-)
-# e.g. user-agents
-name="$(echo "$name" | sed -r 's/^ +//g' | sed -r 's/ +$//g' | sed 's/ /-/g')"
-
 # replace hyphen to space
+# e.g. user agents
+name="$(echo "$name" | sed 's/-/ /g' | sed -r 's/^ +//g' | sed -r 's/ +$//g')"
+
 # capitalize
 # e.g. User Agents
 title="$(node -p "'$name'.replace(/-/g,' ').replace(/(^| )\w/g,s=>s.toUpperCase())")"
 
-# replace spaces
+# remove spaces
 # e.g. UserAgents
 id="$(echo "$title" | sed -r 's/ //g')"
 
 # lowercase
+# replace spaces to hyphen
 # e.g. user-agents
-url="$(echo "$name" | awk '{print tolower($0)}')"
+url="$(echo "$name" | awk '{print tolower($0)}' | sed 's/ /-/g')"
 
 file="server/app/pages/$url.tsx"
 
@@ -40,6 +40,7 @@ fi
 cat "server/app/pages/route-template.tsx" \
   | sed "s/__id__/$id/" \
   | sed "s/__title__/$title/" \
+  | sed "s/__name__/$name/" \
   | sed "s/__url__/$url/" \
   > "$file"
 
