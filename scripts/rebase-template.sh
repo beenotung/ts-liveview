@@ -3,6 +3,8 @@ set -e
 set -o pipefail
 set -x
 
+git checkout v5-auth-ionic-template
+git checkout v5-auth-web-template
 git checkout v5-auth-template
 git checkout v5-ionic-template
 git checkout v5-web-template
