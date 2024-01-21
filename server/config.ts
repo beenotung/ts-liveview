@@ -13,12 +13,6 @@ function fixEpoch() {
 
 let epoch = fixEpoch()
 
-export enum LayoutType {
-  navbar = 'navbar',
-  sidebar = 'sidebar',
-  ionic = 'ionic',
-}
-
 export let config = {
   production,
   development,
@@ -28,7 +22,6 @@ export let config = {
   epoch,
   auto_open: !production && development && epoch === 1,
   client_target: 'es2020',
-  layout_type: LayoutType.navbar,
 }
 
 const titleSuffix = ' | ' + config.site_name
