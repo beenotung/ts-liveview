@@ -1,4 +1,4 @@
-import { LayoutType, title } from '../../config.js'
+import { title } from '../../config.js'
 import { mapArray } from '../components/fragment.js'
 import { IonBackButton } from '../components/ion-back-button.js'
 import { wsStatus } from '../components/ws-status.js'
@@ -83,7 +83,6 @@ let routes = {
     title: title(pageTitle),
     description: `Demo using ionic and ts-liveview to build mobile-first SSR webapp`,
     node: aboutPage,
-    layout_type: LayoutType.ionic,
   },
 } satisfies Routes
 

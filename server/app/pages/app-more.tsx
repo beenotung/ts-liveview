@@ -1,6 +1,6 @@
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
-import { LayoutType, config, title } from '../../config.js'
+import { config, title } from '../../config.js'
 import Style from '../components/style.js'
 import { Link } from '../components/router.js'
 import { appIonTabBar } from '../components/app-tab-bar.js'
@@ -127,7 +127,6 @@ let routes = {
     title: title(pageTitle),
     description: 'TODO',
     node: page,
-    layout_type: LayoutType.ionic,
   },
 } satisfies Routes
 
