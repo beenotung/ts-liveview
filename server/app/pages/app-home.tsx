@@ -1,5 +1,5 @@
 import { loadClientPlugin } from '../../client-plugin.js'
-import { config, title } from '../../config.js'
+import { title } from '../../config.js'
 import { appIonTabBar } from '../components/app-tab-bar.js'
 import { mapArray } from '../components/fragment.js'
 import { Link } from '../components/router.js'
