@@ -71,7 +71,7 @@ function DetailPage(attrs: { item: Character }, context: DynamicContext) {
       <ion-header>
         <ion-toolbar role="heading" aria-level="1">
           <IonBackButton
-            href="/app/home"
+            href="/"
             buttonsSlot="start"
             color="primary"
             backText="List"
@@ -97,7 +97,7 @@ function DetailPage(attrs: { item: Character }, context: DynamicContext) {
 }
 
 let routes = {
-  '/app/characters/:id': {
+  '/characters/:id': {
     layout_type: LayoutType.ionic,
     resolve(context) {
       let id = context.routerMatch?.params.id
