@@ -1,4 +1,4 @@
-import { LayoutType, title } from '../../config.js'
+import { title } from '../../config.js'
 import { renderError } from '../components/error.js'
 import { IonBackButton } from '../components/ion-back-button.js'
 import { DynamicContext } from '../context.js'
@@ -98,7 +98,6 @@ function DetailPage(attrs: { item: Character }, context: DynamicContext) {
 
 let routes = {
   '/app/characters/:id': {
-    layout_type: LayoutType.ionic,
     resolve(context) {
       let id = context.routerMatch?.params.id
       let item = characters.find(item => item.id == id)
