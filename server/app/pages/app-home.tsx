@@ -20,7 +20,7 @@ let homePage = (
           {pageTitle}
         </ion-title>
         <ion-buttons slot="end">
-          <Link tagName="ion-button" href="/app/about" color="light">
+          <Link tagName="ion-button" href="/about" color="light">
             About
           </Link>
         </ion-buttons>
@@ -45,7 +45,7 @@ let homePage = (
       </div>
       <ion-list>
         {mapArray(characters, character => (
-          <Link tagName="ion-item" href={'/app/characters/' + character.id}>
+          <Link tagName="ion-item" href={'/characters/' + character.id}>
             {character.name}
           </Link>
         ))}
@@ -80,7 +80,7 @@ let homePage = (
 homePage = prerender(homePage)
 
 let routes: Routes = {
-  '/app/home': {
+  '/': {
     title: title(pageTitle),
     description:
       'List of fictional characters commonly used as placeholders in discussion about cryptographic systems and protocols.',
