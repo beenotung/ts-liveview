@@ -65,26 +65,4 @@ function IonicPage(attrs: PageAttrs, context: Context) {
   )
 }
 
-function WebPage(attrs: PageAttrs) {
-  return (
-    <div id={attrs.id} class={attrs.class} style={attrs.style}>
-      {attrs.title ? <h1>{attrs.title}</h1> : null}
-      {attrs.children ? [attrs.children] : null}
-    </div>
-  )
-}
-
-export let is_ionic = config.layout_type === LayoutType.ionic
-export let is_web = !is_ionic
-
-export let Page = is_ionic ? IonicPage : WebPage
-
-type Content = Node | (() => Node)
-
-export function Content(attrs: { ionic?: Content; web?: Content }): Node {
-  let content = is_ionic ? attrs.ionic : attrs.web
-  if (typeof content === 'function') {
-    return content()
-  }
-  return content
-}
+export let Page = IonicPage
