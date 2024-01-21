@@ -1,15 +1,16 @@
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
-import { title } from '../../config.js'
+import { apiEndpointTitle, title } from '../../config.js'
 import Style from '../components/style.js'
 import { Context } from '../context.js'
 import { mapArray } from '../components/fragment.js'
 import { IonBackButton } from '../components/ion-back-button.js'
+import { config } from '../../config.js'
 
-let pageTitle = 'App Settings'
+let pageTitle = '__title__'
 
 let style = Style(/* css */ `
-#Settings {
+#__id__ {
 
 }
 `)
@@ -19,44 +20,47 @@ let page = (
     {style}
     <ion-header>
       <ion-toolbar>
-        <IonBackButton href="/app/more" backText="More" />
+        <IonBackButton href="/" backText="Home" />
         <ion-title role="heading" aria-level="1">
           {pageTitle}
         </ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content id="Settings" class="ion-padding">
+    <ion-content id="__id__" class="ion-padding">
       Items
       <Main />
     </ion-content>
   </>
 )
 
-let items = [
-  { title: 'Android', slug: 'md' },
-  { title: 'iOS', slug: 'ios' },
-]
-
 function Main(attrs: {}, context: Context) {
+  let items = [1, 2, 3]
   return (
-    <>
-      <ion-list>
-        {mapArray(items, item => (
-          <ion-item>
-            {item.title} ({item.slug})
-          </ion-item>
-        ))}
-      </ion-list>
-    </>
+    <ion-list>
+      {mapArray(items, item => (
+        <ion-item>item {item}</ion-item>
+      ))}
+    </ion-list>
   )
 }
 
-let routes = {
-  '/settings': {
+function Submit() {
+  return 'TODO'
+}
+
+let routes: Routes = {
+  '/__url__': {
     title: title(pageTitle),
     description: 'TODO',
+    menuText: pageTitle,
     node: page,
   },
-} satisfies Routes
+  '/__url__/submit': {
+    title: apiEndpointTitle,
+    description: 'TODO',
+    node: <Submit />,
+    streaming: false,
+  },
+}
 
 export default { routes }

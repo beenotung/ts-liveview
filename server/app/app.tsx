@@ -18,29 +18,20 @@ import { getRateLimitContext } from '../rate-limit.js'
 import { get_rate_limit } from '../rate-limits.js'
 import { getWSSession } from './session.js'
 import { Flush } from './components/flush.js'
-import { LayoutType, config } from '../config.js'
+import { config } from '../config.js'
 import Stats from './components/stats.js'
 import { MuteConsole, Script } from './components/script.js'
-import {
-  matchRoute,
-  menuRoutes,
-  PageRouteMatch,
-  redirectDict,
-} from './routes.js'
+import { matchRoute, PageRouteMatch, redirectDict } from './routes.js'
 import type { ClientMountMessage, ClientRouteMessage } from '../../client/types'
 import { then } from '@beenotung/tslib/result.js'
-import { webAppStyle, ionicAppStyle } from './app-style.js'
+import { ionicAppStyle } from './app-style.js'
 import { preIonicAppScript, postIonicAppScript } from './styles/mobile-style.js'
-import { renderWebTemplate } from '../../template/web.js'
 import { renderIonicTemplate } from '../../template/ionic.js'
 import { HTMLStream } from './jsx/stream.js'
 import { getWsCookies } from './cookie.js'
-import Navbar from './components/navbar.js'
-import Sidebar from './components/sidebar.js'
 import { logRequest } from './log.js'
 import { WindowStub } from '../../client/internal.js'
 import { updateRequestSession } from '../../db/request-log.js'
-import { Link } from './components/router.js'
 import ErrorLog from './store/error-log.js'
 
 if (config.development) {
@@ -51,12 +42,9 @@ function renderTemplate(
   context: Context,
   route: PageRouteMatch,
 ) {
-  let layout_type = route.layout_type || config.layout_type
-  let App = layouts[layout_type]
+  let App = IonicApp
   let app = App(route)
-  let render =
-    route.renderTemplate ||
-    (App == IonicApp ? renderIonicTemplate : renderWebTemplate)
+  let render = route.renderTemplate || renderIonicTemplate
   render(stream, {
     title: escapeHTMLTextContent(route.title),
     description: unquote(escapeHTMLAttributeValue(route.description)),
@@ -85,83 +73,6 @@ let scripts = config.development ? (
     <script src="/js/bundle.min.js" type="module" defer></script>
   </>
 )
-
-let brand = (
-  <div style="color: darkblue; font-weight: bold">
-    <Link
-      style="font-size: 1.7rem; text-decoration: none"
-      class="text-no-wrap"
-      href="/"
-    >
-      {config.site_name}
-    </Link>{' '}
-    <div class="text-no-wrap">
-      <a target="_blank" href="https://hn.algolia.com/?query=ts-liveview">
-        HN
-      </a>{' '}
-      <a target="_blank" href="https://github.com/beenotung/ts-liveview">
-        git
-      </a>
-    </div>
-  </div>
-)
-
-type Layout = (route: PageRouteMatch) => Element
-
-let layouts: Record<LayoutType, Layout> = {
-  [LayoutType.navbar]: NavbarApp,
-  [LayoutType.sidebar]: SidebarApp,
-  [LayoutType.ionic]: IonicApp,
-}
-
-function NavbarApp(route: PageRouteMatch): Element {
-  // you can write the AST direct for more compact wire-format
-  return [
-    'div.app',
-    {},
-    [
-      // or you can write in JSX for better developer-experience (if you're coming from React)
-      <>
-        {webAppStyle}
-        <Flush />
-        <Navbar brand={brand} menuRoutes={menuRoutes} />
-        <hr />
-        {scripts}
-        {route.node}
-        <Flush />
-        <Footer />
-      </>,
-    ],
-  ]
-}
-
-function SidebarApp(route: PageRouteMatch): Element {
-  // you can write the AST direct for more compact wire-format
-  return [
-    'div.app',
-    {},
-    [
-      // or you can write in JSX for better developer-experience (if you're coming from React)
-      <>
-        {webAppStyle}
-        {scripts}
-        {Sidebar.style}
-        <Flush />
-        <div class={Sidebar.containerClass}>
-          <Sidebar brand={brand} menuRoutes={menuRoutes} />
-          <div
-            class={Sidebar.mainContainerClass}
-            style="display: flex; flex-direction: column"
-          >
-            <div style="flex-grow: 1; padding: 0 1rem">{route.node}</div>
-            <Footer style="padding: 0.5rem;" />
-          </div>
-        </div>
-        <Flush />
-      </>,
-    ],
-  ]
-}
 
 function IonicApp(route: PageRouteMatch): Element {
   // you can write the AST direct for more compact wire-format
@@ -250,7 +161,6 @@ async function handleLiveView(req: Request, res: Response, next: NextFunction) {
       if (route.streaming === false) {
         responseHTML(res, context, route)
       } else {
-        res.setHeader('Content-Type', 'text/html; charset=UTF-8')
         streamHTML(res, context, route)
       }
     })
@@ -409,7 +319,7 @@ export let onWsMessage: OnWsMessage = async (event, ws, _wss) => {
           return
         }
       }
-      let App = layouts[route.layout_type || config.layout_type]
+      let App = IonicApp
       let node = App(route)
       if (navigation_type === 'express' && navigation_method !== 'GET') return
       dispatchUpdate(context, node, route.title)
