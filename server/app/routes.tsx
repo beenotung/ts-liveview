@@ -13,7 +13,6 @@ import type { DynamicContext, ExpressContext } from './context'
 import { o } from './jsx/jsx.js'
 import type { Node } from './jsx/types'
 import UserAgents from './pages/user-agents.js'
-import Home from './pages/home.js'
 import NotFoundPageRoute from './pages/not-found.js'
 import { then } from '@beenotung/tslib/result.js'
 import type { MenuRoute } from './components/menu'
@@ -21,7 +20,6 @@ import DemoPlugin from './pages/demo-plugin.js'
 import AppHome from './pages/app-home.js'
 import AppAbout from './pages/app-about.js'
 import AppCharacter from './pages/app-character.js'
-import type { renderWebTemplate } from '../../template/web.js'
 import type { renderIonicTemplate } from '../../template/ionic.js'
 import { VNode } from '../../client/jsx/types.js'
 import { evalAttrsLocale } from './components/locale.js'
@@ -37,10 +35,9 @@ const StreamingByDefault = true
 
 export type PageRoute = PageRouteOptions & (StaticPageRoute | DynamicPageRoute)
 
-type TemplateFn = typeof renderWebTemplate | typeof renderIonicTemplate
+type TemplateFn = typeof renderIonicTemplate
 
 type RenderOptions = {
-  layout_type?: LayoutType
   renderTemplate?: TemplateFn
 }
 
@@ -74,7 +71,6 @@ export type Routes = Record<string, PageRoute>
 
 // TODO direct support alternative urls instead of having to repeat the entry
 let routeDict = {
-  ...Home.routes,
   ...DemoPlugin.routes,
   ...UILanguage.routes,
   ...UserAgents.routes,
