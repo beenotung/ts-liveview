@@ -50,7 +50,6 @@ function renderTemplate(
   route: PageRouteMatch,
 ) {
   let layout_type = route.layout_type || config.layout_type
-  console.log('route:', { url: route.url, layout_type })
   let App = layouts[layout_type]
   let app = App(route)
   let render =
