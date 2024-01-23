@@ -6,6 +6,14 @@ if [ $# == 0 ]; then
   read -p "page name: " name
 else
   name="$@"
+  echo "page name: $name"
+fi
+
+read -p "template [hybrid/web/ionic]: " template
+template_file="server/app/pages/route-template-$template.tsx"
+if [ ! -f "$template_file" ]; then
+  echo >&2 "Template file not found: $template_file"
+  exit 1
 fi
 
 # trim spaces
@@ -37,7 +45,7 @@ if [ -f "$file" ]; then
   fi
 fi
 
-cat "server/app/pages/route-template.tsx" \
+cat "$template_file" \
   | sed "s/__id__/$id/" \
   | sed "s/__title__/$title/" \
   | sed "s/__name__/$name/" \
