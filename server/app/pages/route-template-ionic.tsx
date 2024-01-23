@@ -8,6 +8,7 @@ import { IonBackButton } from '../components/ion-back-button.js'
 import { object, string } from 'cast.ts'
 import { Link, Redirect } from '../components/router.js'
 import { renderError } from '../components/error.js'
+import { getAuthUser } from '../auth/user.js'
 
 let pageTitle = '__title__'
 let addPageTitle = 'Add __title__'
@@ -42,6 +43,7 @@ let items = [
 ]
 
 function Main(attrs: {}, context: Context) {
+  let user = getAuthUser(context)
   return (
     <>
       <ion-list>
@@ -51,9 +53,15 @@ function Main(attrs: {}, context: Context) {
           </ion-item>
         ))}
       </ion-list>
-      <Link href="/__url__/add" tagName="ion-button">
-        {addPageTitle}
-      </Link>
+      {user ? (
+        <Link href="/__url__/add" tagName="ion-button">
+          {addPageTitle}
+        </Link>
+      ) : (
+        <p>
+          You can add __name__ after <Link href="/register">register</Link>.
+        </p>
+      )}
     </>
   )
 }
@@ -118,6 +126,12 @@ let addPage = (
   </>
 )
 
+function AddPage(attrs: {}, context: DynamicContext) {
+  let user = getAuthUser(context)
+  if (!user) return <Redirect href="/login" />
+  return addPage
+}
+
 let submitParser = object({
   title: string({ minLength: 3, maxLength: 50 }),
   slug: string({ match: /^[\w-]{1,32}$/ }),
@@ -125,6 +139,8 @@ let submitParser = object({
 
 function Submit(attrs: {}, context: DynamicContext) {
   try {
+    let user = getAuthUser(context)
+    if (!user) throw 'You must be logged in to submit ' + pageTitle
     let body = getContextFormBody(context)
     let input = submitParser.parse(body)
     let id = items.push({
@@ -182,7 +198,7 @@ let routes: Routes = {
   '/__url__/add': {
     title: title(addPageTitle),
     description: 'TODO',
-    node: addPage,
+    node: <AddPage />,
     streaming: false,
   },
   '/__url__/add/submit': {
