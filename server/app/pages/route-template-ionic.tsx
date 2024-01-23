@@ -18,8 +18,8 @@ import { proxy } from '../../../db/proxy.js'
 import { env } from '../../env.js'
 import { Script } from '../components/script.js'
 import { toSlug } from '../format/slug.js'
-import { IonButton } from '../components/ion-button.js'
 import { BackToLink } from '../components/back-to-link.js'
+import { getAuthUser } from '../auth/user.js'
 
 let pageTitle = <Locale en="__title__" zh_hk="__title__" zh_cn="__title__" />
 let addPageTitle = (
@@ -58,6 +58,7 @@ let items = [
 ]
 
 function Main(attrs: {}, context: Context) {
+  let user = getAuthUser(context)
   return (
     <>
       <ion-list>
@@ -67,7 +68,15 @@ function Main(attrs: {}, context: Context) {
           </ion-item>
         ))}
       </ion-list>
-      <IonButton url="/__url__/add">{addPageTitle}</IonButton>
+      {user ? (
+        <Link href="/__url__/add" tagName="ion-button">
+          {addPageTitle}
+        </Link>
+      ) : (
+        <p>
+          You can add __name__ after <Link href="/register">register</Link>.
+        </p>
+      )}
     </>
   )
 }
@@ -182,6 +191,12 @@ let addPage = (
   </>
 )
 
+function AddPage(attrs: {}, context: DynamicContext) {
+  let user = getAuthUser(context)
+  if (!user) return <Redirect href="/login" />
+  return addPage
+}
+
 let submitParser = object({
   title: string({ minLength: 3, maxLength: 50 }),
   slug: string({ match: /^[\w\-.]{1,32}$/, case: 'lower' }),
@@ -189,6 +204,8 @@ let submitParser = object({
 
 function Submit(attrs: {}, context: DynamicContext) {
   try {
+    let user = getAuthUser(context)
+    if (!user) throw 'You must be logged in to submit ' + pageTitle
     let body = getContextFormBody(context)
     let input = submitParser.parse(body)
     let id = items.push({
@@ -248,12 +265,11 @@ let routes = {
     title: <Title t={pageTitle} />,
     description: 'TODO',
     node: page,
-    menuText: 'x',
   },
   '/__url__/add': {
     title: <Title t={addPageTitle} />,
     description: 'TODO',
-    node: addPage,
+    node: <AddPage />,
     streaming: false,
   },
   '/__url__/add/submit': {
