@@ -18,6 +18,7 @@ import { env } from '../../env.js'
 import { Script } from '../components/script.js'
 import { toSlug } from '../format/slug.js'
 import { BackToLink } from '../components/back-to-link.js'
+import { getAuthUser } from '../auth/user.js'
 
 let pageTitle = <Locale en="__title__" zh_hk="__title__" zh_cn="__title__" />
 let addPageTitle = (
@@ -48,6 +49,7 @@ let items = [
 ]
 
 function Main(attrs: {}, context: Context) {
+  let user = getAuthUser(context)
   return (
     <>
       <ul>
@@ -57,9 +59,15 @@ function Main(attrs: {}, context: Context) {
           </li>
         ))}
       </ul>
-      <Link href="/__url__/add">
-        <button>{addPageTitle}</button>
-      </Link>
+      {user ? (
+        <Link href="/__url__/add">
+          <button>{addPageTitle}</button>
+        </Link>
+      ) : (
+        <p>
+          You can add __name__ after <Link href="/register">register</Link>.
+        </p>
+      )}
     </>
   )
 }
@@ -161,6 +169,12 @@ let addPage = (
   </>
 )
 
+function AddPage(attrs: {}, context: DynamicContext) {
+  let user = getAuthUser(context)
+  if (!user) return <Redirect href="/login" />
+  return addPage
+}
+
 let submitParser = object({
   title: string({ minLength: 3, maxLength: 50 }),
   slug: string({ match: /^[\w-]{1,32}$/ }),
@@ -168,6 +182,8 @@ let submitParser = object({
 
 function Submit(attrs: {}, context: DynamicContext) {
   try {
+    let user = getAuthUser(context)
+    if (!user) throw 'You must be logged in to submit ' + pageTitle
     let body = getContextFormBody(context)
     let input = submitParser.parse(body)
     let id = items.push({
@@ -221,7 +237,7 @@ let routes = {
   '/__url__/add': {
     title: <Title t={addPageTitle} />,
     description: 'TODO',
-    node: addPage,
+    node: <AddPage/>,
     streaming: false,
   },
   '/__url__/add/submit': {
