@@ -4,19 +4,30 @@ import { mapArray } from './fragment.js'
 import { Raw } from './raw.js'
 import Style from './style.js'
 
-export function Swiper(attrs: {
-  id: string
-  slides: NodeList
-  initialSlide?: number // default 0
-  style?: string
-  themeColor?: string
-  width?: string | number
-  height?: string | number
-  interval?: number
-  showArrow?: boolean
-  showPagination?: boolean
-  keepTallest?: boolean
-}) {
+export function Swiper(
+  attrs: {
+    id: string
+    initialSlide?: number // default 0
+    style?: string
+    themeColor?: string
+    width?: string | number
+    height?: string | number
+    interval?: number
+    showArrow?: boolean
+    showPagination?: boolean
+    keepTallest?: boolean
+    maxHeight?: string // default "unset !important"
+  } & (
+    | {
+        slides: NodeList
+        images?: never
+      }
+    | {
+        slides?: never
+        images: NodeList
+      }
+  ),
+) {
   let css = /* css */ `
 .swiper {
   transition: max-height 0.3s;
@@ -28,6 +39,32 @@ export function Swiper(attrs: {
   cursor: pointer;
 }
 `
+  let maxHeight = attrs.maxHeight ?? 'unset !important'
+  if (maxHeight) {
+    css += /* css */ `
+#${attrs.id} {
+  max-height: ${maxHeight};
+}
+`
+  }
+  if (attrs.images) {
+    css += /* css */ `
+.swiper-slide {
+  display: flex;
+}
+.swiper-pagination-images {
+  display: flex;
+  position: static;
+}
+.swiper-pagination-images img {
+  width: var(--swiper-pagination-image-size,3rem);
+  height: var(--swiper-pagination-image-size,3rem);
+}
+.swiper-pagination-image {
+  display: flex;
+}
+`
+  }
   let styles: string[] = []
   if (attrs.width) styles.push('width:' + toSize(attrs.width))
   if (attrs.height) styles.push('height:' + toSize(attrs.height))
@@ -51,19 +88,32 @@ export function Swiper(attrs: {
       {Style(css)}
       <div id={attrs.id} class="swiper" style={styles.join(';')}>
         <div class="swiper-wrapper">
-          {mapArray(attrs.slides, content => (
+          {mapArray(attrs.slides || attrs.images, content => (
             <div class="swiper-slide">{content}</div>
           ))}
         </div>
         {attrs.showPagination ? (
-          <div class="swiper-pagination swiper-pagination-bullets swiper-pagination-horizontal">
-            {mapArray(attrs.slides, (slide, i) => (
-              <span
-                class="swiper-pagination-bullet"
-                onclick={`swiperSlide(this, '${i}')`}
-              ></span>
-            ))}
-          </div>
+          attrs.images ? (
+            <div class="swiper-pagination swiper-pagination-images swiper-pagination-horizontal">
+              {mapArray(attrs.images, (slide, i) => (
+                <span
+                  class="swiper-pagination-image"
+                  onclick={`swiperSlide(this, '${i}')`}
+                >
+                  {slide}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <div class="swiper-pagination swiper-pagination-bullets swiper-pagination-horizontal">
+              {mapArray(attrs.slides, (slide, i) => (
+                <span
+                  class="swiper-pagination-bullet"
+                  onclick={`swiperSlide(this, '${i}')`}
+                ></span>
+              ))}
+            </div>
+          )
         ) : null}
         {attrs.showArrow ? (
           <>
