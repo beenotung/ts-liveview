@@ -82,7 +82,7 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
 - [x] Only load client-side library on used pages
   - [x] image compression
   - [x] sweetalert (unrestricted)
-  - [x] swiper
+  - [x] swiper (slides / images carousel)
 - [x] Still functional when javascript is disabled on client device [[5]](#feature-5)
 - [x] Support to develop with [JSX](#jsx), AST, or html template
 - [x] Auto-minify with esbuild
