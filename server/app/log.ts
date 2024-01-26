@@ -1,5 +1,5 @@
 import type { Request } from 'express'
-import { storeRequestLog } from '../../db/store.js'
+import { storeRequestLog } from '../../db/request-log.js'
 
 export function logRequest(
   req: Request,

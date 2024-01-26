@@ -39,7 +39,7 @@ import Navbar from './components/navbar.js'
 import Sidebar from './components/sidebar.js'
 import { logRequest } from './log.js'
 import { WindowStub } from '../../client/internal.js'
-import { updateRequestSession } from '../../db/store.js'
+import { updateRequestSession } from '../../db/request-log.js'
 
 if (config.development) {
   scanTemplateDir('template')
