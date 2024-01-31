@@ -4,6 +4,26 @@ set -o pipefail
 
 source scripts/config
 
+if [ -z "$MODE" ]; then
+  echo "possible mode:"
+  echo "  [f] first   (start new pm2 process)"
+  echo "  [q] quick   (reload without database migration)"
+  echo "  [ ] default (reload with database migration)"
+  read -p "mode: " MODE
+fi
+case "$MODE" in
+  f)
+    MODE="first"
+    ;;
+  q)
+    MODE="quick"
+    ;;
+  '')
+    MODE="default"
+    ;;
+esac
+echo "deploy mode: $MODE"
+
 set -x
 
 if [ "$MODE" == "quick" ]; then
