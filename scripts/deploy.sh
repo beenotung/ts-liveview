@@ -43,9 +43,6 @@ else
       set -e
       cd $root_dir
       mkdir -p data
-      mkdir -p db
-      cd db
-      ln -sf ../data
     "
     pm2_cmd="cd $root_dir && pm2 start --name $pm2_name dist/server/index.js"
   else
