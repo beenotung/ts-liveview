@@ -48,10 +48,6 @@ Start the development server, with realtime-update and live-reload.
 Compile the typescript server into 'dist' folder, and bundle the client into 'build' folder.
 This step is only needed when preparing production deployment.
 
-`npm run production`:
-Run the built server (`dist/server/index.js`) in production mode.
-This step is only needed for production deployment.
-
 `npm run fix`:
 Auto add `.js` extension in import paths, which is required in esm runtime.
 
