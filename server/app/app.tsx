@@ -29,6 +29,7 @@ import Chatroom from './pages/chatroom.js'
 import type { ClientMountMessage, ClientRouteMessage } from '../../client/types'
 import { then } from '@beenotung/tslib/result.js'
 import { webAppStyle, ionicAppStyle } from './app-style.js'
+import { ionicAppScript } from './styles/mobile-style.js'
 import { renderWebTemplate } from '../../template/web.js'
 import { renderIonicTemplate } from '../../template/ionic.js'
 import { HTMLStream } from './jsx/stream.js'
@@ -161,6 +162,7 @@ function IonicApp(route: PageRouteMatch): Element {
       <>
         {ionicAppStyle}
         {scripts}
+        {ionicAppScript}
         <Flush />
         <ion-app>
           <div class="page">{route.node}</div>

@@ -7,6 +7,7 @@ import { wsStatus } from '../components/ws-status.js'
 import { prerender } from '../jsx/html.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
+import { fitIonContent } from '../styles/mobile-style.js'
 import { characters } from './app-character.js'
 
 let pageTitle = 'Home'
@@ -25,7 +26,7 @@ let homePage = (
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
-    <ion-content class="ion-padding">
+    <ion-content class="ion-padding" id="Home">
       <p>
         You can get started by replacing the contents of this page in{' '}
         <code class="inline-code">app-home.tsx</code>.
@@ -67,6 +68,7 @@ let homePage = (
       </ion-button>
       {wsStatus.safeArea}
     </ion-content>
+    {fitIonContent('Home')}
   </>
 )
 

@@ -4,7 +4,7 @@ import { IonBackButton } from '../components/ion-back-button.js'
 import { wsStatus } from '../components/ws-status.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
-import { themeColorNames } from '../styles/mobile-style.js'
+import { fitIonContent, themeColorNames } from '../styles/mobile-style.js'
 
 let pageTitle = 'About'
 
@@ -18,7 +18,7 @@ let aboutPage = (
         </ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content class="ion-padding">
+    <ion-content class="ion-padding" id="About">
       <p>
         This is a demo using{' '}
         <a href="https://ionicframework.com" target="_blank">
@@ -66,6 +66,7 @@ let aboutPage = (
       </div>
       {wsStatus.safeArea}
     </ion-content>
+    {fitIonContent('About')}
   </>
 )
 
