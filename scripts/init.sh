@@ -5,24 +5,20 @@ set -o pipefail
 hash code && code . || echo "code not in path, you need to open the IDE manually"
 
 #install="slnpm"
-install="pnpm i --prefer-offline --no-optional"
+install="pnpm i -r"
 #install="yarn"
 #install="npm i"
 
-cd db
 echo "running '$install' in $(pwd)"
 $install
-if [[ "$install" == *no-optional* ]]; then
-  $install
-fi
-npm run migrate
 
-cd ..
-echo "running '$install' in $(pwd)"
-$install
-if [[ "$install" == *no-optional* ]]; then
+cd db
+if [[ "$install" != *-r* ]]; then
+  echo "running '$install' in $(pwd)"
   $install
 fi
+echo "migrating database"
+npm run migrate
 
 echo
 echo "Ready to go!"
