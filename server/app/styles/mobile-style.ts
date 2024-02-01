@@ -95,3 +95,11 @@ export function fitIonContent(ionContentId: string) {
     `<script>fitIonContent(${ionContentId})</script>`,
   ]
 }
+
+export function selectIonTab(tabName: string) {
+  return [
+    'raw',
+    /* html */
+    `<script>document.querySelector('ion-tab-bar ion-tab-button[tab="${tabName}"]')?.classList.add('tab-selected')</script>`,
+  ]
+}
