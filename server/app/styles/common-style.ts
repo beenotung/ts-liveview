@@ -45,4 +45,8 @@ code.inline-code {
   border-radius: 0.25rem;
   font-family: monospace;
 }
+
+.ws_status--safe-area {
+  margin-top: 3rem;
+}
 `
