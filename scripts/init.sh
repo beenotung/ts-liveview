@@ -25,6 +25,3 @@ echo "Ready to go!"
 echo
 echo "Run 'npm start' to start the development server"
 echo
-echo "Run 'npm run build' to build for production deployment"
-echo "Run 'npm run production' to start server in production mode"
-echo
