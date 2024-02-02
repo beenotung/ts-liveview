@@ -56,7 +56,7 @@ ion-button[fill][color="${name}"] {
 
 export let ionicAppScript = Script(/* javascript */ `
 function fitIonContent(ionContent) {
-  let retry = () => setTimeout(() => fitIonContent(ionContent), 33)
+  let retry = () => setTimeout(() => fitIonContent(ionContent), 10)
   let rect = ionContent.getBoundingClientRect();
   if (rect.height == 0) return retry()
   let ionHeader = ionContent.previousElementSibling
@@ -81,6 +81,14 @@ function fitIonContent(ionContent) {
   }
   ionContent.style.height = 'calc(' + height + ')'
 }
+function selectIonTab(tab) {
+  let ionTab = document.querySelector('ion-tab-bar ion-tab-button[tab="'+tab+'"]')
+  let ionIcon = ionTab.querySelector('ion-icon')
+  ionTab.classList.add('tab-selected')
+  if (ionIcon.name) ionIcon.name = ionIcon.name.replace('-outline', '')
+  if (ionIcon.ios) ionIcon.ios = ionIcon.ios.replace('-outline', '')
+  if (ionIcon.md) ionIcon.md = ionIcon.md.replace('-outline', '')
+}
 `)
 
 export function fitIonContent(ionContentId: string) {
@@ -100,6 +108,6 @@ export function selectIonTab(tabName: string) {
   return [
     'raw',
     /* html */
-    `<script>document.querySelector('ion-tab-bar ion-tab-button[tab="${tabName}"]')?.classList.add('tab-selected')</script>`,
+    `<script>selectIonTab("${tabName}")</script>`,
   ]
 }

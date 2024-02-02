@@ -2,17 +2,26 @@ import { LayoutType, title } from '../../config.js'
 import { mapArray } from '../components/fragment.js'
 import { IonBackButton } from '../components/ion-back-button.js'
 import { wsStatus } from '../components/ws-status.js'
+import { Context, DynamicContext } from '../context.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 import { fitIonContent, themeColorNames } from '../styles/mobile-style.js'
 
 let pageTitle = 'About'
 
+function BackButton(attr: {}, context: DynamicContext) {
+  let from = new URLSearchParams(context.routerMatch?.search).get('from')
+  if (from == 'more') {
+    return <IonBackButton href="/more" backText="More" />
+  }
+  return <IonBackButton href="/app/home" backText="Home" />
+}
+
 let aboutPage = (
   <>
     <ion-header>
       <ion-toolbar>
-        <IonBackButton href="/app/home" backText="Home" />
+        <BackButton />
         <ion-title role="heading" aria-level="1">
           {pageTitle}
         </ion-title>
