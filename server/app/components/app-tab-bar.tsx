@@ -14,9 +14,10 @@ export let appIonTabBar = (
         ios: 'chatbubble',
         md: 'chatbox',
         label: 'Chat',
-        href: '/chat',
+        href: '/app/chat',
       },
       {
+        tab: 'notice',
         icon: 'notifications',
         label: 'Notice',
         href: '/app/notice',
@@ -25,7 +26,7 @@ export let appIonTabBar = (
         tab: 'more',
         icon: 'ellipsis-horizontal',
         label: 'More',
-        href: '/more',
+        href: '/app/more',
       },
     ]}
   />

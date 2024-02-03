@@ -12,7 +12,7 @@ let pageTitle = 'About'
 function BackButton(attr: {}, context: DynamicContext) {
   let from = new URLSearchParams(context.routerMatch?.search).get('from')
   if (from == 'more') {
-    return <IonBackButton href="/more" backText="More" />
+    return <IonBackButton href="/app/more" backText="More" />
   }
   return <IonBackButton href="/app/home" backText="Home" />
 }

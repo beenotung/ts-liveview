@@ -1,3 +1,5 @@
+import AppNotice from './pages/app-notice.js'
+import AppChat from './pages/app-chat.js'
 import AppSettings from './pages/app-settings.js'
 import AppMore from './pages/app-more.js'
 import { capitalize } from '@beenotung/tslib/string.js'
@@ -80,6 +82,8 @@ export type Routes = Record<string, PageRoute>
 
 // TODO direct support alternative urls instead of having to repeat the entry
 let routeDict: Routes = {
+  ...AppNotice.routes,
+  ...AppChat.routes,
   ...AppSettings.routes,
   ...AppMore.routes,
   '/': {
