@@ -95,7 +95,7 @@ let items = [
 ]
 
 let routes: Routes = {
-  '/more': {
+  '/app/more': {
     title: title(pageTitle),
     description: 'TODO',
     menuText: pageTitle,

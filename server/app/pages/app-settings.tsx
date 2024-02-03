@@ -23,7 +23,7 @@ let page = (
     {style}
     <ion-header>
       <ion-toolbar>
-        <IonBackButton href="/app/home" backText="Home" />
+        <IonBackButton href="/app/more" backText="More" />
         <ion-title role="heading" aria-level="1">
           {pageTitle}
         </ion-title>
