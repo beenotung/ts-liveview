@@ -15,7 +15,7 @@ import { readFileSync } from 'fs'
 let pageTitle = 'More'
 
 let style = Style(/* css */ `
-#AppMore {
+#More {
 
 }
 `)
@@ -30,7 +30,7 @@ let page = (
         </ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content id="AppMore" class="ion-padding">
+    <ion-content id="More" class="ion-padding">
       <ion-avatar
         style="
           margin:auto;
@@ -85,7 +85,7 @@ let page = (
       {appIonTabBar}
       {selectIonTab('more')}
     </ion-footer>
-    {fitIonContent('AppMore')}
+    {fitIonContent('More')}
   </>
 )
 
