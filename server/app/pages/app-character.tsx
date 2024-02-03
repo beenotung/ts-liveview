@@ -5,7 +5,6 @@ import { Link } from '../components/router.js'
 import { Context, DynamicContext } from '../context.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes'
-import { fitIonContent } from '../styles/mobile-style.js'
 
 type Character = {
   id: number
@@ -94,7 +93,6 @@ function DetailPage(attrs: { item: Character }, context: DynamicContext) {
           </a>
         </div>
       </ion-content>
-      {fitIonContent('DetailPage')}
     </>
   )
 }

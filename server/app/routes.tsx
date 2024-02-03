@@ -50,6 +50,7 @@ type TemplateFn = typeof renderWebTemplate | typeof renderIonicTemplate
 type RenderOptions = {
   layout_type?: LayoutType
   renderTemplate?: TemplateFn
+  no_animation?: boolean
 }
 
 export type PageRouteOptions = {

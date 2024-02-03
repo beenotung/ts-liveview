@@ -9,7 +9,7 @@ import { object, string } from 'cast.ts'
 import { Link, Redirect } from '../components/router.js'
 import { renderError } from '../components/error.js'
 import { appIonTabBar } from '../components/app-tab-bar.js'
-import { fitIonContent, selectIonTab } from '../styles/mobile-style.js'
+import { fitIonFooter, selectIonTab } from '../styles/mobile-style.js'
 import { readFileSync } from 'fs'
 
 let pageTitle = 'More'
@@ -79,13 +79,10 @@ let page = (
       </ion-list>
     </ion-content>
     <ion-footer>
-      <div>
-        <ion-note>v1.0.0</ion-note>
-      </div>
       {appIonTabBar}
       {selectIonTab('more')}
     </ion-footer>
-    {fitIonContent('More')}
+    {fitIonFooter}
   </>
 )
 
@@ -101,6 +98,7 @@ let routes: Routes = {
     menuText: pageTitle,
     node: page,
     layout_type: LayoutType.ionic,
+    no_animation: true,
   },
 }
 

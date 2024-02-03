@@ -8,7 +8,7 @@ import { wsStatus } from '../components/ws-status.js'
 import { prerender } from '../jsx/html.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
-import { fitIonContent, selectIonTab } from '../styles/mobile-style.js'
+import { fitIonFooter, selectIonTab } from '../styles/mobile-style.js'
 import { characters } from './app-character.js'
 
 let pageTitle = 'Home'
@@ -73,7 +73,7 @@ let homePage = (
       {appIonTabBar}
       {selectIonTab('home')}
     </ion-footer>
-    {fitIonContent('Home')}
+    {fitIonFooter}
   </>
 )
 
@@ -89,6 +89,7 @@ let routes: Routes = {
     menuFullNavigate: true,
     node: homePage,
     layout_type: LayoutType.ionic,
+    no_animation: true, // TODO enable animation when switch back
   },
 }
 

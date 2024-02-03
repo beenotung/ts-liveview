@@ -29,7 +29,11 @@ import Chatroom from './pages/chatroom.js'
 import type { ClientMountMessage, ClientRouteMessage } from '../../client/types'
 import { then } from '@beenotung/tslib/result.js'
 import { webAppStyle, ionicAppStyle } from './app-style.js'
-import { ionicAppScript } from './styles/mobile-style.js'
+import {
+  ionicAppScript,
+  mobile_switch_page_animation_script,
+  mobile_switch_page_no_animation_script,
+} from './styles/mobile-style.js'
 import { renderWebTemplate } from '../../template/web.js'
 import { renderIonicTemplate } from '../../template/ionic.js'
 import { HTMLStream } from './jsx/stream.js'
@@ -164,16 +168,12 @@ function IonicApp(route: PageRouteMatch): Element {
         {scripts}
         {ionicAppScript}
         <Flush />
-        <ion-app>
-          <div class="page">{route.node}</div>
+        <ion-app class={route.no_animation ? 'no-animation' : undefined}>
+          {route.node}
         </ion-app>
-        {Script(/* javascript */ `
-document.querySelector('.page')?.classList.add('hide')
-setTimeout(()=>{
-  document.querySelector('.page')?.classList.remove('hide')
-  document.body.classList.remove('back')
-}, 33)
-`)}
+        {route.no_animation
+          ? mobile_switch_page_no_animation_script
+          : mobile_switch_page_animation_script}
         <Flush />
       </>,
     ],
