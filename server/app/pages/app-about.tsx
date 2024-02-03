@@ -5,7 +5,7 @@ import { wsStatus } from '../components/ws-status.js'
 import { Context, DynamicContext } from '../context.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
-import { fitIonContent, themeColorNames } from '../styles/mobile-style.js'
+import { themeColorNames } from '../styles/mobile-style.js'
 
 let pageTitle = 'About'
 
@@ -75,7 +75,6 @@ let aboutPage = (
       </div>
       {wsStatus.safeArea}
     </ion-content>
-    {fitIonContent('About')}
   </>
 )
 

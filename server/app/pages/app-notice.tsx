@@ -5,7 +5,7 @@ import Style from '../components/style.js'
 import { Context, DynamicContext, getContextFormBody } from '../context.js'
 import { mapArray } from '../components/fragment.js'
 import { appIonTabBar } from '../components/app-tab-bar.js'
-import { fitIonContent, selectIonTab } from '../styles/mobile-style.js'
+import { fitIonFooter, selectIonTab } from '../styles/mobile-style.js'
 
 let pageTitle = 'Notice'
 
@@ -33,7 +33,7 @@ let page = (
       {appIonTabBar}
       {selectIonTab('notice')}
     </ion-footer>
-    {fitIonContent('Notice')}
+    {fitIonFooter}
   </>
 )
 
@@ -63,6 +63,7 @@ let routes: Routes = {
     menuText: pageTitle,
     node: page,
     layout_type: LayoutType.ionic,
+    no_animation: true,
   },
 }
 
