@@ -80,7 +80,7 @@ function DetailPage(attrs: { item: Character }, context: DynamicContext) {
           <ion-title>{item.name}</ion-title>
         </ion-toolbar>
       </ion-header>
-      <ion-content class="ion-padding" id="DetailPage">
+      <ion-content class="ion-padding">
         <p>Detail of item: {item.name}</p>
         <p>{item.desc}</p>
         <div>
