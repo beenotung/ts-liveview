@@ -11,11 +11,16 @@ install="pnpm i -r"
 
 echo "running '$install' in $(pwd)"
 $install
+if [[ "$install" == pnpm* ]]; then
+  pnpm rebuild
+fi
 
 cd db
 if [[ "$install" != *-r* ]]; then
   echo "running '$install' in $(pwd)"
   $install
+elif [[ "$install" == pnpm* ]]; then
+  pnpm rebuild
 fi
 echo "migrating database"
 npm run migrate
