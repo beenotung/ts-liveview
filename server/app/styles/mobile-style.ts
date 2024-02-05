@@ -32,7 +32,7 @@ ion-app.hide {
     transform: translate(0,-100%);
   }
 }
-ion-app.no-animation {
+.no-animation ion-app {
   transition: none;
   transform: none;
 }
@@ -40,18 +40,6 @@ ion-app.no-animation {
   transition: all 0.3s ease;
 }
 `
-
-export let mobile_switch_page_no_animation_script = Script(/* javascript */ `
-  document.body.classList.remove('back')
-`)
-
-export let mobile_switch_page_animation_script = Script(/* javascript */ `
-document.querySelector('ion-app')?.classList.add('hide')
-setTimeout(()=>{
-  document.querySelector('ion-app')?.classList.remove('hide')
-  document.body.classList.remove('back')
-}, 1)
-`)
 
 let themeStyle = readFileSync('public/theme.css').toString()
 MobileStyle += themeStyle
@@ -72,7 +60,7 @@ ion-button[fill][color="${name}"] {
 }`
 })
 
-export let ionicAppScript = Script(/* javascript */ `
+export let preIonicAppScript = Script(/* javascript */ `
 async function fitIonFooter() {
   let ionFooter = document.querySelector('ion-footer')
   if (!ionFooter) return
@@ -103,6 +91,24 @@ function selectIonTab(tab) {
   if (ionIcon.ios) ionIcon.ios = ionIcon.ios.replace('-outline', '')
   if (ionIcon.md) ionIcon.md = ionIcon.md.replace('-outline', '')
 }
+function afterNavigation() {
+  let body = document.body
+  if (body.classList.contains('no-animation')) {
+    body.classList.remove('no-animation')
+    body.classList.remove('back')
+    return
+  }
+  let app = body.querySelector('ion-app')
+  app.classList.add('hide')
+  setTimeout(()=>{
+    app.classList.remove('hide')
+    body.classList.remove('back')
+  },1)
+}
+`)
+
+export let postIonicAppScript = Script(/* javascript */ `
+afterNavigation()
 `)
 
 export let fitIonFooter = [

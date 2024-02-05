@@ -9,6 +9,7 @@ import { setSessionUrl } from '../session.js'
 export type LinkAttrs = {
   'tagName'?: string
   'no-history'?: boolean
+  'no-animation'?: boolean
   'is-back'?: boolean
   'href': string
   'onclick'?: never
@@ -20,6 +21,7 @@ export function Link(attrs: LinkAttrs) {
   const {
     'tagName': _tagName,
     'no-history': quiet,
+    'no-animation': fast,
     'is-back': back,
     children,
     ...aAttrs
@@ -27,6 +29,7 @@ export function Link(attrs: LinkAttrs) {
   const tagName = _tagName || 'a'
   let flag = ''
   if (quiet) flag += 'q'
+  if (fast) flag += 'f'
   if (back) flag += 'b'
   const onclick = flag ? `emitHref(event,'${flag}')` : `emitHref(event)`
   if (!children && tagName == 'a') {

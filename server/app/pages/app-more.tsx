@@ -98,7 +98,6 @@ let routes: Routes = {
     menuText: pageTitle,
     node: page,
     layout_type: LayoutType.ionic,
-    no_animation: true,
   },
 }
 
