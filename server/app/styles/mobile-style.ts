@@ -77,7 +77,7 @@ async function fitIonFooter() {
       let style = document.createElement('style')
       style.innerHTML =
         '#ws_status{margin-bottom:calc('+rect.height+'px - 0.5rem)}'
-      + '.ws_status--safe-area{margin-top: 2.5rem;}'
+      + '.ws_status--safe-area{margin-top: 2.75rem;}'
       ionFooter.appendChild(style)
     }
     break
