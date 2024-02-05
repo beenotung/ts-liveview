@@ -9,6 +9,7 @@ import { setSessionUrl } from '../session.js'
 export type LinkAttrs = {
   'tagName'?: string
   'no-history'?: boolean
+  'is-back'?: boolean
   'href': string
   'onclick'?: never
   [name: string]: unknown
@@ -19,11 +20,15 @@ export function Link(attrs: LinkAttrs) {
   const {
     'tagName': _tagName,
     'no-history': quiet,
+    'is-back': back,
     children,
     ...aAttrs
   } = attrs
   const tagName = _tagName || 'a'
-  const onclick = quiet ? `emitHref(event,'q')` : `emitHref(event)`
+  let flag = ''
+  if (quiet) flag += 'q'
+  if (back) flag += 'b'
+  const onclick = flag ? `emitHref(event,'${flag}')` : `emitHref(event)`
   if (!children && tagName == 'a') {
     console.warn('Link attrs:', attrs)
     console.warn(new Error('Link with empty content'))
