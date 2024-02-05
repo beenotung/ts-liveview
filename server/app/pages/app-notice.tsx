@@ -1,6 +1,6 @@
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
-import { LayoutType, apiEndpointTitle, title } from '../../config.js'
+import { apiEndpointTitle, title } from '../../config.js'
 import Style from '../components/style.js'
 import { Context, DynamicContext, getContextFormBody } from '../context.js'
 import { mapArray } from '../components/fragment.js'
@@ -61,7 +61,6 @@ let routes: Routes = {
     title: title(pageTitle),
     description: 'TODO',
     node: page,
-    layout_type: LayoutType.ionic,
   },
 }
 
