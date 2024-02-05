@@ -10,7 +10,7 @@ import {
   setValue,
 } from './jsx/dom.js'
 import { connectWS } from './ws/ws-lite.js'
-import type { WindowStub } from './internal'
+import type { LinkFlag, WindowStub } from './internal'
 import type { ClientMessage, ServerMessage } from './types'
 
 let win = window as unknown as WindowStub
@@ -32,15 +32,21 @@ connectWS({
       ws.send(Array.from(arguments) as ClientMessage)
     }
 
-    function emitHref(event: MouseEvent, flag?: 'q') {
+    function emitHref(event: MouseEvent, flag?: LinkFlag) {
       if (event.ctrlKey || event.shiftKey) {
         return // do not prevent open in new tab or new window
       }
       let a = event.currentTarget as HTMLAnchorElement
       let url = a.getAttribute('href')
-      if (flag !== 'q') {
+      // flag
+      let quiet = flag?.includes('q')
+      let back = flag?.includes('b')
+      if (!quiet) {
         let title = a.getAttribute('title') || document.title
         history.pushState(null, title, url)
+      }
+      if (back) {
+        document.body.classList.add('back')
       }
       emit(url)
       event.preventDefault()

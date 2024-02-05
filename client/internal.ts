@@ -1,6 +1,6 @@
 export type WindowStub = {
   emit(...args: unknown[]): void
-  emitHref(event: Event, flag?: 'q'): void
+  emitHref(event: Event, flag?: LinkFlag): void
   emitForm(event: Event): void
   submitForm(form: HTMLFormElement): void
   get(url: string): Promise<Response>
@@ -10,3 +10,5 @@ export type WindowStub = {
   _navigation_type_: 'static' | 'express' | 'ws'
   _navigation_method_: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 }
+
+export type LinkFlag = ['q', 'b']
