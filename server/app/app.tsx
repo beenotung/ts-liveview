@@ -114,6 +114,7 @@ function NavbarApp(route: PageRouteMatch): Element {
       // or you can write in JSX for better developer-experience (if you're coming from React)
       <>
         {webAppStyle}
+        <Flush />
         <Navbar brand={brand} menuRoutes={menuRoutes} />
         <hr />
         {scripts}
@@ -136,6 +137,7 @@ function SidebarApp(route: PageRouteMatch): Element {
         {webAppStyle}
         {scripts}
         {Sidebar.style}
+        <Flush />
         <div class={Sidebar.containerClass}>
           <Sidebar brand={brand} menuRoutes={menuRoutes} />
           <div
