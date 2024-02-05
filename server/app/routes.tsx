@@ -1,7 +1,3 @@
-import AppNotice from './pages/app-notice.js'
-import AppChat from './pages/app-chat.js'
-import AppSettings from './pages/app-settings.js'
-import AppMore from './pages/app-more.js'
 import { capitalize } from '@beenotung/tslib/string.js'
 import { Router } from 'url-router.ts'
 import { LayoutType, config, title } from '../config.js'
