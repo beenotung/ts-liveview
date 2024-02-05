@@ -89,7 +89,6 @@ let routes: Routes = {
     menuFullNavigate: true,
     node: homePage,
     layout_type: LayoutType.ionic,
-    no_animation: true, // TODO enable animation when switch back
   },
 }
 

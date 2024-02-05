@@ -18,6 +18,7 @@ export function IonTabBar(attrs: {
         return (
           <Link
             tagName="ion-tab-button"
+            no-animation
             href={tab.href}
             tab={tab.tab || tab.icon || 'tab-' + (i + 1)}
           >

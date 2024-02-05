@@ -40,10 +40,14 @@ connectWS({
       let url = a.getAttribute('href')
       // flag
       let quiet = flag?.includes('q')
+      let fast = flag?.includes('f')
       let back = flag?.includes('b')
       if (!quiet) {
         let title = a.getAttribute('title') || document.title
         history.pushState(null, title, url)
+      }
+      if (fast) {
+        document.body.classList.add('no-animation')
       }
       if (back) {
         document.body.classList.add('back')

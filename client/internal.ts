@@ -11,4 +11,4 @@ export type WindowStub = {
   _navigation_method_: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 }
 
-export type LinkFlag = ['q', 'b']
+export type LinkFlag = ['q', 'f', 'b']
