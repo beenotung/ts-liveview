@@ -27,7 +27,7 @@ let aboutPage = (
         </ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content class="ion-padding" id="About">
+    <ion-content class="ion-padding">
       <p>
         This is a demo using{' '}
         <a href="https://ionicframework.com" target="_blank">
