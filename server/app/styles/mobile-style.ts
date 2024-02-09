@@ -39,6 +39,12 @@ ion-app.hide {
 #ws_status {
   transition: all 0.3s ease;
 }
+
+/* general */
+hr {
+  height: 1px solid;
+  background-color: var(--ion-color-dark);
+}
 `
 
 let themeStyle = readFileSync('public/theme.css').toString()

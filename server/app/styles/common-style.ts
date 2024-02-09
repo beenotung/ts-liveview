@@ -23,6 +23,7 @@ export let CommonStyle = /* css */ `
   align-items: center;
 }
 .flex-column {
+  display: flex;
   flex-direction: column;
 }
 
@@ -37,6 +38,10 @@ export let CommonStyle = /* css */ `
 img {
   max-width: 100%;
   max-height: 100%;
+}
+
+.w-100 {
+  width: 100%;
 }
 
 code.inline-code {
