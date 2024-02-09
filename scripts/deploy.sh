@@ -75,7 +75,7 @@ else
     cd $root_dir
     pnpm i -r
     cd db
-    npm run migrate
+    npm run setup
     $pm2_cmd
   "
 fi
