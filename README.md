@@ -201,9 +201,15 @@ Example using _getter and setter_ see [thermostat.tsx](./server/app/pages/thermo
 
 ## Template of common use cases
 
-- [x] Foldable Navbar
-- [x] Foldable Sidebar
+- [x] Foldable Navbar (mobile responsive)
+- [x] Foldable Sidebar (mobile responsive)
+- [x] Bottom Tabbar (ionic mobile)
 - [x] Login / Register (branch: v5-auth-template)
+- [ ] OAuth
+- [x] Email verification
+- [ ] SMS verification
+- [ ] Reset password
+- [ ] Login History
 
 ## Examples / Demo
 
