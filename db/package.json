@@ -8,10 +8,12 @@
   "license": "BSD-2-Clause",
   "main": "index.js",
   "scripts": {
+    "setup": "run-s migrate seed",
     "dev": "run-s migrate update",
     "update": "run-s gen-migrate migrate gen-proxy",
     "gen-migrate": "auto-migrate ../data/db.sqlite3 < erd.txt",
     "migrate": "knex migrate:latest",
+    "seed": "ts-node seed.ts",
     "gen-proxy": "erd-to-proxy < erd.txt > proxy.ts"
   },
   "dependencies": {

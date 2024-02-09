@@ -22,8 +22,8 @@ if [[ "$install" != *-r* ]]; then
 elif [[ "$install" == pnpm* ]]; then
   pnpm rebuild
 fi
-echo "migrating database"
-npm run migrate
+echo "setup database"
+npm run setup
 
 echo
 echo "Ready to go!"
