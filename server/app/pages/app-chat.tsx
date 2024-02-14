@@ -60,7 +60,6 @@ let routes: Routes = {
   '/app/chat': {
     title: title(pageTitle),
     description: 'TODO',
-    menuText: pageTitle,
     node: page,
     layout_type: LayoutType.ionic,
   },

@@ -60,7 +60,6 @@ let routes: Routes = {
   '/app/notice': {
     title: title(pageTitle),
     description: 'TODO',
-    menuText: pageTitle,
     node: page,
     layout_type: LayoutType.ionic,
   },

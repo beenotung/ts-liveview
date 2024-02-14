@@ -58,7 +58,6 @@ let routes: Routes = {
   '/settings': {
     title: title(pageTitle),
     description: 'TODO',
-    menuText: pageTitle,
     node: page,
     layout_type: LayoutType.ionic,
   },
