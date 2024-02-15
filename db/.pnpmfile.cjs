@@ -3,6 +3,6 @@ module.exports = {
     readPackage: pkg => {
       delete pkg.optionalDependencies
       return pkg
-    }
-  }
+    },
+  },
 }
