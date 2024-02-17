@@ -153,7 +153,7 @@ function attachRoutes(app: Router) {
 
       let form = createUploadForm({
         mimeTypeRegex: /^image\/.+/,
-        maxFileSize: 300 * 1024,
+        maxFileSize: config.max_image_size,
       })
       let [fields, files] = await form.parse(req)
 
