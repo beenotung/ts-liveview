@@ -31,6 +31,7 @@ export function Swiper(
   let css = /* css */ `
 .swiper {
   transition: max-height 0.3s;
+  --swiper-theme-color: var(--ion-color-primary);
 }
 .swiper-wrapper {
   transition: transform 0.3s;
