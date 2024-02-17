@@ -2,7 +2,7 @@ import { format_byte } from '@beenotung/tslib/format.js'
 import { compressMobilePhoto, dataURItoFile } from '@beenotung/tslib/image.js'
 import { KB } from '@beenotung/tslib/size'
 
-function compressPhotos(files: FileList) {
+function compressPhotos(files: FileList | File[]) {
   return Promise.all(
     Array.from(files, async file => {
       let dataUrl = await compressMobilePhoto({
