@@ -1,13 +1,13 @@
 import { format_byte } from '@beenotung/tslib/format.js'
 import { compressMobilePhoto, dataURItoFile } from '@beenotung/tslib/image.js'
-import { KB } from '@beenotung/tslib/size'
+import { client_config } from './client-config.js'
 
 function compressPhotos(files: FileList | File[]) {
   return Promise.all(
     Array.from(files, async file => {
       let dataUrl = await compressMobilePhoto({
         image: file,
-        maximumSize: 300 * KB,
+        maximumSize: client_config.max_image_size,
         mimeType: 'image/webp',
       })
       file = dataURItoFile(dataUrl, file)
