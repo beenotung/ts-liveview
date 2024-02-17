@@ -9,6 +9,7 @@ export type WindowStub = {
   remount(): void
   _navigation_type_: 'static' | 'express' | 'ws'
   _navigation_method_: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
+  ws_status?: HTMLElement
 }
 
 export type LinkFlag = ['q', 'f', 'b']
