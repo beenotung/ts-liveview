@@ -41,6 +41,7 @@ import Sidebar from './components/sidebar.js'
 import { logRequest } from './log.js'
 import { WindowStub } from '../../client/internal.js'
 import { updateRequestSession } from '../../db/request-log.js'
+import { Link } from './components/router.js'
 
 if (config.development) {
   scanTemplateDir('template')
@@ -87,9 +88,9 @@ let scripts = config.development ? (
 
 let brand = (
   <div style="color: darkblue; font-weight: bold">
-    <span style="font-size: 1.7rem" class="text-no-wrap">
+    <Link style="font-size: 1.7rem; text-decoration: none" class="text-no-wrap" href="/">
       ts-liveview
-    </span>{' '}
+    </Link>{' '}
     <div class="text-no-wrap">
       <a href="https://news.ycombinator.com/item?id=22830472">HN</a>{' '}
       <a href="https://github.com/beenotung/ts-liveview">git</a>
