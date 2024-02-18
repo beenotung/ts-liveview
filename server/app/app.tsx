@@ -88,7 +88,11 @@ let scripts = config.development ? (
 
 let brand = (
   <div style="color: darkblue; font-weight: bold">
-    <Link style="font-size: 1.7rem; text-decoration: none" class="text-no-wrap" href="/">
+    <Link
+      style="font-size: 1.7rem; text-decoration: none"
+      class="text-no-wrap"
+      href="/"
+    >
       ts-liveview
     </Link>{' '}
     <div class="text-no-wrap">
