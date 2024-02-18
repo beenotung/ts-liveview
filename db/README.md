@@ -17,7 +17,7 @@ Manual mode:
 
 ## Populating database (seeding)
 
-You can setup configuration data and sample data in `seed.ts`, then run it with `npx ts-node seed`.
+You can setup configuration data and sample data in `seed.ts`, then run it with `npm run seed`.
 
 ## Why a separate package?
 
