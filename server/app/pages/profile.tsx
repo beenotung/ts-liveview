@@ -13,6 +13,7 @@ import Style from '../components/style.js'
 import { renderError } from '../components/error.js'
 import { Raw } from '../components/raw.js'
 import { loadClientPlugin } from '../../client-plugin.js'
+import { client_config } from '../../../client/client-config.js'
 
 let style = Style(/* css */ `
 #profile .avatar {
@@ -153,7 +154,7 @@ function attachRoutes(app: Router) {
 
       let form = createUploadForm({
         mimeTypeRegex: /^image\/.+/,
-        maxFileSize: config.max_image_size,
+        maxFileSize: client_config.max_image_size,
       })
       let [fields, files] = await form.parse(req)
 
