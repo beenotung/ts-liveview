@@ -160,7 +160,7 @@ function attachRoutes(app: Router) {
         mimeTypeRegex: /^image\/.+/,
         maxFileSize: client_config.max_image_size,
       })
-      let [fields, files] = await form.parse(req)
+      let [_fields, files] = await form.parse(req)
 
       let file = files.avatar?.[0]
       if (!file) throw 'missing avatar file'
