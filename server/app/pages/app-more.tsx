@@ -81,11 +81,6 @@ let page = (
   </>
 )
 
-let items = [
-  { title: 'Android', slug: 'md' },
-  { title: 'iOS', slug: 'ios' },
-]
-
 let routes: Routes = {
   '/app/more': {
     title: title(pageTitle),
