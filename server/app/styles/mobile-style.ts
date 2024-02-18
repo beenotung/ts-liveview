@@ -56,6 +56,7 @@ MobileStyle += /* css */ `
 /* fix */`
 
 themeStyle.match(/--ion-color-(\w+):/g)?.forEach(part => {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   let name = part.match(/--ion-color-(\w+):/)![1]
   if (themeColorNames.includes(name)) return
   themeColorNames.push(name)
