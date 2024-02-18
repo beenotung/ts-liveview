@@ -4,7 +4,6 @@ import type ws from 'ws'
 import type express from 'express'
 import { config } from '../config.js'
 import { debugLog } from '../debug.js'
-import { EarlyTerminate } from './helpers.js'
 import type { Context } from './context'
 
 const log = debugLog('cookie.ts')

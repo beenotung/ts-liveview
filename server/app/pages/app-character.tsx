@@ -1,8 +1,7 @@
 import { LayoutType, title } from '../../config.js'
 import { renderError } from '../components/error.js'
 import { IonBackButton } from '../components/ion-back-button.js'
-import { Link } from '../components/router.js'
-import { Context, DynamicContext } from '../context.js'
+import { DynamicContext } from '../context.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes'
 
