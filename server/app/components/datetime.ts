@@ -19,7 +19,7 @@ log.enabled = true
 
 export function DateTimeText(
   attrs: {
-    time: number
+    time: number | Date
     relativeTimeThreshold?: number
   },
   context: Context,
@@ -29,13 +29,13 @@ export function DateTimeText(
 
 export function formatDateTimeText(
   attrs: {
-    time: number
+    time: number | Date
     relativeTimeThreshold?: number
   },
   context: Context,
 ): string {
   if (attrs.relativeTimeThreshold !== undefined) {
-    let diff = attrs.time - Date.now()
+    let diff = toTime(attrs.time) - Date.now()
     if (Math.abs(diff) < attrs.relativeTimeThreshold) {
       return format_relative_time(diff, 0)
     }
@@ -58,7 +58,7 @@ export const DefaultLocaleDateTimeFormatOptions: LocaleDateTimeFormatOptions = {
 }
 
 export function toLocaleDateTimeString(
-  time: number,
+  time: number | Date,
   context: Context,
   options: LocaleDateTimeFormatOptions = DefaultLocaleDateTimeFormatOptions,
 ): string {
@@ -69,7 +69,7 @@ export function toLocaleDateTimeString(
   }
   for (;;) {
     try {
-      let date = new Date(time)
+      let date = toDate(time)
       return date.toLocaleString(locales, {
         ...options,
         timeZone,
@@ -210,5 +210,15 @@ function formatRelativeTime(
 
 // timeout interval must fit into a 32-bit signed integer
 const MaxTimeoutInterval = 2147483647
+
+function toTime(time: number | Date): number {
+  if (typeof time === 'number') return time
+  return time.getTime()
+}
+
+function toDate(time: number | Date): Date {
+  if (typeof time === 'number') return new Date(time)
+  return time
+}
 
 export default DateTimeText
