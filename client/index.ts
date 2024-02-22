@@ -8,6 +8,7 @@ import {
   updateProps,
   updateText,
   setValue,
+  insertNodeBefore,
 } from './jsx/dom.js'
 import { connectWS } from './ws/ws-lite.js'
 import type { LinkFlag, WindowStub } from './internal'
@@ -159,6 +160,9 @@ function onServerMessage(message: ServerMessage) {
       break
     case 'append':
       appendNode(message[1], message[2])
+      break
+    case 'insert-before':
+      insertNodeBefore(message[1], message[2])
       break
     case 'remove':
       removeNode(message[1])
