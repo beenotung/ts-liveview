@@ -61,7 +61,7 @@ const Clock = (
       The initial value is rendered on the server, then "re-hydrated" on the
       client.
     </p>
-    <p id="spaClock">
+    <p id="scrClock">
       <ClockText />
     </p>
     {iife(
@@ -69,13 +69,13 @@ const Clock = (
         let date = new Date()
         let lang = navigator.language
         function tickClock() {
-          if (typeof spaClock === 'undefined') {
+          if (typeof scrClock === 'undefined') {
             // stop the loop when this component is out of sight
             return
           }
           let time = Date.now()
           date.setTime(time)
-          spaClock.textContent = date.toLocaleString(lang, options)
+          scrClock.textContent = date.toLocaleString(lang, options)
           date.setMilliseconds(0)
           let diff = time - date.getTime()
           let interval = 1000 - diff
@@ -93,6 +93,6 @@ const Clock = (
     <SourceCode page="clock.tsx" />
   </div>
 )
-declare let spaClock: HTMLDivElement | undefined
+declare let scrClock: HTMLDivElement | undefined
 
 export default Clock
