@@ -87,7 +87,7 @@ export function removeNode(selector: string) {
       'Failed to query selector when removeNode, selector:',
       selector,
     )
-    throw new Error('Failed to query selector when removeNode')
+    return
   }
   e.remove()
 }
