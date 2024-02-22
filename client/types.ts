@@ -26,6 +26,7 @@ export type ServerMessage =
   | ['update', VElement, title?]
   | ['update-in', selector, VNode, title?]
   | ['append', selector, VNode]
+  | ['insert-before', selector, VNode]
   | ['remove', selector]
   | ['update-text', selector, string | number]
   | ['update-all-text', selector, string | number]
