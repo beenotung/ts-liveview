@@ -55,6 +55,8 @@ cat "$template_file" \
 echo "saved to $file"
 code "$file"
 
+node scripts/dev.js build
+
 file="server/app/routes.tsx"
 echo "import $id from './pages/$url.js'" > "$file.tmp"
 cat "$file" >> "$file.tmp"
