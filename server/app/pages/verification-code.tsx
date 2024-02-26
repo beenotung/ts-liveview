@@ -30,7 +30,8 @@ log.enabled = true
 export const PasscodeLength = 6
 export const PasscodeRegex = /[0-9]{6}/
 export const PasscodeExpireDuration = 5 * MINUTE
-const MaxAttempt = 1e6
+const MaxPasscodeInputAttempt = 5
+const MaxPasscodeGenerationAttempt = 1e6
 
 let cleanup_passcode = db.prepare(/* sql */ `
 delete from verification_code
@@ -49,7 +50,7 @@ where request_time > :request_time
   .pluck()
 
 function generatePasscode(): string {
-  for (let i = 0; i < MaxAttempt; i++) {
+  for (let i = 0; i < MaxPasscodeGenerationAttempt; i++) {
     let passcode = Random.nextString(PasscodeLength, digits)
 
     // skip passcode with leading zero
@@ -291,6 +292,32 @@ function Field(attrs: { label: string; input: Node }) {
   )
 }
 
+let count_attempts_by_email = db
+  .prepare(
+    /* sql */ `
+with verification_code_id as (
+select id
+from verification_code
+where email = :email
+  and revoke_time is null
+order by id desc
+limit 1
+)
+select count(*)
+from verification_attempt
+inner join verification_code on verification_code.id in (select id from verification_code_id)
+where verification_attempt.created_at >= verification_code.created_at
+`,
+  )
+  .pluck()
+
+let revoke_verification_code_by_email = db.prepare(/* sql */ `
+update verification_code
+set revoke_time = :revoke_time
+where email = :email
+  and revoke_time is null
+`)
+
 let checkEmailVerificationCodeParser = object({
   email: email(),
   code: string({
@@ -299,6 +326,7 @@ let checkEmailVerificationCodeParser = object({
     match: PasscodeRegex,
   }),
 })
+
 async function checkEmailVerificationCode(
   context: DynamicContext,
 ): Promise<StaticPageRoute> {
@@ -308,33 +336,40 @@ async function checkEmailVerificationCode(
     let body = getContextFormBody(context)
     let input = checkEmailVerificationCodeParser.parse(body)
     email = input.email
+
+    let is_too_much_attempt = false
     let is_expired = false
-    let matched_verification_code: VerificationCode | null = null
     let user_id: number | null = null
+
     db.transaction(() => {
+      let now = Date.now()
+
+      let attempt_id = proxy.verification_attempt.push({
+        passcode: input.code,
+        email: input.email,
+      })
+
+      let attempts = count_attempts_by_email.get({ email }) as number
+      if (attempts > MaxPasscodeInputAttempt) {
+        is_too_much_attempt = true
+        revoke_verification_code_by_email.run({ email, revoke_time: now })
+        return
+      }
+
       let verification_code_rows = filter(proxy.verification_code, {
         passcode: input.code,
         email: input.email,
         revoke_time: null,
         match_id: null,
       })
-      let now = Date.now()
       for (let verification_code of verification_code_rows) {
         if (now - verification_code.request_time >= PasscodeExpireDuration) {
           verification_code.revoke_time = now
           is_expired = true
           continue
         }
-        matched_verification_code = verification_code
         verification_code.revoke_time = now
-        break
-      }
-      let attempt_id = proxy.verification_attempt.push({
-        passcode: input.code,
-        email: input.email,
-      })
-      if (matched_verification_code) {
-        matched_verification_code.match_id = attempt_id
+        verification_code.match_id = attempt_id
         user_id =
           find(proxy.user, { email: input.email })?.id ||
           proxy.user.push({
@@ -344,15 +379,17 @@ async function checkEmailVerificationCode(
             tel: null,
             avatar: null,
           })
-        matched_verification_code.user_id = user_id
+        break
       }
     })()
     if (!user_id) {
       throw new HttpError(
         400,
-        is_expired
-          ? 'Verification code expired.'
-          : 'Verification code not matched.',
+        is_too_much_attempt
+          ? 'Too much mismatched attempts.'
+          : is_expired
+            ? 'Verification code expired.'
+            : 'Verification code not matched.',
       )
     }
     writeUserIdToCookie(res, user_id)
