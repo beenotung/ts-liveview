@@ -357,12 +357,18 @@ async function checkEmailVerificationCode(
       }
 
       let verification_code_rows = filter(proxy.verification_code, {
-        passcode: input.code,
         email: input.email,
         revoke_time: null,
         match_id: null,
       })
+      if (verification_code_rows.length == 0) {
+        is_expired = true
+        return
+      }
       for (let verification_code of verification_code_rows) {
+        if (verification_code.passcode != input.code) {
+          continue
+        }
         if (now - verification_code.request_time >= PasscodeExpireDuration) {
           verification_code.revoke_time = now
           is_expired = true
