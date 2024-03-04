@@ -55,7 +55,9 @@ cat "$template_file" \
 echo "saved to $file"
 code "$file"
 
-node scripts/dev.js build
+if [ -d dist ]; then
+  touch dist/__dev_restart__
+fi
 
 file="server/app/routes.tsx"
 echo "import $id from './pages/$url.js'" > "$file.tmp"
