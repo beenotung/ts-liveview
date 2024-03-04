@@ -116,7 +116,15 @@ async function build(files: string[]) {
   }
 }
 
-function postBuild() {
+let restart_flag_file = path.join('dist', '__dev_restart__')
+
+async function postBuild() {
+  if (fs.existsSync(restart_flag_file)) {
+    fs.unlinkSync(restart_flag_file)
+    await stop()
+    await main()
+    return
+  }
   fix()
   if (mode == 'serve') {
     restartServer()
