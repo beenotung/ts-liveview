@@ -93,7 +93,7 @@ let brand = (
       class="text-no-wrap"
       href="/"
     >
-      ts-liveview
+      {config.site_name}
     </Link>{' '}
     <div class="text-no-wrap">
       <a href="https://news.ycombinator.com/item?id=22830472">HN</a>{' '}
