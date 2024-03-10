@@ -44,7 +44,7 @@ export let config = {
   development,
   port: env.PORT,
   cookie_secret: env.COOKIE_SECRET,
-  site_name: 'ts-liveview Demo',
+  site_name: 'ts-liveview',
   site_description: 'Demo website of ts-liveview',
   setup_robots_txt: false,
   epoch,
