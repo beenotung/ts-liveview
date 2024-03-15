@@ -56,5 +56,5 @@ export function toUploadedUrl(
   if (!url) return undefined
   if (url.startsWith('https://')) return url
   if (url.startsWith('http://')) return url
-  return '/' + join(uploadDir, url)
+  return '/uploads/' + url
 }
