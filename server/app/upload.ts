@@ -4,12 +4,18 @@ import { existsSync, mkdirSync } from 'fs'
 import { randomUUID } from 'crypto'
 import { KB } from '@beenotung/tslib/size.js'
 import { extname, join } from 'path'
+import { client_config } from '../../client/client-config.js'
 
 const maxTrial = 10
 
-const uploadDir = config.upload_dir
-
-mkdirSync(uploadDir, { recursive: true })
+let mkdirCache = new Set<string>()
+function cached_mkdir(dir: string) {
+  if (mkdirCache.has(dir)) {
+    return
+  }
+  mkdirSync(dir, { recursive: true })
+  mkdirCache.add(dir)
+}
 
 function detectExtname(part: Part): string {
   if (part.originalFilename) {
@@ -24,15 +30,33 @@ function detectExtname(part: Part): string {
   return mime?.split('/').pop()?.split(';')[0] || 'bin'
 }
 
-export function createUploadForm(options: {
-  mimeTypeRegex: RegExp
-  maxFileSize?: number // default 300KB (per file)
-  maxFiles?: number // default 1 (single file)
+export let MimeTypeRegex = {
+  any_image: /^image\/.+/,
+}
+
+export function createUploadForm(options?: {
+  /** @default config.upload_dir */
+  uploadDir?: string
+
+  /** @default any_image */
+  mimeTypeRegex?: RegExp
+
+  /** @default client_config.max_image_size */
+  maxFileSize?: number
+
+  /** @default 1 (single file) */
+  maxFiles?: number
 }) {
+  let uploadDir = options?.uploadDir || config.upload_dir
+  let mimeTypeRegex = options?.mimeTypeRegex || MimeTypeRegex.any_image
+  let maxFileSize = options?.maxFileSize || client_config.max_image_size
+  let maxFiles = options?.maxFiles || 1
+
+  cached_mkdir(uploadDir)
   let form = new Formidable({
     uploadDir,
-    maxFileSize: options.maxFileSize || 300 * KB,
-    maxFiles: options.maxFiles || 1,
+    maxFileSize,
+    maxFiles,
     multiples: true,
     filename(name, ext, part, _form): string {
       let extname = detectExtname(part)
@@ -44,7 +68,7 @@ export function createUploadForm(options: {
       throw new Error('too many files in uploadDir')
     },
     filter(part): boolean {
-      return !!part.mimetype && options.mimeTypeRegex.test(part.mimetype)
+      return !!part.mimetype && mimeTypeRegex.test(part.mimetype)
     },
   })
   return form
