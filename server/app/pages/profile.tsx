@@ -156,11 +156,8 @@ function attachRoutes(app: Router) {
       let user = proxy.user[user_id]
       if (!user) throw 'user not found'
 
-      let form = createUploadForm({
-        mimeTypeRegex: /^image\/.+/,
-        maxFileSize: client_config.max_image_size,
-      })
-      let [_fields, files] = await form.parse(req)
+      let form = createUploadForm()
+      let [fields, files] = await form.parse(req)
 
       let file = files.avatar?.[0]
       if (!file) throw 'missing avatar file'
