@@ -33,6 +33,7 @@ import appAbout from './pages/app-about.js'
 import appCharacter from './pages/app-character.js'
 import type { renderWebTemplate } from '../../template/web.js'
 import type { renderIonicTemplate } from '../../template/ionic.js'
+import { VNode } from '../../client/jsx/types.js'
 
 let titles: Record<string, string> = {}
 
@@ -62,7 +63,7 @@ export type PageRouteOptions = {
 
 export type StaticPageRoute = {
   title: string
-  node: Node
+  node: Node | VNode
   description: string
   status?: number
 } & RenderOptions
