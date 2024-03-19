@@ -13,16 +13,9 @@ function fixEpoch() {
 
 let epoch = fixEpoch()
 
-export enum LayoutType {
-  navbar = 'navbar',
-  sidebar = 'sidebar',
-  ionic = 'ionic',
-}
-
 export let config = {
   production,
   development,
-  minify: production,
   site_name: 'ts-liveview',
   short_site_name: 'demo-site',
   site_description: 'Demo website of ts-liveview',
@@ -30,7 +23,6 @@ export let config = {
   epoch,
   auto_open: !production && development && epoch === 1,
   client_target: 'es2020',
-  layout_type: LayoutType.navbar,
   use_social_login: true,
 }
 
