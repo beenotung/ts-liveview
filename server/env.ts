@@ -16,7 +16,6 @@ export let env = {
   EMAIL_PORT: 587,
   EMAIL_USER: '',
   EMAIL_PASSWORD: '',
-  ORIGIN: '',
 }
 applyDefaultEnv()
 
@@ -25,6 +24,8 @@ function applyDefaultEnv() {
   let PORT = process.env.PORT || env.PORT
   env.ORIGIN ||= process.env.ORIGIN || `http://localhost:${PORT}`
   env.COOKIE_SECRET ||= process.env.COOKIE_SECRET || cwd()
+  env.EMAIL_USER ||= process.env.EMAIL_USER || 'skip'
+  env.EMAIL_PASSWORD ||= process.env.EMAIL_PASSWORD || 'skip'
 }
 
 populateEnv(env, { mode: 'halt' })
