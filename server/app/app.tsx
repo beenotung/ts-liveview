@@ -41,6 +41,7 @@ import { logRequest } from './log.js'
 import { WindowStub } from '../../client/internal.js'
 import { updateRequestSession } from '../../db/request-log.js'
 import { Link } from './components/router.js'
+import verificationCode from './pages/verification-code.js'
 
 if (config.development) {
   scanTemplateDir('template')
@@ -196,6 +197,7 @@ function Footer(attrs: { style?: string }) {
 export function attachRoutes(app: Router) {
   // ajax/upload/middleware routes
   app.use(renewAuthCookieMiddleware)
+  verificationCode.attachRoutes(app)
   Profile.attachRoutes(app)
 
   // redirect routes

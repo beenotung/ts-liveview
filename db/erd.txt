@@ -85,6 +85,14 @@ tel varchar(16) NULL unique
 avatar varchar(256) NULL
 
 
+verification_code
+-----------------
+id integer PK
+passcode char(6) NULL
+email varchar(320)
+request_time integer
+
+
 # zoom: 1.000
 # view: (0, 0)
 # text-bg: #6495ed
@@ -102,3 +110,4 @@ avatar varchar(256) NULL
 # ua_stat (715, 60)
 # request_session (450, 445)
 # user (450, 680)
+# verification_code (50, 500)
