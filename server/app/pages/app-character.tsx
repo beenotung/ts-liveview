@@ -1,4 +1,4 @@
-import { LayoutType, title } from '../../config.js'
+import { title } from '../../config.js'
 import { renderError } from '../components/error.js'
 import { IonBackButton } from '../components/ion-back-button.js'
 import type { DynamicContext } from '../context'
@@ -71,7 +71,7 @@ function DetailPage(attrs: { item: Character }, context: DynamicContext) {
       <ion-header>
         <ion-toolbar role="heading" aria-level="1">
           <IonBackButton
-            href="/app/home"
+            href="/"
             buttonsSlot="start"
             color="primary"
             backText="List"
@@ -97,8 +97,7 @@ function DetailPage(attrs: { item: Character }, context: DynamicContext) {
 }
 
 let routes = {
-  '/app/characters/:id': {
-    layout_type: LayoutType.ionic,
+  '/characters/:id': {
     resolve(context) {
       let id = context.routerMatch?.params.id
       let item = characters.find(item => item.id == id)

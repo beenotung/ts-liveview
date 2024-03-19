@@ -20,7 +20,7 @@ import { wsStatus } from '../components/ws-status.js'
 import { to_full_hk_mobile_phone } from '@beenotung/tslib/validate.js'
 import { oauthProviderList } from '../components/oauth.js'
 import { Field } from '../components/field.js'
-import { is_ionic, is_web, Page } from '../components/page.js'
+import { Page } from '../components/page.js'
 import { loadClientPlugin } from '../../client-plugin.js'
 import { IonButton } from '../components/ion-button.js'
 import { Locale, Title } from '../components/locale.js'
@@ -56,7 +56,7 @@ let LoginPage = (
       </p>
       <Main />
       {sweetAlertPlugin.node}
-      {is_ionic && wsStatus.safeArea}
+      {wsStatus.safeArea}
     </Page>
   </>
 )
@@ -83,17 +83,11 @@ let verifyFormBody = (
         }
       />
     )}
-    {config.enable_email &&
-      config.enable_sms &&
-      (is_web ? (
-        <div style="margin: 0.5rem 0">
-          <Locale en="or" zh_hk="或" zh_cn="或" />
-        </div>
-      ) : (
-        <div style="margin-inline-start: 1rem; margin-top: 1rem">
-          <Locale en="or" zh_hk="或" zh_cn="或" />
-        </div>
-      ))}
+    {config.enable_email && config.enable_sms && (
+      <div style="margin-inline-start: 1rem; margin-top: 1rem">
+        <Locale en="or" zh_hk="或" zh_cn="或" />
+      </div>
+    )}
     {config.enable_sms && (
       <Field
         label={<Locale en="Phone number" zh_hk="電話號碼" zh_cn="电话号码" />}
@@ -109,53 +103,26 @@ let verifyFormBody = (
         }
       />
     )}
-    {is_web ? (
-      <div class="field">
-        <label>
-          <input type="checkbox" name="include_link" />{' '}
-          <Locale
-            en="Include magic link (more convenient but may be treated as spam)"
-            zh_hk="包含登入鏈接 (更方便但可能被視為垃圾郵件)"
-            zh_cn="包含登录链接 (更方便但可能被视为垃圾邮件)"
-          />
-        </label>
-      </div>
-    ) : (
-      <>
-        <ion-item>
-          <ion-checkbox slot="start" name="include_link"></ion-checkbox>
-          <ion-label style="pointer-events: none">
-            <Locale
-              en="Include magic link"
-              zh_hk="包含登入鏈接"
-              zh_cn="包含登录链接"
-            />
-          </ion-label>
-        </ion-item>
-        <ion-note color="dark">
-          <Locale
-            en="(More convenient but may be treated as spam)"
-            zh_hk="(更方便但可能被視為垃圾郵件)"
-            zh_cn="(更方便但可能被视为垃圾邮件)"
-          />
-        </ion-note>
-      </>
-    )}
-    {is_web ? (
-      <input
-        type="submit"
-        value={<Locale en="Verify" zh_hk="驗證" zh_cn="验证" />}
+    <ion-item>
+      <ion-checkbox slot="start" name="include_link"></ion-checkbox>
+      <ion-label style="pointer-events: none">
+        <Locale
+          en="Include magic link"
+          zh_hk="包含登入鏈接"
+          zh_cn="包含登录链接"
+        />
+      </ion-label>
+    </ion-item>
+    <ion-note color="dark">
+      <Locale
+        en="(More convenient but may be treated as spam)"
+        zh_hk="(更方便但可能被視為垃圾郵件)"
+        zh_cn="(更方便但可能被视为垃圾邮件)"
       />
-    ) : (
-      <ion-button
-        type="submit"
-        class="ion-margin"
-        fill="block"
-        color="tertiary"
-      >
-        <Locale en="Verify" zh_hk="驗證" zh_cn="验证" />
-      </ion-button>
-    )}
+    </ion-note>
+    <ion-button type="submit" class="ion-margin" fill="block" color="tertiary">
+      <Locale en="Verify" zh_hk="驗證" zh_cn="验证" />
+    </ion-button>
   </>
 )
 
@@ -182,20 +149,11 @@ let passwordFormBody = (
       autocomplete="current-password"
       required
     />
-    {is_web ? (
-      <div class="input-container">
-        <input
-          type="submit"
-          value={<Locale en="Login" zh_hk="登入" zh_cn="登录" />}
-        />
-      </div>
-    ) : (
-      <div class="ion-text-center ion-margin">
-        <ion-button type="submit" fill="block" color="primary">
-          <Locale en="Login" zh_hk="登入" zh_cn="登录" />
-        </ion-button>
-      </div>
-    )}
+    <div class="ion-text-center ion-margin">
+      <ion-button type="submit" fill="block" color="primary">
+        <Locale en="Login" zh_hk="登入" zh_cn="登录" />
+      </ion-button>
+    </div>
     <Message />
   </>
 )
@@ -271,20 +229,14 @@ let guestView = (
       />
     </div>
     <div style="margin-bottom: 1rem">
-      {is_web ? (
-        <Link href="/register">
-          <Locale en="Create an account" zh_hk="註冊帳號" zh_cn="注册账号" />
-        </Link>
-      ) : (
-        <IonButton
-          url="/register"
-          expand="block"
-          class="ion-margin"
-          color="secondary"
-        >
-          <Locale en="Create an account" zh_hk="註冊帳號" zh_cn="注册账号" />
-        </IonButton>
-      )}
+      <IonButton
+        url="/register"
+        expand="block"
+        class="ion-margin"
+        color="secondary"
+      >
+        <Locale en="Create an account" zh_hk="註冊帳號" zh_cn="注册账号" />
+      </IonButton>
     </div>
   </>
 )

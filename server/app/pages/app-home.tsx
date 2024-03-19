@@ -1,5 +1,5 @@
 import { sweetAlertPlugin } from '../../client-plugins.js'
-import { LayoutType, config, title } from '../../config.js'
+import { title } from '../../config.js'
 import { appIonTabBar } from '../components/app-tab-bar.js'
 import { mapArray } from '../components/fragment.js'
 import { Link } from '../components/router.js'
@@ -144,15 +144,10 @@ let homeRoute: PageRoute = {
   menuText: 'Ionic App',
   menuFullNavigate: true,
   node: homePage,
-  layout_type: LayoutType.ionic,
 }
 
 let routes = {
-  ...(config.layout_type === LayoutType.ionic
-    ? {
-        '/': homeRoute,
-      }
-    : {}),
+  '/': homeRoute,
   '/app/home': homeRoute,
 } satisfies Routes
 
