@@ -111,6 +111,14 @@ api_url_id integer FK >- url.id
 request_log_id integer FK >0- request_log.id
 
 
+verification_code
+-----------------
+id integer PK
+passcode char(6) NULL
+email varchar(320)
+request_time integer
+
+
 # zoom: 1.000
 # view: (0, 0)
 # text-bg: #6495ed
@@ -131,3 +139,4 @@ request_log_id integer FK >0- request_log.id
 # request_session (450, 445)
 # user (450, 680)
 # error_log (627, 158)
+# verification_code (50, 500)

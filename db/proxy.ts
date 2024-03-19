@@ -96,6 +96,13 @@ export type ErrorLog = {
   request_log?: RequestLog
 }
 
+export type VerificationCode = {
+  id?: null | number
+  passcode: null | string // char(6)
+  email: string
+  request_time: number
+}
+
 export type DBProxy = {
   method: Method[]
   url: Url[]
@@ -109,6 +116,7 @@ export type DBProxy = {
   user: User[]
   request_log: RequestLog[]
   error_log: ErrorLog[]
+  verification_code: VerificationCode[]
 }
 
 export let proxy = proxySchema<DBProxy>({
@@ -143,5 +151,6 @@ export let proxy = proxySchema<DBProxy>({
       ['api_url', { field: 'api_url_id', table: 'url' }],
       ['request_log', { field: 'request_log_id', table: 'request_log' }],
     ],
+    verification_code: [],
   },
 })

@@ -13,6 +13,11 @@ export let env = {
   UPLOAD_DIR: 'uploads',
   ORIGIN: '',
   FIND_IP_API_KEY: 'skip', // Optional: API key for findip.net geolocation service
+  EMAIL_SERVICE: 'google',
+  EMAIL_HOST: 'smtp.gmail.com',
+  EMAIL_PORT: 587,
+  EMAIL_USER: '',
+  EMAIL_PASSWORD: '',
 }
 applyDefaultEnv()
 
