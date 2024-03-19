@@ -4,14 +4,13 @@ import AppSettings from './pages/app-settings.js'
 import AppMore from './pages/app-more.js'
 import { capitalize } from '@beenotung/tslib/string.js'
 import { Router } from 'url-router.ts'
-import { LayoutType, config, title } from '../config.js'
+import { config, title } from '../config.js'
 import { Redirect } from './components/router.js'
 import UILanguage from './components/ui-language.js'
 import type { Context, DynamicContext } from './context'
 import { o } from './jsx/jsx.js'
 import type { Node } from './jsx/types'
 import UserAgents from './pages/user-agents.js'
-import Home from './pages/home.js'
 import NotFoundPageRoute from './pages/not-found.js'
 import { then } from '@beenotung/tslib/result.js'
 import Login from './pages/login.js'
@@ -23,7 +22,6 @@ import DemoToast from './pages/demo-toast.js'
 import AppHome from './pages/app-home.js'
 import AppAbout from './pages/app-about.js'
 import AppCharacter from './pages/app-character.js'
-import type { renderWebTemplate } from '../../template/web.js'
 import type { renderIonicTemplate } from '../../template/ionic.js'
 import { VNode } from '../../client/jsx/types.js'
 import { EarlyTerminate, MessageException } from '../exception.js'
@@ -41,10 +39,9 @@ const StreamingByDefault = true
 
 export type PageRoute = PageRouteOptions & (StaticPageRoute | DynamicPageRoute)
 
-type TemplateFn = typeof renderWebTemplate | typeof renderIonicTemplate
+type TemplateFn = typeof renderIonicTemplate
 
 type RenderOptions = {
-  layout_type?: LayoutType
   renderTemplate?: TemplateFn
 }
 
@@ -78,7 +75,6 @@ export type Routes = Record<string, PageRoute>
 
 // TODO direct support alternative urls instead of having to repeat the entry
 let routeDict = {
-  ...Home.routes,
   ...DemoToast.routes,
   ...UILanguage.routes,
   '/user-agents': {
