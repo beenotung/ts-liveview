@@ -15,7 +15,7 @@ import { dispatchUpdate } from './jsx/dispatch.js'
 import { EarlyTerminate, MessageException } from './helpers.js'
 import { getWSSession } from './session.js'
 import { Flush } from './components/flush.js'
-import { LayoutType, config } from '../config.js'
+import { config } from '../config.js'
 import Stats from './stats.js'
 import { MuteConsole, Script } from './components/script.js'
 import {
@@ -26,9 +26,8 @@ import {
 } from './routes.js'
 import type { ClientMountMessage, ClientRouteMessage } from '../../client/types'
 import { then } from '@beenotung/tslib/result.js'
-import { webAppStyle, ionicAppStyle } from './app-style.js'
+import { ionicAppStyle } from './app-style.js'
 import { preIonicAppScript, postIonicAppScript } from './styles/mobile-style.js'
-import { renderWebTemplate } from '../../template/web.js'
 import { renderIonicTemplate } from '../../template/ionic.js'
 import { HTMLStream } from './jsx/stream.js'
 import { renewAuthCookieMiddleware } from './auth/user.js'
@@ -51,12 +50,9 @@ function renderTemplate(
   context: Context,
   route: PageRouteMatch,
 ) {
-  let layout_type = route.layout_type || config.layout_type
-  let App = layouts[layout_type]
+  let App = IonicApp
   let app = App(route)
-  let render =
-    route.renderTemplate ||
-    (App == IonicApp ? renderIonicTemplate : renderWebTemplate)
+  let render = route.renderTemplate || renderIonicTemplate
   render(stream, {
     title: escapeHTMLTextContent(route.title),
     description: unquote(escapeHTMLAttributeValue(route.description)),
@@ -101,63 +97,6 @@ let brand = (
     </div>
   </div>
 )
-
-type Layout = (route: PageRouteMatch) => Element
-
-let layouts: Record<LayoutType, Layout> = {
-  [LayoutType.navbar]: NavbarApp,
-  [LayoutType.sidebar]: SidebarApp,
-  [LayoutType.ionic]: IonicApp,
-}
-
-function NavbarApp(route: PageRouteMatch): Element {
-  // you can write the AST direct for more compact wire-format
-  return [
-    'div.app',
-    {},
-    [
-      // or you can write in JSX for better developer-experience (if you're coming from React)
-      <>
-        {webAppStyle}
-        <Flush />
-        <Navbar brand={brand} menuRoutes={menuRoutes} />
-        <hr />
-        {scripts}
-        {route.node}
-        <Flush />
-        <Footer />
-      </>,
-    ],
-  ]
-}
-
-function SidebarApp(route: PageRouteMatch): Element {
-  // you can write the AST direct for more compact wire-format
-  return [
-    'div.app',
-    {},
-    [
-      // or you can write in JSX for better developer-experience (if you're coming from React)
-      <>
-        {webAppStyle}
-        {scripts}
-        {Sidebar.style}
-        <Flush />
-        <div class={Sidebar.containerClass}>
-          <Sidebar brand={brand} menuRoutes={menuRoutes} />
-          <div
-            class={Sidebar.mainContainerClass}
-            style="display: flex; flex-direction: column"
-          >
-            <div style="flex-grow: 1; padding: 0 1rem">{route.node}</div>
-            <Footer style="padding: 0.5rem;" />
-          </div>
-        </div>
-        <Flush />
-      </>,
-    ],
-  ]
-}
 
 function IonicApp(route: PageRouteMatch): Element {
   // you can write the AST direct for more compact wire-format
@@ -349,7 +288,7 @@ export let onWsMessage: OnWsMessage = async (event, ws, _wss) => {
     await then(
       matchRoute(context),
       route => {
-        let App = layouts[route.layout_type || config.layout_type]
+        let App = IonicApp
         let node = App(route)
         if (navigation_type === 'express' && navigation_method !== 'GET') return
         dispatchUpdate(context, node, route.title)

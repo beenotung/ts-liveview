@@ -4,13 +4,12 @@ import AppSettings from './pages/app-settings.js'
 import AppMore from './pages/app-more.js'
 import { capitalize } from '@beenotung/tslib/string.js'
 import { Router } from 'url-router.ts'
-import { LayoutType, config, title } from '../config.js'
+import { config, title } from '../config.js'
 import { Redirect } from './components/router.js'
 import type { DynamicContext } from './context'
 import { o } from './jsx/jsx.js'
 import type { Node } from './jsx/types'
 import UserAgents from './pages/user-agents.js'
-import Home from './pages/home.js'
 import NotFoundPageRoute from './pages/not-found.js'
 import { then } from '@beenotung/tslib/result.js'
 import Login from './pages/login.js'
@@ -22,7 +21,6 @@ import DemoToast from './pages/demo-toast.js'
 import appHome from './pages/app-home.js'
 import appAbout from './pages/app-about.js'
 import appCharacter from './pages/app-character.js'
-import type { renderWebTemplate } from '../../template/web.js'
 import type { renderIonicTemplate } from '../../template/ionic.js'
 import { VNode } from '../../client/jsx/types.js'
 
@@ -37,10 +35,9 @@ const StreamingByDefault = true
 
 export type PageRoute = PageRouteOptions & (StaticPageRoute | DynamicPageRoute)
 
-type TemplateFn = typeof renderWebTemplate | typeof renderIonicTemplate
+type TemplateFn = typeof renderIonicTemplate
 
 type RenderOptions = {
-  layout_type?: LayoutType
   renderTemplate?: TemplateFn
 }
 
@@ -78,13 +75,6 @@ let routeDict: Routes = {
   ...AppChat.routes,
   ...AppSettings.routes,
   ...AppMore.routes,
-  '/': {
-    title: title('Home'),
-    description:
-      'Getting Started with ts-liveview - a server-side rendering realtime webapp framework with progressive enhancement',
-    menuText: 'Home',
-    node: Home,
-  },
   ...DemoToast.routes,
   '/user-agents': {
     title: title('User Agents of Visitors'),
