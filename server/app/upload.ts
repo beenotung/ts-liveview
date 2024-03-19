@@ -1,10 +1,9 @@
 import { Formidable, Part, Options } from 'formidable'
-import { config } from '../config.js'
 import { existsSync, mkdirSync } from 'fs'
 import { randomUUID } from 'crypto'
-import { KB } from '@beenotung/tslib/size.js'
 import { extname, join } from 'path'
 import { client_config } from '../../client/client-config.js'
+import { env } from '../env.js'
 
 const maxTrial = 10
 
@@ -50,7 +49,7 @@ export function createUploadForm(options?: {
   /** @default randomUUID + extname */
   filename?: string | Options['filename']
 }) {
-  let uploadDir = options?.uploadDir || config.upload_dir
+  let uploadDir = options?.uploadDir || env.UPLOAD_DIR
   let mimeTypeRegex = options?.mimeTypeRegex || MimeTypeRegex.any_image
   let maxFileSize = options?.maxFileSize || client_config.max_image_size
   let maxFiles = options?.maxFiles || 1

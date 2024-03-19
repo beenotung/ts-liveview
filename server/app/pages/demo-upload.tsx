@@ -1,4 +1,4 @@
-import { config, title } from '../../config.js'
+import { title } from '../../config.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 import { Request, Response, NextFunction, Router } from 'express'
@@ -16,6 +16,7 @@ import { nodeListToHTML } from '../jsx/html.js'
 import { Context } from '../context.js'
 import { loadClientPlugin } from '../../client-plugin.js'
 import SourceCode from '../components/source-code.js'
+import { env } from '../../env.js'
 
 let log = debugLog('demo-upload.tsx')
 log.enabled = true
@@ -54,7 +55,7 @@ let style = Style(/* css */ `
 `)
 
 function View() {
-  let filenames = readdirSync(config.upload_dir)
+  let filenames = readdirSync(env.UPLOAD_DIR)
   return (
     <div id="uploadDemo">
       {style}
@@ -178,7 +179,7 @@ function clearPreviewImages() {
 
 function UploadedImage(attrs: { filename: string }) {
   let { filename } = attrs
-  let file = join(config.upload_dir, filename)
+  let file = join(env.UPLOAD_DIR, filename)
   let size = format_byte(statSync(file).size)
   triggerAutoDelete(file)
   return (
