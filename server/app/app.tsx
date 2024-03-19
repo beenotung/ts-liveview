@@ -2,7 +2,7 @@ import { o } from './jsx/jsx.js'
 import { scanTemplateDir } from '../template-file.js'
 import { NextFunction, Request, Response, Router } from 'express'
 import type { Context, ExpressContext, WsContext } from './context'
-import { fixLanguage, getContextLanguage } from './context.js'
+import { fixLanguage } from './context.js'
 import type { Element } from './jsx/types'
 import {
   escapeHTMLAttributeValue,
@@ -44,6 +44,7 @@ import { WindowStub } from '../../client/internal.js'
 import { updateRequestSession } from '../../db/request-log.js'
 import { Link } from './components/router.js'
 import ErrorLog from './store/error-log.js'
+import VerificationCode from './pages/verification-code.js'
 import { Locale } from './components/locale.js'
 import { manifest_files, theme_color } from './manifest.js'
 
@@ -215,6 +216,7 @@ export function attachRoutes(app: Router) {
   // ajax/upload/middleware routes
   app.use(renewAuthCookieMiddleware)
   ErrorLog.attachRoutes(app)
+  VerificationCode.attachRoutes(app)
   Profile.attachRoutes(app)
 
   // redirect routes
