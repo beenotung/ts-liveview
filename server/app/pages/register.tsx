@@ -107,7 +107,7 @@ let guestView = (
     <div class="or-line flex-center">or</div>
     <form
       method="POST"
-      action="/verify/email"
+      action="/verify/email/submit"
       // onsubmit="emitForm(event)"
     >
       <Field

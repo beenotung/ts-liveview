@@ -17,6 +17,7 @@ export let env = {
   EMAIL_PORT: 587,
   EMAIL_USER: '',
   EMAIL_PASSWORD: '',
+  ORIGIN: '',
 }
 applyDefaultEnv()
 
