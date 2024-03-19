@@ -19,6 +19,8 @@
 
   You can still get type hints from the IDE or by running `npm run type-check`, which will run tsc in watch mode without saving the built files.
 
+- Flatten env variables from `config.ts` into `env.ts`
+
 ## [v4](https://github.com/beenotung/ts-liveview/tree/v4)
 
 2022
