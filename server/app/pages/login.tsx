@@ -1,4 +1,4 @@
-import { LayoutType, apiEndpointTitle, config, title } from '../../config.js'
+import { apiEndpointTitle, config, title } from '../../config.js'
 import { commonTemplatePageText } from '../components/common-template.js'
 import { Link, Redirect } from '../components/router.js'
 import {
@@ -29,172 +29,103 @@ let style = Style(/* css */ `
 `)
 
 let LoginPage = (
-  <div id="login">
+  <>
     {style}
-    <h1>Login to {config.short_site_name}</h1>
-    <p>{commonTemplatePageText}</p>
-    <Main />
-  </div>
+    <ion-header>
+      <ion-toolbar color="primary">
+        <IonBackButton href="/" backText="Home" color="light" />
+        <ion-title>Login</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div id="login">
+        <h1>Welcome back to {config.short_site_name}</h1>
+        <p>{commonTemplatePageText}</p>
+        <Main />
+      </div>
+      {wsStatus.safeArea}
+    </ion-content>
+  </>
 )
-if (config.layout_type === LayoutType.ionic) {
-  LoginPage = (
-    <>
-      {style}
-      <ion-header>
-        <ion-toolbar color="primary">
-          <IonBackButton href="/" backText="Home" color="light" />
-          <ion-title>Login</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <div id="login">
-          <h1>Welcome back to {config.short_site_name}</h1>
-          <p>{commonTemplatePageText}</p>
-          <Main />
-        </div>
-        {wsStatus.safeArea}
-      </ion-content>
-    </>
-  )
-}
 
 function Main(_attrs: {}, context: Context) {
   let user_id = getAuthUserId(context)
   return user_id ? <UserMessageInGuestView user_id={user_id} /> : guestView
 }
 
-let verifyFormBody =
-  config.layout_type !== LayoutType.ionic ? (
-    <>
-      <div class="field">
-        <label>
-          Email or phone number
-          <div class="input-container">
-            <input
-              name="email"
-              type="email"
-              autocomplete="email"
-              placeholder="Email"
-              required
-              onchange="this.form.tel.required = !this.value"
-            />
-            <div>or</div>
-            <input
-              name="tel"
-              type="tel"
-              autocomplete="tel"
-              placeholder="Phone number"
-              required
-              onchange="this.form.email.required = !this.value"
-            />
-          </div>
-        </label>
-      </div>
-      <div class="field">
-        <label>
-          <input type="checkbox" name="include_link" /> Include magic link (more
-          convince but may be treated as spam)
-        </label>
-      </div>
-      <input type="submit" value="Verify" />
-    </>
-  ) : (
-    <>
-      <ion-list>
-        <ion-item>
-          <ion-input
-            label="Email"
-            label-placement="floating"
-            type="email"
-            name="email"
-            autocomplete="email"
-            required
-            onchange="verifyForm.tel.required = !this.value"
-          ></ion-input>
-        </ion-item>
-        <p style="margin-bottom: 0; margin-left: 1rem">or</p>
-        <ion-item>
-          <ion-input
-            label="Phone number"
-            label-placement="floating"
-            type="tel"
-            name="tel"
-            autocomplete="tel"
-            required
-            onchange="verifyForm.email.required = !this.value"
-          ></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-checkbox name="include_link" slot="start"></ion-checkbox>
-          <ion-label>Include magic link</ion-label>
-        </ion-item>
-        <ion-note color="dark">
-          <div class="ion-padding-horizontal">
-            (More convince but may be treated as spam)
-          </div>
-        </ion-note>
-      </ion-list>
-      <div class="ion-text-center ion-margin">
-        <ion-button type="submit" fill="block" color="tertiary">
-          Verify
-        </ion-button>
-      </div>
-    </>
-  )
+let verifyFormBody = (
+  <>
+    <ion-list>
+      <ion-item>
+        <ion-input
+          label="Email"
+          label-placement="floating"
+          type="email"
+          name="email"
+          autocomplete="email"
+          required
+          onchange="verifyForm.tel.required = !this.value"
+        ></ion-input>
+      </ion-item>
+      <p style="margin-bottom: 0; margin-left: 1rem">or</p>
+      <ion-item>
+        <ion-input
+          label="Phone number"
+          label-placement="floating"
+          type="tel"
+          name="tel"
+          autocomplete="tel"
+          required
+          onchange="verifyForm.email.required = !this.value"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-checkbox name="include_link" slot="start"></ion-checkbox>
+        <ion-label>Include magic link</ion-label>
+      </ion-item>
+      <ion-note color="dark">
+        <div class="ion-padding-horizontal">
+          (More convince but may be treated as spam)
+        </div>
+      </ion-note>
+    </ion-list>
+    <div class="ion-text-center ion-margin">
+      <ion-button type="submit" fill="block" color="tertiary">
+        Verify
+      </ion-button>
+    </div>
+  </>
+)
 
-let passwordFormBody =
-  config.layout_type !== LayoutType.ionic ? (
-    <>
-      <label>
-        Username, email or phone number
-        <div class="input-container">
-          <input name="loginId" autocomplete="username" />
-        </div>
-      </label>
-      <label>
-        Password
-        <div class="input-container">
-          <input
-            name="password"
-            type="password"
-            autocomplete="current-password"
-          />
-        </div>
-      </label>
-      <div class="input-container">
-        <input type="submit" value="Login" />
-      </div>
-      <Message />
-    </>
-  ) : (
-    <>
-      <ion-list>
-        <ion-item>
-          <ion-input
-            label="Username, email or phone number"
-            label-placement="floating"
-            name="loginId"
-            autocomplete="username"
-          ></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-input
-            label="Password"
-            label-placement="floating"
-            name="password"
-            type="password"
-            autocomplete="current-password"
-          ></ion-input>
-        </ion-item>
-      </ion-list>
-      <div class="ion-text-center ion-margin">
-        <ion-button type="submit" fill="block" color="primary">
-          Login
-        </ion-button>
-      </div>
-      <Message />
-    </>
-  )
+let passwordFormBody = (
+  <>
+    <ion-list>
+      <ion-item>
+        <ion-input
+          label="Username, email or phone number"
+          label-placement="floating"
+          name="loginId"
+          autocomplete="username"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          label="Password"
+          label-placement="floating"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+        ></ion-input>
+      </ion-item>
+    </ion-list>
+    <div class="ion-text-center ion-margin">
+      <ion-button type="submit" fill="block" color="primary">
+        Login
+      </ion-button>
+    </div>
+    <Message />
+  </>
+)
 
 let guestView = (
   <>
