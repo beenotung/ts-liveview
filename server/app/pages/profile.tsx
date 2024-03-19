@@ -25,7 +25,7 @@ import { formatTel } from '../components/tel.js'
 import { validateNickname, validateUsername } from '../validate/user.js'
 import { object, string } from 'cast.ts'
 import { MessageException } from '../../exception.js'
-import { Content, Page } from '../components/page.js'
+import { Page } from '../components/page.js'
 import { IonButton } from '../components/ion-button.js'
 
 let style = Style(/* css */ `
@@ -251,18 +251,9 @@ ${toastPlugin.script}
       </form>
       <hr style="margin-bottom: 2rem" />
       {/* TODO make a popup confirm for logout */}
-      <Content
-        web={
-          <a href="/logout" rel="nofollow">
-            Logout
-          </a>
-        }
-        ionic={
-          <IonButton url="/logout" rel="nofollow" color="dark" expand="block">
-            Logout
-          </IonButton>
-        }
-      ></Content>
+      <IonButton url="/logout" rel="nofollow" color="dark" expand="block">
+        Logout
+      </IonButton>
     </>
   )
 }
