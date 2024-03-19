@@ -5,7 +5,6 @@ import { UpdateMessageStyle } from './components/update-message.js'
 import { CommonStyle } from './styles/common-style.js'
 import { FormStyle } from './styles/form-style.js'
 import { MobileStyle } from './styles/mobile-style.js'
-import { WebStyle } from './styles/web-style.js'
 
 let appStyle = /* css */ `
 ${SourceCodeStyle}
@@ -14,7 +13,5 @@ ${UpdateMessageStyle}
 ${CommonStyle}
 ${FormStyle}
 `
-
-export let webAppStyle = Style(appStyle + '\n' + WebStyle)
 
 export let ionicAppStyle = Style(appStyle + '\n' + MobileStyle)

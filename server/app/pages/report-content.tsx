@@ -15,7 +15,7 @@ import { Redirect } from '../components/router.js'
 import { renderError } from '../components/error.js'
 import { getAuthUser, getAuthUserRole } from '../auth/user.js'
 import { Locale, Title } from '../components/locale.js'
-import { Content, Page } from '../components/page.js'
+import { Page } from '../components/page.js'
 import { toRouteUrl } from '../../url.js'
 import { ContentReport, proxy } from '../../../db/proxy.js'
 import { BackToLink } from '../components/back-to-link.js'
@@ -200,23 +200,6 @@ let reasonCategories: ReasonCategory[] = [
   },
 ]
 
-let webStyle = Style(/* css */ `
-.report-type--label {
-  display: block;
-  margin-inline-start: 1rem;
-  padding: 0.25rem 0;
-}
-`)
-
-let webScript = Script(/* js */ `
-ReportContentForm.addEventListener('change', event => {
-  if (event.target.name != 'type') return
-  let form = event.target.closest('form')
-  let submitButton = form.querySelector('button[type="submit"]')
-  submitButton.disabled = !event.target.checked
-})
-`)
-
 let ionicScript = Script(/* js */ `
 ReportContentForm.addEventListener('ionChange', event => {
   if (event.target.name != 'type') return
@@ -247,7 +230,7 @@ function ReportPage(attrs: {}, context: Context) {
         ) : null
       }
     >
-      <Content web={webStyle} ionic={ionicStyle} />
+      {ionicStyle}
       <p>
         <ion-icon name="warning" color="warning" size="large" />{' '}
         <Locale
@@ -265,137 +248,72 @@ function ReportPage(attrs: {}, context: Context) {
       >
         <input type="hidden" name="return_url" value={return_url} />
         <input type="hidden" name="return_title" value={return_title} />
-        <Content
-          web={
-            <>
-              <div>
-                {mapArray(reasonCategories, category => (
-                  <details>
-                    <summary>
+        <ion-list>
+          <ion-list-header>
+            <Locale en="Problem Categories" zh_hk="問題分類" zh_cn="问题分类" />
+          </ion-list-header>
+          <ion-radio-group name="type">
+            <ion-accordion-group>
+              {mapArray(reasonCategories, category => (
+                <ion-accordion value={category.code}>
+                  <ion-item slot="header">
+                    <ion-icon
+                      slot="start"
+                      name={category.icon}
+                      size="small"
+                      color="medium"
+                    />
+                    <ion-label>
                       <Locale
                         en={category.en}
                         zh_hk={category.zh_hk}
                         zh_cn={category.zh_cn}
                       />
-                    </summary>
-                    {mapArray(category.types, type => (
-                      <label class="report-type--label">
-                        <input type="radio" name="type" value={type.code} />{' '}
-                        <Locale
-                          en={type.en}
-                          zh_hk={type.zh_hk}
-                          zh_cn={type.zh_cn}
-                        />
-                      </label>
-                    ))}
-                  </details>
-                ))}
-              </div>
-              <div>
-                <label>
-                  <Locale
-                    en="Additional Details"
-                    zh_hk="補充資料"
-                    zh_cn="补充资料"
-                  />
-                  <br />
-                  <textarea
-                    name="remark"
-                    placeholder={Locale(
-                      {
-                        en: 'Any details that can help us review this report',
-                        zh_hk: '任何有助我們審視此檢舉的資料',
-                        zh_cn: '任何有助我们审视此检举的资料',
-                      },
-                      context,
-                    )}
-                  ></textarea>
-                </label>
-              </div>
-              <button type="submit" disabled>
-                <Locale en="Submit Report" zh_hk="發送回報" zh_cn="发送报告" />
-              </button>
-            </>
-          }
-          ionic={
-            <>
-              <ion-list>
-                <ion-list-header>
-                  <Locale
-                    en="Problem Categories"
-                    zh_hk="問題分類"
-                    zh_cn="问题分类"
-                  />
-                </ion-list-header>
-                <ion-radio-group name="type">
-                  <ion-accordion-group>
-                    {mapArray(reasonCategories, category => (
-                      <ion-accordion value={category.code}>
-                        <ion-item slot="header">
-                          <ion-icon
-                            slot="start"
-                            name={category.icon}
-                            size="small"
-                            color="medium"
+                    </ion-label>
+                  </ion-item>
+                  {mapArray(category.types, type => (
+                    <ion-item slot="content">
+                      <ion-icon
+                        slot="start"
+                        name={type.icon}
+                        size="small"
+                        color="warning"
+                      />
+                      <ion-radio value={type.code} color="warning">
+                        <span class="ion-text-wrap">
+                          <Locale
+                            en={type.en}
+                            zh_hk={type.zh_hk}
+                            zh_cn={type.zh_cn}
                           />
-                          <ion-label>
-                            <Locale
-                              en={category.en}
-                              zh_hk={category.zh_hk}
-                              zh_cn={category.zh_cn}
-                            />
-                          </ion-label>
-                        </ion-item>
-                        {mapArray(category.types, type => (
-                          <ion-item slot="content">
-                            <ion-icon
-                              slot="start"
-                              name={type.icon}
-                              size="small"
-                              color="warning"
-                            />
-                            <ion-radio value={type.code} color="warning">
-                              <span class="ion-text-wrap">
-                                <Locale
-                                  en={type.en}
-                                  zh_hk={type.zh_hk}
-                                  zh_cn={type.zh_cn}
-                                />
-                              </span>
-                            </ion-radio>
-                          </ion-item>
-                        ))}
-                      </ion-accordion>
-                    ))}
-                  </ion-accordion-group>
-                </ion-radio-group>
-                <ion-list-header>
-                  <Locale
-                    en="Additional Details"
-                    zh_hk="補充資料"
-                    zh_cn="补充资料"
-                  />
-                </ion-list-header>
-                <ion-item>
-                  <ion-textarea
-                    name="remark"
-                    placeholder={Locale(
-                      {
-                        en: 'Any details that can help us review this report',
-                        zh_hk: '任何有助我們審視此檢舉的資料',
-                        zh_cn: '任何有助我们审视此检举的资料',
-                      },
-                      context,
-                    )}
-                  ></ion-textarea>
-                </ion-item>
-              </ion-list>
-              <ion-button shape="round" expand="full" type="submit" disabled>
-                <Locale en="Submit Report" zh_hk="發送回報" zh_cn="发送报告" />
-              </ion-button>{' '}
-            </>
-          }
-        />
+                        </span>
+                      </ion-radio>
+                    </ion-item>
+                  ))}
+                </ion-accordion>
+              ))}
+            </ion-accordion-group>
+          </ion-radio-group>
+          <ion-list-header>
+            <Locale en="Additional Details" zh_hk="補充資料" zh_cn="补充资料" />
+          </ion-list-header>
+          <ion-item>
+            <ion-textarea
+              name="remark"
+              placeholder={Locale(
+                {
+                  en: 'Any details that can help us review this report',
+                  zh_hk: '任何有助我們審視此檢舉的資料',
+                  zh_cn: '任何有助我们审视此检举的资料',
+                },
+                context,
+              )}
+            ></ion-textarea>
+          </ion-item>
+        </ion-list>
+        <ion-button shape="round" expand="full" type="submit" disabled>
+          <Locale en="Submit Report" zh_hk="發送回報" zh_cn="发送报告" />
+        </ion-button>{' '}
       </form>
 
       <p>
@@ -406,7 +324,7 @@ function ReportPage(attrs: {}, context: Context) {
           zh_cn="我们会审查您的报告，如发现用户的内容违规，我们将会作出适当处理。请放心，报告的资料会保密处理。与此同时，我们也可能会联系阁下以便跟进问题。"
         />
       </p>
-      <Content web={webScript} ionic={ionicScript} />
+      {ionicScript}
     </Page>
   )
 }
@@ -497,64 +415,6 @@ function countPendingReports() {
   })
 }
 
-let webReviewStyle = Style(/* css */ `
-.report-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  width: fit-content;
-}
-.report-card {
-  display: block;
-  border: 1px solid #e0e0e0;
-  padding: 1rem;
-  border-radius: 0.25rem;
-  box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.1);
-}
-.report-card ion-buttons {
-  display: flex;
-  gap: 0.5rem;
-}
-.report-card ion-buttons ion-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.25rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  transition: all 0.2s ease-in-out;
-  border: 1px solid transparent;
-  cursor: pointer;
-}
-.report-card ion-button:hover {
-  border-color: var(--theme-color);
-}
-.report-card ion-button[color="primary"] {
-  --theme-color: #007bff;
-  --theme-background: #fff;
-}
-.report-card ion-button[color="danger"] {
-  --theme-color: #eb445a;
-  --theme-background: #fff;
-}
-.report-card ion-button[color="dark"] {
-  --theme-color: #222;
-  --theme-background: #fff;
-}
-.report-card ion-button[fill="solid"] {
-  background-color: var(--theme-color);
-  color: var(--theme-background);
-}
-.report-card ion-button[fill="outline"] {
-  background-color: var(--theme-background);
-  color: var(--theme-color);
-  border-color: var(--theme-color);
-}
-`)
-
 // TODO show determined reports in different segments
 function ReviewPage(attrs: {}, context: DynamicContext) {
   let role = getAuthUserRole(context)
@@ -568,7 +428,7 @@ function ReviewPage(attrs: {}, context: DynamicContext) {
   let reports = selectPendingReports()
   return (
     <Page id="Review" title={ReviewPageTitle} class="ion-padding-vertical">
-      <Content web={webReviewStyle} ionic={ionicStyle} />
+      {ionicStyle}
       {reviewStyle}
       <p class="ion-padding-horizontal">
         Total <span class="pending-count">{countPendingReports()}</span> reports
