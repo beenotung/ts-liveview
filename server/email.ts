@@ -13,6 +13,10 @@ let transport = createTransport({
     user: env.EMAIL_USER,
     pass: env.EMAIL_PASSWORD,
   },
+  tls: {
+    // workaround for self-signed certificate from gmail
+    rejectUnauthorized: env.EMAIL_SERVICE == 'google' ? false : true,
+  },
 })
 
 export interface SentMessageInfo {
