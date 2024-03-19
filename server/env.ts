@@ -10,6 +10,11 @@ export let env = {
   COOKIE_SECRET: '',
   EPOCH: 1, // to distinct initial run or restart in serve mode
   UPLOAD_DIR: 'uploads',
+  EMAIL_SERVICE: 'google',
+  EMAIL_HOST: 'smtp.gmail.com',
+  EMAIL_PORT: 587,
+  EMAIL_USER: '',
+  EMAIL_PASSWORD: '',
 }
 applyDefaultEnv()
 
