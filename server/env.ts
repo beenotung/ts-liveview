@@ -29,6 +29,8 @@ function applyDefaultEnv() {
   if (process.env.NODE_ENV === 'production') return
   let PORT = process.env.PORT || env.PORT
   env.ORIGIN ||= process.env.ORIGIN || `http://localhost:${PORT}`
+  env.EMAIL_USER ||= process.env.EMAIL_USER || 'skip'
+  env.EMAIL_PASSWORD ||= process.env.EMAIL_PASSWORD || 'skip'
 }
 
 populateEnv(env, { mode: 'halt' })
