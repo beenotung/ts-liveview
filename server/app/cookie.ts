@@ -5,11 +5,12 @@ import type express from 'express'
 import { config } from '../config.js'
 import { debugLog } from '../debug.js'
 import type { Context } from './context'
+import { env } from '../env.js'
 
 const log = debugLog('cookie.ts')
 log.enabled = true
 
-export const cookieMiddleware = cookieParser(config.cookie_secret)
+export const cookieMiddleware = cookieParser(env.COOKIE_SECRET)
 
 export const mustCookieSecure = config.production
 
