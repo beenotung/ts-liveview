@@ -27,7 +27,7 @@ import { validateUsername, ValidateUserResult } from '../validate/user.js'
 import { oauthProviderList } from '../components/oauth.js'
 import { ClearInputContext, Field, InputContext } from '../components/field.js'
 import { loadClientPlugin } from '../../client-plugin.js'
-import { is_ionic, is_web, Page } from '../components/page.js'
+import { Page } from '../components/page.js'
 import { IonButton } from '../components/ion-button.js'
 
 let style = Style(/* css */ `
@@ -82,7 +82,7 @@ let RegisterPage = (
       </p>
       <Main />
       {sweetAlertPlugin.node}
-      {is_ionic && wsStatus.safeArea}
+      {wsStatus.safeArea}
     </Page>
   </>
 )
@@ -110,13 +110,9 @@ let verifyFormBody = (
         }
       />
     )}
-    {config.enable_email &&
-      config.enable_sms &&
-      (is_web ? (
-        <div style="margin: 0.5rem 0">or</div>
-      ) : (
-        <div style="margin-inline-start: 1rem; margin-top: 1rem">or</div>
-      ))}
+    {config.enable_email && config.enable_sms && (
+      <div style="margin-inline-start: 1rem; margin-top: 1rem">or</div>
+    )}
     {config.enable_sms && (
       <Field
         label="Phone number"
@@ -133,36 +129,14 @@ let verifyFormBody = (
         }
       />
     )}
-    {is_web ? (
-      <div class="field">
-        <label>
-          <input type="checkbox" name="include_link" /> Include magic link (more
-          convince but may be treated as spam)
-        </label>
-      </div>
-    ) : (
-      <>
-        <ion-item>
-          <ion-checkbox slot="start" name="include_link" />
-          <ion-label style="pointer-events: none">Include magic link</ion-label>
-        </ion-item>
-        <ion-note color="dark">
-          (More convince but may be treated as spam)
-        </ion-note>
-      </>
-    )}
-    {is_web ? (
-      <input type="submit" value="Verify" />
-    ) : (
-      <ion-button
-        type="submit"
-        class="ion-margin"
-        fill="block"
-        color="tertiary"
-      >
-        Verify
-      </ion-button>
-    )}
+    <ion-item>
+      <ion-checkbox slot="start" name="include_link" />
+      <ion-label style="pointer-events: none">Include magic link</ion-label>
+    </ion-item>
+    <ion-note color="dark">(More convince but may be treated as spam)</ion-note>
+    <ion-button type="submit" class="ion-margin" fill="block" color="tertiary">
+      Verify
+    </ion-button>
   </>
 )
 
@@ -234,18 +208,14 @@ function checkPassword (form) {
   confirmPasswordMsg.style.color = 'green'
 }
 </script>`)}
-      {is_web ? (
-        <input type="submit" value="Register" />
-      ) : (
-        <ion-button
-          type="submit"
-          class="ion-margin"
-          expand="block"
-          color="primary"
-        >
-          Register
-        </ion-button>
-      )}
+      <ion-button
+        type="submit"
+        class="ion-margin"
+        expand="block"
+        color="primary"
+      >
+        Register
+      </ion-button>
       <ClearInputContext />
     </form>
     <div class="hint">
@@ -259,18 +229,14 @@ function checkPassword (form) {
     </div>
     <div class="separator-line flex-center">Already have an account?</div>
     <div style="margin-bottom: 1rem">
-      {is_web ? (
-        <Link href="/login">Login</Link>
-      ) : (
-        <IonButton
-          url="/login"
-          expand="block"
-          class="ion-margin"
-          color="secondary"
-        >
-          Login
-        </IonButton>
-      )}
+      <IonButton
+        url="/login"
+        expand="block"
+        class="ion-margin"
+        color="secondary"
+      >
+        Login
+      </IonButton>
     </div>
   </>
 )
