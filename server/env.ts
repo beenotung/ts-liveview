@@ -5,7 +5,7 @@ import { cwd } from 'process'
 loadEnv()
 
 export let env = {
-  NODE_ENV: 'development',
+  NODE_ENV: 'development' as 'development' | 'production',
   PORT: 8100,
   COOKIE_SECRET: '',
   EPOCH: 1, // to distinct initial run or restart in serve mode
