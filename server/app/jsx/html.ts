@@ -211,6 +211,19 @@ export function flagsToClassName(flags: Record<string, boolean>): string {
   return classes.join(' ')
 }
 
+export function concatClassNames(
+  ...classNames: (string | null | undefined)[]
+): string | undefined {
+  let className = ''
+  for (let name of classNames) {
+    if (name) {
+      className += ' ' + name
+    }
+  }
+  className = className.trim()
+  return className || undefined
+}
+
 // omit style-name conversion, use it as-is
 export function inlineStyle(styles: Record<string, string | number>): string {
   return Object.entries(styles)
