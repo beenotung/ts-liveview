@@ -58,6 +58,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/chai": "^4.3.14",
     "@types/cookie-parser": "^1.4.7",
     "@types/debug": "^4.1.12",
     "@types/express": "^4.17.21",
@@ -70,6 +71,7 @@
     "@types/ws": "^8.5.12",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
+    "chai": "^5.1.0",
     "esbuild": "^0.21.5",
     "eslint": "^8.57.0",
     "fix-esm-import-path": "^1.10.0",
