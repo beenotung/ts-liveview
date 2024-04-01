@@ -47,16 +47,24 @@ function saveNumber(file: string, value: number) {
         value,
         error,
       })
-    } else {
+      return
+    }
+    let retry = 5
+    commit()
+    function commit() {
       rename(tmpfile, file, error => {
-        if (error) {
-          log('Failed to commit number to file:', {
-            tmpfile,
-            file,
-            value,
-            error,
-          })
+        if (!error) return
+        if (error.code == 'EPERM' && retry > 0) {
+          retry--
+          setTimeout(commit, 100)
+          return
         }
+        log('Failed to commit number to file:', {
+          tmpfile,
+          file,
+          value,
+          error,
+        })
       })
     }
   })
