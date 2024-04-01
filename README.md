@@ -74,14 +74,23 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
   - [x] Nested routing
   - [x] Sync / async routes
   - [x] Static / dynamic document title and description meta
+- [x] Follow the DOM convention
+  - [x] `class`, `style`, `onclick` e.t.c. are string attributes, with helper functions to convert from objects
+  - [x] Compatible with css frameworks and web components (doesn't require framework specific wrappers unlike react)
+  - [x] Support inline script and Immediately Invoked Function Expression (IIFE）
 - [x] Enable interactive UI with minimal amount of javascript to be downloaded
-- [x] Only load client-side library on used pages
-  - [x] image compression
+- [x] Only load client-side library on used pages, for example:
+  - [x] image compression (preview & upload)
   - [x] sweetalert (unrestricted)
   - [x] swiper (slides / images carousel)
-- [x] Still functional when javascript is disabled on client device [[5]](#feature-5)
-- [x] Support to develop with [JSX](#jsx), AST, or html template
-- [x] Auto-minify with esbuild
+- [x] Still functional when javascript is disabled on client device with links and forms [[5]](#feature-5)
+- [x] Support to develop with [JSX](#jsx), AST, component, or html template
+- [x] Code Minification
+  - [x] Minify CSS & JS with esbuild
+  - [x] Minify HTML fragment with AST converter
+  - [x] Minify in production mode, skip in development mode
+  - [x] Memorized to speed up
+  - [x] Allow skipping minimization for dynamic and short code
 - [x] Efficient wire format
 - [x] Lightweight WebSocket-based protocols [[6]](#feature-6)
 - [ ] Reliable connection
@@ -90,7 +99,7 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
 - [x] Work well with express.js [[7]](#feature-7)
 - [x] Built-in locale support (language and timezone)
 - [x] Fully customizable [[8]](#feature-8)
-- [x] Multiple starter template
+- [x] Multiple starter templates
   - [x] v5-demo (kitchen sink demos)
   - [x] v5-web-template (mobile-responsive webapp)
   - [x] v5-ionic-template (mobile-first webapp)
