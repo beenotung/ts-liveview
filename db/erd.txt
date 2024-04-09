@@ -67,7 +67,7 @@ last_request_log_id integer
 
 
 request_session
--------
+---------------
 id integer PK
 language text NULL
 timezone text NULL
