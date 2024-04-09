@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@beenotung/tslib": "^23.4.0",
-    "better-sqlite3-proxy": "^2.6.1",
+    "better-sqlite3-proxy": "^2.6.3",
     "better-sqlite3-schema": "^3.1.4",
     "cast.ts": "^1.12.2",
     "cookie-parser": "^1.4.6",
