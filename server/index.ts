@@ -14,6 +14,7 @@ import { print } from 'listening-on'
 import { HttpError } from './http-error.js'
 import { logRequest } from './app/log.js'
 import { env } from './env.js'
+import { EarlyTerminate } from './app/helpers.js'
 
 const log = debugLog('index.ts')
 log.enabled = true
@@ -55,6 +56,9 @@ app.use(cookieMiddleware)
 attachRoutes(app)
 
 app.use((error: HttpError, req: Request, res: Response, next: NextFunction) => {
+  if ((error as any) == EarlyTerminate) {
+    return
+  }
   res.status(error.statusCode || 500)
   if (error instanceof Error && !(error instanceof HttpError)) {
     console.error(error)
