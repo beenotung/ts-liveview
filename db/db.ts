@@ -18,4 +18,5 @@ export let db: DBInstance = newDB({
   migrate: false,
   fileMustExist: true,
   WAL: true,
+  synchronous: 'NORMAL',
 })
