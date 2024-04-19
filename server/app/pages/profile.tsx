@@ -170,7 +170,7 @@ function attachRoutes(app: Router) {
   })
 }
 
-let routes: Routes = {
+let routes = {
   '/profile': {
     title: title('Profile Page'),
     description: `Manage your public profile and exclusive content`,
@@ -184,6 +184,6 @@ let routes: Routes = {
     streaming: false,
     node: <Logout />,
   },
-}
+} satisfies Routes
 
 export default { routes, attachRoutes }
