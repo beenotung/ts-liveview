@@ -293,7 +293,7 @@ function DemoForm() {
   )
 }
 
-let routes: Routes = {
+let routes = {
   '/form': {
     title: title('Demo Form'),
     description: 'Demonstrate form handling with ts-liveview',
@@ -312,6 +312,6 @@ let routes: Routes = {
     node: <SetKey />,
     streaming: false,
   },
-}
+} satisfies Routes
 
 export default { routes }

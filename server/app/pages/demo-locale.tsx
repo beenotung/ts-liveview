@@ -44,7 +44,7 @@ function Zh(attrs: { lang: string; timezone: string }) {
   )
 }
 
-let routes: Routes = {
+let routes = {
   '/locale': {
     menuText: 'Locale',
     resolve(context) {
@@ -64,6 +64,6 @@ let routes: Routes = {
           }
     },
   },
-}
+} satisfies Routes
 
 export default { routes }

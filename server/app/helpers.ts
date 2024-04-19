@@ -1,6 +1,7 @@
 import type { ServerMessage } from '../../client/types'
 import type express from 'express'
 import { Node } from './jsx/types'
+import { RouteParameters } from 'express-serve-static-core'
 
 export class MessageException {
   constructor(public message: ServerMessage) {}
@@ -52,4 +53,48 @@ export function getStringCasual(body: FormBody | unknown, key: string): string {
   if (!body || typeof body !== 'object') return ''
   let value = (body as FormBody)[key]
   return typeof value === 'string' ? value : ''
+}
+
+export function toRouteUrl<R extends object, K extends string & keyof R>(
+  /** @description for type inference */
+  routes: R,
+  /** @description the url template */
+  key: K,
+  /** @description the variables in url */
+  options: {
+    params: RouteParameters<K>
+    query?: object
+  },
+) {
+  let params = options.params as any
+  let url = key as string
+  for (let part of url.split('/')) {
+    if (part[0] == ':') {
+      let key = part.slice(1)
+      if (key.endsWith('?')) {
+        key = key.slice(0, key.length - 1)
+      }
+      console.log({ params, key })
+      if (key in params) {
+        url = url.replace('/' + part, '/' + params[key])
+      } else {
+        url = url.replace('/' + part, '')
+      }
+    }
+  }
+
+  if (options.query) {
+    let searchParams = new URLSearchParams()
+    for (let [key, value] of Object.entries(options.query)) {
+      if (Array.isArray(value)) {
+        for (let val of value) {
+          searchParams.append(key, val)
+        }
+      } else {
+        searchParams.set(key, value)
+      }
+    }
+    url += '?' + searchParams
+  }
+  return url
 }

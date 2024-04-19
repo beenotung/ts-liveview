@@ -34,6 +34,7 @@ import appCharacter from './pages/app-character.js'
 import type { renderWebTemplate } from '../../template/web.js'
 import type { renderIonicTemplate } from '../../template/ionic.js'
 import { VNode } from '../../client/jsx/types.js'
+import { toRouteUrl } from './helpers.js'
 
 let titles: Record<string, string> = {}
 
@@ -82,7 +83,7 @@ export type Routes = Record<string, PageRoute>
 // or invoke functional component with x-html tag, e.g. `<Editor/>
 
 // TODO direct support alternative urls instead of having to repeat the entry
-let routeDict: Routes = {
+let routeDict = {
   ...AppNotice.routes,
   ...AppChat.routes,
   ...AppSettings.routes,
@@ -154,7 +155,7 @@ let routeDict: Routes = {
   ...appHome.routes,
   ...appCharacter.routes,
   ...appAbout.routes,
-}
+} satisfies Routes
 
 export let redirectDict: Record<string, string> = {
   '/server/app/pages/thermostat.tsx': '/thermostat',
@@ -170,7 +171,7 @@ export const pageRouter = new Router<PageRoute>()
 
 export const menuRoutes: MenuRoute[] = []
 
-Object.entries(routeDict).forEach(([url, route]) => {
+Object.entries(routeDict as Routes).forEach(([url, route]) => {
   pageRouter.add(url, { url, ...route })
   if (route.menuText) {
     menuRoutes.push({

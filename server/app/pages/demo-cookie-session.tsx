@@ -106,14 +106,14 @@ function randomToken(): string {
 }
 
 // liveview-routes
-let routes: Routes = {
+let routes = {
   '/cookie-session': {
     title: title('Cookie-based Session'),
     description: 'Demonstrate accessing cookie with ts-liveview',
     menuText: 'Cookie Session',
     node: <DemoCookieSession />,
   },
-}
+} satisfies Routes
 
 // ajax-routes
 function attachRoutes(app: Router) {

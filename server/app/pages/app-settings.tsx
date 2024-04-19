@@ -51,13 +51,13 @@ function Main(attrs: {}, context: Context) {
   )
 }
 
-let routes: Routes = {
+let routes = {
   '/settings': {
     title: title(pageTitle),
     description: 'TODO',
     node: page,
     layout_type: LayoutType.ionic,
   },
-}
+} satisfies Routes
 
 export default { routes }

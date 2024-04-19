@@ -229,14 +229,14 @@ async function handleUpload(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-let routes: Routes = {
+let routes = {
   '/upload': {
     title: title('Upload Demo'),
     description: 'Demonstrate file upload',
     menuText: 'Upload',
     node: <View />,
   },
-}
+} as Routes
 
 function attachRoutes(app: Router) {
   app.post('/upload/submit', handleUpload)

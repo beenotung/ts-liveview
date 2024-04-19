@@ -178,7 +178,7 @@ function Profile() {
   )
 }
 
-let routes: Routes = {
+let routes = {
   '/profile': {
     title: title('Profile Page'),
     description: 'View and update your public profile',
@@ -186,7 +186,7 @@ let routes: Routes = {
   },
   ...Username.routes,
   ...FavoriteFruit.routes,
-}
+} satisfies Routes
 
 export default { routes, content }
 `.trim()}
@@ -238,10 +238,10 @@ function UserProfile() {
   )
 }
 
-let routes: Routes = {
+let routes = {
   ...Username.routes,
   ...FavoriteFruit.routes,
   ...FavoriteColor.routes,
-}
+} satisfies Routes
 
 export default { routes, content }

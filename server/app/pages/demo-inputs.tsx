@@ -57,7 +57,7 @@ let content = (
   </div>
 )
 
-let routes: Routes = {
+let routes = {
   '/inputs': {
     title: title('Demo input components'),
     description: 'Demonstrate component-based input fields',
@@ -77,6 +77,6 @@ let routes: Routes = {
     node: content,
   },
   ...DemoSingleFieldForm.routes,
-}
+} satisfies Routes
 
 export default { routes }

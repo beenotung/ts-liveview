@@ -282,7 +282,7 @@ function index(): StaticPageRoute {
   }
 }
 
-let routes: Routes = {
+let routes = {
   '/thermostat': {
     resolve: index,
     menuText: 'Thermostat',
@@ -299,6 +299,6 @@ let routes: Routes = {
     node: [dec],
     streaming: false,
   },
-}
+} satisfies Routes
 
 export default { routes }
