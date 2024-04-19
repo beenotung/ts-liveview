@@ -652,7 +652,7 @@ fetch('/login/submit',{
   }
 }
 
-let routes: Routes = {
+let routes = {
   '/register': {
     title: title('Register'),
     description: `Register to access exclusive content and functionality. Join our community on ${config.short_site_name}.`,
@@ -685,6 +685,6 @@ let routes: Routes = {
       }
     },
   },
-}
+} satisfies Routes
 
 export default { routes }
