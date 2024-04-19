@@ -22,6 +22,7 @@ import { renderError } from '../components/error.js'
 import { debugLog } from '../../debug.js'
 import { filter, find } from 'better-sqlite3-proxy'
 import { writeUserIdToCookie } from '../auth/user.js'
+import { env } from '../../env.js'
 
 let log = debugLog('app:verification-code')
 log.enabled = true
@@ -94,7 +95,7 @@ async function requestEmailVerification(
       context,
     )
     let info = await sendEmail({
-      from: config.email.auth.user,
+      from: env.EMAIL_USER,
       to: input.email,
       subject: title('Email Verification'),
       html,
@@ -143,7 +144,7 @@ function verificationCodeEmail(
   context: Context,
 ) {
   let url = attrs.email
-    ? config.origin +
+    ? env.ORIGIN +
       '/verify/email/result?' +
       new URLSearchParams({
         code: attrs.passcode,
