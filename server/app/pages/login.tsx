@@ -234,7 +234,7 @@ async function submit(context: ExpressContext) {
   }
 }
 
-let routes: Routes = {
+let routes = {
   '/login': {
     title: title('Login'),
     description: `Login to access exclusive content and functionality. Welcome back to our community on ${config.short_site_name}.`,
@@ -253,6 +253,6 @@ let routes: Routes = {
       }
     },
   },
-}
+} satisfies Routes
 
 export default { routes }
