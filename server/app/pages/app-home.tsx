@@ -79,7 +79,7 @@ let homePage = (
 // pre-render into html to reduce time to first contentful paint (FCP)
 homePage = prerender(homePage)
 
-let routes: Routes = {
+let routes = {
   '/app/home': {
     title: title(pageTitle),
     description:
@@ -89,6 +89,6 @@ let routes: Routes = {
     node: homePage,
     layout_type: LayoutType.ionic,
   },
-}
+} satisfies Routes
 
 export default { routes }

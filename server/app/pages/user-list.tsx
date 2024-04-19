@@ -69,7 +69,7 @@ function View() {
   ))
 }
 
-let routes: Routes = {
+let routes = {
   '/user-list': {
     title: title('Demo List Editing'),
     description:
@@ -78,6 +78,6 @@ let routes: Routes = {
     node: content,
   },
   ...Nickname.routes,
-}
+} as Routes
 
 export default { routes }

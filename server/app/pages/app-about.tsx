@@ -78,13 +78,13 @@ let aboutPage = (
   </>
 )
 
-let routes: Routes = {
+let routes = {
   '/app/about': {
     title: title(pageTitle),
     description: `Demo using ionic and ts-liveview to build mobile-first SSR webapp`,
     node: aboutPage,
     layout_type: LayoutType.ionic,
   },
-}
+} satisfies Routes
 
 export default { routes }

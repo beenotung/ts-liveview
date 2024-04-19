@@ -96,7 +96,7 @@ function DetailPage(attrs: { item: Character }, context: DynamicContext) {
   )
 }
 
-let routes: Routes = {
+let routes = {
   '/app/characters/:id': {
     layout_type: LayoutType.ionic,
     resolve(context) {
@@ -119,6 +119,6 @@ let routes: Routes = {
       }
     },
   },
-}
+} satisfies Routes
 
 export default { routes }

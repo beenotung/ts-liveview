@@ -428,7 +428,7 @@ function MessageItem(attrs: MessageItemAttrs, context: Context) {
   )
 }
 
-let routes: Routes = {
+let routes = {
   '/chatroom': {
     title: title('Chatroom'),
     description: 'Live chatroom with realtime-update powered by websocket',
@@ -452,7 +452,7 @@ let routes: Routes = {
     node: <Send />,
     streaming: false,
   },
-}
+} satisfies Routes
 
 function attachRoutes(app: Router) {
   app.get('/chatroom', nicknameMiddleware)

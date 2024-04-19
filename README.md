@@ -74,6 +74,7 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
   - [x] Nested routing
   - [x] Sync / async routes
   - [x] Static / dynamic document title and description meta
+  - [x] Type-Safe Routing with Static Type Checking
 - [x] Follow the DOM convention
   - [x] `class`, `style`, `onclick` e.t.c. are string attributes, with helper functions to convert from objects
   - [x] Compatible with css frameworks and web components (doesn't require framework specific wrappers unlike react)

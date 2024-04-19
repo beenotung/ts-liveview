@@ -155,13 +155,13 @@ export function newSingleFieldForm<
     return renderUpdate({ input }, context)
   }
 
-  let routes: Routes = {
+  let routes = {
     [action]: {
       title: apiEndpointTitle,
       description,
       node: <Update />,
     },
-  }
+  } satisfies Routes
 
   return { Form, Update, routes }
 }

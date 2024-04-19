@@ -81,13 +81,13 @@ let page = (
   </>
 )
 
-let routes: Routes = {
+let routes = {
   '/app/more': {
     title: title(pageTitle),
     description: 'TODO',
     node: page,
     layout_type: LayoutType.ionic,
   },
-}
+} satisfies Routes
 
 export default { routes }
