@@ -64,8 +64,8 @@ echo "import $id from './pages/$url.js'" > "$file.tmp"
 cat "$file" >> "$file.tmp"
 mv "$file.tmp" "$file"
 if [[ "$(uname)" == "Darwin" ]]; then
-  sed -i '' "s/let routeDict: Routes = {/let routeDict: Routes = {\n  ...$id.routes,/" "$file"
+  sed -i '' "s/let routeDict = {/let routeDict = {\n  ...$id.routes,/" "$file"
 else
-  sed -i "s/let routeDict: Routes = {/let routeDict: Routes = {\n  ...$id.routes,/" "$file"
+  sed -i "s/let routeDict = {/let routeDict = {\n  ...$id.routes,/" "$file"
 fi
 echo "updated $file"
