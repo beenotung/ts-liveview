@@ -56,7 +56,7 @@ app.use(cookieMiddleware)
 attachRoutes(app)
 
 app.use((error: HttpError, req: Request, res: Response, next: NextFunction) => {
-  if ((error as any) == EarlyTerminate) {
+  if ((error as unknown) == EarlyTerminate) {
     return
   }
   res.status(error.statusCode || 500)
