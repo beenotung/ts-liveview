@@ -74,7 +74,6 @@ export function toRouteUrl<R extends object, K extends string & keyof R>(
       if (key.endsWith('?')) {
         key = key.slice(0, key.length - 1)
       }
-      console.log({ params, key })
       if (key in params) {
         url = url.replace('/' + part, '/' + params[key])
       } else {
