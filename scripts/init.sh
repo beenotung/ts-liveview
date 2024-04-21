@@ -5,9 +5,9 @@ set -o pipefail
 hash code && code . || echo "code not in path, you need to open the IDE manually"
 
 #install="slnpm"
-install="pnpm i -r"
+install="pnpm i -r --prefer-offline"
 #install="yarn"
-#install="npm i"
+#install="npm i --legacy-peer-deps"
 
 echo "running '$install' in $(pwd)"
 $install
