@@ -66,7 +66,7 @@ export function toRouteUrl<R extends object, K extends string & keyof R>(
     query?: object
   },
 ) {
-  let params = options.params as any
+  let params = options.params as Record<string, string | number>
   let url = key as string
   for (let part of url.split('/')) {
     if (part[0] == ':') {
