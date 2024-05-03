@@ -10,6 +10,8 @@ The client-side runtime of ts-liveview is below 13KB (2.3KB bundled, minified an
 
 ts-liveview supports [`JSX`](#jsx) but it **[doesn't rely on Virtual DOM](#no-vdom-diff)**. Instead, precise DOM operations are derived from application-specific event handlers, and sent to the browser client(s) for realtime UI updates.
 
+[中文版本](./README-zh.md)
+
 ## Get Started
 
 To create a new project, run:
