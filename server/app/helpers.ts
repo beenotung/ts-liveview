@@ -61,12 +61,12 @@ export function toRouteUrl<R extends object, K extends string & keyof R>(
   /** @description the url template */
   key: K,
   /** @description the variables in url */
-  options: {
-    params: RouteParameters<K>
+  options?: {
+    params?: RouteParameters<K>
     query?: object
   },
 ) {
-  let params = options.params as Record<string, string | number>
+  let params = options?.params as Record<string, string | number>
   let url = key as string
   for (let part of url.split('/')) {
     if (part[0] == ':') {
@@ -82,7 +82,7 @@ export function toRouteUrl<R extends object, K extends string & keyof R>(
     }
   }
 
-  if (options.query) {
+  if (options?.query) {
     let searchParams = new URLSearchParams()
     for (let [key, value] of Object.entries(options.query)) {
       if (Array.isArray(value)) {
