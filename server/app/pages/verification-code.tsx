@@ -103,6 +103,16 @@ async function requestEmailVerification(
     })
     if (info.accepted[0] === input.email) {
       log('sent passcode email to:', input.email)
+      if (
+        env.EMAIL_USER == 'skip' &&
+        context.type == 'ws' &&
+        env.ORIGIN.includes('localhost')
+      ) {
+        context.ws.send([
+          'eval',
+          `alert('[dev] verification code: ${passcode}')`,
+        ])
+      }
     } else {
       log('failed to send email?')
       log('send email info:')
