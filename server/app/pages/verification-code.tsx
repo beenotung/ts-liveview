@@ -5,7 +5,7 @@ import { HttpError } from '../../exception.js'
 import { proxy } from '../../../db/proxy.js'
 import { boolean, email, object, optional, string } from 'cast.ts'
 import { sendEmail } from '../../email.js'
-import { LayoutType, apiEndpointTitle, config, title } from '../../config.js'
+import { apiEndpointTitle, config, title } from '../../config.js'
 import {
   Context,
   DynamicContext,
@@ -244,23 +244,6 @@ function VerifyEmailPage(attrs: {}, context: DynamicContext) {
       <VerifyEmailForm params={params} />
     </>
   )
-  if (config.layout_type == LayoutType.ionic) {
-    return (
-      <>
-        {style}
-        <ion-header>
-          <ion-toolbar>
-            <ion-title role="heading" aria-level="1">
-              {pageTitle}
-            </ion-title>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content id="verifyEmailPage" class="ion-padding">
-          {node}
-        </ion-content>
-      </>
-    )
-  }
   return (
     <>
       {style}
@@ -294,7 +277,7 @@ function VerifyEmailForm(attrs: { params: URLSearchParams }) {
         label="Verification code"
         input={
           <input
-            style={`font-family: monospace; width: ${config.layout_type == LayoutType.ionic ? '8ch' : '6ch'}; padding: 0.5ch`}
+            style="font-family: monospace; width: 6ch; padding: 0.5ch"
             minlength={PasscodeLength}
             maxlength={PasscodeLength}
             inputmode="numeric"
