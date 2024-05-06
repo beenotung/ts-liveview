@@ -5,7 +5,7 @@ import { HttpError } from '../../exception.js'
 import { VerificationCode, proxy } from '../../../db/proxy.js'
 import { boolean, email, object, optional, string } from 'cast.ts'
 import { sendEmail } from '../../email.js'
-import { apiEndpointTitle, config, title } from '../../config.js'
+import { LayoutType, apiEndpointTitle, config, title } from '../../config.js'
 import {
   Context,
   DynamicContext,
@@ -219,35 +219,56 @@ function VerifyEmailPage(attrs: {}, context: DynamicContext) {
   let params = new URLSearchParams(context.routerMatch?.search)
   let error = params.get('error')
   let title = params.get('title')
-  return (
-    <div id="verifyEmailPage">
-      {style}
-      <h1>Email Verification</h1>
-      {error ? (
-        <>
-          <p>{title || 'Failed to send verification code to your email'}.</p>
-          {renderError(error, context)}
-          <p>
-            You can request another verification code in the{' '}
-            <Link href="/login">login page</Link> or{' '}
-            <Link href="/register">register page</Link>.
-          </p>
-        </>
-      ) : (
-        <>
-          <p>
-            <span style="display: inline-block">
-              A verification code is sent to your email address.
-            </span>{' '}
-            <span style="display: inline-block">
-              Please check your inbox and spam folder.
-            </span>
-          </p>
+  let pageTitle = 'Email Verification'
+  let node = error ? (
+    <>
+      <p>{title || 'Failed to send verification code to your email'}.</p>
+      {renderError(error, context)}
+      <p>
+        You can request another verification code in the{' '}
+        <Link href="/login">login page</Link> or{' '}
+        <Link href="/register">register page</Link>.
+      </p>
+    </>
+  ) : (
+    <>
+      <p>
+        <span style="display: inline-block">
+          A verification code is sent to your email address.
+        </span>{' '}
+        <span style="display: inline-block">
+          Please check your inbox and spam folder.
+        </span>
+      </p>
 
-          <VerifyEmailForm params={params} />
-        </>
-      )}
-    </div>
+      <VerifyEmailForm params={params} />
+    </>
+  )
+  if (config.layout_type == LayoutType.ionic) {
+    return (
+      <>
+        {style}
+        <ion-header>
+          <ion-toolbar>
+            <ion-title role="heading" aria-level="1">
+              {pageTitle}
+            </ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content id="verifyEmailPage" class="ion-padding">
+          {node}
+        </ion-content>
+      </>
+    )
+  }
+  return (
+    <>
+      {style}
+      <div id="verifyEmailPage">
+        <h1>{pageTitle}</h1>
+        {node}
+      </div>
+    </>
   )
 }
 function VerifyEmailForm(attrs: { params: URLSearchParams }) {
@@ -273,7 +294,7 @@ function VerifyEmailForm(attrs: { params: URLSearchParams }) {
         label="Verification code"
         input={
           <input
-            style="font-family: monospace; width: 6ch; padding: 0.5ch"
+            style={`font-family: monospace; width: ${config.layout_type == LayoutType.ionic ? '8ch' : '6ch'}; padding: 0.5ch`}
             minlength={PasscodeLength}
             maxlength={PasscodeLength}
             inputmode="numeric"
