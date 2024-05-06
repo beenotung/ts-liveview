@@ -167,7 +167,7 @@ let guestView = (
     <form
       method="POST"
       action="/verify/email/submit"
-      // onsubmit="emitForm(event)"
+      onsubmit="emitForm(event)"
     >
       {emailFormBody}
     </form>
