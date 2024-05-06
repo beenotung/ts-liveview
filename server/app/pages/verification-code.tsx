@@ -210,7 +210,7 @@ let style = Style(/* css */ `
   flex-wrap: wrap;
   margin-bottom: 0.5rem;
 }
-#verifyEmailPage  form .field input {
+#verifyEmailPage form .field input {
   margin: 0.25rem 0;
 }
 `)
