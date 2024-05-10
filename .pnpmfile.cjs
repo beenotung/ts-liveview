@@ -1,7 +1,8 @@
 module.exports = {
   hooks: {
     readPackage: pkg => {
-      delete pkg.optionalDependencies
+      // need to install optional dependencies, e.g. @esbuild/linux-x64 for esbuild
+      // delete pkg.optionalDependencies
       return pkg
     },
   },
