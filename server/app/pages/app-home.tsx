@@ -1,12 +1,12 @@
 import { loadClientPlugin } from '../../client-plugin.js'
-import { LayoutType, title } from '../../config.js'
+import { LayoutType, config, title } from '../../config.js'
 import { appIonTabBar } from '../components/app-tab-bar.js'
 import { mapArray } from '../components/fragment.js'
 import { Link } from '../components/router.js'
 import { wsStatus } from '../components/ws-status.js'
 import { prerender } from '../jsx/html.js'
 import { o } from '../jsx/jsx.js'
-import { Routes } from '../routes.js'
+import { PageRoute, Routes } from '../routes.js'
 import { fitIonFooter, selectIonTab } from '../styles/mobile-style.js'
 import { characters } from './app-character.js'
 
@@ -79,16 +79,23 @@ let homePage = (
 // pre-render into html to reduce time to first contentful paint (FCP)
 homePage = prerender(homePage)
 
+let homeRoute: PageRoute = {
+  title: title(pageTitle),
+  description:
+    'List of fictional characters commonly used as placeholders in discussion about cryptographic systems and protocols.',
+  menuText: 'Ionic App',
+  menuFullNavigate: true,
+  node: homePage,
+  layout_type: LayoutType.ionic,
+}
+
 let routes = {
-  '/app/home': {
-    title: title(pageTitle),
-    description:
-      'List of fictional characters commonly used as placeholders in discussion about cryptographic systems and protocols.',
-    menuText: 'Ionic App',
-    menuFullNavigate: true,
-    node: homePage,
-    layout_type: LayoutType.ionic,
-  },
+  ...(config.layout_type === LayoutType.ionic
+    ? {
+        '/': homeRoute,
+      }
+    : {}),
+  '/app/home': homeRoute,
 } satisfies Routes
 
 export default { routes }
