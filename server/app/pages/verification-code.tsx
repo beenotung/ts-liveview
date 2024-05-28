@@ -302,6 +302,7 @@ function VerifyEmailForm(attrs: { params: URLSearchParams }) {
             placeholder={'x'.repeat(PasscodeLength)}
             required
             value={code}
+            autocomplete="off"
           />
         }
       />
