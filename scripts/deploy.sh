@@ -53,10 +53,7 @@ else
   rsync -SavLPz \
     db/package.json \
     db/migrations \
-    db/knexfile.ts \
-    db/db.ts \
-    db/proxy.ts \
-    db/seed.ts \
+    db/*.ts \
     "$user@$host:$root_dir/db"
   if [ "$MODE" == "first" ]; then
     ssh "$user@$host" "
