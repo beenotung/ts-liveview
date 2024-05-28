@@ -286,7 +286,7 @@ function VerifyEmailForm(attrs: { params: URLSearchParams }) {
             name="email"
             value={email}
             readonly
-            style={email ? `width: ${email.length}ch` : undefined}
+            style={email ? `width: ${email.length + 2}ch` : undefined}
           />
         }
       />
