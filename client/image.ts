@@ -26,12 +26,13 @@ function compressPhotos(files: FileList | File[]) {
 /** @description resize to given dimension */
 async function selectPhotos(
   options?: {
+    accept?: string
     quality?: number
     multiple?: boolean
   } & ({ width: number; height: number } | { size: number } | {}),
 ) {
   let files = await selectImage({
-    accept: '.jpg,.png,.webp,.heic,.gif',
+    accept: options?.accept || '.jpg,.png,.webp,.heic,.gif',
     multiple: options?.multiple,
   })
   return Promise.all(
