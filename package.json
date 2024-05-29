@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@beenotung/tslib": "^23.5.2",
-    "better-sqlite3-proxy": "^2.7.0",
+    "better-sqlite3-proxy": "^2.7.1",
     "better-sqlite3-schema": "^3.1.5",
     "cast.ts": "^1.12.3",
     "cookie-parser": "^1.4.6",
@@ -55,7 +55,7 @@
     "@types/cookie-parser": "^1.4.7",
     "@types/debug": "^4.1.12",
     "@types/express": "^4.17.21",
-    "@types/express-serve-static-core": "^4.19.1",
+    "@types/express-serve-static-core": "^4.19.2",
     "@types/formidable": "^3.4.5",
     "@types/integer": "^4.0.3",
     "@types/node": "^20.12.13",
