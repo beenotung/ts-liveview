@@ -1,7 +1,7 @@
-import type { ServerMessage } from '../../client/types'
-import type { ManagedWebsocket } from '../ws/wss.js'
-import { o } from './jsx/jsx.js'
-import { onWsSessionClose, sessions } from './session.js'
+import type { ServerMessage } from '../../../client/types'
+import type { ManagedWebsocket } from '../../ws/wss.js'
+import { o } from '../jsx/jsx.js'
+import { onWsSessionClose, sessions } from '../session.js'
 import {
   existsSync,
   mkdirSync,
@@ -10,9 +10,9 @@ import {
   rename,
   renameSync,
 } from 'fs'
-import { debugLog } from '../debug.js'
+import { debugLog } from '../../debug.js'
 import { join } from 'path'
-import type { Context } from './context'
+import type { Context } from '../context'
 
 let log = debugLog('stats.tsx')
 log.enabled = true
