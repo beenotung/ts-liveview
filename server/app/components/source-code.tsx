@@ -9,6 +9,9 @@ code[class*="language-"] {
   display: inline-block !important;
   max-width: 90vw;
 }
+details.source-code {
+  margin-top: 0.5rem;
+}
 details.source-code details summary {
   margin-top: 0.5rem;
   margin-inline-start: 1rem;
