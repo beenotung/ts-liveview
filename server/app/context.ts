@@ -60,6 +60,14 @@ export function getContextFormBody(context: Context): unknown | undefined {
   }
 }
 
+export function getContextSearchParams(
+  context: Context,
+): URLSearchParams | undefined {
+  let search =
+    context.type == 'static' ? undefined : context.routerMatch?.search
+  return new URLSearchParams(search)
+}
+
 export function getContextLanguage(context: Context): string | undefined {
   let lang = getContextCookies(context)?.unsignedCookies.lang
   if (lang) {
