@@ -8,6 +8,7 @@ import SourceCode from '../components/source-code.js'
 import { markdownToHtml } from '../format/markdown.js'
 import { Routes } from '../routes.js'
 import { title } from '../../config.js'
+import { StaticFile } from '../components/static-file.js'
 
 let text = readFileSync('README.md').toString()
 
@@ -64,6 +65,9 @@ const License = prerender(
       : 'LICENSE file is missing. You can put it in the project root directory, alone-side with the package.json'}
   </p>,
 )
+
+// StaticFile is a helper function, it is functionally identical to above code for the license file
+const Help = StaticFile('help.txt')
 
 let routes = {
   '/about/:mode?': {
