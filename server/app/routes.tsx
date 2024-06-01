@@ -9,7 +9,7 @@ import { Redirect } from './components/router.js'
 import type { DynamicContext } from './context'
 import { o } from './jsx/jsx.js'
 import type { Node } from './jsx/types'
-import About, { License } from './pages/about.js'
+import About from './pages/about.js'
 import AutoCompleteDemo from './pages/auto-complete-demo.js'
 import Calculator from './pages/calculator.js'
 import UserAgents from './pages/user-agents.js'
@@ -95,16 +95,7 @@ let routeDict = {
     menuText: 'Home',
     node: Home,
   },
-  '/about/:mode?': {
-    title: title('About'),
-    description:
-      'About ts-liveview - a server-side rendering realtime webapp framework with progressive enhancement',
-    menuText: 'About',
-    menuUrl: '/about',
-    menuMatchPrefix: true,
-    node: About,
-    streaming: true,
-  },
+  ...About.routes,
   ...Thermostat.routes,
   '/editor': {
     title: title('Image Editor'),
@@ -145,12 +136,6 @@ let routeDict = {
     description: "User agents of this site's visitors",
     menuText: 'User Agents',
     node: UserAgents,
-  },
-  '/LICENSE': {
-    title: 'BSD 2-Clause License of ts-liveview',
-    description:
-      'ts-liveview is a free open source project licensed under the BSD 2-Clause License',
-    node: License,
   },
   ...appHome.routes,
   ...appCharacter.routes,

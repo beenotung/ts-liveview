@@ -6,6 +6,8 @@ import { prerender } from '../jsx/html.js'
 import { Menu } from '../components/menu.js'
 import SourceCode from '../components/source-code.js'
 import { markdownToHtml } from '../format/markdown.js'
+import { Routes } from '../routes.js'
+import { title } from '../../config.js'
 
 let text = readFileSync('README.md').toString()
 
@@ -18,7 +20,7 @@ markdown = (
 )
 
 // The JSX expression don't need to be re-built on every render
-export let About = (
+let About = (
   <div id="about">
     <h1>About Page</h1>
     <p>
@@ -55,7 +57,7 @@ export let About = (
   </div>
 )
 
-export const License = prerender(
+const License = prerender(
   <p style="white-space:pre-wrap">
     {existsSync('LICENSE')
       ? readFileSync('LICENSE').toString()
@@ -63,4 +65,29 @@ export const License = prerender(
   </p>,
 )
 
-export default About
+let routes = {
+  '/about/:mode?': {
+    title: title('About'),
+    description:
+      'About ts-liveview - a server-side rendering realtime webapp framework with progressive enhancement',
+    menuText: 'About',
+    menuUrl: '/about',
+    menuMatchPrefix: true,
+    node: About,
+    streaming: true,
+  },
+  '/LICENSE': {
+    title: 'BSD 2-Clause License of ts-liveview',
+    description:
+      'ts-liveview is a free open source project licensed under the BSD 2-Clause License',
+    node: License,
+  },
+  '/help.txt': {
+    title: 'Getting started on ts-liveview',
+    description:
+      'Getting started guide of ts-liveview with bash scripts and npm scripts',
+    node: License,
+  },
+} satisfies Routes
+
+export default { routes }
