@@ -90,7 +90,7 @@ let routes = {
     title: 'Getting started on ts-liveview',
     description:
       'Getting started guide of ts-liveview with bash scripts and npm scripts',
-    node: License,
+    node: Help,
   },
 } satisfies Routes
 
