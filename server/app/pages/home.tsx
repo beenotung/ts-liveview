@@ -3,6 +3,8 @@ import { o } from '../jsx/jsx.js'
 import { prerender } from '../jsx/html.js'
 import Comment from '../components/comment.js'
 import SourceCode from '../components/source-code.js'
+import { Routes } from '../routes.js'
+import { title } from '../../config.js'
 
 // Calling <Component/> will transform the JSX into AST for each rendering.
 // You can reuse a pre-compute AST like `let component = <Component/>`.
@@ -87,4 +89,14 @@ let content = (
 // And it can be pre-rendered into html as well
 let Home = prerender(content)
 
-export default Home
+let routes = {
+  '/': {
+    title: title('Home'),
+    description:
+      'Getting Started with ts-liveview - a server-side rendering realtime webapp framework with progressive enhancement',
+    menuText: 'Home',
+    node: Home,
+  },
+} satisfies Routes
+
+export default { routes }

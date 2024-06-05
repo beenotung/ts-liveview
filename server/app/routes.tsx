@@ -88,13 +88,7 @@ let routeDict = {
   ...AppChat.routes,
   ...AppSettings.routes,
   ...AppMore.routes,
-  '/': {
-    title: title('Home'),
-    description:
-      'Getting Started with ts-liveview - a server-side rendering realtime webapp framework with progressive enhancement',
-    menuText: 'Home',
-    node: Home,
-  },
+  ...Home.routes,
   ...About.routes,
   ...Thermostat.routes,
   '/editor': {
