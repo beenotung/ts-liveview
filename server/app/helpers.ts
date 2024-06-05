@@ -64,6 +64,8 @@ export function toRouteUrl<R extends object, K extends string & keyof R>(
   options?: {
     params?: RouteParameters<K>
     query?: object
+    /** @description to apply `JSON.stringify()` on the result if enabled */
+    json?: boolean
   },
 ) {
   let params = options?.params as Record<string, string | number>
@@ -94,6 +96,9 @@ export function toRouteUrl<R extends object, K extends string & keyof R>(
       }
     }
     url += '?' + searchParams
+  }
+  if (options?.json) {
+    return JSON.stringify(url)
   }
   return url
 }
