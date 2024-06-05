@@ -1,7 +1,7 @@
 import type { ServerMessage } from '../../client/types'
 import type express from 'express'
 import { Node } from './jsx/types'
-import { RouteParameters } from 'express-serve-static-core'
+import type { RouteParameters } from './utils/params'
 
 export class MessageException {
   constructor(public message: ServerMessage) {}
