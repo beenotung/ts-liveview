@@ -2,7 +2,7 @@ import { o } from './jsx/jsx.js'
 import { scanTemplateDir } from '../template-file.js'
 import { NextFunction, Request, Response, Router } from 'express'
 import type { Context, ExpressContext, WsContext } from './context'
-import type { Element, Node } from './jsx/types'
+import type { Element } from './jsx/types'
 import {
   escapeHTMLAttributeValue,
   escapeHTMLTextContent,

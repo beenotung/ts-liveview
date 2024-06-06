@@ -34,7 +34,6 @@ import appCharacter from './pages/app-character.js'
 import type { renderWebTemplate } from '../../template/web.js'
 import type { renderIonicTemplate } from '../../template/ionic.js'
 import { VNode } from '../../client/jsx/types.js'
-import { toRouteUrl } from './helpers.js'
 
 let titles: Record<string, string> = {}
 
