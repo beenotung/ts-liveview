@@ -1,5 +1,5 @@
 import type express from 'express'
-import type { RouteParameters } from './app/utils/params'
+import type { RouteParameters } from './params'
 
 export function toAbsoluteHref(req: express.Request, href: string): string {
   if (href.startsWith('http://') || href.startsWith('https://')) {
