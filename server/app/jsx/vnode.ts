@@ -15,7 +15,7 @@ import type {
 import { nodeListToHTML } from './html.js'
 import { Flush } from '../components/flush.js'
 import { renderError } from '../components/error.js'
-import { EarlyTerminate, MessageException } from '../helpers.js'
+import { EarlyTerminate, MessageException } from '../../exception.js'
 
 export function nodeToVElementOptimized(
   node: Element | Component,

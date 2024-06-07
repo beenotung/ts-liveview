@@ -1,7 +1,7 @@
 import { o } from '../jsx/jsx.js'
 import type { attrs } from '../jsx/types'
 import { ManagedWebsocket } from '../../ws/wss.js'
-import { EarlyTerminate } from '../helpers.js'
+import { EarlyTerminate } from '../../exception.js'
 import type { ServerMessage } from '../../../client/types'
 import { onWsSessionClose } from '../session.js'
 import { Script } from '../components/script.js'

@@ -1,7 +1,6 @@
 import type { VNode } from '../../../client/jsx/types'
-import { HttpError } from '../../http-error'
 import type { Context } from '../context'
-import { ErrorNode } from '../helpers'
+import type { ErrorNode, HttpError } from '../../exception'
 import { Node } from '../jsx/types'
 
 export let ErrorStyle = /* css */ `

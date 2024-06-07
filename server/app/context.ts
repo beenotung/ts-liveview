@@ -60,6 +60,14 @@ export function getContextFormBody(context: Context): unknown | undefined {
   }
 }
 
+type FormBody = Record<string, string[] | string>
+
+export function getStringCasual(body: FormBody | unknown, key: string): string {
+  if (!body || typeof body !== 'object') return ''
+  let value = (body as FormBody)[key]
+  return typeof value === 'string' ? value : ''
+}
+
 export function getContextSearchParams(
   context: Context,
 ): URLSearchParams | undefined {
