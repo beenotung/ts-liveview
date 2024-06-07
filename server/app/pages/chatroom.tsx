@@ -14,7 +14,7 @@ import {
   sessionToContext,
 } from '../session.js'
 import { ManagedWebsocket } from '../../ws/wss.js'
-import { EarlyTerminate } from '../helpers.js'
+import { EarlyTerminate } from '../../exception.js'
 import DateTimeText, {
   createRelativeTimer,
   toLocaleDateTimeString,

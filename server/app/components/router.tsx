@@ -2,7 +2,7 @@ import { o } from '../jsx/jsx.js'
 import { castDynamicContext, Context } from '../context.js'
 import type { Node, NodeList } from '../jsx/types'
 import { Router as UrlRouter } from 'url-router.ts'
-import { EarlyTerminate } from '../helpers.js'
+import { EarlyTerminate } from '../../exception.js'
 import { setSessionUrl } from '../session.js'
 
 export type LinkAttrs = {

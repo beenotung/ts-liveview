@@ -13,7 +13,7 @@ import type {
 import { HTMLStream, noop } from './stream.js'
 import { Flush } from '../components/flush.js'
 import { renderError, renderErrorNode } from '../components/error.js'
-import { EarlyTerminate, ErrorNode, MessageException } from '../helpers.js'
+import { EarlyTerminate, ErrorNode, MessageException } from '../../exception.js'
 
 const log = debug('html.ts')
 log.enabled = true
