@@ -2,7 +2,7 @@
 set -e
 set -o pipefail
 
-hash code && code . || echo "code not in path, you need to open the IDE manually"
+hash code 2> /dev/null && code . || echo "code not in path, you need to open the IDE manually"
 
 #install="slnpm"
 install="pnpm i -r --prefer-offline"
