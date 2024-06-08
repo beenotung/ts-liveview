@@ -12,12 +12,10 @@ import { proxy } from '../../../db/proxy.js'
 import { eraseUserIdFromCookie, getAuthUserId } from '../auth/user.js'
 import { Router } from 'express'
 import { createUploadForm } from '../upload.js'
-import { HttpError } from '../../exception.js'
 import Style from '../components/style.js'
 import { renderError } from '../components/error.js'
 import { Raw } from '../components/raw.js'
 import { loadClientPlugin } from '../../client-plugin.js'
-import { client_config } from '../../../client/client-config.js'
 
 let style = Style(/* css */ `
 #profile .avatar {

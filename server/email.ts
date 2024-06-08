@@ -1,4 +1,4 @@
-import nodemailer, { SendMailOptions, createTransport } from 'nodemailer'
+import { SendMailOptions, createTransport } from 'nodemailer'
 import { debugLog } from './debug.js'
 import { env } from './env.js'
 
