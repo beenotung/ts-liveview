@@ -1,14 +1,18 @@
 import { LayoutType, apiEndpointTitle, config, title } from '../../config.js'
 import { commonTemplatePageText } from '../components/common-template.js'
 import { Link, Redirect } from '../components/router.js'
-import { Context, DynamicContext, ExpressContext } from '../context.js'
+import {
+  Context,
+  DynamicContext,
+  ExpressContext,
+  getContextFormBody,
+  getStringCasual,
+} from '../context.js'
 import { o } from '../jsx/jsx.js'
 import { Routes, StaticPageRoute } from '../routes.js'
-import { getContextFormBody } from '../context.js'
 import { renderError } from '../components/error.js'
 import { proxy } from '../../../db/proxy.js'
 import { find } from 'better-sqlite3-proxy'
-import { getStringCasual } from '../helpers.js'
 import { comparePassword } from '../../hash.js'
 import { UserMessageInGuestView } from './profile.js'
 import { getAuthUserId, writeUserIdToCookie } from '../auth/user.js'
