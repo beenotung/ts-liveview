@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "PKief.material-icon-theme",
+    "Tobermory.es6-string-html",
+    "eamodio.gitlens",
+    "esbenp.prettier-vscode",
+    "TabNine.tabnine-vscode",
+    "streetsidesoftware.code-spell-checker",
+    "usernamehw.errorlens"
+  ]
+}
