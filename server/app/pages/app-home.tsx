@@ -45,11 +45,9 @@ let homePage = (
         <ion-list>
           <ion-item onclick="selectMenu(event)">Show Toast 1</ion-item>
           <ion-item onclick="selectMenu(event)">Show Toast 2</ion-item>
-          <ion-menu-toggle>
-            <ion-item onclick="selectMenu(event, 'close1')">
-              Show Toast and Close Menu
-            </ion-item>
-          </ion-menu-toggle>
+          <ion-item onclick="selectMenu(event, 'close')">
+            Show Toast and Close Menu
+          </ion-item>
         </ion-list>
       </ion-content>
     </ion-menu>
