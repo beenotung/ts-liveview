@@ -16,6 +16,7 @@ export function Input(
     step?: string
     style?: string
     class?: string
+    placeholder?: string
   } & object,
 ) {
   let { tagName, url, ...rest } = attrs
