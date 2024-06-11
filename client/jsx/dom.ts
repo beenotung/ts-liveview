@@ -15,11 +15,14 @@ const origin = location.origin
 function findAndApplyRedirect(root: ParentNode) {
   root.querySelectorAll('a[data-live=redirect]').forEach(e => {
     let a = e as HTMLAnchorElement
-    let title = a.title || document.title
-    const href = a.href.replace(origin, '')
-    history.replaceState(null, title, href)
-    a.remove()
-    win.emit(href)
+    let url = a.href.replace(origin, '')
+    if (url[0] != '/' || a.dataset.full) {
+      location.href = url
+    } else {
+      history.replaceState(null, '', url)
+      a.remove()
+      win.emit(url)
+    }
   })
 }
 
@@ -141,6 +144,15 @@ export function setValue(selector: string, value: string | number) {
     throw new Error('Failed to query selector when setValue')
   }
   e.value = value as string
+}
+
+export function redirect(url: string, full?: 1) {
+  if (url[0] != '/' || full) {
+    location.href = url
+  } else {
+    history.replaceState(null, '', url)
+    win.emit(url)
+  }
 }
 
 function mountElement(e: Element, element: VElement) {
