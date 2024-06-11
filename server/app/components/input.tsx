@@ -28,3 +28,22 @@ export function Input(
     },
   ]
 }
+
+export function Checkbox(attrs: {
+  checked: boolean | null
+  url: string
+  style?: string
+  class?: string
+}) {
+  let { url, checked, ...rest } = attrs
+  return [
+    'input',
+    {
+      'type': 'checkbox',
+      'data-url': url,
+      'onchange': 'emit(this.dataset.url,this.checked)',
+      'checked': checked || undefined,
+      ...rest,
+    },
+  ]
+}
