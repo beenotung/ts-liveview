@@ -9,6 +9,7 @@ import {
   updateText,
   setValue,
   insertNodeBefore,
+  redirect,
 } from './jsx/dom.js'
 import { connectWS } from './ws/ws-lite.js'
 import type { LinkFlag, WindowStub } from './internal'
@@ -192,7 +193,7 @@ function onServerMessage(message: ServerMessage) {
       document.title = message[1]
       break
     case 'redirect':
-      location.href = message[1]
+      redirect(message[1], message[2])
       break
     case 'eval':
       eval(message[1])

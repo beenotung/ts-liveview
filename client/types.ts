@@ -36,5 +36,5 @@ export type ServerMessage =
   | ['batch', ServerMessage[]]
   | ['set-cookie', string]
   | ['set-title', title]
-  | ['redirect', string]
+  | ['redirect', string, full?: 1]
   | ['eval', string]
