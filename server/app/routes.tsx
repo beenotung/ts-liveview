@@ -209,6 +209,13 @@ export function errorRoute(
   if (error == EarlyTerminate || error instanceof MessageException) {
     throw error
   }
+  if (context.type == 'ws' && typeof error == 'string') {
+    throw new MessageException([
+      'eval',
+      // `showToast(${JSON.stringify(error)},'error')`,
+      `showAlert(${JSON.stringify(error)},'error')`,
+    ])
+  }
   return {
     title,
     description,
