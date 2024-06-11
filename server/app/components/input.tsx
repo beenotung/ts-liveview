@@ -3,7 +3,19 @@ export function Input(
     tagName?: string
     url: string
     value: string | number | null
-    type?: 'text' | 'number' | 'tel' | 'email' | 'url'
+    type?: 'text' | 'number' | 'tel' | 'email' | 'url' | 'search'
+    inputmode?:
+      | 'none'
+      | 'text'
+      | 'decimal'
+      | 'numeric'
+      | 'tel'
+      | 'search'
+      | 'email'
+      | 'url'
+    step?: string
+    style?: string
+    class?: string
   } & object,
 ) {
   let { tagName, url, ...rest } = attrs
