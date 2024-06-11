@@ -5,12 +5,16 @@ import Comment from '../components/comment.js'
 import SourceCode from '../components/source-code.js'
 import { Routes } from '../routes.js'
 import { title } from '../../config.js'
+import Style from '../components/style.js'
 
 // Calling <Component/> will transform the JSX into AST for each rendering.
 // You can reuse a pre-compute AST like `let component = <Component/>`.
 
 // If the expression is static (not depending on the render Context),
 // you don't have to wrap it by a function at all.
+
+let style = Style(/* css */ `
+`)
 
 let content = (
   <div id="home">
@@ -87,7 +91,12 @@ let content = (
 )
 
 // And it can be pre-rendered into html as well
-let Home = prerender(content)
+let Home = prerender(
+  <>
+    {style}
+    {content}
+  </>,
+)
 
 let routes = {
   '/': {
