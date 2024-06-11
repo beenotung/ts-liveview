@@ -6,7 +6,7 @@ import { capitalize } from '@beenotung/tslib/string.js'
 import { Router } from 'url-router.ts'
 import { LayoutType, config, title } from '../config.js'
 import { Redirect } from './components/router.js'
-import type { DynamicContext } from './context'
+import type { Context, DynamicContext } from './context'
 import { o } from './jsx/jsx.js'
 import type { Node } from './jsx/types'
 import About from './pages/about.js'
@@ -34,6 +34,8 @@ import appCharacter from './pages/app-character.js'
 import type { renderWebTemplate } from '../../template/web.js'
 import type { renderIonicTemplate } from '../../template/ionic.js'
 import { VNode } from '../../client/jsx/types.js'
+import { EarlyTerminate, MessageException } from '../exception.js'
+import { renderError } from './components/error.js'
 
 let titles: Record<string, string> = {}
 
@@ -196,6 +198,22 @@ export function getContextSearchParams(context: DynamicContext) {
   return new URLSearchParams(
     context.routerMatch?.search || context.url.split('?').pop(),
   )
+}
+
+export function errorRoute(
+  error: unknown,
+  context: Context,
+  title: string,
+  description: string,
+): StaticPageRoute {
+  if (error == EarlyTerminate || error instanceof MessageException) {
+    throw error
+  }
+  return {
+    title,
+    description,
+    node: renderError(error, context),
+  }
 }
 
 if (config.setup_robots_txt) {
