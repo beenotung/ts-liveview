@@ -1,6 +1,13 @@
 import { NodeList } from '../jsx/types.js'
 
-export function Button(attrs: { url: string; children?: NodeList } & object) {
+export function Button(
+  attrs: {
+    url: string
+    class?: string
+    style?: string
+    children?: NodeList
+  } & object,
+) {
   let { url, children, ...rest } = attrs
   return [
     'button',
