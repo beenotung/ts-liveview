@@ -113,21 +113,29 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
 
 **Remarks**:
 
-<span id='feature-1'>[1]</span> Pay the AST-to-HTML conversion time-cost once at boot-time instead of at each request-time
+<span id='feature-1'>[1]</span>
+Pay the AST-to-HTML conversion time-cost once at boot-time instead of at each request-time
 
-<span id='feature-2'>[2]</span> Response contentful html page directly to GET request. Content chunk is streamed to clients as soon as it's ready, without waiting for client-side javascript bundles nor data requests to start rendering.
+<span id='feature-2'>[2]</span>
+Response contentful html page directly to GET request. Content chunk is streamed to clients as soon as it's ready, without waiting for client-side javascript bundles nor data requests to start rendering.
 
-<span id='feature-3'>[3]</span> Updates can be triggered by (bi-directional) events from the server or other clients
+<span id='feature-3'>[3]</span>
+Updates can be triggered by (bi-directional) events from the server or other clients
 
-<span id='feature-4'>[4]</span> With `history.pushState()` and `PopStateEvent`
+<span id='feature-4'>[4]</span>
+With `history.pushState()` and `PopStateEvent`
 
-<span id='feature-5'>[5]</span> For screen-reader, text-based browser, and people with slow or unstable network, or simply tried with privacy invading scripts
+<span id='feature-5'>[5]</span>
+For screen-reader, text-based browser, and people with slow or unstable network, or simply tried with privacy invading scripts
 
-<span id='feature-6'>[6]</span> The network client code is [0.4K to 0.9K minified, 102x to 45x smaller than socket.io.min.js](./size.md)
+<span id='feature-6'>[6]</span>
+The network client code is [0.4K to 0.9K minified, 102x to 45x smaller than socket.io.min.js](./size.md)
 
-<span id='feature-7'>[7]</span> The entry point of ts-liveview app can be wrapped as an express middleware
+<span id='feature-7'>[7]</span>
+The entry point of ts-liveview app can be wrapped as an express middleware
 
-<span id='feature-8'>[8]</span> ts-liveview is provided as a template (rather than a library), hence any part can be modified to suit your need
+<span id='feature-8'>[8]</span>
+ts-liveview is provided as a template (rather than a library), hence any part can be modified to suit your need
 
 ## Size Comparison with other tools
 
