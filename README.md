@@ -96,13 +96,13 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
   - [x] Memorized to speed up
   - [x] Allow skipping minimization for dynamic and short code
 - [x] Efficient wire format
-- [x] Lightweight WebSocket-based protocols [[6]](#feature-6)
+- [x] Lightweight WebSocket-based protocols [[7]](#feature-7)
 - [ ] Reliable connection
   - [x] Auto reconnect when network resume
   - [ ] Auto send accumulated offline messages when network resume (WIP)
-- [x] Work well with express.js [[7]](#feature-7)
+- [x] Work well with express.js [[8]](#feature-8)
 - [x] Built-in locale support (language and timezone)
-- [x] Fully customizable [[8]](#feature-8)
+- [x] Fully customizable [[9]](#feature-9)
 - [x] Multiple starter templates
   - [x] v5-demo (kitchen sink demos)
   - [x] v5-web-template (mobile-responsive webapp)
@@ -132,13 +132,13 @@ For screen-reader, text-based browser, and people with slow or unstable network,
 <span id='feature-6'>[6]</span>
 Each function component are evaluated with error handling, this approach can deliver as much as possible, avoiding blank pages when error occur.
 
-<span id='feature-6'>[6]</span>
+<span id='feature-7'>[7]</span>
 The network client code is [0.4K to 0.9K minified, 102x to 45x smaller than socket.io.min.js](./size.md)
 
-<span id='feature-7'>[7]</span>
+<span id='feature-8'>[8]</span>
 The entry point of ts-liveview app can be wrapped as an express middleware
 
-<span id='feature-8'>[8]</span>
+<span id='feature-9'>[9]</span>
 ts-liveview is provided as a template (rather than a library), hence any part can be modified to suit your need
 
 ## Size Comparison with other tools
