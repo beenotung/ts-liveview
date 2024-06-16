@@ -88,6 +88,7 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
   - [x] swiper (slides / images carousel)
 - [x] Still functional when javascript is disabled on client device with links and forms [[5]](#feature-5)
 - [x] Support to develop with [JSX](#jsx), AST, component, or html template
+- [x] Error boundary for each component [[6]](#feature-6)
 - [x] Code Minification
   - [x] Minify CSS & JS with esbuild
   - [x] Minify HTML fragment with AST converter
@@ -127,6 +128,9 @@ With `history.pushState()` and `PopStateEvent`
 
 <span id='feature-5'>[5]</span>
 For screen-reader, text-based browser, and people with slow or unstable network, or simply tried with privacy invading scripts
+
+<span id='feature-6'>[6]</span>
+Each function component are evaluated with error handling, this approach can deliver as much as possible, avoiding blank pages when error occur.
 
 <span id='feature-6'>[6]</span>
 The network client code is [0.4K to 0.9K minified, 102x to 45x smaller than socket.io.min.js](./size.md)
