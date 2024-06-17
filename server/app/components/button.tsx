@@ -6,14 +6,16 @@ export function Button(
     class?: string
     style?: string
     children?: NodeList
+    disabled?: boolean
   } & object,
 ) {
-  let { url, children, ...rest } = attrs
+  let { url, children, disabled, ...rest } = attrs
   return [
     'button',
     {
       'data-url': url,
       'onclick': 'emit(this.dataset.url)',
+      'disabled': disabled ? '' : undefined,
       ...rest,
     },
     children,
