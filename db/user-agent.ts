@@ -3,6 +3,8 @@ import { filter, find } from 'better-sqlite3-proxy'
 import { db } from './db.js'
 import { proxy, RequestLog } from './proxy.js'
 import { debugLog } from '../server/debug.js'
+import { join } from 'path'
+import { loadNumber, saveNumber } from '../server/app/data/version-number'
 
 let log = debugLog('user-agent')
 log.enabled = true
@@ -163,14 +165,21 @@ set count = 0
 let reset_stats_part_2 = db.prepare('update ua_type set count = 0')
 let reset_stats_part_3 = db.prepare('update ua_bot set count = 0')
 
-let _resetStats = db.transaction(() => {
+let resetStats = db.transaction(() => {
   reset_stats_part_1.run()
   reset_stats_part_2.run()
   reset_stats_part_3.run()
   ua_stat.last_request_log_id = last_request_log_id = 0
 })
 
-// _resetStats() // TODO remove after dev
+let versionFile = join('data', 'user-agent-version.txt')
+let version = 1
+function autoResetStats() {
+  if (loadNumber(versionFile) == version) return
+  resetStats()
+  saveNumber(versionFile, version)
+}
+autoResetStats()
 
 let other_type_id = getUaTypeId('Other')
 
