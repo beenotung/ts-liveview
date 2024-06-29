@@ -2,20 +2,10 @@ import type { ServerMessage } from '../../../client/types'
 import type { ManagedWebsocket } from '../../ws/wss.js'
 import { o } from '../jsx/jsx.js'
 import { onWsSessionClose, sessions } from '../session.js'
-import {
-  existsSync,
-  mkdirSync,
-  readFileSync,
-  writeFile,
-  rename,
-  renameSync,
-} from 'fs'
-import { debugLog } from '../../debug.js'
+import { existsSync, renameSync } from 'fs'
 import { join } from 'path'
 import type { Context } from '../context'
-
-let log = debugLog('stats.tsx')
-log.enabled = true
+import { loadNumber, saveNumber } from '../data/version-number.js'
 
 function sendMessage(message: ServerMessage, skip?: ManagedWebsocket) {
   sessions.forEach(session => {
@@ -25,65 +15,16 @@ function sendMessage(message: ServerMessage, skip?: ManagedWebsocket) {
   })
 }
 
-function loadNumber(file: string): number {
-  if (!existsSync(file)) {
-    return 0
-  }
-  let text = readFileSync(file).toString()
-  let num = parseInt(text)
-  if (Number.isNaN(num)) {
-    throw new Error(`Invalid number, file: ${file}, text: ${text}`)
-  }
-  return num
-}
-
-function saveNumber(file: string, value: number) {
-  const tmpfile = file + '.tmp.' + Math.random().toString(36).slice(2)
-  writeFile(tmpfile, String(value), error => {
-    if (error) {
-      log('Failed to save number to temp file:', {
-        tmpfile,
-        file,
-        value,
-        error,
-      })
-      return
-    }
-    let retry = 5
-    commit()
-    function commit() {
-      rename(tmpfile, file, error => {
-        if (!error) return
-        if (error.code == 'EPERM' && retry > 0) {
-          retry--
-          setTimeout(commit, 100)
-          return
-        }
-        log('Failed to commit number to file:', {
-          tmpfile,
-          file,
-          value,
-          error,
-        })
-      })
-    }
-  })
-}
-
-mkdirSync('data', { recursive: true })
+let visitFile = join('data', 'visit.txt')
+let _visitorFile = join('data', 'visitor.txt')
+let sessionFile = join('data', 'session.txt')
 
 function migrateVisitFile() {
-  if (
-    existsSync(join('data', 'visitor.txt')) &&
-    !existsSync(join('data', 'visit.txt'))
-  ) {
-    renameSync(join('data', 'visitor.txt'), join('data', 'visit.txt'))
+  if (existsSync(_visitorFile) && !existsSync(visitFile)) {
+    renameSync(_visitorFile, visitFile)
   }
 }
 migrateVisitFile()
-
-let visitFile = join('data', 'visit.txt')
-let sessionFile = join('data', 'session.txt')
 
 let state = {
   visit: loadNumber(visitFile),
