@@ -4,7 +4,7 @@ import { db } from './db.js'
 import { proxy, RequestLog } from './proxy.js'
 import { debugLog } from '../server/debug.js'
 import { join } from 'path'
-import { loadNumber, saveNumber } from '../server/app/data/version-number'
+import { loadNumber, saveNumber } from '../server/app/data/version-number.js'
 
 let log = debugLog('user-agent')
 log.enabled = true
