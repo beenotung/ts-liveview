@@ -1,5 +1,5 @@
-import { mkdirSync, existsSync, readFileSync, writeFile, rename } from "fs"
-import { debugLog } from "../../debug.js"
+import { mkdirSync, existsSync, readFileSync, writeFile, rename } from 'fs'
+import { debugLog } from '../../debug.js'
 
 mkdirSync('data', { recursive: true })
 
