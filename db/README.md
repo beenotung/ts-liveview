@@ -10,6 +10,8 @@ The hosted version store the content in LocalStorage, so the changes are persist
 
 In some region, it may take quite some time to load the website, you can run the web ui locally as well.
 
+Remark: cd to `db` if not done already
+
 Command to run the web ui of erd locally:
 
 ```bash
