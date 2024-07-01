@@ -11,6 +11,7 @@
   },
   "license": "BSD-2-Clause",
   "scripts": {
+    "ui": "cd db && npm run ui",
     "lint": "eslint --fix .",
     "format": "prettier --write . && format-json-cli",
     "fix": "run-p fix:*",

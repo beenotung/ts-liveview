@@ -8,6 +8,7 @@
   "license": "BSD-2-Clause",
   "main": "index.js",
   "scripts": {
+    "ui": "erd-ui",
     "setup": "run-s migrate seed",
     "dev": "run-s migrate update",
     "update": "run-s gen-migrate migrate gen-proxy",
