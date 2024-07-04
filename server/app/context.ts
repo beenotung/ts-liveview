@@ -4,6 +4,7 @@ import type { RouteContext } from 'url-router.ts'
 import type { Session } from './session'
 import type { PageRoute } from './routes'
 import { getContextCookies } from './cookie.js'
+import { HttpError } from '../exception.js'
 
 export type Context = StaticContext | DynamicContext
 
@@ -66,6 +67,15 @@ export function getStringCasual(body: FormBody | unknown, key: string): string {
   if (!body || typeof body !== 'object') return ''
   let value = (body as FormBody)[key]
   return typeof value === 'string' ? value : ''
+}
+
+export function getId(body: FormBody | unknown, key: string): number {
+  if (!body || typeof body !== 'object')
+    throw new HttpError(400, 'missing form body')
+  if (!(key in body)) throw new HttpError(400, 'missing ' + key)
+  let value = +(body as FormBody)[key]
+  if (!value) throw new HttpError(400, 'invalid ' + key)
+  return value
 }
 
 export function getContextSearchParams(
