@@ -18,7 +18,7 @@ let style = Style(/* css */ `
 }
 `)
 
-function Container(
+export function Copyable(
   attrs: ({ code: Node } | { text: string }) & {
     buttonText?: string
     successText?: string
@@ -80,7 +80,3 @@ function copyToClipboard(event) {
   }, 5000)
 }
 `)
-
-export let Copyable = {
-  Container,
-}
