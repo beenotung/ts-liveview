@@ -1,4 +1,4 @@
-import { ServerMessage } from './types'
+import type { ServerMessage } from './types'
 
 export type WindowStub = {
   emit(...args: unknown[]): void
