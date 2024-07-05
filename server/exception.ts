@@ -1,5 +1,5 @@
 import type { ServerMessage } from '../client/types'
-import { Node } from './app/jsx/types'
+import type { Node } from './app/jsx/types'
 
 export class HttpError extends Error {
   constructor(
