@@ -71,6 +71,7 @@ export function createUploadForm(options?: {
     uploadDir,
     maxFileSize,
     maxFiles,
+    maxTotalFileSize: maxFileSize * maxFiles,
     multiples: true,
     filename: typeof filename == 'string' ? () => filename : filename,
     filter(part): boolean {
