@@ -3,6 +3,7 @@ import type { ManagedWebsocket } from '../ws/wss'
 import type { RouteContext } from 'url-router.ts'
 import type { Session } from './session'
 import type { PageRoute } from './routes'
+import { pageRouter } from './routes.js'
 import { getContextCookies } from './cookie.js'
 import { HttpError } from '../exception.js'
 
@@ -35,6 +36,22 @@ export type RouterContext = {
 }
 
 export type RouterMatch = Omit<RouteContext<PageRoute>, 'value'>
+
+export function resolveExpressContext(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) {
+  let context: ExpressContext = {
+    type: 'express',
+    req,
+    res,
+    next,
+    url: req.url,
+    routerMatch: pageRouter.route(req.url),
+  }
+  return context
+}
 
 export function getContextUrl(context: Context): string {
   if (context.type === 'static') {
