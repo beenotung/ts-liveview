@@ -27,6 +27,5 @@ export function updateUrlVersion(url: string): string {
   let pathname = url.split('?')[0]
   let t = Date.now()
   timestamps.set(pathname, t)
-  console.log('update image:', { url, pathname, t })
   return pathname + '?t=' + t
 }
