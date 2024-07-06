@@ -46,7 +46,7 @@ export function Redirect(
   if (context.type === 'express') {
     const res = context.res
     if (res.headersSent) {
-      res.send(renderRedirect(href))
+      res.end(renderRedirect(href))
     } else {
       const status = attrs.status || 303
       res.redirect(status, href)
