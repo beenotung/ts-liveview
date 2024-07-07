@@ -25,6 +25,7 @@ export function toRouteUrl<R extends object, K extends string & keyof R>(
   options?: {
     params?: RouteParameters<K>
     query?: object
+    search?: string
     /** @description to apply `JSON.stringify()` on the result if enabled */
     json?: boolean
   },
@@ -39,39 +40,48 @@ export function toUrl<K extends string>(
   options?: {
     params?: RouteParameters<K>
     query?: object
+    search?: string
     /** @description to apply `JSON.stringify()` on the result if enabled */
     json?: boolean
   },
 ): string {
-  let params = options?.params as Record<string, string | number>
+  let params = (options?.params || {}) as Record<string, string | number>
   let url = key as string
   for (let part of url.split('/')) {
     if (part[0] == ':') {
       let key = part.slice(1)
-      if (key.endsWith('?')) {
+      let optional = key.endsWith('?')
+      if (optional) {
         key = key.slice(0, key.length - 1)
       }
       if (key in params) {
         url = url.replace('/' + part, '/' + params[key])
-      } else {
+      } else if (optional) {
         url = url.replace('/' + part, '')
+      } else {
+        throw new Error(`missing parameter "${key}" in route "${url}"`)
       }
     }
   }
 
-  if (options?.query) {
-    let searchParams = new URLSearchParams()
-    for (let [key, value] of Object.entries(options.query)) {
-      if (Array.isArray(value)) {
-        for (let val of value) {
-          searchParams.append(key, val)
+  if (options && (options.query || options.search)) {
+    let searchParams = new URLSearchParams(options.search)
+    if (options.query) {
+      for (let [key, value] of Object.entries(options.query)) {
+        if (Array.isArray(value)) {
+          for (let val of value) {
+            searchParams.append(key, val)
+          }
+        } else {
+          searchParams.set(key, value)
         }
-      } else {
-        searchParams.set(key, value)
       }
     }
-    url += '?' + searchParams
+    if (searchParams.size > 0) {
+      url += '?' + searchParams
+    }
   }
+
   if (options?.json) {
     return JSON.stringify(url)
   }
