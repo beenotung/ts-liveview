@@ -2,6 +2,7 @@ import type { ServerMessage } from './types'
 
 export type WindowStub = {
   emit(...args: unknown[]): void
+  goto(url: string): void
   emitHref(event: Event, flag?: LinkFlag): void
   emitForm(event: Event): void
   submitForm(form: HTMLFormElement): void

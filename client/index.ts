@@ -35,6 +35,11 @@ connectWS({
       ws.send(Array.from(arguments) as ClientMessage)
     }
 
+    function goto(url: string): void {
+      history.pushState(null, document.title, url)
+      emit(url)
+    }
+
     function emitHref(event: MouseEvent, flag?: LinkFlag) {
       if (event.ctrlKey || event.shiftKey) {
         return // do not prevent open in new tab or new window
@@ -98,6 +103,7 @@ connectWS({
     }
 
     win.emit = emit
+    win.goto = goto
     win.emitHref = emitHref
     win.emitForm = emitForm
     win.submitForm = submitForm
