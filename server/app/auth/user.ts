@@ -23,7 +23,14 @@ export function getAuthUser(context: Context): User | null {
   if (!idStr) return null
   let id = +idStr
   if (!id) return null
-  return proxy.user[id]
+  return proxy.user[id] || null
+}
+
+export type AuthUserRole = 'guest' | 'admin' | 'user'
+
+export function getAuthUserRole(context: Context): AuthUserRole {
+  let user = getAuthUser(context)
+  return !user ? 'guest' : user.is_admin ? 'admin' : 'user'
 }
 
 export function writeUserIdToCookie(res: Response, user_id: number) {
