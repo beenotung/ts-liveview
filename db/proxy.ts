@@ -64,6 +64,7 @@ export type User = {
   email: null | string
   tel: null | string
   avatar: null | string
+  is_admin: null | boolean
 }
 
 export type RequestLog = {
