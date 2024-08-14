@@ -601,6 +601,7 @@ async function submit(context: InputContext): Promise<Node> {
       email: input.email,
       tel: null,
       avatar: null,
+      is_admin: null,
     })
 
     let main: Node
