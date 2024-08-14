@@ -5,7 +5,7 @@ import { mapArray } from './fragment.js'
 import { Style } from './style.js'
 import { Context, getContextUrl } from '../context.js'
 import { capitalize } from '@beenotung/tslib/string.js'
-import { getAuthUserId } from '../auth/user.js'
+import { AuthUserRole, getAuthUserRole } from '../auth/user.js'
 
 export type MenuRoute = {
   url: string
@@ -15,6 +15,19 @@ export type MenuRoute = {
   menuFullNavigate?: boolean // default false to enable ws updates
   guestOnly?: boolean
   userOnly?: boolean
+  adminOnly?: boolean
+}
+
+export function isCurrentMenuRouteAllowed(
+  route: MenuRoute,
+  role: AuthUserRole,
+) {
+  return (
+    (route.guestOnly && role === 'guest') ||
+    (route.userOnly && role === 'user') ||
+    (route.adminOnly && role === 'admin') ||
+    !(route.guestOnly || route.userOnly || route.adminOnly)
+  )
 }
 
 export function isCurrentMenuRoute(
@@ -39,7 +52,7 @@ export function Menu(
   context: Context,
 ) {
   const currentUrl = getContextUrl(context)
-  const role = getAuthUserId(context) ? 'user' : 'guest'
+  const role = getAuthUserRole(context)
   return (
     <>
       {Style(/* css */ `
@@ -54,13 +67,7 @@ export function Menu(
 `)}
       <div class="menu" {...attrs.attrs}>
         {mapArray(
-          attrs.routes.filter(
-            route =>
-              !(
-                (route.guestOnly && role !== 'guest') ||
-                (route.userOnly && role !== 'user')
-              ),
-          ),
+          attrs.routes.filter(route => isCurrentMenuRouteAllowed(route, role)),
           route => (
             <a
               href={route.menuUrl || route.url}
