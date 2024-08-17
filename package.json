@@ -33,7 +33,7 @@
     "watch:client": "npm run build:client -- --watch"
   },
   "dependencies": {
-    "@beenotung/tslib": "^23.7.0",
+    "@beenotung/tslib": "^23.10.1",
     "better-sqlite3-proxy": "^2.8.0",
     "better-sqlite3-schema": "^3.1.7",
     "cast.ts": "^1.14.0",
@@ -43,6 +43,7 @@
     "express": "^4.19.2",
     "fastest-levenshtein": "^1.0.16",
     "formidable": "^3.5.1",
+    "heic2any": "^0.0.4",
     "listening-on": "^2.0.9",
     "marked": "^12.0.2",
     "open": "^10.1.0",
