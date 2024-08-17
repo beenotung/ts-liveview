@@ -8,6 +8,7 @@ export function IonButton(
     children?: NodeList
     disabled?: boolean
     color?: string
+    shape?: string
   } & object,
 ) {
   let { url, children, disabled, ...rest } = attrs
