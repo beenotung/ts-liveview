@@ -1,4 +1,6 @@
+import { o } from '../jsx/jsx.js'
 import { NodeList } from '../jsx/types.js'
+import { Link } from './router.js'
 
 export function IonButton(
   attrs: {
@@ -8,18 +10,21 @@ export function IonButton(
     children?: NodeList
     disabled?: boolean
     color?: string
-    shape?: string
+    expand?: 'block' | 'full'
+    shape?: 'round'
+    fill?: 'clear' | 'outline' | 'solid'
+    size?: 'small' | 'default' | 'large'
   } & object,
 ) {
   let { url, children, disabled, ...rest } = attrs
-  return [
-    'ion-button',
-    {
-      'data-url': url,
-      'onclick': 'emit(this.dataset.url)',
-      'disabled': disabled ? '' : undefined,
-      ...rest,
-    },
-    children,
-  ]
+  return (
+    <Link
+      tagName="ion-button"
+      href={url}
+      disabled={disabled ? '' : undefined}
+      {...rest}
+    >
+      {[children]}
+    </Link>
+  )
 }
