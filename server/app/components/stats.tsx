@@ -64,7 +64,11 @@ export function Stats(attrs: { hidden?: boolean }, context: Context) {
   }
   sendMessage(['batch', messages], ws)
   return (
-    <div id="stats" hidden={attrs.hidden || undefined}>
+    <div
+      id="stats"
+      hidden={attrs.hidden || undefined}
+      style="text-align: start"
+    >
       <table>
         <tbody>
           <tr>
