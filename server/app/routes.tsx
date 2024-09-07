@@ -28,9 +28,9 @@ import Clock from './pages/clock.js'
 import type { MenuRoute } from './components/menu'
 import DemoUpload from './pages/demo-upload.js'
 import DemoToast from './pages/demo-toast.js'
-import appHome from './pages/app-home.js'
-import appAbout from './pages/app-about.js'
-import appCharacter from './pages/app-character.js'
+import AppHome from './pages/app-home.js'
+import AppAbout from './pages/app-about.js'
+import AppCharacter from './pages/app-character.js'
 import type { renderWebTemplate } from '../../template/web.js'
 import type { renderIonicTemplate } from '../../template/ionic.js'
 import { VNode } from '../../client/jsx/types.js'
@@ -85,10 +85,6 @@ export type Routes = Record<string, PageRoute>
 
 // TODO direct support alternative urls instead of having to repeat the entry
 let routeDict = {
-  ...AppNotice.routes,
-  ...AppChat.routes,
-  ...AppSettings.routes,
-  ...AppMore.routes,
   ...Home.routes,
   ...About.routes,
   ...Thermostat.routes,
@@ -132,9 +128,13 @@ let routeDict = {
     menuText: 'User Agents',
     node: UserAgents,
   },
-  ...appHome.routes,
-  ...appCharacter.routes,
-  ...appAbout.routes,
+  ...AppHome.routes,
+  ...AppCharacter.routes,
+  ...AppAbout.routes,
+  ...AppChat.routes,
+  ...AppNotice.routes,
+  ...AppMore.routes,
+  ...AppSettings.routes,
 } satisfies Routes
 
 export let redirectDict: Record<string, string> = {
