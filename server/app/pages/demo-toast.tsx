@@ -2,6 +2,7 @@ import { loadClientPlugin } from '../../client-plugin.js'
 import { title } from '../../config.js'
 import { Locale } from '../components/locale.js'
 import { Script } from '../components/script.js'
+import SourceCode from '../components/source-code.js'
 import Style from '../components/style.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
@@ -81,6 +82,7 @@ async function demoConfirm(icon) {
   }
 }
 `)}
+    <SourceCode page="demo-toast.tsx" style="margin-top: 1.5rem" />
   </div>
 )
 

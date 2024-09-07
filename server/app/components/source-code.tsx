@@ -21,7 +21,7 @@ details.source-code details summary {
 }
 `
 
-function SourceCode(attrs: { page: string }) {
+function SourceCode(attrs: { page: string; style?: string }) {
   let file = join('server', 'app', 'pages', attrs.page)
   let source = readFileSync(file).toString()
   let parts = source.split('\n\n')
@@ -31,7 +31,7 @@ function SourceCode(attrs: { page: string }) {
     source = parts.join('\n\n')
   }
   return (
-    <details class="source-code">
+    <details class="source-code" style={attrs.style}>
       <summary>
         <b>
           Source Code of <code>{attrs.page}</code>
