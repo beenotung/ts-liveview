@@ -45,6 +45,7 @@ else
     server \
     client \
     public \
+    template \
     build \
     dist \
     package.json \
