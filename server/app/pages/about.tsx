@@ -118,7 +118,7 @@ const Help = StaticFile('help.txt')
 
 let routes = {
   '/about/:mode?': {
-    menuText: 'About',
+    menuText: <Locale en="About" zh="關於" />,
     menuUrl: '/about',
     menuMatchPrefix: true,
     streaming: true,

@@ -6,7 +6,7 @@ import SourceCode from '../components/source-code.js'
 import { Routes } from '../routes.js'
 import { title } from '../../config.js'
 import Style from '../components/style.js'
-import { isPreferZh } from '../components/locale.js'
+import { Locale, isPreferZh } from '../components/locale.js'
 
 // Calling <Component/> will transform the JSX into AST for each rendering.
 // You can reuse a pre-compute AST like `let component = <Component/>`.
@@ -153,7 +153,7 @@ let content_zh = (
       </tbody>
     </table>
     <p>
-      試試一些反應式範例: <Link href="/thermostat">溫控器</Link>,{' '}
+      試試一些反應式 (reactive) 範例: <Link href="/thermostat">溫控器</Link>,{' '}
       <Link href="/form">表單範例</Link>
     </p>
     <SourceCode page="home.tsx" />
@@ -177,7 +177,7 @@ content_zh = prerender(
 
 let routes = {
   '/': {
-    menuText: 'Home',
+    menuText: <Locale en="Home" zh="主頁" />,
     resolve(context) {
       let zh = isPreferZh(context)
       return {
