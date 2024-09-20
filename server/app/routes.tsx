@@ -6,6 +6,7 @@ import { capitalize } from '@beenotung/tslib/string.js'
 import { Router } from 'url-router.ts'
 import { LayoutType, config, title } from '../config.js'
 import { Redirect } from './components/router.js'
+import UILanguage from './components/ui-language.js'
 import type { Context, DynamicContext } from './context'
 import { o } from './jsx/jsx.js'
 import type { Node } from './jsx/types'
@@ -109,6 +110,7 @@ let routeDict = {
   ...DemoCookieSession.routes,
   ...Chatroom.routes,
   ...DemoLocale.routes,
+  ...UILanguage.routes,
   '/clock': {
     title: title('Clock'),
     description:
