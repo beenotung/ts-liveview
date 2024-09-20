@@ -104,8 +104,9 @@ let content_zh = (
       （亦稱為 <b>SSR-SPA</b>）。
     </p>
     <p>
-      當瀏覽器載入這個網址時，伺服器會回應完整的 HTML 內容至 GET
-      請求。這讓瀏覽器能夠盡快進行有意義的頁面渲染。這對 SEO 是理想的方案。
+      當瀏覽器載入此網址時，伺服器會回應完整的 HTML 內容給 GET
+      請求，讓瀏覽器能夠盡快完成有意義的頁面渲染，這對
+      SEO（搜尋引擎優化）是非常理想的。
     </p>
     <p>然後，瀏覽器會建立 websocket 連接，以便接收伺服器的即時更新。</p>
     <p>
@@ -113,9 +114,10 @@ let content_zh = (
       DOM 中。）
     </p>
     <p>
-      與 ts-liveview v1 相反，伺服器並不維持虛擬 DOM 進行差異修補。UI
-      是通過查詢選擇器和 AST/JSX 進行更新的。ts-liveview
-      採用了混合方式：開發者可以聲明式地指定初始佈局，並應用事件驅動的部分佈局更新。這就像是{' '}
+      與 ts-liveview v1 相反，伺服器並不維持虛擬 DOM (virtual DOM)
+      進行差異修補。UI 是通過查詢選擇器和 AST/JSX 進行更新的。ts-liveview
+      採用了混合方式：開發者可以聲明式地指定初始佈局 (declarative UI)
+      ，並應用事件驅動 (event driven) 的部分佈局更新 (partial update)。這就像是{' '}
       <a href="https://reactjs.org/">React</a> 和{' '}
       <a href="https://jquery.com/">jQuery</a>{' '}
       的結合，取兩者的優點，平衡開發者體驗（DX）和運行時效能，從而提升用戶體驗（UX）。

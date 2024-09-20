@@ -40,20 +40,16 @@ function DemoLocale(attrs: {}, context: Context) {
 
 let routes = {
   '/locale': {
-    menuText: 'Locale',
+    menuText: <Locale en="Locale" zh="本地化" />,
     resolve(context) {
-      return isPreferZh(context)
-        ? {
-            title: title('本地化設置示範'),
-            description: '示範支援多種語言和時區 (i18n)',
-            node: <DemoLocale />,
-          }
-        : {
-            title: title('Locale Demo'),
-            description:
-              'Locale demo for multiple languages and timezone (i18n)',
-            node: <DemoLocale />,
-          }
+      let zh = isPreferZh(context)
+      return {
+        title: title(zh ? '本地化設置示範' : 'Locale Demo'),
+        description: zh
+          ? '示範支援多種語言和時區 (i18n)'
+          : 'Locale demo for multiple languages and timezone (i18n)',
+        node: <DemoLocale />,
+      }
     },
   },
 } satisfies Routes
