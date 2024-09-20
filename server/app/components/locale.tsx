@@ -1,7 +1,7 @@
 import { Context, getContextLanguage } from '../context.js'
 import { Node } from '../jsx/types.js'
 
-export type LocaleVariants<T> = {
+export type LocaleVariants<T = Node> = {
   en: T
   zh: T
 }
