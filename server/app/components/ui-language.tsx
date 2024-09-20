@@ -12,7 +12,7 @@ export function PickLanguage(attrs: { style?: string }, context: Context) {
       {Raw(/* html */ `
 <script>
 function switchLang(lang){
-  document.cookie = 'lang=' + lang + ';SameSite=Lax'
+  document.cookie = 'lang=' + lang + ';SameSite=Lax;path=/'
   remount()
 }
 </script>
