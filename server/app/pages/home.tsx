@@ -6,6 +6,7 @@ import SourceCode from '../components/source-code.js'
 import { Routes } from '../routes.js'
 import { title } from '../../config.js'
 import Style from '../components/style.js'
+import { isPreferZh } from '../components/locale.js'
 
 // Calling <Component/> will transform the JSX into AST for each rendering.
 // You can reuse a pre-compute AST like `let component = <Component/>`.
@@ -16,7 +17,8 @@ import Style from '../components/style.js'
 let style = Style(/* css */ `
 `)
 
-let content = (
+// And it can be pre-rendered into html as well
+let content_en = (
   <div id="home">
     <h1>Home Page</h1>
     <p>
@@ -90,21 +92,102 @@ let content = (
   </div>
 )
 
+let content_zh = (
+  <div id="home">
+    <h1>首頁</h1>
+    <p>
+      這個網站是一個{' '}
+      <b>
+        混合 <abbr title="靜態生成">SSG</abbr> 和{' '}
+        <abbr title="伺服器端渲染">SSR</abbr> 的即時網頁應用
+      </b>{' '}
+      （亦稱為 <b>SSR-SPA</b>）。
+    </p>
+    <p>
+      當瀏覽器載入這個網址時，伺服器會回應完整的 HTML 內容至 GET
+      請求。這讓瀏覽器能夠盡快進行有意義的頁面渲染。這對 SEO 是理想的方案。
+    </p>
+    <p>然後，瀏覽器會建立 websocket 連接，以便接收伺服器的即時更新。</p>
+    <p>
+      應用邏輯在伺服器上執行，應用狀態也保持在伺服器上。（輸入值在表單提交前保存在
+      DOM 中。）
+    </p>
+    <p>
+      與 ts-liveview v1 相反，伺服器並不維持虛擬 DOM 進行差異修補。UI
+      是通過查詢選擇器和 AST/JSX 進行更新的。ts-liveview
+      採用了混合方式：開發者可以聲明式地指定初始佈局，並應用事件驅動的部分佈局更新。這就像是{' '}
+      <a href="https://reactjs.org/">React</a> 和{' '}
+      <a href="https://jquery.com/">jQuery</a>{' '}
+      的結合，取兩者的優點，平衡開發者體驗（DX）和運行時效能，從而提升用戶體驗（UX）。
+    </p>
+
+    <h2>ts-liveview 程式碼範例</h2>
+    <p>您可以使用 JSX 或 AST 編寫。</p>
+    {Comment(`使用表格將三個程式碼塊對齊至相同寬度`)}
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <fieldset>
+              <legend>JSX 範例</legend>
+              <code class="inline-code">{`<a href='#'>hash link</a>`}</code>
+            </fieldset>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <fieldset>
+              <legend>AST 範例</legend>
+              <code class="inline-code">{`['a', { href: '#' }, ['hash link']]`}</code>
+            </fieldset>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <fieldset>
+              <legend>HTML 輸出</legend>
+              <a href="#">hash link</a>
+            </fieldset>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      試試一些反應式範例: <Link href="/thermostat">溫控器</Link>,{' '}
+      <Link href="/form">表單範例</Link>
+    </p>
+    <SourceCode page="home.tsx" />
+  </div>
+)
+
 // And it can be pre-rendered into html as well
-let Home = prerender(
+content_en = prerender(
   <>
     {style}
-    {content}
+    {content_en}
+  </>,
+)
+
+content_zh = prerender(
+  <>
+    {style}
+    {content_zh}
   </>,
 )
 
 let routes = {
   '/': {
-    title: title('Home'),
-    description:
-      'Getting Started with ts-liveview - a server-side rendering realtime webapp framework with progressive enhancement',
     menuText: 'Home',
-    node: Home,
+    resolve(context) {
+      let zh = isPreferZh(context)
+      return {
+        title: title(zh ? '首頁' : 'Home'),
+        description: zh
+          ? '開始使用 ts-liveview - 一個具有漸進增強功能的伺服器端渲染即時網頁應用框架'
+          : 'Getting Started with ts-liveview - a server-side rendering realtime webapp framework with progressive enhancement',
+        node: zh ? content_zh : content_en,
+      }
+    },
   },
 } satisfies Routes
 
