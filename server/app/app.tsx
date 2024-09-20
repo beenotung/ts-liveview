@@ -191,7 +191,12 @@ function Footer(attrs: { style?: string }) {
         (attrs.style || '')
       }
     >
-      <PickLanguage style="text-align: end" />
+      <div style="margin-bottom: 0.75rem">
+        Made with 💝 by{' '}
+        <a target="_blank" href="https://github.com/beenotung">
+          Beeno
+        </a>
+      </div>
       <Stats />
     </footer>
   )

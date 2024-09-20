@@ -6,6 +6,7 @@ import { mapArray } from './fragment.js'
 import { MenuRoute, isCurrentMenuRoute } from './menu.js'
 import Style from './style.js'
 import { menuIcon } from '../icons/menu.js'
+import { PickLanguage } from './ui-language.js'
 
 let style = Style(/* css */ `
 .navbar {
@@ -14,6 +15,11 @@ let style = Style(/* css */ `
 	align-items: center;
 }
 .navbar .navbar-brand {}
+.navbar .navbar-menu {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
 .navbar .navbar-menu-toggle {
 	display: flex;
 	justify-content: center;
@@ -38,7 +44,7 @@ let style = Style(/* css */ `
 }
 .navbar .navbar-menu-item.selected {
 	border-bottom: 2px solid black;
-	margin-bottom: calc(0.25rem - 1px)
+	margin-bottom: calc(0.5rem - 1px)
 }
 @media (max-width: 768px) {
 	.navbar .navbar-menu-toggle {
@@ -51,6 +57,9 @@ let style = Style(/* css */ `
 		inset: 0;
 		margin-top: 3.5rem;
 		overflow: auto;
+		overscroll-behavior: contain;
+		/* avoid overlap by the ws_status */
+		padding-bottom: 2.5rem;
 	}
 	.navbar [name=navbar-menu-toggle]:checked ~ .navbar-menu {
 		display: initial;
@@ -98,6 +107,7 @@ function Navbar(
             {route.menuText}
           </a>
         ))}
+        <PickLanguage style="text-align: end; margin-inline: 1rem; flex-grow: 1" />
       </div>
     </nav>
   )

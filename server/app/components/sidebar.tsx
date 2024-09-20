@@ -6,6 +6,7 @@ import { Node } from '../jsx/types.js'
 import { mapArray } from './fragment.js'
 import { MenuRoute, isCurrentMenuRoute } from './menu.js'
 import Style from './style.js'
+import { PickLanguage } from './ui-language.js'
 
 let containerClass = 'sidebar-container'
 let mainContainerClass = 'sidebar-main-container'
@@ -22,9 +23,16 @@ body {
 	max-height: 100vh;
 	overflow: auto;
 	flex-grow: 1;
+	/* avoid overlap by the ws_status */
+	padding-bottom: 2.5rem;
 }
 .sidebar {
 	border-right: 1px solid black;
+	display: flex;
+	flex-direction: column;
+}
+.sidebar:has([name=sidebar-menu-toggle]:checked) {
+	border: none;
 }
 .sidebar-top-container {
 	margin: 0.5rem;
@@ -59,6 +67,16 @@ body {
 .sidebar-foldable {
 	width: 100%;
 	transition: width 0.3s;
+	overflow: auto;
+}
+.sidebar .sidebar-menu-container {
+	border-top: 1px solid #0002;
+	/* avoid overlap by the ws_status */
+	padding-bottom: 2.5rem;
+}
+body {
+	/* override the ws_status padding */
+	padding-bottom: 0rem;
 }
 .sidebar-foldable-animation {
 	animation-delay: 0.3s;
@@ -119,7 +137,7 @@ function Sidebar(
           {menuIcon}
         </label>
       </div>
-      <div class="sidebar-foldable">
+      <div class="sidebar-menu-container sidebar-foldable">
         <div class="sidebar-menu">
           {mapArray(attrs.menuRoutes, route => (
             <a
@@ -134,6 +152,7 @@ function Sidebar(
             </a>
           ))}
         </div>
+        <PickLanguage style="margin: 1rem" />
       </div>
     </nav>
   )
