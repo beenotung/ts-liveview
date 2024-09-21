@@ -11,6 +11,7 @@ export type Context = StaticContext | DynamicContext
 
 export type StaticContext = {
   type: 'static'
+  language: string
 }
 
 export type DynamicContext = ExpressContext | WsContext
@@ -109,7 +110,7 @@ export function getContextLanguage(context: Context): string | undefined {
     return lang
   }
   if (context.type === 'static') {
-    return
+    return context.language
   }
   if (context.type === 'ws') {
     return fixLanguage(context.session.language)
