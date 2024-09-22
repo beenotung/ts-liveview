@@ -1,6 +1,11 @@
-import { Context, DynamicContext, getContextLanguage } from '../context.js'
+import {
+  Context,
+  DynamicContext,
+  getContextLanguage,
+  getContextSearchParams,
+} from '../context.js'
 import { o } from '../jsx/jsx.js'
-import { ResolvedPageRoute, Routes, getContextSearchParams } from '../routes.js'
+import { ResolvedPageRoute, Routes } from '../routes.js'
 import { Raw } from './raw.js'
 import { apiEndpointTitle } from '../../config.js'
 import { toRouteUrl } from '../../url.js'
@@ -46,7 +51,7 @@ function switchLang(event, lang){
 
 function submit(context: DynamicContext): ResolvedPageRoute {
   let lang = context.routerMatch?.params.lang
-  let return_url = getContextSearchParams(context).get('return_url')
+  let return_url = getContextSearchParams(context)?.get('return_url')
   if (context.type == 'express') {
     context.res.cookie('lang', lang, {
       sameSite: 'lax',
