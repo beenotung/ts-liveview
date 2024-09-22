@@ -7,8 +7,7 @@ import { onWsSessionClose } from '../session.js'
 import { Script } from '../components/script.js'
 import Style from '../components/style.js'
 import SourceCode from '../components/source-code.js'
-import { getContextSearchParams } from '../routes.js'
-import type { Context } from '../context'
+import { getContextSearchParams, Context } from '../context.js'
 
 type State = {
   width: number
@@ -47,7 +46,7 @@ export function Editor(_attrs: attrs, context: Context) {
     }
     let messages: ServerMessage[] = []
     let params = getContextSearchParams(context)
-    let width = +(params.get('width') as string)
+    let width = +params?.get('width')!
     if (width) {
       state.width = width
       messages.push(
@@ -55,7 +54,7 @@ export function Editor(_attrs: attrs, context: Context) {
         ['update-props', '#image-editor #output_image', { width }],
       )
     }
-    let colorParam = params.get('color')
+    let colorParam = params?.get('color')
     if (colorParam) {
       state.color = colorParam
       messages.push([

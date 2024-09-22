@@ -230,12 +230,6 @@ export function matchRoute(
   return route
 }
 
-export function getContextSearchParams(context: DynamicContext) {
-  return new URLSearchParams(
-    context.routerMatch?.search || context.url.split('?').pop(),
-  )
-}
-
 export function errorRoute(
   error: unknown,
   context: Context,
