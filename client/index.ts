@@ -72,6 +72,17 @@ connectWS({
 
     function submitForm(form: HTMLFormElement) {
       let formData = new FormData(form)
+      if (form.dataset.trimEmpty) {
+        let keys: string[] = []
+        formData.forEach((value, key) => {
+          if (value == '') {
+            keys.push(key)
+          }
+        })
+        for (let key of keys) {
+          formData.delete(key)
+        }
+      }
       if (form.method === 'get') {
         let url = new URL(form.action || location.href)
         url.search = new URLSearchParams(formData as {}).toString()
