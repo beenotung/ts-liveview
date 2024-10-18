@@ -49,7 +49,7 @@ where request_time > :request_time
   )
   .pluck()
 
-function generatePasscode(): string {
+export function generatePasscode(): string {
   for (let i = 0; i < MaxPasscodeGenerationAttempt; i++) {
     let passcode = Random.nextString(PasscodeLength, digits)
 
@@ -133,6 +133,9 @@ async function requestEmailVerification(
       ),
     }
   } catch (error) {
+    if (error instanceof MessageException) {
+      throw error
+    }
     return {
       title: title('Email Verification'),
       description:
@@ -149,7 +152,7 @@ async function requestEmailVerification(
   }
 }
 
-function verificationCodeEmail(
+export function verificationCodeEmail(
   attrs: { passcode: string; email: string | null },
   context: Context,
 ) {
