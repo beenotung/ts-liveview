@@ -8,6 +8,8 @@ import SourceCode from '../components/source-code.js'
 import { Routes, StaticPageRoute } from '../routes.js'
 import type { Node } from '../jsx/types'
 import { apiEndpointTitle, title } from '../../config.js'
+import { Locale, isPreferZh } from '../components/locale.js'
+import { Context, DynamicContext } from '../context.js'
 
 const UpdateInterval = 1000
 
@@ -205,21 +207,42 @@ let Thermostat: Node = (
   height: var(--size);
 }
 `)}
-    <h1>Thermostat Demo</h1>
-    <p>This demo illustrates how to do cross-browser realtime update.</p>
+    <h1>
+      <Locale en="Thermostat Demo" zh="溫控器範例" />
+    </h1>
     <p>
-      The state is globally shared (for all connections) and the logic are
-      maintained on the server.
+      <Locale
+        en="This demo illustrates how to do cross-browser realtime update."
+        zh="此範例展示了如何實現跨瀏覽器的即時更新。"
+      />
     </p>
     <p>
-      In addition, the document title is dynamically generated and updated in
-      realtime.
+      <Locale
+        en="The state is globally shared (for all connections) and the logic is maintained on the server."
+        zh="狀態在所有連線中是全域共享的，邏輯由伺服器維護。"
+      />
     </p>
-    <h2 class="title">Interactive UIs</h2>
+    <p>
+      <Locale
+        en="In addition, the document title is dynamically generated and updated in realtime."
+        zh="此外，文件標題是動態生成並即時更新的。"
+      />
+    </p>
+    <h2 class="title">
+      <Locale en="Interactive UIs" zh="互動式介面" />
+    </h2>
     <div class="outer circle" style={StatusStyles[state.status]}>
       <div class="text-container">
-        Target:&nbsp;
-        <span title="Target temperature in celsius degree">
+        <Locale en="Target:" zh="目標溫度：" />
+        &nbsp;
+        <span
+          title={
+            <Locale
+              en="Target temperature in celsius degree"
+              zh="攝氏目標溫度"
+            />
+          }
+        >
           <span id="target">
             {
               /* this fraction is wrapped in an inline functional component to evaluate the state at request-time */
@@ -235,14 +258,26 @@ let Thermostat: Node = (
             <Link
               href="/thermostat/dec"
               no-history
-              title="Reduce target temperature by 0.5 celsius degree"
+              title={
+                <Locale
+                  en="Reduce target temperature by 0.5 celsius degree"
+                  zh="降低目標溫度0.5攝氏度"
+                />
+              }
             >
               <button>-</button>
             </Link>
           </div>
           <div>
             <div class="inner circle">
-              <span title="Current temperature in celsius degree">
+              <span
+                title={
+                  <Locale
+                    en="Current temperature in celsius degree"
+                    zh="當前攝氏溫度"
+                  />
+                }
+              >
                 <span id="current">{[() => state.current.toFixed(1)]}</span>
                 &deg;
               </span>
@@ -252,7 +287,12 @@ let Thermostat: Node = (
             <Link
               href="/thermostat/inc"
               no-history
-              title="Increase target temperature by 0.5 celsius degree"
+              title={
+                <Locale
+                  en="Increase target temperature by 0.5 celsius degree"
+                  zh="增加目標溫度0.5攝氏度"
+                />
+              }
             >
               <button>+</button>
             </Link>
@@ -260,7 +300,7 @@ let Thermostat: Node = (
         </div>
       </div>
       <div class="text-container">
-        <span id="status" title="Current status">
+        <span id="status" title={<Locale en="Current status" zh="當前狀態" />}>
           {[() => state.status]}
         </span>
       </div>
@@ -268,24 +308,27 @@ let Thermostat: Node = (
     <SourceCode page="thermostat.tsx" />
     <p>
       <a href="https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript">
-        Layout reference
+        <Locale en="Layout reference" zh="界面參考" />
       </a>
     </p>
   </div>
 )
 
-function index(): StaticPageRoute {
+function index(context: Context): StaticPageRoute {
+  let zh = isPreferZh(context)
   return {
-    title: state.title,
-    description: `A realtime updated thermostat demo application. Current temperature: ${state.currentText}; target temperature: ${state.targetText}.`,
+    title: zh ? '溫控器範例' : 'Thermostat Demo',
+    description: zh
+      ? `一個即時更新的溫控器範例應用程式。當前溫度：${state.currentText}；目標溫度：${state.targetText}。`
+      : `A real-time updated thermostat demo application. Current temperature: ${state.currentText}; target temperature: ${state.targetText}.`,
     node: Thermostat,
   }
 }
 
 let routes = {
   '/thermostat': {
+    menuText: <Locale en="Thermostat" zh="溫控器" />,
     resolve: index,
-    menuText: 'Thermostat',
   },
   '/thermostat/inc': {
     title: apiEndpointTitle,

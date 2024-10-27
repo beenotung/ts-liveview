@@ -3,15 +3,31 @@ import { filter, find } from 'better-sqlite3-proxy'
 import { db } from './db.js'
 import { proxy, RequestLog } from './proxy.js'
 import { debugLog } from '../server/debug.js'
+import { join } from 'path'
+import { loadNumber, saveNumber } from '../server/app/data/version-number.js'
 
 let log = debugLog('user-agent')
 log.enabled = true
 
 function classifyUserAgent(ua: string) {
-  if (ua.startsWith('TelegramBot')) return { bot: 'TelegramBot' }
+  if (ua == 'node' || ua == 'node-fetch' || /^axios\/[\d.]+$/.test(ua))
+    return { bot: 'NodeBot' }
+  else if (ua.startsWith('HackerNews')) return { bot: 'HackerNewsBot' }
+  else if (ua.startsWith('TelegramBot')) return { bot: 'TelegramBot' }
   else if (ua.startsWith('WhatsApp')) return { bot: 'WhatsAppBot' }
+  else if (ua.startsWith('Twitterbot')) return { bot: 'TwitterBot' }
   else if (ua.startsWith('AnyConnect')) return { bot: 'CiscoAnyConnect' }
-  else if (ua.startsWith('python-requests')) return { bot: 'PythonRequests' }
+  else if (ua.includes('ImagesiftBot')) return { bot: 'ImagesiftBot' }
+  else if (ua.includes('DomainStatsBot')) return { bot: 'DomainStatsBot' }
+  else if (ua.startsWith('Akkoma ')) return { bot: 'AkkomaBot' }
+  else if (
+    ua.startsWith('python-requests') ||
+    // e.g. "Python-urllib/3.7"
+    /^Python-urllib\/[\d.]+$/.test(ua) ||
+    // e.g. "Python/3.10 aiohttp/3.9.0"
+    /^Python\/[\d.]+ aiohttp\/[\d.]+$/.test(ua)
+  )
+    return { bot: 'PythonBot' }
   else if (ua.includes('http://help.yahoo.com/help/us/ysearch/slurp'))
     return { bot: 'YahooBot' }
   else if (ua.includes('https://neeva.com/neevabot')) return { bot: 'NeevaBot' }
@@ -27,6 +43,7 @@ function classifyUserAgent(ua: string) {
   else if (ua.includes('https://babbar.tech/crawler'))
     return { bot: 'BarkrowlerBot' }
   else if (ua.includes('http://webmeup-crawler.com/')) return { bot: 'BLEXBot' }
+  else if (ua.includes('https://openai.com/')) return { bot: 'OpenAIBot' }
   else if (ua.includes('http://www.linkdex.com/bots/'))
     return { bot: 'LinkdexBot' }
   else if (ua.includes('https://opensiteexplorer.org/dotbot'))
@@ -37,14 +54,26 @@ function classifyUserAgent(ua: string) {
   else if (ua.includes('Googlebot-Image')) return { bot: 'GoogleBot' }
   else if (ua.includes('http://duckduckgo.com')) return { bot: 'DuckDuckGoBot' }
   else if (ua.includes('http://yandex.com/bots')) return { bot: 'YandexBot' }
+  else if (ua.includes('http://www.baidu.com')) return { bot: 'BaiduBot' }
+  else if (ua.includes('https://www.mojeek.com/bot.html'))
+    return { bot: 'MojeekBot' }
+  else if (ua.includes('http://napoveda.seznam.cz')) return { bot: 'SeznamBot' }
   else if (ua.includes('https://about.censys.io'))
     return { bot: 'CensysInspect' }
   else if (ua.includes('crawler@mixrank.com')) return { bot: 'MixrankBot' }
   else if (ua.includes('facebookexternalhit')) return { bot: 'FacebookBot' }
+  else if (ua.includes('Mastodon')) return { bot: 'MastodonBot' }
+  // e.g. "Slack-ImgProxy (+https://api.slack.com/robots)"
+  // e.g. "Slackbot-LinkExpanding 1.0 (+https://api.slack.com/robots)"
+  else if (ua.includes('https://api.slack.com/robots'))
+    return { bot: 'SlackBot' }
   else if (ua.includes('http://www.semrush.com/bot.html'))
     return { bot: 'SemrushBot' }
   else if (ua.includes('https://internet-measurement.com'))
     return { bot: 'InternetMeasurement' }
+  else if (ua.includes('https://seolyt.com')) return { bot: 'SEOlytBot' }
+  else if (ua.includes('http://linkaffinity.io'))
+    return { bot: 'LinkAffinityBot' }
   else if (ua.includes('https://dataforseo.com/dataforseo-bot'))
     return { bot: 'DataForSeoBot' }
   else if (ua.includes('iPhone')) return { type: 'iPhone' }
@@ -60,6 +89,20 @@ function classifyUserAgent(ua: string) {
   else if (ua.includes('X11; CrOS x86_64')) return { type: 'ChromeOS' }
   else if (ua.includes('Windows')) return { type: 'Windows' }
   else if (ua.includes('Linux')) return { type: 'Linux' }
+  // e.g. "Dart/2.15 (dart:io)"
+  else if (/^Dart\/[\d.]+ \(dart:io\)$/.test(ua)) return { bot: 'DartBot' }
+  else if (
+    // e.g. "Java/21.0.3"
+    /^Java\/[\d.]+$/.test(ua) ||
+    // e.g. "Apache-HttpClient/4.5.5 (Java/1.8.0_181)"
+    /^Apache-HttpClient\/[\d.]+ \(Java\/[\d._]+\)$/.test(ua) ||
+    // e.g. "okhttp/4.9.0"
+    /^okhttp\/[\d.]+$/.test(ua)
+  )
+    return { bot: 'JavaBot' }
+  // e.g. "Go-http-client/1.1"
+  else if (/^Go-http-client\/[\d.]+$/.test(ua)) return { bot: 'GoBot' }
+  else if (ua.startsWith('Hackers/')) return { bot: 'HackerNewsBot' }
   else return { type: 'Other' }
 }
 
@@ -122,14 +165,21 @@ set count = 0
 let reset_stats_part_2 = db.prepare('update ua_type set count = 0')
 let reset_stats_part_3 = db.prepare('update ua_bot set count = 0')
 
-let _resetStats = db.transaction(() => {
+let resetStats = db.transaction(() => {
   reset_stats_part_1.run()
   reset_stats_part_2.run()
   reset_stats_part_3.run()
   ua_stat.last_request_log_id = last_request_log_id = 0
 })
 
-// _resetStats() // TODO remove after dev
+let versionFile = join('data', 'user-agent-version.txt')
+let version = 1
+function autoResetStats() {
+  if (loadNumber(versionFile) == version) return
+  resetStats()
+  saveNumber(versionFile, version)
+}
+autoResetStats()
 
 let other_type_id = getUaTypeId('Other')
 

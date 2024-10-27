@@ -2,7 +2,7 @@ import { o } from './jsx/jsx.js'
 import { scanTemplateDir } from '../template-file.js'
 import { NextFunction, Request, Response, Router } from 'express'
 import type { Context, ExpressContext, WsContext } from './context'
-import type { Element, Node } from './jsx/types'
+import type { Element } from './jsx/types'
 import {
   escapeHTMLAttributeValue,
   escapeHTMLTextContent,
@@ -12,12 +12,12 @@ import {
 import { sendHTMLHeader } from './express.js'
 import { OnWsMessage } from '../ws/wss.js'
 import { dispatchUpdate } from './jsx/dispatch.js'
-import { EarlyTerminate, MessageException } from './helpers.js'
+import { EarlyTerminate, MessageException } from '../exception.js'
 import { getWSSession } from './session.js'
 import DemoCookieSession from './pages/demo-cookie-session.js'
 import { Flush } from './components/flush.js'
 import { LayoutType, config } from '../config.js'
-import Stats from './stats.js'
+import Stats from './components/stats.js'
 import { MuteConsole, Script } from './components/script.js'
 import {
   matchRoute,
@@ -96,8 +96,12 @@ let brand = (
       {config.site_name}
     </Link>{' '}
     <div class="text-no-wrap">
-      <a href="https://news.ycombinator.com/item?id=22830472">HN</a>{' '}
-      <a href="https://github.com/beenotung/ts-liveview">git</a>
+      <a target="_blank" href="https://news.ycombinator.com/item?id=22830472">
+        HN
+      </a>{' '}
+      <a target="_blank" href="https://github.com/beenotung/ts-liveview">
+        git
+      </a>
     </div>
   </div>
 )
@@ -187,7 +191,12 @@ function Footer(attrs: { style?: string }) {
         (attrs.style || '')
       }
     >
-      <PickLanguage style="text-align: end" />
+      <div style="margin-bottom: 0.75rem">
+        Made with 💝 by{' '}
+        <a target="_blank" href="https://github.com/beenotung">
+          Beeno
+        </a>
+      </div>
       <Stats />
     </footer>
   )
@@ -209,7 +218,7 @@ export function attachRoutes(app: Router) {
   app.use(handleLiveView)
 }
 
-function handleLiveView(req: Request, res: Response, next: NextFunction) {
+async function handleLiveView(req: Request, res: Response, next: NextFunction) {
   sendHTMLHeader(res)
 
   let context: ExpressContext = {
@@ -220,19 +229,39 @@ function handleLiveView(req: Request, res: Response, next: NextFunction) {
     url: req.url,
   }
 
-  then(matchRoute(context), route => {
-    if (route.status) {
-      res.status(route.status)
-    }
+  try {
+    await then(
+      matchRoute(context),
+      route => {
+        if (route.status) {
+          res.status(route.status)
+        }
 
-    route.description = route.description.replace(/"/g, "'")
+        route.description = route.description.replace(/"/g, "'")
 
-    if (route.streaming === false) {
-      responseHTML(res, context, route)
-    } else {
-      streamHTML(res, context, route)
+        if (route.streaming === false) {
+          responseHTML(res, context, route)
+        } else {
+          streamHTML(res, context, route)
+        }
+      },
+      onError,
+    )
+  } catch (error) {
+    onError(error)
+  }
+  function onError(error: unknown) {
+    if (error == EarlyTerminate) {
+      return
     }
-  })
+    if (error instanceof MessageException) {
+      res.json({ message: error.message })
+      return
+    }
+    res.status(500)
+    res.json({ error: String(error) })
+    console.error(error)
+  }
 }
 
 function responseHTML(

@@ -1,9 +1,9 @@
 import { LayoutType, title } from '../../config.js'
 import { renderError } from '../components/error.js'
 import { IonBackButton } from '../components/ion-back-button.js'
-import { DynamicContext } from '../context.js'
+import type { DynamicContext } from '../context'
 import { o } from '../jsx/jsx.js'
-import { Routes } from '../routes'
+import type { Routes } from '../routes'
 
 type Character = {
   id: number

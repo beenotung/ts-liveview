@@ -5,8 +5,7 @@ import { join } from 'path'
 import { Update } from '../components/update.js'
 import { distance } from 'fastest-levenshtein'
 import SourceCode from '../components/source-code.js'
-import { getContextSearchParams } from '../routes.js'
-import type { Context } from '../context'
+import { getContextSearchParams, Context } from '../context.js'
 
 const wordSet = new Set<string>()
 const dictDir = '/usr/share/dict'
@@ -124,7 +123,7 @@ function renderUpdate(input: string) {
 
 export function AutoCompleteDemo(_attrs: attrs, context: Context) {
   if (context.type === 'ws') {
-    const input = getContextSearchParams(context).get('input')
+    const input = getContextSearchParams(context)?.get('input')
     if (input) {
       return renderUpdate(input)
     }
