@@ -69,7 +69,6 @@ function scan() {
   }
 
   scanDir('server')
-  scanDir('db')
   scanDir('client')
   scanDir('template')
 
@@ -133,21 +132,8 @@ async function postBuild() {
 
 async function fix() {
   let ps = []
-  ps.push(fix_proxy())
   // add custom fixes here
   await Promise.all(ps)
-}
-
-async function fix_proxy() {
-  let file = path.join('dist', 'db', 'proxy.js')
-  await wait_file(file)
-  let text = fs.readFileSync(file).toString()
-  if (!text.includes(`import { db } from "./db"`)) return
-  text = text.replace(
-    `import { db } from "./db"`,
-    `import { db } from "./db.js"`,
-  )
-  fs.writeFileSync(file, text)
 }
 
 async function wait_file(file: string) {
