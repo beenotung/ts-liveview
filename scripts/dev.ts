@@ -69,7 +69,6 @@ function scan() {
   }
 
   scanDir('server')
-  scanDir('db')
   scanDir('client')
   scanDir('template')
 
@@ -146,7 +145,6 @@ async function fix() {
   let context: FixContext = { update }
 
   let ps = []
-  ps.push(fix_proxy(context))
   // add custom fixes here
   await Promise.all(ps)
 
