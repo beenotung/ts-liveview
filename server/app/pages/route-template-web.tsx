@@ -2,7 +2,12 @@ import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 import { apiEndpointTitle, title } from '../../config.js'
 import Style from '../components/style.js'
-import { Context, DynamicContext, getContextFormBody } from '../context.js'
+import {
+  Context,
+  DynamicContext,
+  getContextFormBody,
+  isAjax,
+} from '../context.js'
 import { mapArray } from '../components/fragment.js'
 import { object, string } from 'cast.ts'
 import { Link, Redirect } from '../components/router.js'
@@ -129,7 +134,7 @@ function Submit(attrs: {}, context: DynamicContext) {
       context.ws.send(message)
       throw EarlyTerminate
     }
-    if (context.type == 'express') {
+    if (context.type == 'express' && isAjax(context)) {
       context.res.json({ message })
       throw EarlyTerminate
     }

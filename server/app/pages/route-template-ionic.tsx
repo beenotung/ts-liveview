@@ -2,12 +2,19 @@ import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 import { apiEndpointTitle, title } from '../../config.js'
 import Style from '../components/style.js'
-import { Context, DynamicContext, getContextFormBody } from '../context.js'
+import {
+  Context,
+  DynamicContext,
+  getContextFormBody,
+  isAjax,
+} from '../context.js'
 import { mapArray } from '../components/fragment.js'
 import { IonBackButton } from '../components/ion-back-button.js'
 import { object, string } from 'cast.ts'
 import { Link, Redirect } from '../components/router.js'
 import { renderError } from '../components/error.js'
+import { EarlyTerminate, MessageException } from '../../exception.js'
+import { ServerMessage } from '../../../client/types.js'
 
 let pageTitle = '__title__'
 let addPageTitle = 'Add __title__'
@@ -113,6 +120,7 @@ let addPage = (
           <br />
           *: mandatory fields
         </p>
+        <p id="add-message"></p>
       </form>
     </ion-content>
   </>
@@ -133,6 +141,24 @@ function Submit(attrs: {}, context: DynamicContext) {
     })
     return <Redirect href={`/__url__/result?id=${id}`} />
   } catch (error) {
+    let message: ServerMessage =
+      error instanceof MessageException
+        ? error.message
+        : [
+            'batch',
+            [
+              ['update-text', '#add-message', String(error)],
+              ['add-class', '#add-message', 'error'],
+            ],
+          ]
+    if (context.type == 'ws') {
+      context.ws.send(message)
+      throw EarlyTerminate
+    }
+    if (context.type == 'express' && isAjax(context)) {
+      context.res.json({ message })
+      throw EarlyTerminate
+    }
     return (
       <Redirect
         href={
