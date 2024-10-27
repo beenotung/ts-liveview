@@ -7,6 +7,8 @@ import { mapArray } from '../components/fragment.js'
 import { object, string } from 'cast.ts'
 import { Link, Redirect } from '../components/router.js'
 import { renderError } from '../components/error.js'
+import { ServerMessage } from '../../../client/types.js'
+import { EarlyTerminate, MessageException } from '../helpers.js'
 
 let pageTitle = '__title__'
 let addPageTitle = 'Add __title__'
@@ -93,6 +95,7 @@ let addPage = (
         <br />
         *: mandatory fields
       </p>
+      <p id="add-message"></p>
     </form>
   </div>
 )
@@ -112,6 +115,24 @@ function Submit(attrs: {}, context: DynamicContext) {
     })
     return <Redirect href={`/__url__/result?id=${id}`} />
   } catch (error) {
+    let message: ServerMessage =
+      error instanceof MessageException
+        ? error.message
+        : [
+            'batch',
+            [
+              ['update-text', '#add-message', String(error)],
+              ['add-class', '#add-message', 'error'],
+            ],
+          ]
+    if (context.type == 'ws') {
+      context.ws.send(message)
+      throw EarlyTerminate
+    }
+    if (context.type == 'express') {
+      context.res.json({ message })
+      throw EarlyTerminate
+    }
     return (
       <Redirect
         href={
