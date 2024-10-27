@@ -15,16 +15,6 @@ if [[ "$install" == pnpm* ]]; then
   pnpm rebuild
 fi
 
-cd db
-if [[ "$install" != *-r* ]]; then
-  echo "running '$install' in $(pwd)"
-  $install
-elif [[ "$install" == pnpm* ]]; then
-  pnpm rebuild
-fi
-echo "setup database"
-npm run setup
-
 echo
 echo "Ready to go!"
 echo
