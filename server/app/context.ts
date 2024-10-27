@@ -136,3 +136,9 @@ export function getContextTimezone(context: Context): string | undefined {
     return context.session.timeZone
   }
 }
+
+export function isAjax(context: Context): boolean {
+  if (context.type !== 'express') return false
+  let mode = context.req.header('Sec-Fetch-Mode')
+  return mode != null && mode !== 'navigate'
+}
