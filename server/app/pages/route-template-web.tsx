@@ -8,7 +8,7 @@ import { object, string } from 'cast.ts'
 import { Link, Redirect } from '../components/router.js'
 import { renderError } from '../components/error.js'
 import { ServerMessage } from '../../../client/types.js'
-import { EarlyTerminate, MessageException } from '../helpers.js'
+import { EarlyTerminate, MessageException } from '../../exception.js'
 
 let pageTitle = '__title__'
 let addPageTitle = 'Add __title__'
