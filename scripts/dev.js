@@ -56,7 +56,6 @@ function scan() {
     })
   }
   scanDir('server')
-  scanDir('db')
   scanDir('client')
   scanDir('template')
   return files
@@ -108,20 +107,9 @@ async function postBuild() {
     await main()
     return
   }
-  fix()
   if (mode == 'serve') {
     restartServer()
   }
-}
-function fix() {
-  let file = path.join('dist', 'db', 'proxy.js')
-  let text = fs.readFileSync(file).toString()
-  if (!text.includes(`import { db } from "./db"`)) return
-  text = text.replace(
-    `import { db } from "./db"`,
-    `import { db } from "./db.js"`,
-  )
-  fs.writeFileSync(file, text)
 }
 let stopServer = () => Promise.resolve()
 let EPOCH = 0
