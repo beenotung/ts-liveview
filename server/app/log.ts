@@ -1,16 +1,15 @@
 import type { Request } from 'express'
-import { storeRequestLog } from '../../db/request-log.js'
+import { Session } from './session'
 
 export function logRequest(
   req: Request,
   method: string,
   url: string,
-  session_id: number | null,
+  session_id: string | null,
 ) {
-  storeRequestLog({
-    method,
-    url,
-    user_agent: req.headers['user-agent'] || null,
-    session_id,
-  })
+  // TODO: log request into storage of your choice
+}
+
+export function updateRequestSession(session_id: string, session: Session) {
+  // TODO: update request session into storage of your choice
 }
