@@ -143,6 +143,27 @@ export function setValue(selector: string, value: string | number) {
   e.value = value as string
 }
 
+export function addClass(selector: string, className: string) {
+  let e = document.querySelector(selector)
+  if (!e) {
+    console.error('Failed to query selector when addClass, selector:', selector)
+    throw new Error('Failed to query selector when addClass')
+  }
+  className.split(' ').forEach(c => e.classList.add(c))
+}
+
+export function removeClass(selector: string, className: string) {
+  let e = document.querySelector(selector)
+  if (!e) {
+    console.error(
+      'Failed to query selector when removeClass, selector:',
+      selector,
+    )
+    throw new Error('Failed to query selector when removeClass')
+  }
+  className.split(' ').forEach(c => e.classList.remove(c))
+}
+
 function mountElement(e: Element, element: VElement) {
   let [selector, attrs, children] = element
   applySelector(e, selector)

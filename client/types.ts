@@ -33,6 +33,8 @@ export type ServerMessage =
   | ['update-attrs', selector, attrs]
   | ['update-props', selector, props]
   | ['set-value', selector, string | number]
+  | ['add-class', selector, string]
+  | ['remove-class', selector, string]
   | ['batch', ServerMessage[]]
   | ['set-cookie', string]
   | ['set-title', title]
