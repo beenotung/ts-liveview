@@ -60,12 +60,6 @@ else
     package.json \
     README.md \
     "$user@$host:$root_dir"
-  rsync -SavLPz \
-    db/package.json \
-    db/tsconfig.json \
-    db/migrations \
-    db/*.ts \
-    "$user@$host:$root_dir/db"
   if [ "$MODE" == "first" ]; then
     rebuild_cmd="pnpm rebuild"
     pm2_cmd="cd $root_dir && pm2 start --name $pm2_name dist/server/index.js"
@@ -81,9 +75,6 @@ else
     mkdir -p data
     pnpm i -r
     $rebuild_cmd
-    cd db
-    $rebuild_cmd
-    npm run setup
     $pm2_cmd
     pm2 logs $pm2_name
   "
