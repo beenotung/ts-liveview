@@ -35,9 +35,8 @@ import { HTMLStream } from './jsx/stream.js'
 import { getWsCookies } from './cookie.js'
 import Navbar from './components/navbar.js'
 import Sidebar from './components/sidebar.js'
-import { logRequest } from './log.js'
+import { logRequest, updateRequestSession } from './log.js'
 import { WindowStub } from '../../client/internal.js'
-import { updateRequestSession } from '../../db/request-log.js'
 import { Link } from './components/router.js'
 
 if (config.development) {
