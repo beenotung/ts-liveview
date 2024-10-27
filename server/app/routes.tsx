@@ -6,7 +6,6 @@ import UILanguage from './components/ui-language.js'
 import type { Context, DynamicContext } from './context'
 import { o } from './jsx/jsx.js'
 import type { Node } from './jsx/types'
-import UserAgents from './pages/user-agents.js'
 import Home from './pages/home.js'
 import NotFoundPageRoute from './pages/not-found.js'
 import { then } from '@beenotung/tslib/result.js'
@@ -70,19 +69,6 @@ let routeDict = {
   ...Home.routes,
   ...DemoToast.routes,
   ...UILanguage.routes,
-  '/user-agents': {
-    menuText: <Locale en="Visitor Stats" zh="訪客統計" />,
-    resolve(context) {
-      let zh = isPreferZh(context)
-      return {
-        title: title(zh ? '訪客的用戶代理' : 'User Agents of Visitors'),
-        description: zh
-          ? '此網站訪客的用戶代理資訊'
-          : "User agents of this site's visitors",
-        node: UserAgents,
-      }
-    },
-  },
 } satisfies Routes
 
 export let redirectDict: Record<string, string> = {

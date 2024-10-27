@@ -51,12 +51,6 @@ else
     package.json \
     README.md \
     "$user@$host:$root_dir"
-  rsync -SavLPz \
-    db/package.json \
-    db/tsconfig.json \
-    db/migrations \
-    db/*.ts \
-    "$user@$host:$root_dir/db"
   if [ "$MODE" == "first" ]; then
     ssh "$user@$host" "
       set -e
@@ -73,8 +67,6 @@ else
     set -x
     cd $root_dir
     pnpm i -r
-    cd db
-    npm run setup
     $pm2_cmd
   "
 fi
