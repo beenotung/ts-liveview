@@ -32,8 +32,6 @@ npm start
 
 To setup a cloned project, run `./scripts/init.sh`, which will install packages and setup sqlite database for you.
 
-To update database schema, see [db/README.md](./db/README.md)
-
 To deploy, setup [scripts/config](./scripts/config) then run `./scripts/deploy.sh`, which will build and deploy the server with knex migrate and pm2.
 
 To test https-required functions during development (e.g., camera, microphone):
