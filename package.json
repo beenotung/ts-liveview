@@ -11,7 +11,6 @@
   },
   "license": "BSD-2-Clause",
   "scripts": {
-    "ui": "cd db && npm run ui",
     "lint": "eslint --fix .",
     "format": "prettier --write . && format-json-cli",
     "fix": "run-p fix:*",
@@ -40,10 +39,8 @@
   "dependencies": {
     "@beenotung/tslib": "^23.12.1",
     "@ionic/core": "^8.4.1",
-    "better-sqlite3-proxy": "^2.10.1",
-    "better-sqlite3-schema": "^3.1.7",
     "canvas-confetti": "^1.9.3",
-    "cast.ts": "^1.14.3",
+    "cast.ts": "^1.14.2",
     "chart.js": "^4.4.7",
     "cookie-parser": "^1.4.7",
     "datatables.net": "^2.2.1",
@@ -67,7 +64,6 @@
     "ws": "^8.18.0"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.12",
     "@types/canvas-confetti": "^1.9.0",
     "@types/chai": "^4.3.20",
     "@types/cookie-parser": "^1.4.8",
