@@ -56,7 +56,7 @@ fi
 set -x
 
 git push origin master v5-demo
-git push origin -f \
+git push origin --force-with-lease \
   v5-hybrid-template \
   v5-web-template \
   v5-ionic-template \

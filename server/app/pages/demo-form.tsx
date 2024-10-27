@@ -1,6 +1,6 @@
 import { Raw } from '../components/raw.js'
 import { Style } from '../components/style.js'
-import { MessageException } from '../helpers.js'
+import { MessageException } from '../../exception.js'
 import { o } from '../jsx/jsx.js'
 import type { attrs } from '../jsx/types'
 import sanitizeHTML from 'sanitize-html'
@@ -22,6 +22,7 @@ import { renderError } from '../components/error.js'
 import { Link } from '../components/router.js'
 import { apiEndpointTitle, title } from '../../config.js'
 import { Routes } from '../routes.js'
+import { toRouteUrl } from '../../url.js'
 
 const log = debug('demo-form.tsx')
 log.enabled = true
@@ -181,7 +182,11 @@ function DemoForm() {
       <div>
         <div style="display: inline-flex; flex-direction: column">
           <h1>Demo Form</h1>
-          <form method="POST" action="/form/submit" onsubmit="emitForm(event)">
+          <form
+            method="POST"
+            action={toRouteUrl(routes, '/form/submit')}
+            onsubmit="emitForm(event)"
+          >
             {style}
 
             <h2>Sanitized user input</h2>

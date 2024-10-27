@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    // "noUnusedLocals": true,
     "allowSyntheticDefaultImports": true,
     "jsx": "react",
     "jsxFactory": "o",

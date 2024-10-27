@@ -29,8 +29,29 @@ function showAlert(title: SweetAlertOptions['title'], icon: SweetAlertIcon) {
   })
 }
 
+async function showConfirm(options: {
+  title: SweetAlertOptions['title']
+  text?: SweetAlertOptions['text']
+  icon?: SweetAlertIcon
+  confirmButtonText?: string
+  cancelButtonText?: string
+}) {
+  let result = await Swal.fire({
+    title: options.title,
+    text: options.text,
+    icon: options.icon,
+    showConfirmButton: true,
+    showCancelButton: true,
+    heightAuto: false,
+    confirmButtonText: options.confirmButtonText || 'Confirm',
+    cancelButtonText: options.cancelButtonText || 'Cancel',
+  })
+  return result.isConfirmed
+}
+
 Object.assign(window, {
   Swal,
   showToast,
   showAlert,
+  showConfirm,
 })

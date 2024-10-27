@@ -76,7 +76,7 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
   - [x] Nested routing
   - [x] Sync / async routes
   - [x] Static / dynamic document title and description meta
-  - [x] Type-Safe Routing with Static Type Checking
+  - [x] Type-Safe routing with inferred static type checking
 - [x] Follow the DOM convention
   - [x] `class`, `style`, `onclick` e.t.c. are string attributes, with helper functions to convert from objects
   - [x] Compatible with css frameworks and web components (doesn't require framework specific wrappers unlike react)
@@ -86,8 +86,10 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
   - [x] image compression (preview & upload)
   - [x] sweetalert (unrestricted)
   - [x] swiper (slides / images carousel)
+  - [x] DataTables (pagination / search)
 - [x] Still functional when javascript is disabled on client device with links and forms [[5]](#feature-5)
 - [x] Support to develop with [JSX](#jsx), AST, component, or html template
+- [x] Error boundary for each component [[6]](#feature-6)
 - [x] Code Minification
   - [x] Minify CSS & JS with esbuild
   - [x] Minify HTML fragment with AST converter
@@ -95,13 +97,13 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
   - [x] Memorized to speed up
   - [x] Allow skipping minimization for dynamic and short code
 - [x] Efficient wire format
-- [x] Lightweight WebSocket-based protocols [[6]](#feature-6)
+- [x] Lightweight WebSocket-based protocols [[7]](#feature-7)
 - [ ] Reliable connection
   - [x] Auto reconnect when network resume
   - [ ] Auto send accumulated offline messages when network resume (WIP)
-- [x] Work well with express.js [[7]](#feature-7)
+- [x] Work well with express.js [[8]](#feature-8)
 - [x] Built-in locale support (language and timezone)
-- [x] Fully customizable [[8]](#feature-8)
+- [x] Fully customizable [[9]](#feature-9)
 - [x] Multiple starter templates
   - [x] v5-demo (kitchen sink demos)
   - [x] v5-web-template (mobile-responsive webapp)
@@ -113,21 +115,32 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
 
 **Remarks**:
 
-<span id='feature-1'>[1]</span> Pay the AST-to-HTML conversion time-cost once at boot-time instead of at each request-time
+<span id='feature-1'>[1]</span>
+Pay the AST-to-HTML conversion time-cost once at boot-time instead of at each request-time
 
-<span id='feature-2'>[2]</span> Response contentful html page directly to GET request. Content chunk is streamed to clients as soon as it's ready, without waiting for client-side javascript bundles nor data requests to start rendering.
+<span id='feature-2'>[2]</span>
+Response contentful html page directly to GET request. Content chunk is streamed to clients as soon as it's ready, without waiting for client-side javascript bundles nor data requests to start rendering.
 
-<span id='feature-3'>[3]</span> Updates can be triggered by (bi-directional) events from the server or other clients
+<span id='feature-3'>[3]</span>
+Updates can be triggered by (bi-directional) events from the server or other clients
 
-<span id='feature-4'>[4]</span> With `history.pushState()` and `PopStateEvent`
+<span id='feature-4'>[4]</span>
+With `history.pushState()` and `PopStateEvent`
 
-<span id='feature-5'>[5]</span> For screen-reader, text-based browser, and people with slow or unstable network, or simply tried with privacy invading scripts
+<span id='feature-5'>[5]</span>
+For screen-reader, text-based browser, and people with slow or unstable network, or simply tried with privacy invading scripts
 
-<span id='feature-6'>[6]</span> The network client code is [0.4K to 0.9K minified, 102x to 45x smaller than socket.io.min.js](./size.md)
+<span id='feature-6'>[6]</span>
+Each function component are evaluated with error handling, this approach can deliver as much as possible, avoiding blank pages when error occur.
 
-<span id='feature-7'>[7]</span> The entry point of ts-liveview app can be wrapped as an express middleware
+<span id='feature-7'>[7]</span>
+The network client code is [0.4K to 0.9K minified, 102x to 45x smaller than socket.io.min.js](./size.md)
 
-<span id='feature-8'>[8]</span> ts-liveview is provided as a template (rather than a library), hence any part can be modified to suit your need
+<span id='feature-8'>[8]</span>
+The entry point of ts-liveview app can be wrapped as an express middleware
+
+<span id='feature-9'>[9]</span>
+ts-liveview is provided as a template (rather than a library), hence any part can be modified to suit your need
 
 ## Size Comparison with other tools
 

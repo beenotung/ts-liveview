@@ -1,4 +1,4 @@
-import type { Context } from '../context'
+import type { Context, StaticContext } from '../context'
 import debug from 'debug'
 import type {
   html,
@@ -13,7 +13,7 @@ import type {
 import { HTMLStream, noop } from './stream.js'
 import { Flush } from '../components/flush.js'
 import { renderError, renderErrorNode } from '../components/error.js'
-import { EarlyTerminate, ErrorNode, MessageException } from '../helpers.js'
+import { EarlyTerminate, ErrorNode, MessageException } from '../../exception.js'
 
 const log = debug('html.ts')
 log.enabled = true
@@ -64,8 +64,17 @@ export function nodeListToHTML(nodeList: NodeList, context: Context): html {
   return html
 }
 
-export function prerender(node: Node): Raw {
-  let html = nodeToHTML(node, { type: 'static' })
+export function prerender(
+  node: Node,
+  context: Context | Omit<StaticContext, 'type'> = {
+    type: 'static',
+    language: 'en',
+  },
+): Raw {
+  if (!('type' in context)) {
+    context = { type: 'static', ...context }
+  }
+  let html = nodeToHTML(node, context)
   return ['raw', html]
 }
 

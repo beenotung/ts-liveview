@@ -6,10 +6,11 @@ import { capitalize } from '@beenotung/tslib/string.js'
 import { Router } from 'url-router.ts'
 import { LayoutType, config, title } from '../config.js'
 import { Redirect } from './components/router.js'
-import type { DynamicContext } from './context'
+import UILanguage from './components/ui-language.js'
+import type { Context, DynamicContext } from './context'
 import { o } from './jsx/jsx.js'
 import type { Node } from './jsx/types'
-import About, { License } from './pages/about.js'
+import About from './pages/about.js'
 import AutoCompleteDemo from './pages/auto-complete-demo.js'
 import Calculator from './pages/calculator.js'
 import UserAgents from './pages/user-agents.js'
@@ -28,13 +29,15 @@ import Clock from './pages/clock.js'
 import type { MenuRoute } from './components/menu'
 import DemoUpload from './pages/demo-upload.js'
 import DemoToast from './pages/demo-toast.js'
-import appHome from './pages/app-home.js'
-import appAbout from './pages/app-about.js'
-import appCharacter from './pages/app-character.js'
+import AppHome from './pages/app-home.js'
+import AppAbout from './pages/app-about.js'
+import AppCharacter from './pages/app-character.js'
 import type { renderWebTemplate } from '../../template/web.js'
 import type { renderIonicTemplate } from '../../template/ionic.js'
 import { VNode } from '../../client/jsx/types.js'
-import { toRouteUrl } from './helpers.js'
+import { EarlyTerminate, MessageException } from '../exception.js'
+import { renderError } from './components/error.js'
+import { Locale, isPreferZh } from './components/locale.js'
 
 let titles: Record<string, string> = {}
 
@@ -70,9 +73,9 @@ export type StaticPageRoute = {
 } & RenderOptions
 
 export type DynamicPageRoute = {
-  resolve: (context: DynamicContext) => ResolvedPageRoue
+  resolve: (context: DynamicContext) => ResolvedPageRoute
 }
-export type ResolvedPageRoue = StaticPageRoute | Promise<StaticPageRoute>
+export type ResolvedPageRoute = StaticPageRoute | Promise<StaticPageRoute>
 
 export type PageRouteMatch = PageRouteOptions & StaticPageRoute
 
@@ -84,40 +87,34 @@ export type Routes = Record<string, PageRoute>
 
 // TODO direct support alternative urls instead of having to repeat the entry
 let routeDict = {
-  ...AppNotice.routes,
-  ...AppChat.routes,
-  ...AppSettings.routes,
-  ...AppMore.routes,
-  '/': {
-    title: title('Home'),
-    description:
-      'Getting Started with ts-liveview - a server-side rendering realtime webapp framework with progressive enhancement',
-    menuText: 'Home',
-    node: Home,
-  },
-  '/about/:mode?': {
-    title: title('About'),
-    description:
-      'About ts-liveview - a server-side rendering realtime webapp framework with progressive enhancement',
-    menuText: 'About',
-    menuUrl: '/about',
-    menuMatchPrefix: true,
-    node: About,
-    streaming: true,
-  },
+  ...Home.routes,
+  ...About.routes,
   ...Thermostat.routes,
   '/editor': {
-    title: title('Image Editor'),
-    description:
-      'Image Editor that works without javascript, with progress enhancement when javascript and websocket are available',
-    menuText: 'Editor',
-    node: <Editor />,
+    menuText: <Locale en="Editor" zh="編輯器" />,
+    resolve(context) {
+      let zh = isPreferZh(context)
+      return {
+        title: title(zh ? '圖片編輯器' : 'Image Editor'),
+        description: zh
+          ? '不依賴 JavaScript 的圖片編輯器，當支援 JavaScript 和 WebSocket 時會提供增強功能'
+          : 'Image Editor that works without JavaScript, with progressive enhancement when JavaScript and WebSocket are available',
+        node: <Editor />,
+      }
+    },
   },
   '/auto-complete': {
-    title: title('Auto Complete'),
-    description: 'Server-driven auto-complete input box demo',
-    menuText: 'Auto Complete',
-    node: <AutoCompleteDemo />,
+    menuText: <Locale en="Auto Complete" zh="自動輸入框" />,
+    resolve(context) {
+      let zh = isPreferZh(context)
+      return {
+        title: title(zh ? '自動完成' : 'Auto Complete'),
+        description: zh
+          ? '伺服器驅動的自動完成輸入框範例'
+          : 'Server-driven auto-complete input box demo',
+        node: <AutoCompleteDemo />,
+      }
+    },
   },
   ...DemoForm.routes,
   ...DemoInputComponents.routes,
@@ -127,34 +124,53 @@ let routeDict = {
   ...DemoCookieSession.routes,
   ...Chatroom.routes,
   ...DemoLocale.routes,
+  ...UILanguage.routes,
   '/clock': {
-    title: title('Clock'),
-    description:
-      'Realtime clock using system time localized with client language and timezone',
-    menuText: 'Clock',
-    node: Clock,
+    menuText: <Locale en="Clock" zh="時鐘" />,
+    resolve(context) {
+      let zh = isPreferZh(context)
+      return {
+        title: title(zh ? '時鐘' : 'Clock'),
+        description: zh
+          ? '使用系統時間的即時時鐘，根據客戶端的語言和時區本地化'
+          : 'Realtime clock using system time localized with client language and timezone',
+        node: Clock,
+      }
+    },
   },
   '/calculator': {
-    title: title('Calculator'),
-    description: 'A simple stateful component demo',
-    menuText: 'Calculator',
-    node: <Calculator />,
+    menuText: <Locale en="Calculator" zh="計算器" />,
+    resolve(context) {
+      let zh = isPreferZh(context)
+      return {
+        title: title(zh ? '計算器' : 'Calculator'),
+        description: zh
+          ? '一個簡單的有狀態元件範例'
+          : 'A simple stateful component demo',
+        node: <Calculator />,
+      }
+    },
   },
   '/user-agents': {
-    title: title('User Agents of Visitors'),
-    description: "User agents of this site's visitors",
-    menuText: 'User Agents',
-    node: UserAgents,
+    menuText: <Locale en="Visitor Stats" zh="訪客統計" />,
+    resolve(context) {
+      let zh = isPreferZh(context)
+      return {
+        title: title(zh ? '訪客的用戶代理' : 'User Agents of Visitors'),
+        description: zh
+          ? '此網站訪客的用戶代理資訊'
+          : "User agents of this site's visitors",
+        node: UserAgents,
+      }
+    },
   },
-  '/LICENSE': {
-    title: 'BSD 2-Clause License of ts-liveview',
-    description:
-      'ts-liveview is a free open source project licensed under the BSD 2-Clause License',
-    node: License,
-  },
-  ...appHome.routes,
-  ...appCharacter.routes,
-  ...appAbout.routes,
+  ...AppHome.routes,
+  ...AppCharacter.routes,
+  ...AppAbout.routes,
+  ...AppChat.routes,
+  ...AppNotice.routes,
+  ...AppMore.routes,
+  ...AppSettings.routes,
 } satisfies Routes
 
 export let redirectDict: Record<string, string> = {
@@ -214,10 +230,27 @@ export function matchRoute(
   return route
 }
 
-export function getContextSearchParams(context: DynamicContext) {
-  return new URLSearchParams(
-    context.routerMatch?.search || context.url.split('?').pop(),
-  )
+export function errorRoute(
+  error: unknown,
+  context: Context,
+  title: string,
+  description: string,
+): StaticPageRoute {
+  if (error == EarlyTerminate || error instanceof MessageException) {
+    throw error
+  }
+  if (context.type == 'ws' && typeof error == 'string') {
+    throw new MessageException([
+      'eval',
+      // `showToast(${JSON.stringify(error)},'error')`,
+      `showAlert(${JSON.stringify(error)},'error')`,
+    ])
+  }
+  return {
+    title,
+    description,
+    node: renderError(error, context),
+  }
 }
 
 if (config.setup_robots_txt) {

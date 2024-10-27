@@ -2,12 +2,12 @@
 set -e
 set -o pipefail
 
-hash code && code . || echo "code not in path, you need to open the IDE manually"
+hash code 2> /dev/null && code . || echo "code not in path, you need to open the IDE manually"
 
-#install="slnpm"
-install="pnpm i -r --prefer-offline"
-#install="yarn"
-#install="npm i --legacy-peer-deps"
+install="npm i --legacy-peer-deps"
+hash slnpm 2> /dev/null && install="slnpm"
+hash yarn 2> /dev/null && install="yarn"
+hash pnpm 2> /dev/null && install="pnpm i -r --prefer-offline"
 
 echo "running '$install' in $(pwd)"
 $install
