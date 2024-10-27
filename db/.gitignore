@@ -1,6 +1,0 @@
-node_modules
-*.tgz
-dist
-.env
-.env.*
-!.env.example
