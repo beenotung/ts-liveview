@@ -21,26 +21,16 @@ function clean_up {
 }
 
 clean_root=0
-clean_db=0
 
 case "$compare_path" in
   .|./)
     clean_root=1
-    clean_db=1
-    ;;
-  db|db/|./db|./db/)
-    clean_db=1
     ;;
 esac
 
 if [ "$clean_root" == 1 ]; then
   clean_up .
   clean_up "$upstream_path"
-fi
-
-if [ "$clean_db" == 1 ]; then
-  clean_up db
-  clean_up "$upstream_path/db"
 fi
 
 meld "$upstream_path/$compare_path" "$compare_path"

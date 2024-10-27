@@ -69,7 +69,6 @@ function scan() {
     })
   }
   scanDir('server')
-  scanDir('db')
   scanDir('client')
   scanDir('template')
   return files
