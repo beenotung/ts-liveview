@@ -2,10 +2,16 @@ import { Link } from '../components/router.js'
 import { o } from '../jsx/jsx.js'
 import { prerender } from '../jsx/html.js'
 import SourceCode from '../components/source-code.js'
-import { ResolvedPageRoute, Routes } from '../routes.js'
-import { title } from '../../config.js'
+import { Routes } from '../routes.js'
 import Style from '../components/style.js'
-import { Locale, LocaleVariants } from '../components/locale.js'
+import { Locale } from '../components/locale.js'
+import { apiEndpointTitle, title } from '../../config.js'
+import { sessions } from '../session.js'
+import { ServerMessage } from '../../../client/types.js'
+import { format_time_duration } from '@beenotung/tslib/format.js'
+import { Context } from '../context.js'
+import { EarlyTerminate } from '../../exception.js'
+import { Redirect } from '../components/router.js'
 
 // Calling <Component/> will transform the JSX into AST for each rendering.
 // You can reuse a pre-compute AST like `let component = <Component/>`.
@@ -16,8 +22,8 @@ import { Locale, LocaleVariants } from '../components/locale.js'
 let style = Style(/* css */ `
 `)
 
-let content = (
-  <div id="home">
+let introduction = (
+  <>
     <h1>
       <Locale en="Home" zh_hk="主頁" zh_cn="主页" />
     </h1>
@@ -29,49 +35,95 @@ let content = (
         zh_cn="你可以从修改此页的内容开始。"
       />
     </p>
-    <SourceCode page="home.tsx" />
-  </div>
-)
-
-let home = (
-  <>
-    {style}
-    {content}
   </>
 )
 
 // And it can be pre-rendered into html as well
 //
-// This route is optimized for static content,
+// This example is optimized for static content,
 // you can reference other pages for routes with dynamic content
 // using <Title> and <Locale> in route title and description
-let route: LocaleVariants<ResolvedPageRoute> = {
-  en: {
-    title: title('Home'),
-    description:
-      'Getting Started with ts-liveview - a server-side rendering realtime webapp framework with progressive enhancement',
-    node: prerender(home, { language: 'en' }),
-  },
-  zh_hk: {
-    title: title('主頁'),
-    description:
-      '開始使用 ts-liveview - 一個具有漸進增強功能的伺服器端渲染即時網頁應用框架',
-    node: prerender(home, { language: 'zh_hk' }),
-  },
-  zh_cn: {
-    title: title('主页'),
-    description:
-      '开始使用 ts-liveview - 一个具有渐进增强功能的服务器端渲染即时网页应用框架',
-    node: prerender(home, { language: 'zh_cn' }),
-  },
+
+let introduction_en = prerender(introduction, { language: 'en' })
+let introduction_zh_hk = prerender(introduction, { language: 'zh_hk' })
+let introduction_zh_cn = prerender(introduction, { language: 'zh_cn' })
+
+let count = 0
+
+let home = (
+  <>
+    {style}
+    <div id="home">
+      <Locale
+        en={introduction_en}
+        zh_hk={introduction_zh_hk}
+        zh_cn={introduction_zh_cn}
+      />
+      {/* ------------------------------ */}
+      <h2>Demo updates from server-side</h2>
+      <p>The uptime is updated by server every second.</p>
+      Up-time: <span id="uptime">This is updated by server.</span>
+      {/* ------------------------------ */}
+      <h2>Demo updates from client-side</h2>
+      <p>Try to open this page in multiple tabs.</p>
+      <button onclick="emit('/inc')">
+        Click to update: <span id="count">{count}</span>
+      </button>
+      {/* ------------------------------ */}
+      <SourceCode page="home.tsx" />
+    </div>
+  </>
+)
+
+// demo updates from server-side
+function tick() {
+  let uptime = format_time_duration(process.uptime() * 1000)
+  broadcast(['update-text', '#uptime', uptime])
+}
+setInterval(tick, 1000)
+
+// This function will be called on the server-side when the '/inc' endpoint is hit
+function Inc(attrs: {}, context: Context) {
+  count++
+  if (context.type == 'ws') {
+    broadcast(['update-text', '#count', count])
+    if (context.type == 'ws') {
+      context.ws.send([
+        'update-attrs',
+        '#home button',
+        { style: 'color:green' },
+      ])
+      throw EarlyTerminate
+    }
+  }
+  return <Redirect href="/" />
+}
+
+function broadcast(message: ServerMessage) {
+  sessions.forEach(session => {
+    session.ws.send(message)
+  })
 }
 
 let routes = {
   '/': {
+    title: (
+      <Locale en={title('Home')} zh_hk={title('主頁')} zh_cn={title('主页')} />
+    ),
+    description: (
+      <Locale
+        en="Demo how to update from server-side and client-side"
+        zh_hk="示範如何從伺服器和客戶端更新"
+        zh_cn="演示如何从服务器和客户端更新"
+      />
+    ),
     menuText: <Locale en="Home" zh_hk="主頁" zh_cn="主页" />,
-    resolve(context) {
-      return Locale(route, context)
-    },
+    node: home,
+  },
+  '/inc': {
+    title: apiEndpointTitle,
+    description: 'Increment counter on server',
+    node: <Inc />,
   },
 } satisfies Routes
 
