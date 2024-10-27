@@ -45,7 +45,7 @@ export function $Name() {
 export default $Name" > "$file"
 
 echo "saved to $file"
-code "$file"
+./scripts/ide.sh "$file"
 
 if [ -d dist ]; then
   touch dist/__dev_restart__

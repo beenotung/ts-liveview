@@ -2,7 +2,7 @@
 set -e
 set -o pipefail
 
-hash code 2> /dev/null && code . || echo "code not in path, you need to open the IDE manually"
+./scripts/ide.sh .
 
 install="npm i --legacy-peer-deps"
 hash slnpm 2> /dev/null && install="slnpm"
