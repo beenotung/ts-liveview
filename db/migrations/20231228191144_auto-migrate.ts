@@ -15,7 +15,6 @@ export async function up(knex: Knex): Promise<void> {
         .where({ id: row.id })
     }
   }
-  // FIXME: alter column (verification_code.passcode) to be non-nullable not supported in sqlite
   // you may set it to be non-nullable with sqlite browser manually
 }
 
@@ -32,6 +31,5 @@ export async function down(knex: Knex): Promise<void> {
         .where({ id: row.id })
     }
   }
-  // FIXME: alter column (user.username) to be non-nullable not supported in sqlite
   // you may set it to be non-nullable with sqlite browser manually
 }
