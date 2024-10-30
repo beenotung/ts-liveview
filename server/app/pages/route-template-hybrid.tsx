@@ -2,14 +2,19 @@ import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 import { apiEndpointTitle, title } from '../../config.js'
 import Style from '../components/style.js'
-import { Context, DynamicContext, getContextFormBody } from '../context.js'
+import {
+  Context,
+  DynamicContext,
+  getContextFormBody,
+  throwIfInAPI,
+} from '../context.js'
 import { mapArray } from '../components/fragment.js'
 import { IonBackButton } from '../components/ion-back-button.js'
 import { LayoutType, config } from '../../config.js'
 import { object, string } from 'cast.ts'
 import { Link, Redirect } from '../components/router.js'
 import { renderError } from '../components/error.js'
-import { throwIfInAPI } from '../../exception.js'
+import { getAuthUser } from '../auth/user.js'
 import { evalLocale, Locale } from '../components/locale.js'
 
 let pageTitle = <Locale en="__title__" zh_hk="__title__" zh_cn="__title__" />
@@ -58,6 +63,7 @@ let items = [
 ]
 
 function Main(attrs: {}, context: Context) {
+  let user = getAuthUser(context)
   if (config.layout_type !== LayoutType.ionic) {
     return (
       <>
@@ -68,9 +74,15 @@ function Main(attrs: {}, context: Context) {
             </li>
           ))}
         </ul>
-        <Link href="/__url__/add">
-          <button>{addPageTitle}</button>
-        </Link>
+        {user ? (
+          <Link href="/__url__/add">
+            <button>{addPageTitle}</button>
+          </Link>
+        ) : (
+          <p>
+            You can add __name__ after <Link href="/register">register</Link>.
+          </p>
+        )}
       </>
     )
   }
@@ -83,9 +95,15 @@ function Main(attrs: {}, context: Context) {
           </ion-item>
         ))}
       </ion-list>
-      <Link href="/__url__/add" tagName="ion-button">
-        {addPageTitle}
-      </Link>
+      {user ? (
+        <Link href="/__url__/add" tagName="ion-button">
+          {addPageTitle}
+        </Link>
+      ) : (
+        <p>
+          You can add __name__ after <Link href="/register">register</Link>.
+        </p>
+      )}
     </>
   )
 }
@@ -200,6 +218,11 @@ if (config.layout_type === LayoutType.ionic) {
     </>
   )
 }
+function AddPage(attrs: {}, context: DynamicContext) {
+  let user = getAuthUser(context)
+  if (!user) return <Redirect href="/login" />
+  return addPage
+}
 
 let submitParser = object({
   title: string({ minLength: 3, maxLength: 50 }),
@@ -208,6 +231,8 @@ let submitParser = object({
 
 function Submit(attrs: {}, context: DynamicContext) {
   try {
+    let user = getAuthUser(context)
+    if (!user) throw 'You must be logged in to submit ' + pageTitle
     let body = getContextFormBody(context)
     let input = submitParser.parse(body)
     let id = items.push({
@@ -283,7 +308,7 @@ let routes = {
   '/__url__/add': {
     title: <Title t={addPageTitle} />,
     description: 'TODO',
-    node: addPage,
+    node: <AddPage />,
     streaming: false,
   },
   '/__url__/add/submit': {
