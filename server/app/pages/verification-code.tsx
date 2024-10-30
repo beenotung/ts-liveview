@@ -1,7 +1,7 @@
 import { Random, digits } from '@beenotung/tslib/random.js'
 import { MINUTE } from '@beenotung/tslib/time.js'
 import { db } from '../../../db/db.js'
-import { HttpError } from '../../exception.js'
+import { HttpError, MessageException } from '../../exception.js'
 import { proxy } from '../../../db/proxy.js'
 import { boolean, email, object, optional, string } from 'cast.ts'
 import { sendEmail } from '../../email.js'
