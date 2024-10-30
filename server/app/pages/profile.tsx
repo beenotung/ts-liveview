@@ -59,7 +59,7 @@ let ProfilePage = (_attrs: {}, context: DynamicContext) => {
 function renderProfile(user_id: number, context: DynamicContext) {
   let user = proxy.user[user_id]
   let params = getContextSearchParams(context)
-  let error = params.get('error')
+  let error = params?.get('error')
   return (
     <>
       <p>Welcome back, {user.username || user.email}</p>
