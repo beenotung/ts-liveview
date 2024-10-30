@@ -2,20 +2,13 @@ import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 import { apiEndpointTitle, title } from '../../config.js'
 import Style from '../components/style.js'
-import {
-  Context,
-  DynamicContext,
-  getContextFormBody,
-  isAjax,
-} from '../context.js'
+import { Context, DynamicContext, getContextFormBody } from '../context.js'
 import { mapArray } from '../components/fragment.js'
 import { IonBackButton } from '../components/ion-back-button.js'
 import { object, string } from 'cast.ts'
 import { Link, Redirect } from '../components/router.js'
 import { renderError } from '../components/error.js'
-import { getAuthUser } from '../auth/user.js'
-import { EarlyTerminate, MessageException } from '../../exception.js'
-import { ServerMessage } from '../../../client/types.js'
+import { throwIfInAPI } from '../../exception.js'
 import { evalLocale, Locale } from '../components/locale.js'
 
 let pageTitle = <Locale en="__title__" zh_hk="__title__" zh_cn="__title__" />
@@ -53,7 +46,6 @@ let items = [
 ]
 
 function Main(attrs: {}, context: Context) {
-  let user = getAuthUser(context)
   return (
     <>
       <ion-list>
@@ -63,15 +55,9 @@ function Main(attrs: {}, context: Context) {
           </ion-item>
         ))}
       </ion-list>
-      {user ? (
-        <Link href="/__url__/add" tagName="ion-button">
-          {addPageTitle}
-        </Link>
-      ) : (
-        <p>
-          You can add __name__ after <Link href="/register">register</Link>.
-        </p>
-      )}
+      <Link href="/__url__/add" tagName="ion-button">
+        {addPageTitle}
+      </Link>
     </>
   )
 }
@@ -137,12 +123,6 @@ let addPage = (
   </>
 )
 
-function AddPage(attrs: {}, context: DynamicContext) {
-  let user = getAuthUser(context)
-  if (!user) return <Redirect href="/login" />
-  return addPage
-}
-
 let submitParser = object({
   title: string({ minLength: 3, maxLength: 50 }),
   slug: string({ match: /^[\w-]{1,32}$/ }),
@@ -150,8 +130,6 @@ let submitParser = object({
 
 function Submit(attrs: {}, context: DynamicContext) {
   try {
-    let user = getAuthUser(context)
-    if (!user) throw 'You must be logged in to submit ' + pageTitle
     let body = getContextFormBody(context)
     let input = submitParser.parse(body)
     let id = items.push({
@@ -160,24 +138,7 @@ function Submit(attrs: {}, context: DynamicContext) {
     })
     return <Redirect href={`/__url__/result?id=${id}`} />
   } catch (error) {
-    let message: ServerMessage =
-      error instanceof MessageException
-        ? error.message
-        : [
-            'batch',
-            [
-              ['update-text', '#add-message', String(error)],
-              ['add-class', '#add-message', 'error'],
-            ],
-          ]
-    if (context.type == 'ws') {
-      context.ws.send(message)
-      throw EarlyTerminate
-    }
-    if (context.type == 'express' && isAjax(context)) {
-      context.res.json({ message })
-      throw EarlyTerminate
-    }
+    throwIfInAPI(error, '#add-message', context)
     return (
       <Redirect
         href={
@@ -227,7 +188,7 @@ let routes = {
   '/__url__/add': {
     title: <Title t={addPageTitle} />,
     description: 'TODO',
-    node: <AddPage />,
+    node: addPage,
     streaming: false,
   },
   '/__url__/add/submit': {
