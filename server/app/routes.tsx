@@ -7,7 +7,8 @@ import { Router } from 'url-router.ts'
 import { LayoutType, config, title } from '../config.js'
 import { Redirect } from './components/router.js'
 import UILanguage from './components/ui-language.js'
-import type { Context, DynamicContext } from './context'
+import type express from 'express'
+import type { Context, DynamicContext, ExpressContext } from './context'
 import { o } from './jsx/jsx.js'
 import type { Node } from './jsx/types'
 import About from './pages/about.js'
@@ -228,6 +229,22 @@ export function matchRoute(
     return then(route.resolve(context), res => Object.assign(route, res))
   }
   return route
+}
+
+export function resolveExpressContext(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) {
+  let context: ExpressContext = {
+    type: 'express',
+    req,
+    res,
+    next,
+    url: req.url,
+    routerMatch: pageRouter.route(req.url),
+  }
+  return context
 }
 
 export function errorRoute(
