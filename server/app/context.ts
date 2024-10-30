@@ -3,9 +3,9 @@ import type { ManagedWebsocket } from '../ws/wss'
 import type { RouteContext } from 'url-router.ts'
 import type { Session } from './session'
 import type { PageRoute } from './routes'
-import { pageRouter } from './routes.js'
 import { getContextCookies } from './cookie.js'
-import { HttpError } from '../exception.js'
+import { EarlyTerminate, HttpError, MessageException } from '../exception.js'
+import type { ServerMessage } from '../../client/types'
 
 export type Context = StaticContext | DynamicContext
 
@@ -38,7 +38,7 @@ export type RouterContext = {
 
 export type RouterMatch = Omit<RouteContext<PageRoute>, 'value'>
 
-export function resolveExpressContext(
+export function toExpressContext(
   req: express.Request,
   res: express.Response,
   next: express.NextFunction,
@@ -49,7 +49,6 @@ export function resolveExpressContext(
     res,
     next,
     url: req.url,
-    routerMatch: pageRouter.route(req.url),
   }
   return context
 }
@@ -141,4 +140,29 @@ export function isAjax(context: Context): boolean {
   if (context.type !== 'express') return false
   let mode = context.req.header('Sec-Fetch-Mode')
   return mode != null && mode !== 'navigate'
+}
+
+export function throwIfInAPI(
+  error: unknown,
+  selector: string,
+  context: Context,
+) {
+  let message: ServerMessage =
+    error instanceof MessageException
+      ? error.message
+      : [
+          'batch',
+          [
+            ['update-text', selector, String(error)],
+            ['add-class', selector, 'error'],
+          ],
+        ]
+  if (context.type == 'ws') {
+    context.ws.send(message)
+    throw EarlyTerminate
+  }
+  if (context.type == 'express' && isAjax(context)) {
+    context.res.json({ message })
+    throw EarlyTerminate
+  }
 }

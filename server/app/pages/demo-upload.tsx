@@ -13,7 +13,7 @@ import { join } from 'path'
 import { SECOND } from '@beenotung/tslib/time.js'
 import { debugLog } from '../../debug.js'
 import { nodeListToHTML } from '../jsx/html.js'
-import { resolveExpressContext } from '../context.js'
+import { toExpressContext } from '../context.js'
 import { loadClientPlugin } from '../../client-plugin.js'
 import SourceCode from '../components/source-code.js'
 import { env } from '../../env.js'
@@ -211,7 +211,7 @@ async function handleUpload(req: Request, res: Response, next: NextFunction) {
     })
     let [_fields, files] = await form.parse(req)
     let images = files.image || []
-    let context = resolveExpressContext(req, res, next)
+    let context = toExpressContext(req, res, next)
     let html = nodeListToHTML(
       images.map(file => <UploadedImage filename={file.newFilename} />),
       context,
