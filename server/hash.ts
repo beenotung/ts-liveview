@@ -1,5 +1,6 @@
 import { createHash } from 'crypto'
 import { compare, hash, hashSync } from 'bcrypt'
+import { createHash } from 'crypto'
 
 export function hashText(text: string) {
   return createHash('sha256').update(text).digest('hex')
@@ -25,7 +26,20 @@ function calcCost(password: string) {
   return cost < MinCost ? MinCost : cost > MaxCost ? MaxCost : cost
 }
 
+const max_bcrypt_input_length = 72
+
+function preprocessPassword(password: string): string {
+  let byte_length = Buffer.from(password).length
+  if (byte_length <= max_bcrypt_input_length) {
+    return password
+  }
+  let hash = createHash('sha256')
+  hash.write(password)
+  return hash.digest('hex')
+}
+
 export async function hashPassword(password: string): Promise<string> {
+  password = preprocessPassword(password)
   let cost = calcCost(password)
   return hash(password, cost)
 }
@@ -34,5 +48,6 @@ export function comparePassword(options: {
   password: string
   password_hash: string
 }): Promise<boolean> {
-  return compare(options.password, options.password_hash)
+  let password = preprocessPassword(options.password)
+  return compare(password, options.password_hash)
 }
