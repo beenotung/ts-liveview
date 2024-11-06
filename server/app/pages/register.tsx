@@ -246,8 +246,8 @@ function checkPassword (form) {
       Your password is not be stored in plain text.
       <br />
       Instead, it is processed with{' '}
-      <a href="https://en.wikipedia.org/wiki/Bcrypt" target="_blank">
-        bcrypt algorithm
+      <a href="https://en.wikipedia.org/wiki/Argon2" target="_blank">
+        Argon2 algorithm
       </a>{' '}
       to protect your credential against data leak.
     </div>
