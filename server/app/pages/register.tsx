@@ -332,7 +332,7 @@ function ClearInputContext(_attrs: {}, context: InputContext) {
 
 type InputContext = Context & {
   contextError?: ContextError
-  values?: Record<string, string>
+  values?: Record<string, string | null>
 }
 type ContextError = Record<string, ValidateResult>
 
@@ -430,7 +430,7 @@ function validatePassword(password: string): ValidateResult {
 }
 
 // email is optional
-function validateEmail(email: string): ValidateResult {
+function validateEmail(email: string | null): ValidateResult {
   if (!email) {
     return { type: 'ok', text: '' }
   }
@@ -581,7 +581,7 @@ async function submit(context: InputContext): Promise<Node> {
     let input = {
       username: getStringCasual(body, 'username').trim().toLowerCase(),
       password: getStringCasual(body, 'password'),
-      email: getStringCasual(body, 'email').trim().toLowerCase(),
+      email: getStringCasual(body, 'email').trim().toLowerCase() || null,
       confirm_password: getStringCasual(body, 'confirm_password'),
     }
     let results = {
