@@ -461,16 +461,16 @@ function validateConfirmPassword(input: {
   if (!input.password)
     return {
       type: 'error',
-      text: 'Password not provided',
+      text: 'password not provided',
     }
   if (input.password != input.confirm_password)
     return {
       type: 'error',
-      text: 'Password not matched',
+      text: 'password not matched',
     }
   return {
     type: 'ok',
-    text: 'Password matched',
+    text: 'password matched',
   }
 }
 
