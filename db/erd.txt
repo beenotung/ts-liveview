@@ -115,8 +115,10 @@ request_log_id integer FK >0- request_log.id
 verification_code
 -----------------
 id integer PK
+uuid text NULL unique
 passcode char(6)
-email varchar(320)
+email varchar(320) NULL
+tel varchar(16) NULL
 request_time integer
 revoke_time integer NULL
 match_id integer NULL FK >0- verification_attempt.id
@@ -127,7 +129,8 @@ verification_attempt
 --------------------
 id integer PK
 passcode char(6)
-email varchar(320)
+email varchar(320) NULL
+tel varchar(16) NULL
 
 
 # zoom: 1.000
@@ -151,4 +154,4 @@ email varchar(320)
 # user (450, 680)
 # error_log (627, 158)
 # verification_code (50, 550)
-# verification_attempt (50, 400)
+# verification_attempt (50, 372)

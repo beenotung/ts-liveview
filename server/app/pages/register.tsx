@@ -20,7 +20,7 @@ import {
 } from '../svgs/logo.js'
 import { proxy, User } from '../../../db/proxy.js'
 import { ServerMessage } from '../../../client/types.js'
-import { is_email } from '@beenotung/tslib'
+import { is_email, to_full_hk_mobile_phone } from '@beenotung/tslib/validate.js'
 import { Raw } from '../components/raw.js'
 import { hashPassword } from '../../hash.js'
 import { Routes, StaticPageRoute } from '../routes.js'
@@ -31,6 +31,7 @@ import { getAuthUserId } from '../auth/user.js'
 import { UserMessageInGuestView } from './profile.js'
 import { IonBackButton } from '../components/ion-back-button.js'
 import { wsStatus } from '../components/ws-status.js'
+import { formatTel } from '../components/tel.js'
 
 let style = Style(/* css */ `
 .oauth-provider-list a {
@@ -113,9 +114,7 @@ function Main(_attrs: {}, context: Context) {
   return user_id ? <UserMessageInGuestView user_id={user_id} /> : guestView
 }
 
-let useSocialLogin = true
-
-let emailFormBody = (
+let verifyFormBody = (
   <>
     <Field
       label="Email"
@@ -124,6 +123,14 @@ let emailFormBody = (
       msgId="emailMsg"
       oninput="emit('/register/check-email', this.value)"
       autocomplete="email"
+    />
+    <Field
+      label="Phone number"
+      type="tel"
+      name="tel"
+      msgId="telMsg"
+      oninput="emit('/register/check-tel', this.value)"
+      autocomplete="tel"
     />
     {config.layout_type !== LayoutType.ionic ? (
       <div class="field">
@@ -162,7 +169,7 @@ let guestView = (
     </p>
     <div class="flex-center flex-column"></div>
     <div>Register with:</div>
-    {useSocialLogin ? (
+    {config.use_social_login ? (
       <>
         <div class="flex-center flex-column">
           <div class="oauth-provider-list">
@@ -183,10 +190,12 @@ let guestView = (
       action="/verify/email/submit"
       onsubmit="emitForm(event)"
     >
-      {emailFormBody}
+      <p>Register with email or phone number</p>
+      {verifyFormBody}
     </form>
     <div class="or-line flex-center">or</div>
     <form method="POST" action="/register/submit" onsubmit="emitForm(event)">
+      <p>Register with username and password</p>
       <Field
         label="Username"
         name="username"
@@ -429,8 +438,8 @@ function validatePassword(password: string): ValidateResult {
   return { type: 'ok' as const, text: 'password is acceptable' }
 }
 
-// email is optional
 function validateEmail(email: string | null): ValidateResult {
+  // email is optional
   if (!email) {
     return { type: 'ok', text: '' }
   }
@@ -446,12 +455,39 @@ function validateEmail(email: string | null): ValidateResult {
   if (user) {
     return {
       type: 'found' as const,
-      text: `email "${email}" is already used`,
+      text: `email "${email}" has already registered`,
       user,
     }
   }
 
   return { type: 'ok', text: `email "${email}" is valid` }
+}
+
+function validateTel(tel: string | null): ValidateResult {
+  // tel is optional
+  if (!tel) {
+    return { type: 'ok', text: '' }
+  }
+
+  tel = to_full_hk_mobile_phone(tel)
+
+  if (!tel) {
+    return {
+      type: 'error',
+      text: 'invalid hk mobile phone number',
+    }
+  }
+
+  let user = find(proxy.user, { tel })
+  if (user) {
+    return {
+      type: 'found' as const,
+      text: `tel "${formatTel(tel)}" has already registered`,
+      user,
+    }
+  }
+
+  return { type: 'ok', text: `tel "${formatTel(tel)}" is valid` }
 }
 
 function validateConfirmPassword(input: {
@@ -575,6 +611,17 @@ function CheckEmail(_: {}, context: WsContext) {
   })
 }
 
+function CheckTel(_: {}, context: WsContext) {
+  let tel = context.args?.[0] as string
+  validateInput({
+    context,
+    value: tel,
+    field: 'tel',
+    selector: '#telMsg',
+    validate: validateTel,
+  })
+}
+
 async function submit(context: InputContext): Promise<Node> {
   try {
     let body = getContextFormBody(context)
@@ -683,6 +730,11 @@ let routes = {
     title: apiEndpointTitle,
     description: 'validate email and check availability',
     node: <CheckEmail />,
+  },
+  '/register/check-tel': {
+    title: apiEndpointTitle,
+    description: 'validate phone number and check availability',
+    node: <CheckTel />,
   },
   '/register/submit': {
     async resolve(context): Promise<StaticPageRoute> {

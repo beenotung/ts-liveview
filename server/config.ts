@@ -30,6 +30,7 @@ export let config = {
   auto_open: !production && development && epoch === 1,
   client_target: 'es2020',
   layout_type: LayoutType.navbar,
+  use_social_login: true,
 }
 
 const titleSuffix = ' | ' + config.site_name

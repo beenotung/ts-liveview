@@ -100,13 +100,16 @@ export type ErrorLog = {
 export type VerificationAttempt = {
   id?: null | number
   passcode: string // char(6)
-  email: string
+  email: null | string
+  tel: null | string
 }
 
 export type VerificationCode = {
   id?: null | number
+  uuid: null | string
   passcode: string // char(6)
-  email: string
+  email: null | string
+  tel: null | string
   request_time: number
   revoke_time: null | number
   match_id: null | number
