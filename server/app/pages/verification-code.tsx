@@ -3,7 +3,7 @@ import { MINUTE } from '@beenotung/tslib/time.js'
 import { db } from '../../../db/db.js'
 import { HttpError, MessageException } from '../../exception.js'
 import { proxy } from '../../../db/proxy.js'
-import { boolean, email, object, optional, string } from 'cast.ts'
+import { boolean, email, literal, object, optional, or, string } from 'cast.ts'
 import { sendEmail } from '../../email.js'
 import { LayoutType, apiEndpointTitle, config, title } from '../../config.js'
 import {
@@ -23,6 +23,10 @@ import { debugLog } from '../../debug.js'
 import { filter, find } from 'better-sqlite3-proxy'
 import { writeUserIdToCookie } from '../auth/user.js'
 import { env } from '../../env.js'
+import { randomUUID } from 'crypto'
+import { sendSMS } from '../../sms.js'
+import { to_full_hk_mobile_phone } from '@beenotung/tslib/validate.js'
+import { formatTel } from '../components/tel.js'
 
 let log = debugLog('app:verification-code')
 log.enabled = true
@@ -68,78 +72,181 @@ export function generatePasscode(): string {
   throw new HttpError(503, 'passcode pool is full')
 }
 
-let requestEmailVerificationParser = object({
-  email: email(),
+let requestVerificationParser = object({
+  email: or([literal(''), email()]),
+  tel: string(),
   include_link: optional(boolean()),
 })
 
-async function requestEmailVerification(
+async function requestVerification(
   context: DynamicContext,
 ): Promise<StaticPageRoute> {
+  let mode: 'email' | 'sms' | null = null
   try {
     let body = getContextFormBody(context)
-    let input = requestEmailVerificationParser.parse(body, { name: 'body' })
+    let input = requestVerificationParser.parse(body, { name: 'body' })
 
+    let email = input.email || null
+    let tel = input.tel || null
+
+    if (!email && !tel) {
+      throw 'email or tel is required'
+    }
+
+    mode = email ? 'email' : 'sms'
+
+    if (tel) {
+      tel = to_full_hk_mobile_phone(tel)
+      if (!tel) {
+        throw 'not a valid HK mobile phone number'
+      }
+    }
+
+    let uuid = randomUUID()
     let passcode = generatePasscode()
     let request_time = Date.now()
     proxy.verification_code.push({
       passcode,
-      email: input.email,
+      uuid,
+      email,
+      tel,
       request_time,
       revoke_time: null,
       match_id: null,
-      user_id: find(proxy.user, { email: input.email })?.id || null,
+      user_id:
+        (email
+          ? find(proxy.user, { email })?.id
+          : tel
+            ? find(proxy.user, { tel })?.id
+            : null) || null,
     })
-    let { html, text } = verificationCodeEmail(
-      { passcode, email: input.include_link ? input.email : null },
-      context,
-    )
-    let info = await sendEmail({
-      from: env.EMAIL_USER,
-      to: input.email,
-      subject: title('Email Verification'),
-      html,
-      text,
-    })
-    if (info.accepted[0] === input.email) {
-      log('sent passcode email to:', input.email)
-      if (
-        env.EMAIL_USER == 'skip' &&
-        context.type == 'ws' &&
-        env.ORIGIN.includes('localhost')
-      ) {
-        context.ws.send([
-          'eval',
-          `alert('[dev] verification code: ${passcode}')`,
-        ])
+
+    async function sendByEmail(): Promise<StaticPageRoute> {
+      let { html, text } = verificationCodeEmail(
+        { passcode, uuid, include_link: input.include_link || false },
+        context,
+      )
+      let info = await sendEmail({
+        from: `${config.site_name} <${env.EMAIL_USER}>`,
+        to: input.email,
+        subject: title('Email Verification'),
+        html,
+        text,
+      })
+      if (info.accepted[0] === input.email) {
+        log('sent passcode email to:', input.email)
+        if (
+          env.EMAIL_USER == 'skip' &&
+          context.type == 'ws' &&
+          env.ORIGIN.includes('localhost')
+        ) {
+          context.ws.send([
+            'eval',
+            `alert('[dev] verification code: ${passcode}')`,
+          ])
+        }
+      } else {
+        log('failed to send email?')
+        log('send email info:')
+        console.dir(info, { depth: 20 })
+        throw new HttpError(502, info.response)
       }
-    } else {
-      log('failed to send email?')
-      log('send email info:')
-      console.dir(info, { depth: 20 })
-      throw new HttpError(502, info.response)
+      return {
+        title: title('Email Verification'),
+        description:
+          'API Endpoint to request email verification code for authentication',
+        node: (
+          <Redirect
+            href={'/verify/email/result?' + new URLSearchParams({ uuid })}
+          />
+        ),
+      }
     }
-    return {
-      title: title('Email Verification'),
-      description:
-        'API Endpoint to request email verification code for authentication',
-      node: (
-        <Redirect
-          href={
-            '/verify/email/result?' +
-            new URLSearchParams({ email: input.email })
-          }
-        />
-      ),
+
+    async function sendBySMS(): Promise<StaticPageRoute> {
+      let text = verificationCodeSMS({
+        passcode,
+        uuid,
+        include_link: input.include_link || false,
+      })
+      let res = await sendSMS({
+        from: config.site_name,
+        to: input.tel,
+        text,
+      })
+      if (res.ok) {
+        log('sent passcode sms to:', input.tel)
+        if (
+          env.SMS_ACCOUNT_KEY == 'skip' &&
+          context.type == 'ws' &&
+          env.ORIGIN.includes('localhost')
+        ) {
+          context.ws.send([
+            'eval',
+            `alert('[dev] verification code: ${passcode}')`,
+          ])
+        }
+      } else {
+        log('failed to send sms?')
+        log('send sms response:')
+        let text = await res.text()
+        log({ status: res.status, statusText: res.statusText, text })
+        throw new HttpError(502, text)
+      }
+      return {
+        title: title('SMS Verification'),
+        description:
+          'API Endpoint to request sms verification code for authentication',
+        node: (
+          <Redirect
+            href={'/verify/sms/result?' + new URLSearchParams({ uuid })}
+          />
+        ),
+      }
     }
+
+    return mode == 'email' ? await sendByEmail() : await sendBySMS()
   } catch (error) {
     if (error instanceof MessageException) {
       throw error
     }
+
+    if (mode === 'email') {
+      return {
+        title: title('Email Verification'),
+        description:
+          'API Endpoint to request email verification code for authentication',
+        node: (
+          <Redirect
+            href={
+              '/verify/email/result?' +
+              new URLSearchParams({ error: String(error) })
+            }
+          />
+        ),
+      }
+    }
+
+    if (mode === 'sms') {
+      return {
+        title: title('SMS Verification'),
+        description:
+          'API Endpoint to request sms verification code for authentication',
+        node: (
+          <Redirect
+            href={
+              '/verify/sms/result?' +
+              new URLSearchParams({ error: String(error) })
+            }
+          />
+        ),
+      }
+    }
+
     return {
-      title: title('Email Verification'),
+      title: title('Authentication Verification'),
       description:
-        'API Endpoint to request email verification code for authentication',
+        'API Endpoint to request verification code for authentication',
       node: (
         <Redirect
           href={
@@ -153,15 +260,19 @@ async function requestEmailVerification(
 }
 
 export function verificationCodeEmail(
-  attrs: { passcode: string; email: string | null },
+  attrs: {
+    uuid: string
+    passcode: string
+    include_link: boolean
+  },
   context: Context,
 ) {
-  let url = attrs.email
+  let url = attrs.include_link
     ? env.ORIGIN +
       '/verify/email/result?' +
       new URLSearchParams({
         code: attrs.passcode,
-        email: attrs.email,
+        uuid: attrs.uuid,
       })
     : null
   let node = (
@@ -189,31 +300,48 @@ export function verificationCodeEmail(
     </div>
   )
   let html = nodeToHTML(node, context)
+  let site_name =
+    config.site_name != config.short_site_name
+      ? `${config.site_name} (${config.short_site_name} in short)`
+      : config.site_name
   let text = `
 ${attrs.passcode} is your verification code.
 
 To complete the email verification process, please copy the code above and paste it to the form.
 
-If you did not request to authenticate on ${config.site_name} (${config.short_site_name} in short), it is safe to ignore this email.
+If you did not request to authenticate on ${site_name}, it is safe to ignore this email.
 `.trim()
   return { html, text }
 }
 
-function verificationCodeSMS(attrs: { passcode: string }) {
-  return `
-${attrs.passcode} is your verification code.
-
-If you did not request to authenticate on ${config.short_site_name}, it is safe to ignore this message.
-`.trim()
+export function verificationCodeSMS(attrs: {
+  uuid: string
+  passcode: string
+  include_link: boolean
+}): string {
+  let url = attrs.include_link
+    ? env.ORIGIN +
+      '/verify/sms/result?' +
+      new URLSearchParams({
+        code: attrs.passcode,
+        uuid: attrs.uuid,
+      })
+    : null
+  let text = `${attrs.passcode} is your verification code.`
+  if (url) {
+    text += '\n\n' + url
+  }
+  text += `\n\nIf you did not request to authenticate on ${config.site_name}, it is safe to ignore this message.`
+  return text
 }
 
 let style = Style(/* css */ `
-#verifyEmailPage form .field {
+form .field {
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 0.5rem;
 }
-#verifyEmailPage form .field input {
+form .field input {
   margin: 0.25rem 0;
 }
 `)
@@ -223,6 +351,12 @@ function VerifyEmailPage(attrs: {}, context: DynamicContext) {
   let error = params.get('error')
   let title = params.get('title')
   let pageTitle = 'Email Verification'
+  let code = params.get('code')
+  let uuid = params.get('uuid')
+  let email = uuid ? find(proxy.verification_code, { uuid })?.email : null
+  if (!email) {
+    error ||= 'invalid verification link'
+  }
   let node = error ? (
     <>
       <p>{title || 'Failed to send verification code to your email'}.</p>
@@ -244,7 +378,7 @@ function VerifyEmailPage(attrs: {}, context: DynamicContext) {
         </span>
       </p>
 
-      <VerifyEmailForm params={params} />
+      <VerifyEmailForm uuid={uuid!} email={email!} code={code} />
     </>
   )
   if (config.layout_type == LayoutType.ionic) {
@@ -274,12 +408,15 @@ function VerifyEmailPage(attrs: {}, context: DynamicContext) {
     </>
   )
 }
-function VerifyEmailForm(attrs: { params: URLSearchParams }) {
-  let { params } = attrs
-  let email = params.get('email')
-  let code = params.get('code')
+function VerifyEmailForm(attrs: {
+  uuid: string
+  email: string
+  code: string | null
+}) {
+  let { email, code } = attrs
   return (
     <form method="post" action="/verify/email/code/submit">
+      <input type="hidden" name="uuid" value={attrs.uuid} />
       <Field
         label="Email"
         input={
@@ -290,6 +427,113 @@ function VerifyEmailForm(attrs: { params: URLSearchParams }) {
             value={email}
             readonly
             style={email ? `width: ${email.length + 2}ch` : undefined}
+          />
+        }
+      />
+      <Field
+        label="Verification code"
+        input={
+          <input
+            style={`font-family: monospace; width: ${config.layout_type == LayoutType.ionic ? '8ch' : '6ch'}; padding: 0.5ch`}
+            minlength={PasscodeLength}
+            maxlength={PasscodeLength}
+            inputmode="numeric"
+            name="code"
+            placeholder={'x'.repeat(PasscodeLength)}
+            required
+            value={code}
+            autocomplete="off"
+          />
+        }
+      />
+      <div>
+        <input type="submit" value="Verify" />
+      </div>
+    </form>
+  )
+}
+
+function VerifySMSPage(attrs: {}, context: DynamicContext) {
+  let params = new URLSearchParams(context.routerMatch?.search)
+  let error = params.get('error')
+  let title = params.get('title')
+  let pageTitle = 'SMS Verification'
+  let code = params.get('code')
+  let uuid = params.get('uuid')
+  let tel = uuid ? find(proxy.verification_code, { uuid })?.tel : null
+  if (!tel) {
+    error ||= 'invalid verification link'
+  }
+  let node = error ? (
+    <>
+      <p>{title || 'Failed to send verification code to your phone'}.</p>
+      {renderError(error, context)}
+      <p>
+        You can request another verification code in the{' '}
+        <Link href="/login">login page</Link> or{' '}
+        <Link href="/register">register page</Link>.
+      </p>
+    </>
+  ) : (
+    <>
+      <p>
+        <span style="display: inline-block">
+          A verification code is sent to your phone number.
+        </span>{' '}
+        <span style="display: inline-block">
+          Please check your inbox and spam folder.
+        </span>
+      </p>
+
+      <VerifySMSForm uuid={uuid!} tel={tel!} code={code} />
+    </>
+  )
+  if (config.layout_type == LayoutType.ionic) {
+    return (
+      <>
+        {style}
+        <ion-header>
+          <ion-toolbar>
+            <ion-title role="heading" aria-level="1">
+              {pageTitle}
+            </ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content id="verifySMSPage" class="ion-padding">
+          {node}
+        </ion-content>
+      </>
+    )
+  }
+  return (
+    <>
+      {style}
+      <div id="verifySMSPage">
+        <h1>{pageTitle}</h1>
+        {node}
+      </div>
+    </>
+  )
+}
+function VerifySMSForm(attrs: {
+  uuid: string
+  tel: string
+  code: string | null
+}) {
+  let { tel, code } = attrs
+  return (
+    <form method="post" action="/verify/sms/code/submit">
+      <input type="hidden" name="uuid" value={attrs.uuid} />
+      <Field
+        label="Phone number"
+        input={
+          <input
+            type="tel"
+            required
+            name="tel"
+            value={formatTel(tel)}
+            readonly
+            style={tel ? `width: ${tel.length + 2}ch` : undefined}
           />
         }
       />
@@ -327,13 +571,13 @@ function Field(attrs: { label: string; input: Node }) {
   )
 }
 
-let count_attempts_by_email = db
-  .prepare(
+let count_attempts = db
+  .prepare<{ email: string | null; tel: string | null }, number>(
     /* sql */ `
 with verification_code_id as (
 select id
 from verification_code
-where email = :email
+where (email = :email or tel = :tel)
   and revoke_time is null
 order by id desc
 limit 1
@@ -346,15 +590,30 @@ where verification_attempt.created_at >= verification_code.created_at
   )
   .pluck()
 
-let revoke_verification_code_by_email = db.prepare(/* sql */ `
+let revoke_verification_code = db.prepare<{
+  email: string | null
+  tel: string | null
+  revoke_time: number
+}>(/* sql */ `
 update verification_code
 set revoke_time = :revoke_time
-where email = :email
+where (email = :email or tel = :tel)
   and revoke_time is null
 `)
 
 let checkEmailVerificationCodeParser = object({
+  uuid: string(),
   email: email(),
+  code: string({
+    minLength: PasscodeLength,
+    maxLength: PasscodeLength,
+    match: PasscodeRegex,
+  }),
+})
+
+let checkSMSVerificationCodeParser = object({
+  uuid: string(),
+  tel: string(),
   code: string({
     minLength: PasscodeLength,
     maxLength: PasscodeLength,
@@ -366,11 +625,11 @@ async function checkEmailVerificationCode(
   context: DynamicContext,
 ): Promise<StaticPageRoute> {
   let res = (context as ExpressContext).res
-  let email: string | null = null
+  let uuid: string | null = null
   try {
     let body = getContextFormBody(context)
     let input = checkEmailVerificationCodeParser.parse(body)
-    email = input.email
+    uuid = input.uuid
 
     let is_too_much_attempt = false
     let is_expired = false
@@ -382,12 +641,17 @@ async function checkEmailVerificationCode(
       let attempt_id = proxy.verification_attempt.push({
         passcode: input.code,
         email: input.email,
+        tel: null,
       })
 
-      let attempts = count_attempts_by_email.get({ email }) as number
+      let attempts = count_attempts.get({ email: input.email, tel: null })!
       if (attempts > MaxPasscodeInputAttempt) {
         is_too_much_attempt = true
-        revoke_verification_code_by_email.run({ email, revoke_time: now })
+        revoke_verification_code.run({
+          email: input.email,
+          tel: null,
+          revoke_time: now,
+        })
         return
       }
 
@@ -415,9 +679,9 @@ async function checkEmailVerificationCode(
           find(proxy.user, { email: input.email })?.id ||
           proxy.user.push({
             email: input.email,
+            tel: null,
             username: null,
             password_hash: null,
-            tel: null,
             avatar: null,
             is_admin: null,
           })
@@ -446,7 +710,7 @@ async function checkEmailVerificationCode(
       title: 'Failed to verify email',
       error: String(error),
     })
-    if (email) params.set('email', email)
+    if (uuid) params.set('uuid', uuid)
     return {
       title: apiEndpointTitle,
       description:
@@ -456,10 +720,111 @@ async function checkEmailVerificationCode(
   }
 }
 
+async function checkSMSVerificationCode(
+  context: DynamicContext,
+): Promise<StaticPageRoute> {
+  let res = (context as ExpressContext).res
+  let uuid: string | null = null
+  try {
+    let body = getContextFormBody(context)
+    let input = checkSMSVerificationCodeParser.parse(body)
+    uuid = input.uuid
+    let is_too_much_attempt = false
+    let is_expired = false
+    let user_id: number | null = null
+
+    let tel = to_full_hk_mobile_phone(input.tel)
+    if (!tel) throw new HttpError(400, 'Invalid hk mobile phone number')
+
+    db.transaction(() => {
+      let now = Date.now()
+
+      let attempt_id = proxy.verification_attempt.push({
+        passcode: input.code,
+        email: null,
+        tel,
+      })
+
+      let attempts = count_attempts.get({ email: null, tel })!
+      if (attempts > MaxPasscodeInputAttempt) {
+        is_too_much_attempt = true
+        revoke_verification_code.run({
+          email: null,
+          tel,
+          revoke_time: now,
+        })
+        return
+      }
+
+      let verification_code_rows = filter(proxy.verification_code, {
+        tel,
+        revoke_time: null,
+        match_id: null,
+      })
+      if (verification_code_rows.length == 0) {
+        is_expired = true
+        return
+      }
+      for (let verification_code of verification_code_rows) {
+        if (verification_code.passcode != input.code) {
+          continue
+        }
+        if (now - verification_code.request_time >= PasscodeExpireDuration) {
+          verification_code.revoke_time = now
+          is_expired = true
+          continue
+        }
+        verification_code.revoke_time = now
+        verification_code.match_id = attempt_id
+        user_id =
+          find(proxy.user, { tel })?.id ||
+          proxy.user.push({
+            email: null,
+            tel,
+            username: null,
+            password_hash: null,
+            avatar: null,
+            is_admin: null,
+          })
+        break
+      }
+    })()
+    if (!user_id) {
+      throw new HttpError(
+        400,
+        is_too_much_attempt
+          ? 'Too much mismatched attempts.'
+          : is_expired
+            ? 'Verification code expired.'
+            : 'Verification code not matched.',
+      )
+    }
+    writeUserIdToCookie(res, user_id)
+    return {
+      title: apiEndpointTitle,
+      description:
+        'API Endpoint to submit sms verification code for authentication',
+      node: <Redirect href="/login?code=ok" />,
+    }
+  } catch (error) {
+    let params = new URLSearchParams({
+      title: 'Failed to verify sms',
+      error: String(error),
+    })
+    if (uuid) params.set('uuid', uuid)
+    return {
+      title: apiEndpointTitle,
+      description:
+        'API Endpoint to submit sms verification code for authentication',
+      node: <Redirect href={'/verify/sms/result?' + params} />,
+    }
+  }
+}
+
 let routes = {
-  '/verify/email/submit': {
+  '/verify/submit': {
     streaming: false,
-    resolve: requestEmailVerification,
+    resolve: requestVerification,
   },
   '/verify/email/result': {
     title: title('Email Verification'),
@@ -469,6 +834,15 @@ let routes = {
   '/verify/email/code/submit': {
     streaming: false,
     resolve: checkEmailVerificationCode,
+  },
+  '/verify/sms/result': {
+    title: title('SMS Verification'),
+    description: 'Input SMS verification code for authentication',
+    node: <VerifySMSPage />,
+  },
+  '/verify/sms/code/submit': {
+    streaming: false,
+    resolve: checkSMSVerificationCode,
   },
 } satisfies Routes
 
