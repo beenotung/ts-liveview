@@ -18,6 +18,8 @@ export let env = {
   EMAIL_PORT: 587,
   EMAIL_USER: '',
   EMAIL_PASSWORD: '',
+  SMS_ACCOUNT_KEY: '',
+  SMS_API_KEY: '',
 }
 applyDefaultEnv()
 
@@ -31,6 +33,8 @@ function applyDefaultEnv() {
   env.ORIGIN ||= process.env.ORIGIN || `http://localhost:${PORT}`
   env.EMAIL_USER ||= process.env.EMAIL_USER || 'skip'
   env.EMAIL_PASSWORD ||= process.env.EMAIL_PASSWORD || 'skip'
+  env.SMS_ACCOUNT_KEY ||= process.env.SMS_ACCOUNT_KEY || 'skip'
+  env.SMS_API_KEY ||= process.env.SMS_API_KEY || 'skip'
 }
 
 populateEnv(env, { mode: 'halt' })
