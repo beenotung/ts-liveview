@@ -16,6 +16,7 @@ import Style from '../components/style.js'
 import { renderError } from '../components/error.js'
 import { Raw } from '../components/raw.js'
 import { loadClientPlugin } from '../../client-plugin.js'
+import { formatTel } from '../components/tel.js'
 
 let style = Style(/* css */ `
 #profile .avatar {
@@ -56,6 +57,7 @@ let ProfilePage = (_attrs: {}, context: DynamicContext) => {
   )
 }
 
+// TODO allow change username, email, tel
 function renderProfile(user_id: number, context: DynamicContext) {
   let user = proxy.user[user_id]
   let params = getContextSearchParams(context)
@@ -129,7 +131,8 @@ export function UserMessageInGuestView(attrs: { user_id: number }) {
   return (
     <>
       <p>
-        You have login as <b>{user.username || user.email}</b>.
+        You have login as{' '}
+        <b>{user.username || user.email || formatTel(user.tel)}</b>.
       </p>
       <p>
         You can go to <Link href="/profile">profile page</Link> to manage your
