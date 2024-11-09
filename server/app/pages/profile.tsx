@@ -4,12 +4,17 @@ import { Link, Redirect } from '../components/router.js'
 import {
   DynamicContext,
   ExpressContext,
+  getContextFormBody,
   getContextSearchParams,
 } from '../context.js'
 import { o } from '../jsx/jsx.js'
-import { Routes } from '../routes.js'
-import { proxy } from '../../../db/proxy.js'
-import { eraseUserIdFromCookie, getAuthUserId } from '../auth/user.js'
+import { PageRoute, Routes } from '../routes.js'
+import { proxy, User } from '../../../db/proxy.js'
+import {
+  eraseUserIdFromCookie,
+  getAuthUser,
+  getAuthUserId,
+} from '../auth/user.js'
 import { Router } from 'express'
 import { createUploadForm } from '../upload.js'
 import Style from '../components/style.js'
@@ -17,6 +22,10 @@ import { renderError } from '../components/error.js'
 import { Raw } from '../components/raw.js'
 import { loadClientPlugin } from '../../client-plugin.js'
 import { formatTel } from '../components/tel.js'
+import { newSingleFieldForm } from '../components/single-field-form.js'
+import { validateUsername } from './register.js'
+import { object, string } from 'cast.ts'
+import { MessageException } from '../../exception.js'
 
 let style = Style(/* css */ `
 #profile .avatar {
@@ -26,6 +35,17 @@ let style = Style(/* css */ `
 #profile #previewImg {
   max-width: 160px;
   max-height: 160px;
+}
+#profile .field {
+  display: inline-flex;
+  margin: 0.25rem 0;
+}
+#profile .field span {
+  display: inline-block;
+  min-width: 7.5rem;
+}
+#profile .field input {
+  max-width: 40vw;
 }
 `)
 
@@ -57,6 +77,12 @@ let ProfilePage = (_attrs: {}, context: DynamicContext) => {
   )
 }
 
+let toastPlugin = loadClientPlugin({ entryFile: 'dist/client/sweetalert.js' })
+
+function getUserName(user: User) {
+  return user.username || user.email || formatTel(user.tel)
+}
+
 // TODO allow change username, email, tel
 function renderProfile(user_id: number, context: DynamicContext) {
   let user = proxy.user[user_id]
@@ -64,25 +90,84 @@ function renderProfile(user_id: number, context: DynamicContext) {
   let error = params?.get('error')
   return (
     <>
-      <p>Welcome back, {user.username || user.email}</p>
+      <p>Welcome back, {getUserName(user)}</p>
+      <div>
+        <label class="field">
+          <span>User ID: </span>
+          <span>{user_id}</span>
+        </label>
+      </div>
+      <form
+        method="POST"
+        action="/profile/username/submit"
+        onsubmit="emitForm(event)"
+      >
+        <label class="field">
+          <span>Username: </span>
+          <input
+            type="text"
+            name="username"
+            autocomplete="off"
+            value={user.username}
+            data-value={user.username}
+            oninput="submitUsernameBtn.disabled = this.value === this.dataset.value || !this.value"
+          />
+        </label>{' '}
+        <button type="submit" id="submitUsernameBtn" disabled>
+          Change
+        </button>
+      </form>
+      <form method="POST" action="/verify/submit" onsubmit="emitForm(event)">
+        <input name="tel" hidden />
+        <label class="field">
+          <span>Email: </span>
+          <input
+            type="email"
+            name="email"
+            autocomplete="email"
+            value={user.email}
+            data-value={user.email}
+            oninput="submitEmailBtn.disabled = this.value === this.dataset.value || !this.value"
+          />
+        </label>{' '}
+        <button type="submit" id="submitEmailBtn" disabled>
+          Verify
+        </button>
+      </form>
+      <form method="POST" action="/verify/submit" onsubmit="emitForm(event)">
+        <input name="email" hidden />
+        <label class="field">
+          <span>Phone number: </span>
+          <input
+            type="tel"
+            name="tel"
+            autocomplete="tel"
+            value={user.tel}
+            data-value={user.tel}
+            oninput="submitTelBtn.disabled = this.value === this.dataset.value || !this.value"
+          />
+        </label>{' '}
+        <button type="submit" id="submitTelBtn" disabled>
+          Verify
+        </button>
+      </form>
       <form
         method="POST"
         action="/avatar"
         enctype="multipart/form-data"
         style="margin-bottom: 1rem"
       >
-        <div>
-          Avatar:
+        <label class="field">
+          <span>Avatar: </span>
           {user.avatar ? (
-            <div>
-              <img class="avatar" src={'/uploads/' + user.avatar} />
-            </div>
+            <img class="avatar" src={'/uploads/' + user.avatar} />
           ) : (
             ' (none)'
           )}
-        </div>
-        <label>
-          Change avatar:{' '}
+        </label>
+        <div></div>
+        <label class="field">
+          <span>Change avatar: </span>
           <input
             type="file"
             name="avatar"
@@ -112,6 +197,7 @@ async function previewAvatar(input) {
   previewContainer.hidden = false
 }
 </script>
+${toastPlugin.script}
 `)}
       </form>
       <a href="/logout" rel="nofollow">
@@ -175,6 +261,51 @@ function attachRoutes(app: Router) {
   })
 }
 
+let changeUsernameParser = object({
+  username: string(),
+})
+
+function ChangeUsername(attrs: {}, context: DynamicContext) {
+  let user = getAuthUser(context)
+  if (!user) throw 'not login'
+
+  let body = getContextFormBody(context)
+  let { username } = changeUsernameParser.parse(body)
+
+  if (user.username !== username) {
+    let result = validateUsername(username)
+    if (result.type === 'ok') {
+      user.username = username
+      if (context.type === 'ws') {
+        throw new MessageException([
+          'batch',
+          [
+            ['eval', `showAlert('updated username','success')`],
+            [
+              'update-attrs',
+              'input[name="username"]',
+              {
+                'value': username,
+                'data-value': username,
+              },
+            ],
+            ['update-props', '#submitUsernameBtn', { disabled: true }],
+          ],
+        ])
+      }
+    } else {
+      if (context.type === 'ws') {
+        throw new MessageException([
+          'eval',
+          `showAlert(${JSON.stringify(result.text)},'warning')`,
+        ])
+      }
+    }
+  }
+
+  return <Redirect href="/profile" />
+}
+
 let routes = {
   '/profile': {
     title: title('Profile Page'),
@@ -182,6 +313,12 @@ let routes = {
     menuText: 'Profile',
     userOnly: true,
     node: <ProfilePage />,
+  },
+  '/profile/username/submit': {
+    title: apiEndpointTitle,
+    description: 'change username',
+    streaming: false,
+    node: <ChangeUsername />,
   },
   '/logout': {
     title: apiEndpointTitle,
