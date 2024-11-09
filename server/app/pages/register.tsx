@@ -358,7 +358,7 @@ type ValidateResult =
 let minUsername = 1
 let maxUsername = 32
 
-function validateUsername(username: string): ValidateResult {
+export function validateUsername(username: string): ValidateResult {
   if (!username) {
     return { type: 'error', text: 'username not provided' }
   }

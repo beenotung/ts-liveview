@@ -1,7 +1,7 @@
 import { Random, digits } from '@beenotung/tslib/random.js'
 import { MINUTE } from '@beenotung/tslib/time.js'
 import { db } from '../../../db/db.js'
-import { HttpError, MessageException } from '../../exception.js'
+import { EarlyTerminate, HttpError, MessageException } from '../../exception.js'
 import { proxy } from '../../../db/proxy.js'
 import { boolean, email, literal, object, optional, or, string } from 'cast.ts'
 import { sendEmail } from '../../email.js'
@@ -20,8 +20,12 @@ import Style from '../components/style.js'
 import { Node } from '../jsx/types.js'
 import { renderError } from '../components/error.js'
 import { debugLog } from '../../debug.js'
-import { filter, find } from 'better-sqlite3-proxy'
-import { writeUserIdToCookie } from '../auth/user.js'
+import { count, filter, find } from 'better-sqlite3-proxy'
+import {
+  getAuthUser,
+  getAuthUserId,
+  writeUserIdToCookie,
+} from '../auth/user.js'
 import { env } from '../../env.js'
 import { randomUUID } from 'crypto'
 import { sendSMS } from '../../sms.js'
@@ -102,6 +106,33 @@ async function requestVerification(
       }
     }
 
+    let authUser = getAuthUser(context)
+    if (email) {
+      mode = 'email'
+      if (authUser && authUser.email != email) {
+        // changing email, check if the new email is already registered
+        if (count(proxy.user, { email })) {
+          throw 'this email is already registered by another account'
+        }
+      }
+    }
+    if (tel) {
+      mode = 'sms'
+      if (authUser && authUser.tel != tel) {
+        // changing tel, check if the new tel is already registered
+        if (count(proxy.user, { tel })) {
+          throw 'this phone number is already registered by another account'
+        }
+      }
+    }
+
+    function getUserId(): number | null {
+      if (authUser) return authUser.id!
+      if (email) return find(proxy.user, { email })?.id || null
+      if (tel) return find(proxy.user, { tel })?.id || null
+      return null
+    }
+
     let uuid = randomUUID()
     let passcode = generatePasscode()
     let request_time = Date.now()
@@ -113,12 +144,7 @@ async function requestVerification(
       request_time,
       revoke_time: null,
       match_id: null,
-      user_id:
-        (email
-          ? find(proxy.user, { email })?.id
-          : tel
-            ? find(proxy.user, { tel })?.id
-            : null) || null,
+      user_id: getUserId(),
     })
 
     async function sendByEmail(): Promise<StaticPageRoute> {
@@ -209,6 +235,11 @@ async function requestVerification(
   } catch (error) {
     if (error instanceof MessageException) {
       throw error
+    }
+
+    if (context.type == 'ws') {
+      context.ws.send(['eval', `showAlert(${JSON.stringify(error)},'error')`])
+      throw EarlyTerminate
     }
 
     if (mode === 'email') {
@@ -676,6 +707,7 @@ async function checkEmailVerificationCode(
         verification_code.revoke_time = now
         verification_code.match_id = attempt_id
         user_id =
+          verification_code.user_id ||
           find(proxy.user, { email: input.email })?.id ||
           proxy.user.push({
             email: input.email,
@@ -685,6 +717,11 @@ async function checkEmailVerificationCode(
             avatar: null,
             is_admin: null,
           })
+        // update email after verification
+        let user = proxy.user[user_id]
+        if (user.email != input.email) {
+          user.email = input.email
+        }
         break
       }
     })()
@@ -777,6 +814,7 @@ async function checkSMSVerificationCode(
         verification_code.revoke_time = now
         verification_code.match_id = attempt_id
         user_id =
+          verification_code.user_id ||
           find(proxy.user, { tel })?.id ||
           proxy.user.push({
             email: null,
@@ -786,6 +824,11 @@ async function checkSMSVerificationCode(
             avatar: null,
             is_admin: null,
           })
+        // update tel after verification
+        let user = proxy.user[user_id]
+        if (user.tel != tel) {
+          user.tel = tel
+        }
         break
       }
     })()
