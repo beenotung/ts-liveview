@@ -90,11 +90,11 @@ let ProfilePage = (_attrs: {}, context: DynamicContext) => {
 
 let toastPlugin = loadClientPlugin({ entryFile: 'dist/client/sweetalert.js' })
 
-function getUserName(user: User) {
+function getDisplayName(user: User) {
   return (
     user.nickname ||
     user.username ||
-    user.email?.split('@')[0] ||
+    user.email ||
     formatTel(user.tel)
   )
 }
@@ -106,7 +106,7 @@ function renderProfile(user_id: number, context: DynamicContext) {
   let error = params?.get('error')
   return (
     <>
-      <p>Welcome back, {getUserName(user)}</p>
+      <p>Welcome back, {getDisplayName(user)}</p>
       <div class="divider">
         <hr />
         <span>For login</span>
@@ -263,7 +263,7 @@ export function UserMessageInGuestView(attrs: { user_id: number }) {
   return (
     <>
       <p>
-        You have login as <b>{getUserName(user)}</b>.
+        You have login as <b>{getDisplayName(user)}</b>.
       </p>
       <p>
         You can go to <Link href="/profile">profile page</Link> to manage your
