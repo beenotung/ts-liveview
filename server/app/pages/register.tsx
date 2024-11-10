@@ -32,6 +32,7 @@ import { UserMessageInGuestView } from './profile.js'
 import { IonBackButton } from '../components/ion-back-button.js'
 import { wsStatus } from '../components/ws-status.js'
 import { formatTel } from '../components/tel.js'
+import { validateUsername, ValidateUserResult } from '../validate/user.js'
 
 let style = Style(/* css */ `
 .oauth-provider-list a {
@@ -317,7 +318,10 @@ function Field(
   )
 }
 
-function renderErrorMessage(id: string, result: ValidateResult | undefined) {
+function renderErrorMessage(
+  id: string,
+  result: ValidateUserResult | undefined,
+) {
   if (!result) {
     return <div id={id} class="msg"></div>
   }
@@ -343,79 +347,12 @@ type InputContext = Context & {
   contextError?: ContextError
   values?: Record<string, string | null>
 }
-type ContextError = Record<string, ValidateResult>
-
-type ValidateResult =
-  | { type: 'error'; text: string; extra?: string }
-  | {
-      type: 'found'
-      text: string
-      user: User
-      extra?: string
-    }
-  | { type: 'ok'; text: string; extra?: string }
-
-let minUsername = 1
-let maxUsername = 32
-
-export function validateUsername(username: string): ValidateResult {
-  if (!username) {
-    return { type: 'error', text: 'username not provided' }
-  }
-
-  if (username.length < minUsername) {
-    let diff = minUsername - username.length
-    return {
-      type: 'error' as const,
-      text: `username "${username}" is too short, need ${diff} more characters`,
-    }
-  }
-
-  if (username.length > maxUsername) {
-    let diff = username.length - maxUsername
-    return {
-      type: 'error' as const,
-      text: `username "${username}" is too long, need ${diff} less characters`,
-    }
-  }
-
-  if (username.replace(/badminton/g, '').includes('admin')) {
-    return {
-      type: 'error' as const,
-      text: `username cannot contains "admin"`,
-    }
-  }
-
-  let excludedChars = Array.from(
-    new Set(username.replace(/[a-z0-9_]/g, '')),
-  ).join('')
-  if (excludedChars.length > 0) {
-    return {
-      type: 'error' as const,
-      text: `username cannot contains "${excludedChars}"`,
-      extra: `username should only consist of english letters [a-z] and digits [0-9], underscore [_] is also allowed`,
-    }
-  }
-
-  let user = find(proxy.user, { username })
-  if (user) {
-    return {
-      type: 'found' as const,
-      text: `username "${username}" is already used`,
-      user,
-    }
-  }
-
-  return {
-    type: 'ok' as const,
-    text: `username "${username}" is available`,
-  }
-}
+type ContextError = Record<string, ValidateUserResult>
 
 let minPassword = 6
 let maxPassword = 256
 
-function validatePassword(password: string): ValidateResult {
+function validatePassword(password: string): ValidateUserResult {
   if (!password) {
     return { type: 'error', text: 'password not provided' }
   }
@@ -438,7 +375,7 @@ function validatePassword(password: string): ValidateResult {
   return { type: 'ok' as const, text: 'password is acceptable' }
 }
 
-function validateEmail(email: string | null): ValidateResult {
+function validateEmail(email: string | null): ValidateUserResult {
   // email is optional
   if (!email) {
     return { type: 'ok', text: '' }
@@ -463,7 +400,7 @@ function validateEmail(email: string | null): ValidateResult {
   return { type: 'ok', text: `email "${email}" is valid` }
 }
 
-function validateTel(tel: string | null): ValidateResult {
+function validateTel(tel: string | null): ValidateUserResult {
   // tel is optional
   if (!tel) {
     return { type: 'ok', text: '' }
@@ -493,7 +430,7 @@ function validateTel(tel: string | null): ValidateResult {
 function validateConfirmPassword(input: {
   password: string
   confirm_password: string
-}): ValidateResult {
+}): ValidateUserResult {
   if (!input.password)
     return {
       type: 'error',
@@ -515,7 +452,7 @@ function validateInput(input: {
   field: string
   value: string | void
   selector: string
-  validate: (value: string) => ValidateResult
+  validate: (value: string) => ValidateUserResult
 }) {
   let { context, value, selector } = input
 
@@ -640,7 +577,7 @@ async function submit(context: InputContext): Promise<Node> {
     let errors = Object.entries(results)
     let hasError = errors.some(entry => entry[1].type != 'ok')
     if (hasError) {
-      context.contextError = Object.fromEntries<ValidateResult>(errors)
+      context.contextError = Object.fromEntries<ValidateUserResult>(errors)
       context.values = input
       return RegisterPage
     }

@@ -65,6 +65,7 @@ export type User = {
   tel: null | string
   avatar: null | string
   is_admin: null | boolean
+  nickname: null | string
 }
 
 export type RequestLog = {

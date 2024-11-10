@@ -99,6 +99,7 @@ email varchar(320) NULL unique
 tel varchar(16) NULL unique
 avatar varchar(256) NULL
 is_admin boolean NULL
+nickname text NULL
 
 
 error_log
