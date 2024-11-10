@@ -22,8 +22,7 @@ import { renderError } from '../components/error.js'
 import { Raw } from '../components/raw.js'
 import { loadClientPlugin } from '../../client-plugin.js'
 import { formatTel } from '../components/tel.js'
-import { newSingleFieldForm } from '../components/single-field-form.js'
-import { validateUsername } from './register.js'
+import { validateNickname, validateUsername } from '../validate/user.js'
 import { object, string } from 'cast.ts'
 import { MessageException } from '../../exception.js'
 
@@ -46,6 +45,18 @@ let style = Style(/* css */ `
 }
 #profile .field input {
   max-width: 40vw;
+}
+#profile .divider {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 32rem;
+  opacity: 0.5;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+#profile .divider hr {
+  flex-grow: 1;
 }
 `)
 
@@ -80,7 +91,12 @@ let ProfilePage = (_attrs: {}, context: DynamicContext) => {
 let toastPlugin = loadClientPlugin({ entryFile: 'dist/client/sweetalert.js' })
 
 function getUserName(user: User) {
-  return user.username || user.email || formatTel(user.tel)
+  return (
+    user.nickname ||
+    user.username ||
+    user.email?.split('@')[0] ||
+    formatTel(user.tel)
+  )
 }
 
 // TODO allow change username, email, tel
@@ -91,6 +107,11 @@ function renderProfile(user_id: number, context: DynamicContext) {
   return (
     <>
       <p>Welcome back, {getUserName(user)}</p>
+      <div class="divider">
+        <hr />
+        <span>For login</span>
+        <hr />
+      </div>
       <div>
         <label class="field">
           <span>User ID: </span>
@@ -149,6 +170,31 @@ function renderProfile(user_id: number, context: DynamicContext) {
         </label>{' '}
         <button type="submit" id="submitTelBtn" disabled>
           Verify
+        </button>
+      </form>
+      <div class="divider">
+        <hr />
+        <span>For display</span>
+        <hr />
+      </div>
+      <form
+        method="POST"
+        action="/profile/nickname/submit"
+        onsubmit="emitForm(event)"
+      >
+        <label class="field">
+          <span>Nickname: </span>
+          <input
+            type="text"
+            name="nickname"
+            autocomplete="off"
+            value={user.nickname}
+            data-value={user.nickname}
+            oninput="submitNicknameBtn.disabled = this.value === this.dataset.value || !this.value"
+          />
+        </label>{' '}
+        <button type="submit" id="submitNicknameBtn" disabled>
+          Change
         </button>
       </form>
       <form
@@ -217,8 +263,7 @@ export function UserMessageInGuestView(attrs: { user_id: number }) {
   return (
     <>
       <p>
-        You have login as{' '}
-        <b>{user.username || user.email || formatTel(user.tel)}</b>.
+        You have login as <b>{getUserName(user)}</b>.
       </p>
       <p>
         You can go to <Link href="/profile">profile page</Link> to manage your
@@ -280,7 +325,7 @@ function ChangeUsername(attrs: {}, context: DynamicContext) {
         throw new MessageException([
           'batch',
           [
-            ['eval', `showAlert('updated username','success')`],
+            ['eval', `showToast('updated username','success')`],
             [
               'update-attrs',
               'input[name="username"]',
@@ -290,6 +335,51 @@ function ChangeUsername(attrs: {}, context: DynamicContext) {
               },
             ],
             ['update-props', '#submitUsernameBtn', { disabled: true }],
+          ],
+        ])
+      }
+    } else {
+      if (context.type === 'ws') {
+        throw new MessageException([
+          'eval',
+          `showAlert(${JSON.stringify(result.text)},'warning')`,
+        ])
+      }
+    }
+  }
+
+  return <Redirect href="/profile" />
+}
+
+let changeNicknameParser = object({
+  nickname: string(),
+})
+
+function ChangeNickname(attrs: {}, context: DynamicContext) {
+  let user = getAuthUser(context)
+  if (!user) throw 'not login'
+
+  let body = getContextFormBody(context)
+  let { nickname } = changeNicknameParser.parse(body)
+
+  if (user.nickname !== nickname) {
+    let result = validateNickname(nickname)
+    if (result.type === 'ok') {
+      user.nickname = nickname
+      if (context.type === 'ws') {
+        throw new MessageException([
+          'batch',
+          [
+            ['eval', `showToast('updated nickname','success')`],
+            [
+              'update-attrs',
+              'input[name="nickname"]',
+              {
+                'value': nickname,
+                'data-value': nickname,
+              },
+            ],
+            ['update-props', '#submitNicknameBtn', { disabled: true }],
           ],
         ])
       }
@@ -319,6 +409,12 @@ let routes = {
     description: 'change username',
     streaming: false,
     node: <ChangeUsername />,
+  },
+  '/profile/nickname/submit': {
+    title: apiEndpointTitle,
+    description: 'change nickname',
+    streaming: false,
+    node: <ChangeNickname />,
   },
   '/logout': {
     title: apiEndpointTitle,

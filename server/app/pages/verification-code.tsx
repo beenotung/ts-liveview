@@ -716,6 +716,7 @@ async function checkEmailVerificationCode(
             password_hash: null,
             avatar: null,
             is_admin: null,
+            nickname: null,
           })
         // update email after verification
         let user = proxy.user[user_id]
@@ -823,6 +824,7 @@ async function checkSMSVerificationCode(
             password_hash: null,
             avatar: null,
             is_admin: null,
+            nickname: null,
           })
         // update tel after verification
         let user = proxy.user[user_id]
