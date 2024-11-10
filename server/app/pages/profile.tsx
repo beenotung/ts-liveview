@@ -401,6 +401,7 @@ let routes = {
     title: title('Profile Page'),
     description: `Manage your public profile and exclusive content`,
     menuText: 'Profile',
+    adminOnly: true,
     userOnly: true,
     node: <ProfilePage />,
   },
