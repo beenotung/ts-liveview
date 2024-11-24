@@ -147,16 +147,19 @@ export function throwIfInAPI(
   selector: string,
   context: Context,
 ) {
-  let message: ServerMessage =
+  let message: ServerMessage = [
+    'batch',
     error instanceof MessageException
-      ? error.message
-      : [
-          'batch',
-          [
-            ['update-text', selector, String(error)],
-            ['add-class', selector, 'error'],
-          ],
+      ? [
+          ['update-text', selector, ''],
+          ['remove-class', selector, 'error'],
+          error.message,
         ]
+      : [
+          ['update-text', selector, String(error)],
+          ['add-class', selector, 'error'],
+        ],
+  ]
   if (context.type == 'ws') {
     context.ws.send(message)
     throw EarlyTerminate
