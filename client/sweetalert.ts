@@ -1,12 +1,17 @@
 import Swal, {
   SweetAlertIcon,
   SweetAlertOptions,
+  SweetAlertPosition,
 } from 'sweetalert2-unrestricted'
 
-function showToast(title: SweetAlertOptions['title'], icon: SweetAlertIcon) {
+function showToast(
+  title: SweetAlertOptions['title'],
+  icon: SweetAlertIcon,
+  position: SweetAlertPosition = 'top-end',
+) {
   const Toast = Swal.mixin({
     toast: true,
-    position: 'top-end',
+    position,
     showConfirmButton: false,
     timer: 3000,
     timerProgressBar: true,
