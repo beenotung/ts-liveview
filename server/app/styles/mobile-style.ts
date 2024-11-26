@@ -45,8 +45,9 @@ hr {
   height: 1px solid;
   background-color: var(--ion-color-dark);
 }
-ion-title {
-  width: fit-content;
+ion-title.ios {
+  min-width: fit-content;
+  padding-inline: unset;
 }
 `
 
