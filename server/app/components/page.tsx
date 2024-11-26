@@ -50,8 +50,17 @@ function WebPage(attrs: PageAttrs) {
   )
 }
 
-export let Page = config.layout_type === LayoutType.ionic ? IonicPage : WebPage
+export let is_ionic = config.layout_type === LayoutType.ionic
 
-export function Content(attrs: { ionic?: Node; web?: Node }) {
-  return config.layout_type === LayoutType.ionic ? attrs.ionic : attrs.web
+export let Page = is_ionic ? IonicPage : WebPage
+
+type Content = Node | (() => Node)
+
+export function Content(attrs: { ionic?: Content; web?: Content }): Node {
+  let content =
+    config.layout_type === LayoutType.ionic ? attrs.ionic : attrs.web
+  if (typeof content === 'function') {
+    return content()
+  }
+  return content
 }
