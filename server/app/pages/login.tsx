@@ -19,7 +19,7 @@ import { getAuthUserId, writeUserIdToCookie } from '../auth/user.js'
 import Style from '../components/style.js'
 import { IonBackButton } from '../components/ion-back-button.js'
 import { wsStatus } from '../components/ws-status.js'
-import { to_full_hk_mobile_phone } from '@beenotung/tslib'
+import { to_full_hk_mobile_phone } from '@beenotung/tslib/validate.js'
 
 let style = Style(/* css */ `
 #login .field {
