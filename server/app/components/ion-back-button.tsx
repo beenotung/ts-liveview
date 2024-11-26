@@ -10,7 +10,7 @@ export function IonBackButton(attrs: {
 }) {
   let { href, class: className, backText, buttonsSlot, ...extraAttrs } = attrs
   className = className ? className + ' ' : ''
-  backText ??= 'Back'
+  backText ??= href == '/' ? 'Home' : 'Back'
   buttonsSlot ??= 'start'
   let button = (
     <Link href={href} is-back>
