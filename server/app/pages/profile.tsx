@@ -99,7 +99,6 @@ function getDisplayName(user: User) {
   )
 }
 
-// TODO allow change username, email, tel
 function renderProfile(user_id: number, context: DynamicContext) {
   let user = proxy.user[user_id]
   let params = getContextSearchParams(context)
