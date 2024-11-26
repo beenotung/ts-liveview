@@ -11,7 +11,7 @@ export function BackToLink(attrs: { title: string; href: string }) {
         </p>
       }
       ionic={
-        <Link href={attrs.href} tagName="ion-button">
+        <Link href={attrs.href} tagName="ion-button" is-back>
           Back to {attrs.title}
         </Link>
       }
