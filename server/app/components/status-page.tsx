@@ -1,16 +1,15 @@
-import { config, LayoutType } from '../../config.js'
 import { Context, getContextUrl } from '../context.js'
 import { o } from '../jsx/jsx.js'
 import { Node } from '../jsx/types.js'
-import { IonBackButton } from './ion-back-button.js'
 import { LocaleVariants, isPreferZh } from './locale.js'
+import { Page } from './page.js'
 import SourceCode from './source-code.js'
 
 function StatusPage(
   attrs: {
     status: number
     id: string
-    title: LocaleVariants
+    title: LocaleVariants<string>
     page?: string
     backText?: string
     backHref?: string
@@ -23,36 +22,18 @@ function StatusPage(
   let zh = isPreferZh(context)
   let title = zh ? attrs.title.zh : attrs.title.en
   let label = zh ? '網址' : 'Url'
-  if (config.layout_type === LayoutType.ionic) {
-    return (
-      <>
-        <ion-header>
-          <ion-toolbar>
-            <IonBackButton
-              href={attrs.backHref || '/'}
-              backText={attrs.backText}
-            />
-            <ion-title role="heading" aria-level="1">
-              {title}
-            </ion-title>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content id={attrs.id} class="ion-padding">
-          <p>
-            {label}: <code>{getContextUrl(context)}</code>
-          </p>
-        </ion-content>
-      </>
-    )
-  }
   return (
-    <div id={attrs.id}>
-      <h1>{title}</h1>
+    <Page
+      id={attrs.id}
+      title={title}
+      backHref={attrs.backHref || '/'}
+      backText={attrs.backText}
+    >
       <p>
         {label}: <code>{getContextUrl(context)}</code>
       </p>
       {attrs.page ? <SourceCode page={attrs.page} /> : null}
-    </div>
+    </Page>
   )
 }
 
