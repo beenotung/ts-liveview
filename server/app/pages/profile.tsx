@@ -95,7 +95,8 @@ function getDisplayName(user: User) {
     user.nickname ||
     user.username ||
     user.email ||
-    formatTel(user.tel)
+    formatTel(user.tel) ||
+    `user-${user.id}`
   )
 }
 
