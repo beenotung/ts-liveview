@@ -3,6 +3,17 @@ import { o } from '../jsx/jsx.js'
 import { Node, NodeList } from '../jsx/types.js'
 import { IonBackButton } from './ion-back-button.js'
 
+export type ThemeColor =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'success'
+  | 'warning'
+  | 'danger'
+  | 'light'
+  | 'medium'
+  | 'dark'
+
 type PageAttrs = {
   style?: string
   id: string
@@ -10,7 +21,9 @@ type PageAttrs = {
   children?: NodeList
   backText?: string
   backHref?: string
+  backColor?: ThemeColor
   class?: string
+  color?: ThemeColor
 }
 
 function IonicPage(attrs: PageAttrs) {
@@ -18,9 +31,13 @@ function IonicPage(attrs: PageAttrs) {
     <>
       {attrs.backHref || attrs.title ? (
         <ion-header>
-          <ion-toolbar>
+          <ion-toolbar color={attrs.color}>
             {attrs.backHref ? (
-              <IonBackButton href={attrs.backHref} backText={attrs.backText} />
+              <IonBackButton
+                href={attrs.backHref}
+                backText={attrs.backText}
+                color={attrs.backColor}
+              />
             ) : null}
             {attrs.title ? (
               <ion-title role="heading" aria-level="1">
