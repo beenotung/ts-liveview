@@ -45,6 +45,9 @@ hr {
   height: 1px solid;
   background-color: var(--ion-color-dark);
 }
+ion-title {
+  width: fit-content;
+}
 `
 
 let themeStyle = readFileSync('public/theme.css').toString()
