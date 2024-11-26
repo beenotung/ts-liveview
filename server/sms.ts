@@ -1,4 +1,4 @@
-import { to_full_hk_mobile_phone } from '@beenotung/tslib'
+import { to_full_hk_mobile_phone } from '@beenotung/tslib/validate.js'
 import { env } from './env.js'
 import { HttpError } from './exception.js'
 import { debugLog } from './debug.js'
