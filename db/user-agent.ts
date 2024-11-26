@@ -1,4 +1,4 @@
-import { format_time_duration } from '@beenotung/tslib'
+import { format_time_duration } from '@beenotung/tslib/format.js'
 import { filter, find } from 'better-sqlite3-proxy'
 import { db } from './db.js'
 import { proxy, RequestLog } from './proxy.js'
