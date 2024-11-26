@@ -20,21 +20,22 @@ type PageAttrs = {
   title?: string
   children?: NodeList
   backText?: string
-  backHref?: string
+  backHref?: string | false
   backColor?: ThemeColor
   class?: string
   color?: ThemeColor
 }
 
 function IonicPage(attrs: PageAttrs) {
+  let backHref = attrs.backHref ?? '/'
   return (
     <>
-      {attrs.backHref || attrs.title ? (
+      {backHref || attrs.title ? (
         <ion-header>
           <ion-toolbar color={attrs.color}>
-            {attrs.backHref ? (
+            {backHref ? (
               <IonBackButton
-                href={attrs.backHref}
+                href={backHref}
                 backText={attrs.backText}
                 color={attrs.backColor}
               />
