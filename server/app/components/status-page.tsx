@@ -17,8 +17,6 @@ function StatusPage(
   },
   context: Context,
 ): Node {
-  let backText = attrs.backText || 'Home'
-  let backHref = attrs.backHref || '/'
   if (context.type === 'express' && !context.res.headersSent) {
     context.res.status(attrs.status)
   }
@@ -30,7 +28,10 @@ function StatusPage(
       <>
         <ion-header>
           <ion-toolbar>
-            <IonBackButton href={backHref} backText={backText} />
+            <IonBackButton
+              href={attrs.backHref || '/'}
+              backText={attrs.backText}
+            />
             <ion-title role="heading" aria-level="1">
               {title}
             </ion-title>
