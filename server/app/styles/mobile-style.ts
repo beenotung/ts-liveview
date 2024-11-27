@@ -49,6 +49,12 @@ ion-title.ios {
   min-width: fit-content;
   padding-inline: unset;
 }
+.padding-half {
+  --ion-padding: 8px;
+}
+.margin-half {
+  --ion-margin: 8px;
+}
 `
 
 let themeStyle = readFileSync('public/theme.css').toString()
