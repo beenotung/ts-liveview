@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@beenotung/tslib": "^23.12.1",
+    "@ionic/core": "^8.4.1",
     "better-sqlite3-proxy": "^2.10.0",
     "better-sqlite3-schema": "^3.1.7",
     "cast.ts": "^1.14.2",
