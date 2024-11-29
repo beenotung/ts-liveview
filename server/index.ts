@@ -46,6 +46,7 @@ if (config.development) {
 app.use('/js', express.static('build'))
 app.use('/uploads', express.static(env.UPLOAD_DIR))
 app.use('/npm/@ionic/core', express.static('node_modules/@ionic/core'))
+app.use('/npm/swiper', express.static('node_modules/swiper'))
 app.use(express.static('public'))
 
 app.use(express.json())

@@ -82,10 +82,7 @@ export function Swiper(
 
   return (
     <>
-      <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
-      />
+      <link rel="stylesheet" href="/npm/swiper/swiper-bundle.min.css" />
       {Style(css)}
       <div id={attrs.id} class="swiper" style={styles.join(';')}>
         <div class="swiper-wrapper">
