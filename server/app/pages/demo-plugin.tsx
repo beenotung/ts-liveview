@@ -4,6 +4,7 @@ import { Locale } from '../components/locale.js'
 import { Script } from '../components/script.js'
 import SourceCode from '../components/source-code.js'
 import Style from '../components/style.js'
+import { Swiper } from '../components/swiper.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 
@@ -12,6 +13,18 @@ let icons = ['success', 'error', 'warning', 'info', 'question']
 let content = (
   <div>
     {Style(/* css */ `
+#demo-swiper {
+  outline: 1px solid black;
+  max-width: 300px;
+  height: 150px;
+  background-color: #f552;
+  --swiper-theme-color: red;
+}
+#demo-swiper .swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .demo-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -27,6 +40,15 @@ let content = (
         zh="此頁面演示加載與 npm 包捆綁在一起的客戶端插件並在瀏覽器中運行它們。"
       />
     </p>
+    <h2>
+      <Locale en="Swiper Demo" zh="Swiper 示範" />
+    </h2>
+    <Swiper
+      id="demo-swiper"
+      slides={[<p>Slice 1</p>, <p>Slice 2</p>, <p>Slice 3</p>]}
+      showPagination
+      showArrow
+    />
     <h2>
       <Locale en="Sweet Alert Demo" zh="Sweet Alert 示範" />
     </h2>
@@ -82,14 +104,15 @@ async function demoConfirm(icon) {
   }
 }
 `)}
-    <SourceCode page="demo-toast.tsx" style="margin-top: 1.5rem" />
+    <SourceCode page="demo-plugin.tsx" style="margin-top: 1.5rem" />
   </div>
 )
 
 let routes = {
-  '/toast': {
-    title: title('Sweet Alert Toast Demo'),
-    description: 'Demonstrate using sweet alert client-side plugin',
+  '/demo-plugin': {
+    title: title('Client Plugin Demo'),
+    description:
+      'Demonstrate using client-side plugins, including swiper and sweet alert',
     menuText: 'Client Plugin',
     node: content,
   },
