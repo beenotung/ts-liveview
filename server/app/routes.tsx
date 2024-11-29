@@ -29,7 +29,7 @@ import DemoLocale from './pages/demo-locale.js'
 import Clock from './pages/clock.js'
 import type { MenuRoute } from './components/menu'
 import DemoUpload from './pages/demo-upload.js'
-import DemoToast from './pages/demo-plugin.js'
+import DemoPlugin from './pages/demo-plugin.js'
 import AppHome from './pages/app-home.js'
 import AppAbout from './pages/app-about.js'
 import AppCharacter from './pages/app-character.js'
@@ -120,7 +120,7 @@ let routeDict = {
   ...DemoForm.routes,
   ...DemoInputComponents.routes,
   ...UserList.routes,
-  ...DemoToast.routes,
+  ...DemoPlugin.routes,
   ...DemoUpload.routes,
   ...DemoCookieSession.routes,
   ...Chatroom.routes,
