@@ -160,7 +160,7 @@ let routes = {
   '/demo-plugin': {
     title: title('Client Plugin Demo'),
     description:
-      'Demonstrate using client-side plugins, including swiper and sweet alert',
+      'Demonstrate using client-side plugins, including Swiper, DataTables and SweetAlert2',
     menuText: 'Client Plugin',
     node: content,
   },
