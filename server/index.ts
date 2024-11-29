@@ -47,6 +47,12 @@ app.use('/js', express.static('build'))
 app.use('/uploads', express.static(env.UPLOAD_DIR))
 app.use('/npm/@ionic/core', express.static('node_modules/@ionic/core'))
 app.use('/npm/swiper', express.static('node_modules/swiper'))
+app.use('/npm/jquery', express.static('node_modules/jquery'))
+app.use('/npm/datatables.net', express.static('node_modules/datatables.net'))
+app.use(
+  '/npm/datatables.net-dt',
+  express.static('node_modules/datatables.net-dt'),
+)
 app.use(express.static('public'))
 
 app.use(express.json())
