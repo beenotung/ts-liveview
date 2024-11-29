@@ -1,5 +1,8 @@
 import { loadClientPlugin } from '../../client-plugin.js'
+import { allNames } from '@beenotung/tslib/constant/character-name.js'
 import { title } from '../../config.js'
+import { dataTableAsset, enableDataTable } from '../components/data-table.js'
+import { mapArray } from '../components/fragment.js'
 import { Locale } from '../components/locale.js'
 import { Script } from '../components/script.js'
 import SourceCode from '../components/source-code.js'
@@ -25,6 +28,13 @@ let content = (
   justify-content: center;
   align-items: center;
 }
+#demo-dataTable_wrapper .dt-layout-table {
+  justify-content: center;
+}
+#demo-dataTable .swal2-icon {
+  font-size: 0.5rem;
+  margin: 1em;
+}
 .demo-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -49,6 +59,44 @@ let content = (
       showPagination
       showArrow
     />
+    <h2>
+      <Locale en="DataTable Demo" zh="DataTable 示範" />
+    </h2>
+    <table id="demo-dataTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Status</th>
+          <th>Icon</th>
+        </tr>
+      </thead>
+      <tbody>
+        {mapArray(allNames, (name, index) => {
+          let icon = icons[index % icons.length]
+          return (
+            <tr>
+              <td>{index + 1}</td>
+              <td>{name}</td>
+              <td>{icon}</td>
+              <th>
+                <div
+                  class={`swal2-icon swal2-${icon} swal2-icon-show`}
+                  style="display: flex;"
+                >
+                  <div class="swal2-icon-content">!</div>
+                </div>
+              </th>
+            </tr>
+          )
+        })}
+      </tbody>
+    </table>
+    {dataTableAsset}
+    {enableDataTable('demo-dataTable', {
+      pageLength: 2,
+      lengthMenu: [1, 2, 3, 5, 10, 25],
+    })}
     <h2>
       <Locale en="Sweet Alert Demo" zh="Sweet Alert 示範" />
     </h2>
