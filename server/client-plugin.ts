@@ -8,6 +8,8 @@ export function loadClientPlugin(options: {
   entryFile: string
   // e.g. image.bundle.js
   outFilename?: string
+  async?: boolean
+  onload?: string
 }) {
   let { entryFile } = options
   if (!entryFile.startsWith('dist/client/')) {
@@ -33,7 +35,7 @@ export function loadClientPlugin(options: {
   // e.g. js/image.bundle.js
   let scriptSrc = '/js/' + outFilename
 
-  let script = /* html */ `<script src="${scriptSrc}"></script>`
+  let script = /* html */ `<script src="${scriptSrc}" ${options.async ? 'async defer' : ''} ${options.onload ? `onload=` + JSON.stringify(options.onload) : ''}></script>`
 
   let node = Raw(script)
 
