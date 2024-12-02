@@ -3,7 +3,7 @@ import type { ManagedWebsocket } from '../ws/wss'
 import type { RouteContext } from 'url-router.ts'
 import type { Session } from './session'
 import type { PageRoute } from './routes'
-import { getContextCookies } from './cookie.js'
+import { getContextCookies, setContextCookie } from './cookie.js'
 import { EarlyTerminate, HttpError, MessageException } from '../exception.js'
 import type { ServerMessage } from '../../client/types'
 
@@ -103,8 +103,16 @@ export function getContextSearchParams(
   return new URLSearchParams(search)
 }
 
+export function getCookieLang(context: Context) {
+  return getContextCookies(context)?.unsignedCookies.lang
+}
+
+export function setCookieLang(context: Context, lang: string) {
+  setContextCookie(context, 'lang', lang)
+}
+
 export function getContextLanguage(context: Context): string | undefined {
-  let lang = getContextCookies(context)?.unsignedCookies.lang
+  let lang = getCookieLang(context)
   if (lang) {
     return lang
   }
