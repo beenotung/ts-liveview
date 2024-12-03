@@ -256,3 +256,30 @@ function upload(url: string, formData: FormData) {
   })
 }
 win.upload = upload
+
+win.fetch_json = (input, init) => {
+  return fetch(input, init)
+    .then(res => res.json().catch(error => ({ error: res.statusText })))
+    .catch(res => ({ error: String(res) }))
+    .then(json => {
+      if (json.error) {
+        showError(json.error)
+      }
+      if (json.message) {
+        onServerMessage(json.message)
+      }
+      return json
+    })
+}
+
+// in sweetalert client plugin
+declare function showAlert(title: string, icon: string): void
+
+function showError(error: unknown) {
+  if (typeof showAlert === 'function') {
+    showAlert(String(error), 'error')
+  } else {
+    alert(String(error))
+  }
+}
+win.showError = showError
