@@ -15,6 +15,7 @@ export type LinkAttrs = {
   'onclick'?: never
   [name: string]: unknown
   'children'?: NodeList
+  'hidden'?: boolean | undefined
 }
 
 export function Link(attrs: LinkAttrs, context: Context) {
@@ -25,6 +26,7 @@ export function Link(attrs: LinkAttrs, context: Context) {
     'no-animation': fast,
     'is-back': back,
     children,
+    hidden,
     ...aAttrs
   } = attrs
   const tagName = _tagName || 'a'
@@ -37,7 +39,11 @@ export function Link(attrs: LinkAttrs, context: Context) {
     console.warn('Link attrs:', attrs)
     console.warn(new Error('Link with empty content'))
   }
-  return [tagName, { onclick, ...aAttrs }, children]
+  return [
+    tagName,
+    { onclick, hidden: hidden ? '' : undefined, ...aAttrs },
+    children,
+  ]
 }
 
 export function Redirect(
