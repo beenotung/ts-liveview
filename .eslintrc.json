@@ -30,7 +30,7 @@
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
-        "argsIgnorePattern": "^_|context|attrs|req|res|next",
+        "argsIgnorePattern": "^_|context|attrs|req|res|next|knex|fields",
         "varsIgnorePattern": "^_|o"
       }
     ],
