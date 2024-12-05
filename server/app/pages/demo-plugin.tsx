@@ -3,7 +3,7 @@ import { allNames } from '@beenotung/tslib/constant/character-name.js'
 import { title } from '../../config.js'
 import { dataTableAsset, enableDataTable } from '../components/data-table.js'
 import { mapArray } from '../components/fragment.js'
-import { Locale } from '../components/locale.js'
+import { Locale, Title } from '../components/locale.js'
 import { Script } from '../components/script.js'
 import SourceCode from '../components/source-code.js'
 import Style from '../components/style.js'
@@ -42,16 +42,21 @@ let content = (
 }
 `)}
     <h1>
-      <Locale en="Client-Side Plugin Demo" zh="客戶端插件示範" />
+      <Locale
+        en="Client-Side Plugin Demo"
+        zh_hk="客戶端插件示範"
+        zh_cn="客户端插件示范"
+      />
     </h1>
     <p>
       <Locale
         en="This page demo loading client-side plugins that is bundled with npm packages and run them in the browser."
-        zh="此頁面演示加載與 npm 包捆綁在一起的客戶端插件並在瀏覽器中運行它們。"
+        zh_hk="此頁面演示加載與 npm 包捆綁在一起的客戶端插件並在瀏覽器中運行它們。"
+        zh_cn="此页面演示加载与 npm 包捆绑在一起的客户端插件并在浏览器中运行它们。"
       />
     </p>
     <h2>
-      <Locale en="Swiper Demo" zh="Swiper 示範" />
+      <Locale en="Swiper Demo" zh_hk="Swiper 示範" zh_cn="Swiper 示范" />
     </h2>
     <Swiper
       id="demo-swiper"
@@ -60,7 +65,11 @@ let content = (
       showArrow
     />
     <h2>
-      <Locale en="DataTable Demo" zh="DataTable 示範" />
+      <Locale
+        en="DataTable Demo"
+        zh_hk="DataTable 示範"
+        zh_cn="DataTable 示范"
+      />
     </h2>
     <table id="demo-dataTable">
       <thead>
@@ -98,11 +107,15 @@ let content = (
       lengthMenu: [1, 2, 3, 5, 10, 25],
     })}
     <h2>
-      <Locale en="Sweet Alert Demo" zh="Sweet Alert 示範" />
+      <Locale
+        en="Sweet Alert Demo"
+        zh_hk="Sweet Alert 示範"
+        zh_cn="Sweet Alert 示範"
+      />
     </h2>
     {loadClientPlugin({ entryFile: 'dist/client/sweetalert.js' }).node}
     <h3>
-      <Locale en="Toast" zh="提示 (Toast)" />
+      <Locale en="Toast" zh_hk="提示 (Toast)" zh_cn="提示 (Toast)" />
     </h3>
     <div class="demo-buttons">
       <button onclick="showToast('sample text message')">default</button>
@@ -115,7 +128,11 @@ let content = (
       ]}
     </div>
     <h3>
-      <Locale en="Alert" zh="通知彈出視窗 (Alert)" />
+      <Locale
+        en="Alert"
+        zh_hk="通知彈出視窗 (Alert)"
+        zh_cn="通知弹出窗口 (Alert)"
+      />
     </h3>
     <div class="demo-buttons">
       <button onclick="showAlert('sample text message')">default</button>
@@ -128,7 +145,11 @@ let content = (
       ]}
     </div>
     <h3>
-      <Locale en="Confirm" zh="確認彈出視窗 (Confirm)" />
+      <Locale
+        en="Confirm"
+        zh_hk="確認彈出視窗 (Confirm)"
+        zh_cn="确认弹出窗口 (Confirm)"
+      />
     </h3>
     <div class="demo-buttons">
       <button onclick="demoConfirm()">default</button>
@@ -158,10 +179,27 @@ async function demoConfirm(icon) {
 
 let routes = {
   '/demo-plugin': {
-    title: title('Client Plugin Demo'),
-    description:
-      'Demonstrate using client-side plugins, including Swiper, DataTables and SweetAlert2',
-    menuText: 'Client Plugin',
+    menuText: (
+      <Locale en="Client Plugin" zh_hk="客戶端插件" zh_cn="客户端插件" />
+    ),
+    title: (
+      <Title
+        t={
+          <Locale
+            en="Client Plugin Demo"
+            zh_hk="客戶端插件示範"
+            zh_cn="客户端插件示范"
+          />
+        }
+      />
+    ),
+    description: (
+      <Locale
+        en="Demonstrate using client-side plugins, including Swiper, DataTables and SweetAlert2"
+        zh_hk="演示使用客戶端插件，包括 Swiper、DataTable 和 SweetAlert2"
+        zh_cn="演示使用客户端插件，包括 Swiper、DataTable 和 SweetAlert2"
+      />
+    ),
     node: content,
   },
 } satisfies Routes

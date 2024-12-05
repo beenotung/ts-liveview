@@ -4,6 +4,7 @@ import type { Node, NodeList } from '../jsx/types'
 import { Router as UrlRouter } from 'url-router.ts'
 import { EarlyTerminate } from '../../exception.js'
 import { setSessionUrl } from '../session.js'
+import { evalAttrsLocale } from './locale.js'
 
 export type LinkAttrs = {
   'tagName'?: string
@@ -16,7 +17,8 @@ export type LinkAttrs = {
   'children'?: NodeList
 }
 
-export function Link(attrs: LinkAttrs) {
+export function Link(attrs: LinkAttrs, context: Context) {
+  evalAttrsLocale(attrs, 'title', context)
   const {
     'tagName': _tagName,
     'no-history': quiet,

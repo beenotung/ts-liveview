@@ -1,6 +1,8 @@
 import { Style } from '../components/style.js'
 import { o } from '../jsx/jsx.js'
 import SourceCode from '../components/source-code.js'
+import { Locale, Title } from '../components/locale.js'
+import { Routes } from '../routes.js'
 
 let update = `c.textContent = a.valueAsNumber + b.valueAsNumber`
 
@@ -29,4 +31,22 @@ function Calculator() {
     </div>
   )
 }
-export default Calculator
+
+let t = <Locale en="Calculator" zh_hk="計算機" zh_cn="计算器" />
+
+let routes = {
+  '/calculator': {
+    menuText: t,
+    title: <Title t={t} />,
+    description: (
+      <Locale
+        en="A simple stateful component demo"
+        zh_hk="一個簡單的有狀態元件範例"
+        zh_cn="一个简单有状态组件的示例"
+      />
+    ),
+    node: <Calculator />,
+  },
+} satisfies Routes
+
+export default { routes }

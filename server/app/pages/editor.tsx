@@ -8,6 +8,8 @@ import { Script } from '../components/script.js'
 import Style from '../components/style.js'
 import SourceCode from '../components/source-code.js'
 import { getContextSearchParams, Context } from '../context.js'
+import { Routes } from '../routes.js'
+import { Locale, Title } from '../components/locale.js'
 
 type State = {
   width: number
@@ -192,4 +194,23 @@ export function Editor(_attrs: attrs, context: Context) {
   )
 }
 
-export default Editor
+let routes = {
+  '/editor': {
+    menuText: <Locale en="Editor" zh_hk="編輯器" zh_cn="编辑器" />,
+    title: (
+      <Title
+        t={<Locale en="Image Editor" zh_hk="圖片編輯器" zh_cn="图片编辑器" />}
+      />
+    ),
+    description: (
+      <Locale
+        en="Image Editor that works without JavaScript, with progressive enhancement when JavaScript and WebSocket are available"
+        zh_hk="不依賴 JavaScript 的圖片編輯器，當支援 JavaScript 和 WebSocket 時會提供增強功能"
+        zh_cn="不依赖 JavaScript 的图片编辑器，当支持 JavaScript 和 WebSocket 时会提供增强功能"
+      />
+    ),
+    node: <Editor />,
+  },
+} satisfies Routes
+
+export default { routes }

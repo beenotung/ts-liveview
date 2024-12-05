@@ -6,6 +6,8 @@ import { Update } from '../components/update.js'
 import { distance } from 'fastest-levenshtein'
 import SourceCode from '../components/source-code.js'
 import { getContextSearchParams, Context } from '../context.js'
+import { Routes } from '../routes.js'
+import { Locale, Title } from '../components/locale.js'
 
 const wordSet = new Set<string>()
 const dictDir = '/usr/share/dict'
@@ -131,4 +133,21 @@ export function AutoCompleteDemo(_attrs: attrs, context: Context) {
   return content
 }
 
-export default AutoCompleteDemo
+let t = <Locale en="Auto Complete" zh_hk="自動輸入框" zh_cn="自动输入框" />
+
+let routes = {
+  '/auto-complete': {
+    menuText: t,
+    title: <Title t={t} />,
+    description: (
+      <Locale
+        en="Server-driven auto-complete input box demo"
+        zh_hk="伺服器驅動的自動完成輸入框範例"
+        zh_cn="服务器驱动的自动完成输入框示例"
+      />
+    ),
+    node: <AutoCompleteDemo />,
+  },
+} satisfies Routes
+
+export default { routes }

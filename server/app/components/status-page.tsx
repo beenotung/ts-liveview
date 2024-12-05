@@ -1,7 +1,7 @@
 import { Context, getContextUrl } from '../context.js'
 import { o } from '../jsx/jsx.js'
 import { Node } from '../jsx/types.js'
-import { LocaleVariants, isPreferZh } from './locale.js'
+import { Locale } from './locale.js'
 import { Page } from './page.js'
 import SourceCode from './source-code.js'
 
@@ -9,7 +9,8 @@ function StatusPage(
   attrs: {
     status: number
     id: string
-    title: LocaleVariants<string>
+    title: string
+    description?: string
     page?: string
     backText?: string
     backHref?: string
@@ -19,19 +20,18 @@ function StatusPage(
   if (context.type === 'express' && !context.res.headersSent) {
     context.res.status(attrs.status)
   }
-  let zh = isPreferZh(context)
-  let title = zh ? attrs.title.zh : attrs.title.en
-  let label = zh ? '網址' : 'Url'
   return (
     <Page
       id={attrs.id}
-      title={title}
+      title={attrs.title}
       backHref={attrs.backHref || '/'}
       backText={attrs.backText}
     >
       <p>
-        {label}: <code>{getContextUrl(context)}</code>
+        <Locale en="Url" zh_hk="網址" zh_cn="网址" />:{' '}
+        <code>{getContextUrl(context)}</code>
       </p>
+      {attrs.description ? <p>{attrs.description}</p> : null}
       {attrs.page ? <SourceCode page={attrs.page} /> : null}
     </Page>
   )
