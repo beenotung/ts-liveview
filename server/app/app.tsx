@@ -18,12 +18,7 @@ import { Flush } from './components/flush.js'
 import { config } from '../config.js'
 import Stats from './components/stats.js'
 import { MuteConsole, Script } from './components/script.js'
-import {
-  matchRoute,
-  menuRoutes,
-  PageRouteMatch,
-  redirectDict,
-} from './routes.js'
+import { matchRoute, PageRouteMatch, redirectDict } from './routes.js'
 import type { ClientMountMessage, ClientRouteMessage } from '../../client/types'
 import { then } from '@beenotung/tslib/result.js'
 import { ionicAppStyle } from './app-style.js'
@@ -32,13 +27,10 @@ import { renderIonicTemplate } from '../../template/ionic.js'
 import { HTMLStream } from './jsx/stream.js'
 import { renewAuthCookieMiddleware } from './auth/user.js'
 import { getWsCookies } from './cookie.js'
-import { PickLanguage } from './components/ui-language.js'
 import Profile from './pages/profile.js'
 import { logRequest } from './log.js'
 import { WindowStub } from '../../client/internal.js'
 import { updateRequestSession } from '../../db/request-log.js'
-import { Link } from './components/router.js'
-import verificationCode from './pages/verification-code.js'
 
 if (config.development) {
   scanTemplateDir('template')
