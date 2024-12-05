@@ -1,6 +1,5 @@
 import { loadClientPlugin } from '../../client-plugin.js'
 import { allNames } from '@beenotung/tslib/constant/character-name.js'
-import { title } from '../../config.js'
 import { dataTableAsset, enableDataTable } from '../components/data-table.js'
 import { mapArray } from '../components/fragment.js'
 import { Locale, Title } from '../components/locale.js'

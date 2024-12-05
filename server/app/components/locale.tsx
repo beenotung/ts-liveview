@@ -1,6 +1,6 @@
 import { title } from '../../config.js'
 import { Context, getContextLanguage } from '../context.js'
-import { Component, Node, NodeList } from '../jsx/types.js'
+import { Component, Node } from '../jsx/types.js'
 
 export type LocaleVariants<T = Node> = {
   en: T
