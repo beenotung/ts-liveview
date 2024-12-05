@@ -8,8 +8,8 @@ import SourceCode from '../components/source-code.js'
 import { Routes, StaticPageRoute } from '../routes.js'
 import type { Node } from '../jsx/types'
 import { apiEndpointTitle, title } from '../../config.js'
-import { Locale, isPreferZh } from '../components/locale.js'
-import { Context, DynamicContext } from '../context.js'
+import { Locale } from '../components/locale.js'
+import { Context } from '../context.js'
 
 const UpdateInterval = 1000
 
@@ -208,38 +208,42 @@ let Thermostat: Node = (
 }
 `)}
     <h1>
-      <Locale en="Thermostat Demo" zh="溫控器範例" />
+      <Locale en="Thermostat Demo" zh_hk="恆溫器示範" zh_cn="恒温器演示" />
     </h1>
     <p>
       <Locale
         en="This demo illustrates how to do cross-browser realtime update."
-        zh="此範例展示了如何實現跨瀏覽器的即時更新。"
+        zh_hk="此範例展示了如何實現跨瀏覽器的即時更新。"
+        zh_cn="此范例展示了如何实现跨浏览器的即时更新。"
       />
     </p>
     <p>
       <Locale
         en="The state is globally shared (for all connections) and the logic is maintained on the server."
-        zh="狀態在所有連線中是全域共享的，邏輯由伺服器維護。"
+        zh_hk="狀態在所有連線中是全域共享的，邏輯由伺服器維護。"
+        zh_cn="状态在所有连接中是全局共享的，逻辑由服务器维护。"
       />
     </p>
     <p>
       <Locale
         en="In addition, the document title is dynamically generated and updated in realtime."
-        zh="此外，文件標題是動態生成並即時更新的。"
+        zh_hk="此外，文件標題是動態生成並即時更新的。"
+        zh_cn="此外，文件标题是动态生成并即时更新的。"
       />
     </p>
     <h2 class="title">
-      <Locale en="Interactive UIs" zh="互動式介面" />
+      <Locale en="Interactive UIs" zh_hk="互動式介面" zh_cn="互动界面" />
     </h2>
     <div class="outer circle" style={StatusStyles[state.status]}>
       <div class="text-container">
-        <Locale en="Target:" zh="目標溫度：" />
+        <Locale en="Target:" zh_hk="目標溫度：" zh_cn="目标温度：" />
         &nbsp;
         <span
           title={
             <Locale
               en="Target temperature in celsius degree"
-              zh="攝氏目標溫度"
+              zh_hk="攝氏目標溫度"
+              zh_cn="摄氏目标温度"
             />
           }
         >
@@ -261,7 +265,8 @@ let Thermostat: Node = (
               title={
                 <Locale
                   en="Reduce target temperature by 0.5 celsius degree"
-                  zh="降低目標溫度0.5攝氏度"
+                  zh_hk="降低目標溫度0.5攝氏度"
+                  zh_cn="降低目标温度0.5摄氏度"
                 />
               }
             >
@@ -274,7 +279,8 @@ let Thermostat: Node = (
                 title={
                   <Locale
                     en="Current temperature in celsius degree"
-                    zh="當前攝氏溫度"
+                    zh_hk="當前攝氏溫度"
+                    zh_cn="当前摄氏温度"
                   />
                 }
               >
@@ -290,7 +296,8 @@ let Thermostat: Node = (
               title={
                 <Locale
                   en="Increase target temperature by 0.5 celsius degree"
-                  zh="增加目標溫度0.5攝氏度"
+                  zh_hk="增加目標溫度0.5攝氏度"
+                  zh_cn="增加目标温度0.5摄氏度"
                 />
               }
             >
@@ -300,7 +307,12 @@ let Thermostat: Node = (
         </div>
       </div>
       <div class="text-container">
-        <span id="status" title={<Locale en="Current status" zh="當前狀態" />}>
+        <span
+          id="status"
+          title={
+            <Locale en="Current status" zh_hk="當前狀態" zh_cn="当前状态" />
+          }
+        >
           {[() => state.status]}
         </span>
       </div>
@@ -308,26 +320,33 @@ let Thermostat: Node = (
     <SourceCode page="thermostat.tsx" />
     <p>
       <a href="https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript">
-        <Locale en="Layout reference" zh="界面參考" />
+        <Locale en="Layout reference" zh_hk="介面參考" zh_cn="介面參考" />
       </a>
     </p>
   </div>
 )
 
 function index(context: Context): StaticPageRoute {
-  let zh = isPreferZh(context)
   return {
-    title: zh ? '溫控器範例' : 'Thermostat Demo',
-    description: zh
-      ? `一個即時更新的溫控器範例應用程式。當前溫度：${state.currentText}；目標溫度：${state.targetText}。`
-      : `A real-time updated thermostat demo application. Current temperature: ${state.currentText}; target temperature: ${state.targetText}.`,
+    title: (
+      <Locale en="Thermostat Demo" zh_hk="恆溫器示範" zh_cn="恒温器演示" />
+    ),
+    description: (
+      <Locale
+        en={`A real-time updated thermostat demo application. Current temperature: ${state.currentText}; target temperature: ${state.targetText}.`}
+        zh_hk={`一個即時更新的溫控器範例應用程式。當前溫度：${state.currentText}；目標溫度：${state.targetText}。`}
+        zh_cn={`一个即时更新的温控器范例应用程序。当前温度：${state.currentText}；目标温度：${state.targetText}。`}
+      />
+    ),
     node: Thermostat,
   }
 }
 
 let routes = {
   '/thermostat': {
-    menuText: <Locale en="Thermostat" zh="溫控器" />,
+    menuText: (
+      <Locale en="Thermostat Demo" zh_hk="恆溫器示範" zh_cn="恒温器演示" />
+    ),
     resolve: index,
   },
   '/thermostat/inc': {

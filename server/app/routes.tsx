@@ -38,7 +38,7 @@ import type { renderIonicTemplate } from '../../template/ionic.js'
 import { VNode } from '../../client/jsx/types.js'
 import { EarlyTerminate, MessageException } from '../exception.js'
 import { renderError } from './components/error.js'
-import { Locale, isPreferZh } from './components/locale.js'
+import { evalAttrsLocale, Locale } from './components/locale.js'
 
 let titles: Record<string, string> = {}
 
@@ -91,32 +91,8 @@ let routeDict = {
   ...Home.routes,
   ...About.routes,
   ...Thermostat.routes,
-  '/editor': {
-    menuText: <Locale en="Editor" zh="編輯器" />,
-    resolve(context) {
-      let zh = isPreferZh(context)
-      return {
-        title: title(zh ? '圖片編輯器' : 'Image Editor'),
-        description: zh
-          ? '不依賴 JavaScript 的圖片編輯器，當支援 JavaScript 和 WebSocket 時會提供增強功能'
-          : 'Image Editor that works without JavaScript, with progressive enhancement when JavaScript and WebSocket are available',
-        node: <Editor />,
-      }
-    },
-  },
-  '/auto-complete': {
-    menuText: <Locale en="Auto Complete" zh="自動輸入框" />,
-    resolve(context) {
-      let zh = isPreferZh(context)
-      return {
-        title: title(zh ? '自動完成' : 'Auto Complete'),
-        description: zh
-          ? '伺服器驅動的自動完成輸入框範例'
-          : 'Server-driven auto-complete input box demo',
-        node: <AutoCompleteDemo />,
-      }
-    },
-  },
+  ...Editor.routes,
+  ...AutoCompleteDemo.routes,
   ...DemoForm.routes,
   ...DemoInputComponents.routes,
   ...UserList.routes,
@@ -126,45 +102,9 @@ let routeDict = {
   ...Chatroom.routes,
   ...DemoLocale.routes,
   ...UILanguage.routes,
-  '/clock': {
-    menuText: <Locale en="Clock" zh="時鐘" />,
-    resolve(context) {
-      let zh = isPreferZh(context)
-      return {
-        title: title(zh ? '時鐘' : 'Clock'),
-        description: zh
-          ? '使用系統時間的即時時鐘，根據客戶端的語言和時區本地化'
-          : 'Realtime clock using system time localized with client language and timezone',
-        node: Clock,
-      }
-    },
-  },
-  '/calculator': {
-    menuText: <Locale en="Calculator" zh="計算器" />,
-    resolve(context) {
-      let zh = isPreferZh(context)
-      return {
-        title: title(zh ? '計算器' : 'Calculator'),
-        description: zh
-          ? '一個簡單的有狀態元件範例'
-          : 'A simple stateful component demo',
-        node: <Calculator />,
-      }
-    },
-  },
-  '/user-agents': {
-    menuText: <Locale en="Visitor Stats" zh="訪客統計" />,
-    resolve(context) {
-      let zh = isPreferZh(context)
-      return {
-        title: title(zh ? '訪客的用戶代理' : 'User Agents of Visitors'),
-        description: zh
-          ? '此網站訪客的用戶代理資訊'
-          : "User agents of this site's visitors",
-        node: UserAgents,
-      }
-    },
-  },
+  ...Clock.routes,
+  ...Calculator.routes,
+  ...UserAgents.routes,
   ...AppHome.routes,
   ...AppCharacter.routes,
   ...AppAbout.routes,
@@ -226,8 +166,15 @@ export function matchRoute(
   }
   context.routerMatch = match
   if ('resolve' in route) {
-    return then(route.resolve(context), res => Object.assign(route, res))
+    return then(route.resolve(context), res => {
+      let resolved = Object.assign(route, res)
+      evalAttrsLocale(resolved, 'title', context)
+      evalAttrsLocale(resolved, 'description', context)
+      return resolved
+    })
   }
+  evalAttrsLocale(route, 'title', context)
+  evalAttrsLocale(route, 'description', context)
   return route
 }
 

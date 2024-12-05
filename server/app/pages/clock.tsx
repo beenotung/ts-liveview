@@ -9,6 +9,8 @@ import { sessions } from '../session.js'
 import { Context } from '../context.js'
 import { iife } from '../components/script.js'
 import SourceCode from '../components/source-code.js'
+import { Locale, Title } from '../components/locale.js'
+import { Routes } from '../routes.js'
 
 let options: LocaleDateTimeFormatOptions = {
   ...DefaultLocaleDateTimeFormatOptions,
@@ -95,4 +97,21 @@ const Clock = (
 )
 declare let scrClock: HTMLDivElement | undefined
 
-export default Clock
+let t = <Locale en="Clock" zh_hk="時鐘" zh_cn="时钟" />
+
+let routes = {
+  '/clock': {
+    menuText: t,
+    title: <Title t={t} />,
+    description: (
+      <Locale
+        en="Realtime clock using system time localized with client language and timezone"
+        zh_hk="使用系統時間的即時時鐘，根據客戶端的語言和時區本地化"
+        zh_cn="使用系统时间的即时时钟，根据客户端的语言和时区本地化"
+      />
+    ),
+    node: Clock,
+  },
+} satisfies Routes
+
+export default { routes }
