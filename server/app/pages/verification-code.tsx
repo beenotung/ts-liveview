@@ -504,30 +504,19 @@ function VerifySMSPage(attrs: {}, context: DynamicContext) {
       <VerifySMSForm uuid={uuid!} tel={tel!} code={code} />
     </>
   )
-  if (config.layout_type == LayoutType.ionic) {
-    return (
-      <>
-        {style}
-        <ion-header>
-          <ion-toolbar>
-            <ion-title role="heading" aria-level="1">
-              {pageTitle}
-            </ion-title>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content id="verifySMSPage" class="ion-padding">
-          {node}
-        </ion-content>
-      </>
-    )
-  }
   return (
     <>
       {style}
-      <div id="verifySMSPage">
-        <h1>{pageTitle}</h1>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title role="heading" aria-level="1">
+            {pageTitle}
+          </ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content id="verifySMSPage" class="ion-padding">
         {node}
-      </div>
+      </ion-content>
     </>
   )
 }
@@ -557,7 +546,7 @@ function VerifySMSForm(attrs: {
         label="Verification code"
         input={
           <input
-            style={`font-family: monospace; width: ${config.layout_type == LayoutType.ionic ? '8ch' : '6ch'}; padding: 0.5ch`}
+            style={`font-family: monospace; width: 8ch; padding: 0.5ch`}
             minlength={PasscodeLength}
             maxlength={PasscodeLength}
             inputmode="numeric"
