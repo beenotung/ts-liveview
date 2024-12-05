@@ -260,11 +260,9 @@ win.upload = upload
 win.fetch_json = (input, init) => {
   return fetch(input, init)
     .then(res =>
-      res
-        .json()
-        .catch(error => ({
-          error: res.statusText || `Status Code: ${res.status}`,
-        })),
+      res.json().catch(() => ({
+        error: res.statusText || `Status Code: ${res.status}`,
+      })),
     )
     .catch(res => ({ error: String(res) }))
     .then(json => {
