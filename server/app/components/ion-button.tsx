@@ -1,5 +1,6 @@
 import { o } from '../jsx/jsx.js'
 import { NodeList } from '../jsx/types.js'
+import { ThemeColor } from './page.js'
 import { Link } from './router.js'
 
 export function IonButton(
@@ -9,11 +10,13 @@ export function IonButton(
     style?: string
     children?: NodeList
     disabled?: boolean
-    color?: string
+    color?: ThemeColor
     expand?: 'block' | 'full'
     shape?: 'round'
     fill?: 'clear' | 'outline' | 'solid'
     size?: 'small' | 'default' | 'large'
+    slot?: 'start' | 'end'
+    hidden?: boolean | undefined
   } & object,
 ) {
   let { url, children, disabled, ...rest } = attrs

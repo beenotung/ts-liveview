@@ -1,16 +1,17 @@
 import { o } from '../jsx/jsx.js'
+import { ThemeColor } from './page.js'
 import { Link } from './router.js'
 
 export function IonBackButton(attrs: {
   href: string
-  color?: string
+  color?: ThemeColor
   class?: string
   backText?: string // default: 'Back'
   buttonsSlot?: string | false // default: 'start'
 }) {
   let { href, class: className, backText, buttonsSlot, ...extraAttrs } = attrs
   className = className ? className + ' ' : ''
-  backText ??= href == '/' ? 'Home' : 'Back'
+  backText ??= href === '/' ? 'Home' : 'Back'
   buttonsSlot ??= 'start'
   let button = (
     <Link href={href} is-back>
