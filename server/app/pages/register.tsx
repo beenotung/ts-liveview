@@ -18,7 +18,7 @@ import {
   googleLogo,
   instagramLogo,
 } from '../svgs/logo.js'
-import { proxy, User } from '../../../db/proxy.js'
+import { proxy } from '../../../db/proxy.js'
 import { ServerMessage } from '../../../client/types.js'
 import { is_email, to_full_hk_mobile_phone } from '@beenotung/tslib/validate.js'
 import { Raw } from '../components/raw.js'
