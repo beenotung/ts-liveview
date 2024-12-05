@@ -588,6 +588,7 @@ async function submit(context: InputContext): Promise<Node> {
       tel: null,
       avatar: null,
       is_admin: null,
+      nickname: null,
     })
 
     let main: Node
