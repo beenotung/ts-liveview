@@ -102,7 +102,12 @@ export function validateNickname(nickname: string): ValidateUserResult {
     }
   }
 
-  if (nickname.toLowerCase().replace(/badminton/g, '').includes('admin')) {
+  if (
+    nickname
+      .toLowerCase()
+      .replace(/badminton/g, '')
+      .includes('admin')
+  ) {
     return {
       type: 'error' as const,
       text: `nickname cannot contains "admin"`,
