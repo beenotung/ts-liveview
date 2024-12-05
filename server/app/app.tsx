@@ -80,26 +80,6 @@ let scripts = config.development ? (
   </>
 )
 
-let brand = (
-  <div style="color: darkblue; font-weight: bold">
-    <Link
-      style="font-size: 1.7rem; text-decoration: none"
-      class="text-no-wrap"
-      href="/"
-    >
-      {config.site_name}
-    </Link>{' '}
-    <div class="text-no-wrap">
-      <a target="_blank" href="https://news.ycombinator.com/item?id=22830472">
-        HN
-      </a>{' '}
-      <a target="_blank" href="https://github.com/beenotung/ts-liveview">
-        git
-      </a>
-    </div>
-  </div>
-)
-
 function IonicApp(route: PageRouteMatch): Element {
   // you can write the AST direct for more compact wire-format
   return [
