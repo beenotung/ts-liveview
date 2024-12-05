@@ -21,11 +21,7 @@ import { Node } from '../jsx/types.js'
 import { renderError } from '../components/error.js'
 import { debugLog } from '../../debug.js'
 import { count, filter, find } from 'better-sqlite3-proxy'
-import {
-  getAuthUser,
-  getAuthUserId,
-  writeUserIdToCookie,
-} from '../auth/user.js'
+import { getAuthUser, writeUserIdToCookie } from '../auth/user.js'
 import { env } from '../../env.js'
 import { randomUUID } from 'crypto'
 import { sendSMS } from '../../sms.js'
