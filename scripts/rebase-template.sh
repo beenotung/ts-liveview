@@ -48,6 +48,8 @@ git cherry-pick origin/v5-auth-template..origin/v5-auth-ionic-template
 set +x
 echo finished cherry-pick.
 
+./scripts/check-commits.sh
+
 echo -n 'continue to push? [y/N] '
 read ans
 if [ "x-$ans" != "x-y" ]; then
