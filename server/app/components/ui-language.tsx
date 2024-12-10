@@ -10,32 +10,34 @@ import { Raw } from './raw.js'
 import { apiEndpointTitle } from '../../config.js'
 import { toRouteUrl } from '../../url.js'
 import { Redirect } from './router.js'
+import { Locale } from './locale.js'
+import { mapArray } from './fragment.js'
 
 export function PickLanguage(attrs: { style?: string }, context: Context) {
   let lang = getContextLanguage(context)
   let return_url = context.type == 'static' ? '' : context.url
   return (
     <div style={attrs.style}>
-      {lang === 'zh' ? 'Language' : '界面語言'}:{' '}
-      <a
-        onclick="switchLang(event, 'zh')"
-        href={toRouteUrl(routes, '/set-lang/:lang', {
-          params: { lang: 'zh' },
-          query: { return_url },
-        })}
-      >
-        <button>繁體中文</button>
-      </a>{' '}
-      |{' '}
-      <a
-        onclick="switchLang(event, 'en')"
-        href={toRouteUrl(routes, '/set-lang/:lang', {
-          params: { lang: 'en' },
-          query: { return_url },
-        })}
-      >
-        <button>English</button>
-      </a>
+      🌏 <Locale en="Language" zh_hk="語言" zh_cn="语言" />:{' '}
+      {mapArray(
+        [
+          ['en', 'English'],
+          ['zh_HK', '繁體中文'],
+          ['zh_CN', '简体中文'],
+        ],
+        ([lang, text]) => (
+          <a
+            onclick={`switchLang(event, '${lang}')`}
+            href={toRouteUrl(routes, '/set-lang/:lang', {
+              params: { lang },
+              query: { return_url },
+            })}
+          >
+            <button>{text}</button>
+          </a>
+        ),
+        ' | ',
+      )}
       {Raw(/* html */ `
 <script>
 function switchLang(event, lang){
