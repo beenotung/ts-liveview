@@ -17,8 +17,15 @@ let sweetAlertPlugin = loadClientPlugin({
 let icons = ['success', 'error', 'warning', 'info', 'question']
 
 let content = (
-  <div>
+  <div id="demo-plugin">
     {Style(/* css */ `
+h2 {
+  margin: 0.5em 0;
+}
+#demo-plugin hr {
+  margin: 1em 0.25em;
+  border-color: #5555;
+}
 #demo-swiper {
   outline: 1px solid black;
   max-width: 300px;
@@ -58,6 +65,9 @@ let content = (
         zh_cn="此页面演示加载与 npm 包捆绑在一起的客户端插件并在浏览器中运行它们。"
       />
     </p>
+
+    <hr />
+
     <h2>
       <Locale en="Swiper Demo" zh_hk="Swiper 示範" zh_cn="Swiper 示范" />
     </h2>
@@ -67,48 +77,9 @@ let content = (
       showPagination
       showArrow
     />
-    <h2>
-      <Locale
-        en="DataTable Demo"
-        zh_hk="DataTable 示範"
-        zh_cn="DataTable 示范"
-      />
-    </h2>
-    <table id="demo-dataTable">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Username</th>
-          <th>Status</th>
-          <th>Icon</th>
-        </tr>
-      </thead>
-      <tbody>
-        {mapArray(allNames, (name, index) => {
-          let icon = icons[index % icons.length]
-          return (
-            <tr>
-              <td>{index + 1}</td>
-              <td>{name}</td>
-              <td>{icon}</td>
-              <th>
-                <div
-                  class={`swal2-icon swal2-${icon} swal2-icon-show`}
-                  style="display: flex;"
-                >
-                  <div class="swal2-icon-content">!</div>
-                </div>
-              </th>
-            </tr>
-          )
-        })}
-      </tbody>
-    </table>
-    {dataTableAsset}
-    {enableDataTable('demo-dataTable', {
-      pageLength: 2,
-      lengthMenu: [1, 2, 3, 5, 10, 25],
-    })}
+
+    <hr />
+
     <h2>
       <Locale
         en="Sweet Alert Demo"
@@ -176,6 +147,54 @@ async function demoConfirm(icon) {
   }
 }
 `)}
+
+    <hr />
+
+    <h2>
+      <Locale
+        en="DataTable Demo"
+        zh_hk="DataTable 示範"
+        zh_cn="DataTable 示范"
+      />
+    </h2>
+    <table id="demo-dataTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Status</th>
+          <th>Icon</th>
+        </tr>
+      </thead>
+      <tbody>
+        {mapArray(allNames, (name, index) => {
+          let icon = icons[index % icons.length]
+          return (
+            <tr>
+              <td>{index + 1}</td>
+              <td>{name}</td>
+              <td>{icon}</td>
+              <th>
+                <div
+                  class={`swal2-icon swal2-${icon} swal2-icon-show`}
+                  style="display: flex;"
+                >
+                  <div class="swal2-icon-content">!</div>
+                </div>
+              </th>
+            </tr>
+          )
+        })}
+      </tbody>
+    </table>
+    {dataTableAsset}
+    {enableDataTable('demo-dataTable', {
+      pageLength: 2,
+      lengthMenu: [1, 2, 3, 5, 10, 25],
+    })}
+
+    <hr />
+
     <SourceCode page="demo-plugin.tsx" style="margin-top: 1.5rem" />
   </div>
 )
