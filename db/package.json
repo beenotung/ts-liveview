@@ -23,12 +23,12 @@
     "knex": "^3.1.0"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.11",
+    "@types/better-sqlite3": "^7.6.12",
     "@types/integer": "^4.0.3",
-    "@types/node": "^22.9.0",
+    "@types/node": "^22.10.1",
     "npm-run-all": "^4.1.5",
-    "quick-erd": "^4.26.2",
+    "quick-erd": "^4.26.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.7.2"
   }
 }
