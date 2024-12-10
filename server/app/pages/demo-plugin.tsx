@@ -10,6 +10,10 @@ import { Swiper } from '../components/swiper.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 
+let sweetAlertPlugin = loadClientPlugin({
+  entryFile: 'dist/client/sweetalert.js',
+})
+
 let icons = ['success', 'error', 'warning', 'info', 'question']
 
 let content = (
@@ -112,7 +116,7 @@ let content = (
         zh_cn="Sweet Alert 示範"
       />
     </h2>
-    {loadClientPlugin({ entryFile: 'dist/client/sweetalert.js' }).node}
+    {sweetAlertPlugin.node}
     <h3>
       <Locale en="Toast" zh_hk="提示 (Toast)" zh_cn="提示 (Toast)" />
     </h3>

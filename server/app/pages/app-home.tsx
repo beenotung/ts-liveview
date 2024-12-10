@@ -32,6 +32,10 @@ function selectMenu(event, flag) {
 }
 `)
 
+let sweetAlertPlugin = loadClientPlugin({
+  entryFile: 'dist/client/sweetalert.js',
+})
+
 let homePage = (
   <>
     {style}
@@ -92,7 +96,7 @@ let homePage = (
             </Link>
           ))}
         </ion-list>
-        {loadClientPlugin({ entryFile: 'dist/client/sweetalert.js' }).node}
+        {sweetAlertPlugin.node}
         <ion-button
           fill="block"
           color="primary"
