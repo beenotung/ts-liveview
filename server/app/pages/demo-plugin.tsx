@@ -9,12 +9,28 @@ import Style from '../components/style.js'
 import { Swiper } from '../components/swiper.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
+import { Chart, ChartScript } from '../components/chart.js'
 
 let sweetAlertPlugin = loadClientPlugin({
   entryFile: 'dist/client/sweetalert.js',
 })
 
+let confettiPlugin = loadClientPlugin({
+  entryFile: 'dist/client/confetti.js',
+})
+
 let icons = ['success', 'error', 'warning', 'info', 'question']
+
+// init demo chart data
+let demo_chart_label: string[] = []
+let demo_chart_data: number[] = []
+Math.PI.toString()
+  .replace('.', '')
+  .split('')
+  .forEach((char, index) => {
+    demo_chart_label.push(String(index + 1))
+    demo_chart_data.push(parseInt(char))
+  })
 
 let content = (
   <div id="demo-plugin">
@@ -77,6 +93,40 @@ h2 {
       showPagination
       showArrow
     />
+
+    <hr />
+
+    <h2>
+      <Locale en="Chart Demo" zh_hk="圖表示範" zh_cn="图表示范" />
+    </h2>
+    {ChartScript}
+    <Chart
+      canvas_id="demo-chart"
+      dataset_labels="PI Digits"
+      data_labels={demo_chart_label}
+      data={demo_chart_data}
+      borderWidth={1}
+      min={0}
+      max={9}
+    />
+
+    <hr />
+
+    <h2>
+      <Locale en="Confetti Demo" zh_hk="彩紙示範" zh_cn="彩纸示范" />
+    </h2>
+    <div className="demo-buttons">
+      <button onclick="fireConfetti()">
+        <Locale en="Fire Confetti" zh_hk="放彩紙" zh_cn="放彩纸" />
+      </button>
+      <button onclick="fireStar()">
+        <Locale en="Fire Star" zh_hk="放星星" zh_cn="放星星" />
+      </button>
+      <button onclick="fireEmoji()">
+        <Locale en="Fire Emoji" zh_hk="放表情符號" zh_cn="放表情符号" />
+      </button>
+    </div>
+    {confettiPlugin.node}
 
     <hr />
 
@@ -189,7 +239,7 @@ async function demoConfirm(icon) {
     </table>
     {dataTableAsset}
     {enableDataTable('demo-dataTable', {
-      pageLength: 2,
+      pageLength: 3,
       lengthMenu: [1, 2, 3, 5, 10, 25],
     })}
 

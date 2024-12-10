@@ -86,6 +86,8 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
   - [x] image compression (preview & upload)
   - [x] sweetalert (unrestricted)
   - [x] swiper (slides / images carousel)
+  - [x] chart.js (canvas based line chart, bar chart, and more)
+  - [x] canvas-confetti (fireworks animation)
   - [x] DataTables (pagination / search)
 - [x] Still functional when javascript is disabled on client device with links and forms [[5]](#feature-5)
 - [x] Support to develop with [JSX](#jsx), AST, component, or html template
