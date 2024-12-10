@@ -5,15 +5,13 @@ set -o pipefail
 function check_commit {
   commit="$1"
   out=$(git log -n 1 "$commit")
-  hash=$(echo "$out" | grep -oP 'commit \K.*')
-  date=$(echo "$out" | grep -oP 'Date: \K.*')
+  hash=$(echo "$out" | sed -n 's/^commit //p')
+  date=$(echo "$out" | sed -n 's/^Date: //p')
   echo "$hash | $date"
 }
 
 function check {
   name="$1"
-  echo ""
-  echo "== checking $name =="
 
   local=$(check_commit "$name")
   remote=$(check_commit "origin/$name")
@@ -22,10 +20,12 @@ function check {
   remote_date=$(echo "$remote" | awk -F '|' '{print $2}')
 
   if [ "$local_date" == "$remote_date" ]; then
-    echo "matched"
+    echo "matched: $name"
   else
+    echo "mismatch: $name"
     echo "$local"
     echo "$remote"
+    echo ""
   fi
 }
 
