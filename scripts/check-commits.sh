@@ -10,6 +10,7 @@ function check_commit {
   echo "$hash | $date"
 }
 
+matched=()
 function check {
   name="$1"
 
@@ -20,7 +21,7 @@ function check {
   remote_date=$(echo "$remote" | awk -F '|' '{print $2}')
 
   if [ "$local_date" == "$remote_date" ]; then
-    echo "matched: $name"
+    matched+=("$name")
   else
     echo "mismatch: $name"
     echo "$local"
@@ -37,3 +38,5 @@ check v5-ionic-template
 check v5-auth-template
 check v5-auth-web-template
 check v5-auth-ionic-template
+
+echo "matched branches: ${matched[@]}"
