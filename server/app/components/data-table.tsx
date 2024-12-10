@@ -15,7 +15,12 @@ export let dataTableAsset = (
 
 export function enableDataTable(id: string, config: Config = {}) {
   return Script(/* javascript */ `
-(function(){
+(function initDateTable() {
+	if (typeof DataTable !== 'function') {
+		// still loading
+		setTimeout(initDateTable, 50)
+		return
+	}
 	let id = ${JSON.stringify(id)};
 	let table = document.getElementById(id);
   let dataTable = new DataTable(table, ${JSON.stringify(config)});
