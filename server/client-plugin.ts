@@ -2,6 +2,9 @@ import * as esbuild from 'esbuild'
 import * as path from 'path'
 import { config } from './config.js'
 import { Raw } from './app/components/raw.js'
+import { Raw as RawType } from './app/jsx/types.js'
+
+let cache = new Map<string, { script: string; node: RawType }>()
 
 export function loadClientPlugin(options: {
   // e.g. dist/client/image.js
@@ -21,6 +24,13 @@ export function loadClientPlugin(options: {
 
   let outFilename = options.outFilename || defaultBundleFilename(entryFile)
 
+  let key = entryFile + '|' + outFilename
+
+  let result = cache.get(key)
+  if (result) {
+    return result
+  }
+
   // e.g. build/image.bundle.js
   let outFile = 'build/' + outFilename
 
@@ -39,7 +49,10 @@ export function loadClientPlugin(options: {
 
   let node = Raw(script)
 
-  return { script, node }
+  result = { script, node }
+
+  cache.set(key, result)
+  return result
 }
 
 function defaultBundleFilename(entryFile: string) {
