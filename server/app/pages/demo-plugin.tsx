@@ -102,9 +102,8 @@ h2 {
     {ChartScript}
     <Chart
       canvas_id="demo-chart"
-      dataset_labels="PI Digits"
       data_labels={demo_chart_label}
-      data={demo_chart_data}
+      datasets={[{ label: 'PI Digits', data: demo_chart_data }]}
       borderWidth={1}
       min={0}
       max={9}

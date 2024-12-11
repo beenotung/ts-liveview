@@ -6,9 +6,12 @@ export let ChartScript = <script src="/npm/chart.js/dist/chart.umd.js"></script>
 export function Chart(attrs: {
   canvas_id: string
   skip_canvas?: boolean
-  dataset_labels: string
+  datasets: {
+    label: string
+    data: number[]
+    hidden?: boolean
+  }[]
   data_labels: string[]
-  data: number[]
   type?: 'line' | 'bar'
 
   /**
@@ -44,13 +47,12 @@ export function Chart(attrs: {
     type: attrs.type || 'line',
     data: {
       labels: attrs.data_labels,
-      datasets: [
-        {
-          label: attrs.dataset_labels,
-          data: attrs.data,
-          borderWidth: attrs.borderWidth,
-        },
-      ],
+      datasets: attrs.datasets.map(dataset => ({
+        label: dataset.label,
+        data: dataset.data,
+        borderWidth: attrs.borderWidth,
+        hidden: dataset.hidden,
+      })),
     },
     options: {
       scales: {
