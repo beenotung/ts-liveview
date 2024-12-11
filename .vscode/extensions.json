@@ -1,11 +1,15 @@
 {
   "recommendations": [
+    "Gruntfuggly.todo-tree",
     "PKief.material-icon-theme",
     "TabNine.tabnine-vscode",
     "Tobermory.es6-string-html",
     "eamodio.gitlens",
     "esbenp.prettier-vscode",
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-rename-tag",
     "streetsidesoftware.code-spell-checker",
-    "usernamehw.errorlens"
+    "usernamehw.errorlens",
+    "wix.vscode-import-cost"
   ]
 }
