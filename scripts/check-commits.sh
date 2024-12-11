@@ -30,8 +30,6 @@ function check {
   fi
 }
 
-check master
-check v5-demo
 check v5-hybrid-template
 check v5-web-template
 check v5-ionic-template
