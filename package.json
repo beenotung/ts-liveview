@@ -35,14 +35,14 @@
   "dependencies": {
     "@beenotung/tslib": "^23.12.1",
     "@ionic/core": "^8.4.1",
-    "better-sqlite3-proxy": "^2.10.0",
+    "better-sqlite3-proxy": "^2.10.1",
     "better-sqlite3-schema": "^3.1.7",
     "canvas-confetti": "^1.9.3",
     "cast.ts": "^1.14.3",
     "chart.js": "^4.4.7",
     "cookie-parser": "^1.4.7",
-    "datatables.net": "^2.1.8",
-    "datatables.net-dt": "^2.1.8",
+    "datatables.net": "^2.2.1",
+    "datatables.net-dt": "^2.2.1",
     "debug": "^4.4.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -54,16 +54,16 @@
     "listening-on": "^2.0.9",
     "marked": "^12.0.2",
     "open": "^10.1.0",
-    "sanitize-html": "^2.13.1",
+    "sanitize-html": "^2.14.0",
     "sweetalert2-unrestricted": "^11.10.5",
-    "swiper": "^11.1.15",
+    "swiper": "^11.2.1",
     "timezone-date.ts": "^2.0.1",
     "url-router.ts": "^1.2.1",
     "ws": "^8.18.0"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.12",
-    "@types/canvas-confetti": "^1.6.4",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/chai": "^4.3.20",
     "@types/cookie-parser": "^1.4.8",
     "@types/debug": "^4.1.12",
@@ -71,7 +71,7 @@
     "@types/express-serve-static-core": "^4.19.6",
     "@types/formidable": "^3.4.5",
     "@types/integer": "^4.0.3",
-    "@types/node": "^22.10.1",
+    "@types/node": "^22.10.6",
     "@types/sanitize-html": "^2.13.0",
     "@types/ws": "^8.5.13",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
@@ -85,6 +85,6 @@
     "npm-run-all": "^4.1.5",
     "populate-env": "^2.3.1",
     "prettier": "^3.4.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.3"
   }
 }
