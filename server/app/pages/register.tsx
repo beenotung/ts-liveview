@@ -186,11 +186,7 @@ let guestView = (
     ) : (
       <div style="height: 0.5rem"></div>
     )}
-    <form
-      method="POST"
-      action="/verify/email/submit"
-      onsubmit="emitForm(event)"
-    >
+    <form method="POST" action="/verify/submit" onsubmit="emitForm(event)">
       <p>Register with email or phone number</p>
       {verifyFormBody}
     </form>
