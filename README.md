@@ -236,7 +236,7 @@ Example using _getter and setter_ see [thermostat.tsx](./server/app/pages/thermo
 - [x] Login / Register (branch: v5-auth-template)
 - [ ] OAuth
 - [x] Email verification
-- [ ] SMS verification
+- [x] SMS verification
 - [ ] Reset password
 - [ ] Login History
 
