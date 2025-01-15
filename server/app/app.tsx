@@ -95,7 +95,7 @@ let brand = (
       {config.site_name}
     </Link>{' '}
     <div class="text-no-wrap">
-      <a target="_blank" href="https://news.ycombinator.com/item?id=22830472">
+      <a target="_blank" href="https://hn.algolia.com/?query=ts-liveview">
         HN
       </a>{' '}
       <a target="_blank" href="https://github.com/beenotung/ts-liveview">
