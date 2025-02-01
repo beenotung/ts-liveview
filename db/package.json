@@ -10,10 +10,11 @@
   "scripts": {
     "ui": "erd-ui",
     "setup": "run-s migrate seed",
-    "dev": "run-s migrate update",
-    "update": "run-s gen-migrate migrate gen-proxy",
-    "gen-migrate": "auto-migrate ../data/db.sqlite3 < erd.txt",
+    "dev": "run-s migrate plan update",
     "migrate": "knex migrate:latest",
+    "plan": "auto-migrate ../data/db.sqlite3 < erd.txt",
+    "rename": "auto-migrate --rename ../data/db.sqlite3 < erd.txt",
+    "update": "run-s migrate gen-proxy",
     "seed": "ts-node seed.ts",
     "gen-proxy": "erd-to-proxy < erd.txt > proxy.ts"
   },

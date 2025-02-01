@@ -30,7 +30,7 @@ Auto mode:
 Manual mode:
 
 1. update `erd.txt` with any text editor
-2. run `npm run gen-migrate`
+2. run `npm run plan`
 3. review the generated migration script in the `migrations` directory
 4. run `npm run migrate`
 5. run `npm run gen-proxy`
