@@ -5,6 +5,8 @@ export let ChartScript = <script src="/npm/chart.js/dist/chart.umd.js"></script>
 
 export function Chart(attrs: {
   canvas_id: string
+  height?: number
+  width?: number
   skip_canvas?: boolean
   datasets: {
     label: string
@@ -85,7 +87,13 @@ export function Chart(attrs: {
   `)
   return (
     <>
-      {attrs.skip_canvas ? null : <canvas id={attrs.canvas_id} />}
+      {attrs.skip_canvas ? null : (
+        <canvas
+          id={attrs.canvas_id}
+          height={attrs.height}
+          width={attrs.width}
+        />
+      )}
       {script}
     </>
   )
