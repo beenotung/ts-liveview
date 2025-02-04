@@ -8,24 +8,34 @@ export type LocaleVariants<T = Node> = {
   zh_cn: T
 }
 
-export function isPreferZh(context: Context) {
-  let lang = getContextLanguage(context)
+export function isPreferZh(context_or_lang: Context | string | undefined) {
+  let lang =
+    typeof context_or_lang === 'object'
+      ? getContextLanguage(context_or_lang)
+      : context_or_lang
   return lang?.match(/zh|HK|CN/i) && !lang?.match(/en/i)
 }
 
-export function isPreferZhHK(context: Context) {
-  let lang = getContextLanguage(context)
+export function isPreferZhHK(context_or_lang: Context | string | undefined) {
+  let lang =
+    typeof context_or_lang === 'object'
+      ? getContextLanguage(context_or_lang)
+      : context_or_lang
   return lang?.match(/zh|HK/i) && !lang?.match(/en|CN/i)
 }
 
-export function isPreferZhCN(context: Context) {
-  let lang = getContextLanguage(context)
+export function isPreferZhCN(context_or_lang: Context | string | undefined) {
+  let lang =
+    typeof context_or_lang === 'object'
+      ? getContextLanguage(context_or_lang)
+      : context_or_lang
   return lang?.match(/zh|CN/i) && !lang?.match(/en|HK/i)
 }
 
 export function Locale<T>(attrs: LocaleVariants<T>, context: Context): T {
-  if (isPreferZhHK(context)) return attrs.zh_hk
-  if (isPreferZhCN(context)) return attrs.zh_cn
+  let lang = getContextLanguage(context)
+  if (isPreferZhHK(lang)) return attrs.zh_hk
+  if (isPreferZhCN(lang)) return attrs.zh_cn
   return attrs.en
 }
 
