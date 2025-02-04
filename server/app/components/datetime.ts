@@ -66,6 +66,10 @@ export function toLocaleDateTimeString(
   let timeZone: string | undefined = getContextTimezone(context)
   if (locales === '*') {
     locales = undefined
+  } else if (locales === 'zh_hk') {
+    locales = 'hk'
+  } else if (locales === 'zh_cn') {
+    locales = 'cn'
   }
   for (;;) {
     try {
