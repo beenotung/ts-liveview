@@ -31,6 +31,7 @@ export function formatDateTimeText(
   attrs: {
     time: number | Date
     relativeTimeThreshold?: number
+    options?: LocaleDateTimeFormatOptions
   },
   context: Context,
 ): string {
@@ -40,7 +41,7 @@ export function formatDateTimeText(
       return format_relative_time(diff, 0)
     }
   }
-  return toLocaleDateTimeString(attrs.time, context)
+  return toLocaleDateTimeString(attrs.time, context, attrs.options)
 }
 
 export type LocaleDateTimeFormatOptions = Omit<
