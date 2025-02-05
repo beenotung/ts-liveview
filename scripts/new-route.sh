@@ -47,7 +47,7 @@ fi
 
 cat "$template_file" \
   | sed "s/__id__/$id/" \
-  | sed "s/__title__/$title/" \
+  | sed "s/__title__/$title/g" \
   | sed "s/__name__/$name/" \
   | sed "s/__url__/$url/" \
   > "$file"

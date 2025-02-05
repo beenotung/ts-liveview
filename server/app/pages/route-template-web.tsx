@@ -12,9 +12,12 @@ import { mapArray } from '../components/fragment.js'
 import { object, string } from 'cast.ts'
 import { Link, Redirect } from '../components/router.js'
 import { renderError } from '../components/error.js'
+import { evalLocale, Locale } from '../components/locale.js'
 
-let pageTitle = '__title__'
-let addPageTitle = 'Add __title__'
+let pageTitle = <Locale en="__title__" zh_hk="__title__" zh_cn="__title__" />
+let addPageTitle = (
+  <Locale en="Add __title__" zh_hk="添加__title__" zh_cn="添加__title__" />
+)
 
 let style = Style(/* css */ `
 #__id__ {
@@ -151,10 +154,15 @@ function SubmitResult(attrs: {}, context: DynamicContext) {
 
 let routes = {
   '/__url__': {
-    title: title(pageTitle),
-    description: 'TODO',
     menuText: pageTitle,
-    node: page,
+    resolve(context) {
+      let t = evalLocale(pageTitle, context)
+      return {
+        title: title(t),
+        description: 'TODO',
+        node: page,
+      }
+    },
   },
   '/__url__/add': {
     title: title(addPageTitle),
