@@ -34,3 +34,4 @@ uploads/
 # data files
 data/*.tmp.*
 data/*.sql
+data/*.zst
