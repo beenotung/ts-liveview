@@ -165,10 +165,15 @@ let routes = {
     },
   },
   '/__url__/add': {
-    title: title(addPageTitle),
-    description: 'TODO',
-    node: addPage,
     streaming: false,
+    resolve(context) {
+      let t = evalLocale(addPageTitle, context)
+      return {
+        title: title(t),
+        description: 'TODO',
+        node: addPage,
+      }
+    },
   },
   '/__url__/add/submit': {
     title: apiEndpointTitle,
