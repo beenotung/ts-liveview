@@ -25,7 +25,7 @@ Remark: cd to `db` if not done already
 Auto mode:
 
 1. update `erd.txt` with any text editor
-2. run `npm run update`
+2. run `npm run dev`
 
 Manual mode:
 
