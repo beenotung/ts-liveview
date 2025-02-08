@@ -6,6 +6,8 @@ import { Link } from '../components/router.js'
 import { appIonTabBar } from '../components/app-tab-bar.js'
 import { fitIonFooter, selectIonTab } from '../styles/mobile-style.js'
 import { readFileSync } from 'fs'
+import { Context } from '../context.js'
+import { getAuthUser } from '../auth/user.js'
 
 let pageTitle = 'More'
 
@@ -44,10 +46,7 @@ let page = (
         {config.site_name}
       </h2>
       <ion-list>
-        <Link tagName="ion-item" href="/login" disabled>
-          <ion-icon slot="start" name="log-in" />
-          <ion-label>Login / Sign up</ion-label>
-        </Link>
+        <UserSection />
         <Link tagName="ion-item" href="/app/about?from=more">
           <ion-icon slot="start" name="information" />
           <ion-label>About Us</ion-label>
@@ -80,6 +79,29 @@ let page = (
     {fitIonFooter}
   </>
 )
+
+function UserSection(attrs: {}, context: Context) {
+  let user = getAuthUser(context)
+  return (
+    <>
+      {user ? (
+        <>
+          <Link tagName="ion-item" href="/profile">
+            <ion-icon slot="start" name="person" />
+            <ion-label>Profile</ion-label>
+          </Link>
+        </>
+      ) : (
+        <>
+          <Link tagName="ion-item" href="/login">
+            <ion-icon slot="start" name="log-in" />
+            <ion-label>Login / Sign up</ion-label>
+          </Link>
+        </>
+      )}
+    </>
+  )
+}
 
 let routes = {
   '/app/more': {
