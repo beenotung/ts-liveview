@@ -8,6 +8,8 @@ import { fitIonFooter, selectIonTab } from '../styles/mobile-style.js'
 import { readFileSync } from 'fs'
 import { LanguageRadioGroup } from '../components/language-radio-group.js'
 import { Locale } from '../components/locale.js'
+import { Context } from '../context.js'
+import { getAuthUser } from '../auth/user.js'
 
 let pageTitle = 'More'
 
@@ -52,16 +54,7 @@ let page = (
             <Locale en="Account" zh_hk="帳戶" zh_cn="账户" />
           </ion-label>
         </ion-list-header>
-        <Link tagName="ion-item" href="/login" disabled>
-          <ion-icon slot="start" name="log-in" />
-          <ion-label>
-            <Locale
-              en="Login / Sign up"
-              zh_hk="登入 / 註冊"
-              zh_cn="登录 / 注册"
-            />
-          </ion-label>
-        </Link>
+        <UserSection />
         <Link tagName="ion-item" href="/settings">
           <ion-icon slot="start" ios="cog" md="settings" />
           <ion-label>
@@ -121,6 +114,37 @@ let page = (
     {fitIonFooter}
   </>
 )
+
+function UserSection(attrs: {}, context: Context) {
+  let user = getAuthUser(context)
+  return (
+    <>
+      {user ? (
+        <>
+          <Link tagName="ion-item" href="/profile">
+            <ion-icon slot="start" name="person" />
+            <ion-label>
+              <Locale en="Profile" zh_hk="個人資料" zh_cn="个人资料" />
+            </ion-label>
+          </Link>
+        </>
+      ) : (
+        <>
+          <Link tagName="ion-item" href="/login" disabled>
+            <ion-icon slot="start" name="log-in" />
+            <ion-label>
+              <Locale
+                en="Login / Sign up"
+                zh_hk="登入 / 註冊"
+                zh_cn="登录 / 注册"
+              />
+            </ion-label>
+          </Link>
+        </>
+      )}
+    </>
+  )
+}
 
 let routes = {
   '/app/more': {
