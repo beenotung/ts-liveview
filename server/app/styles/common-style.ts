@@ -51,6 +51,10 @@ code.inline-code {
   font-family: monospace;
 }
 
+.no-decoration {
+  text-decoration: none;
+}
+
 .ws_status--safe-area {
   margin-top: 3rem;
 }
