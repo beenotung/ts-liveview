@@ -202,6 +202,13 @@ function writeElement(
     case 'br':
     case 'hr':
     case 'meta':
+    case 'link':
+    case 'base':
+    case 'source':
+    case 'track':
+    case 'col':
+    case 'param':
+    case 'area':
       return
   }
   if (children) {
