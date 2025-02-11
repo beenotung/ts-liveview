@@ -31,6 +31,8 @@ function check {
 }
 
 check v5-hybrid-template
+check v5-minimal-template
+check v5-minimal-without-db-template
 check v5-web-template
 check v5-ionic-template
 check v5-auth-template
