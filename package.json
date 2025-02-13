@@ -32,6 +32,11 @@
     "watch:server": "node scripts/dev.js serve",
     "watch:client": "npm run build:client -- --watch"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ]
+  },
   "dependencies": {
     "@beenotung/tslib": "^23.12.1",
     "@ionic/core": "^8.4.1",
