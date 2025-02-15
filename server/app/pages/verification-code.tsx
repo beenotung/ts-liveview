@@ -186,6 +186,9 @@ async function requestVerification(
     }
 
     async function sendBySMS(): Promise<StaticPageRoute> {
+      if (!input.tel) {
+        throw 'missing phone number'
+      }
       let text = verificationCodeSMS({
         passcode,
         uuid,
