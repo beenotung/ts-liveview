@@ -1,5 +1,4 @@
-import { LayoutType, apiEndpointTitle, config, title } from '../../config.js'
-import { commonTemplatePageText } from '../components/common-template.js'
+import { apiEndpointTitle, config, title } from '../../config.js'
 import { Link, Redirect } from '../components/router.js'
 import {
   Context,
@@ -17,12 +16,13 @@ import { comparePassword } from '../../hash.js'
 import { UserMessageInGuestView } from './profile.js'
 import { getAuthUserId, writeUserIdToCookie } from '../auth/user.js'
 import Style from '../components/style.js'
-import { IonBackButton } from '../components/ion-back-button.js'
 import { wsStatus } from '../components/ws-status.js'
 import { to_full_hk_mobile_phone } from '@beenotung/tslib/validate.js'
 import { oauthProviderList } from '../components/oauth.js'
 import { Field } from '../components/field.js'
-import { is_web } from '../components/page.js'
+import { is_ionic, is_web, Page } from '../components/page.js'
+import { loadClientPlugin } from '../../client-plugin.js'
+import { IonButton } from '../components/ion-button.js'
 
 let style = Style(/* css */ `
 #login .field {
@@ -31,34 +31,28 @@ let style = Style(/* css */ `
 }
 `)
 
+let sweetAlertPlugin = loadClientPlugin({
+  entryFile: 'dist/client/sweetalert.js',
+})
+
 let LoginPage = (
-  <div id="login">
+  <>
     {style}
-    <h1>Login</h1>
-    <p>Welcome back to {config.short_site_name}!</p>
-    <Main />
-  </div>
+    <Page
+      id="login"
+      title="Login"
+      backHref="/"
+      backText="Home"
+      backColor="light"
+      color="primary"
+    >
+      <p>Welcome back to {config.short_site_name}!</p>
+      <Main />
+      {sweetAlertPlugin.node}
+      {is_ionic && wsStatus.safeArea}
+    </Page>
+  </>
 )
-if (config.layout_type === LayoutType.ionic) {
-  LoginPage = (
-    <>
-      {style}
-      <ion-header>
-        <ion-toolbar color="primary">
-          <IonBackButton href="/" backText="Home" color="light" />
-          <ion-title>Login</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <div id="login">
-          <h1>Welcome back to {config.short_site_name}</h1>
-          <Main />
-        </div>
-        {wsStatus.safeArea}
-      </ion-content>
-    </>
-  )
-}
 
 function Main(_attrs: {}, context: Context) {
   let user_id = getAuthUserId(context)
@@ -195,7 +189,18 @@ let guestView = (
       New to {config.short_site_name}?
     </div>
     <div style="margin-bottom: 1rem">
-      <Link href="/register">Create an account</Link>.
+      {is_web ? (
+        <Link href="/register">Create an account</Link>
+      ) : (
+        <IonButton
+          url="/register"
+          expand="block"
+          class="ion-margin"
+          color="secondary"
+        >
+          Create an account
+        </IonButton>
+      )}
     </div>
   </>
 )
