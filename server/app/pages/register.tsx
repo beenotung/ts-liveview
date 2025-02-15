@@ -1,5 +1,4 @@
-import { LayoutType, apiEndpointTitle, config, title } from '../../config.js'
-import { commonTemplatePageText } from '../components/common-template.js'
+import { apiEndpointTitle, config, title } from '../../config.js'
 import { Link } from '../components/router.js'
 import Style from '../components/style.js'
 import {
@@ -22,14 +21,14 @@ import { renderError } from '../components/error.js'
 import { getWsCookies } from '../cookie.js'
 import { getAuthUserId } from '../auth/user.js'
 import { UserMessageInGuestView } from './profile.js'
-import { IonBackButton } from '../components/ion-back-button.js'
 import { wsStatus } from '../components/ws-status.js'
 import { formatTel } from '../components/tel.js'
 import { validateUsername, ValidateUserResult } from '../validate/user.js'
 import { oauthProviderList } from '../components/oauth.js'
 import { ClearInputContext, Field, InputContext } from '../components/field.js'
 import { loadClientPlugin } from '../../client-plugin.js'
-import { is_web } from '../components/page.js'
+import { is_ionic, is_web, Page } from '../components/page.js'
+import { IonButton } from '../components/ion-button.js'
 
 let style = Style(/* css */ `
 #register form .field {
@@ -68,43 +67,25 @@ let sweetAlertPlugin = loadClientPlugin({
 let RegisterPage = (
   <>
     {style}
-    <div id="register">
-      <h1>Register</h1>
+    <Page
+      id="register"
+      title="Register"
+      backHref="/"
+      backText="Home"
+      backColor="light"
+      color="primary"
+    >
       <p>
         Welcome to {config.short_site_name}!
         <br />
         Let's begin the adventure~
       </p>
       <Main />
-    </div>
-    {sweetAlertPlugin.node}
+      {sweetAlertPlugin.node}
+      {is_ionic && wsStatus.safeArea}
+    </Page>
   </>
 )
-if (config.layout_type === LayoutType.ionic) {
-  RegisterPage = (
-    <>
-      {style}
-      <ion-header>
-        <ion-toolbar color="primary">
-          <IonBackButton href="/" backText="Home" color="light" />
-          <ion-title>Register</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <div id="register">
-          <p hidden>{commonTemplatePageText}</p>
-          <p>
-            Welcome to {config.short_site_name}!
-            <br />
-            Let's begin the adventure~
-          </p>
-          <Main />
-        </div>
-        {wsStatus.safeArea}
-      </ion-content>
-    </>
-  )
-}
 
 function Main(_attrs: {}, context: Context) {
   let user_id = getAuthUserId(context)
@@ -253,13 +234,13 @@ function checkPassword (form) {
   confirmPasswordMsg.style.color = 'green'
 }
 </script>`)}
-      {config.layout_type !== LayoutType.ionic ? (
+      {is_web ? (
         <input type="submit" value="Register" />
       ) : (
         <ion-button
           type="submit"
           class="ion-margin"
-          fill="block"
+          expand="block"
           color="primary"
         >
           Register
@@ -278,7 +259,18 @@ function checkPassword (form) {
     </div>
     <div class="separator-line flex-center">Already have an account?</div>
     <div style="margin-bottom: 1rem">
-      <Link href="/login">Login</Link>
+      {is_web ? (
+        <Link href="/login">Login</Link>
+      ) : (
+        <IonButton
+          url="/login"
+          expand="block"
+          class="ion-margin"
+          color="secondary"
+        >
+          Login
+        </IonButton>
+      )}
     </div>
   </>
 )
