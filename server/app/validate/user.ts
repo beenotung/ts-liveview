@@ -1,16 +1,16 @@
 import { find } from 'better-sqlite3-proxy'
 import { proxy, User } from '../../../db/proxy.js'
 import { config } from '../../config.js'
+import { ValidateResult } from '../components/field.js'
 
 export type ValidateUserResult =
-  | { type: 'error'; text: string; extra?: string }
+  | ValidateResult
   | {
       type: 'found'
       text: string
       user: User
       extra?: string
     }
-  | { type: 'ok'; text: string; extra?: string }
 
 let minUsername = 1
 let maxUsername = 32
@@ -102,7 +102,12 @@ export function validateNickname(nickname: string): ValidateUserResult {
     }
   }
 
-  if (nickname.toLowerCase().replace(/badminton/g, '').includes('admin')) {
+  if (
+    nickname
+      .toLowerCase()
+      .replace(/badminton/g, '')
+      .includes('admin')
+  ) {
     return {
       type: 'error' as const,
       text: `nickname cannot contains "admin"`,
