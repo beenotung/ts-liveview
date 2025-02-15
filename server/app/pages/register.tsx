@@ -100,6 +100,7 @@ if (config.layout_type === LayoutType.ionic) {
           </p>
           <Main />
         </div>
+        {wsStatus.safeArea}
       </ion-content>
     </>
   )
@@ -276,10 +277,9 @@ function checkPassword (form) {
       to protect your credential against data leak.
     </div>
     <div class="separator-line flex-center">Already have an account?</div>
-    <div>
+    <div style="margin-bottom: 1rem">
       <Link href="/login">Login</Link>
     </div>
-    {wsStatus.safeArea}
   </>
 )
 
