@@ -20,6 +20,9 @@ import Style from '../components/style.js'
 import { IonBackButton } from '../components/ion-back-button.js'
 import { wsStatus } from '../components/ws-status.js'
 import { to_full_hk_mobile_phone } from '@beenotung/tslib/validate.js'
+import { oauthProviderList } from '../components/oauth.js'
+import { Field } from '../components/field.js'
+import { is_web } from '../components/page.js'
 
 let style = Style(/* css */ `
 #login .field {
@@ -31,8 +34,8 @@ let style = Style(/* css */ `
 let LoginPage = (
   <div id="login">
     {style}
-    <h1>Login to {config.short_site_name}</h1>
-    <p>{commonTemplatePageText}</p>
+    <h1>Login</h1>
+    <p>Welcome back to {config.short_site_name}!</p>
     <Main />
   </div>
 )
@@ -49,7 +52,6 @@ if (config.layout_type === LayoutType.ionic) {
       <ion-content class="ion-padding">
         <div id="login">
           <h1>Welcome back to {config.short_site_name}</h1>
-          <p>{commonTemplatePageText}</p>
           <Main />
         </div>
         {wsStatus.safeArea}
@@ -63,158 +65,139 @@ function Main(_attrs: {}, context: Context) {
   return user_id ? <UserMessageInGuestView user_id={user_id} /> : guestView
 }
 
-let verifyFormBody =
-  config.layout_type !== LayoutType.ionic ? (
-    <>
-      <div class="field">
-        <label>
-          Email or phone number
-          <div class="input-container">
-            <input
-              name="email"
-              type="email"
-              autocomplete="email"
-              placeholder="Email"
-              required
-              onchange="this.form.tel.required = !this.value"
-            />
-            <div>or</div>
-            <input
-              name="tel"
-              type="tel"
-              autocomplete="tel"
-              placeholder="Phone number"
-              required
-              onchange="this.form.email.required = !this.value"
-            />
-          </div>
-        </label>
-      </div>
+let verifyFormBody = (
+  <>
+    {config.enable_email && (
+      <Field
+        label="Email"
+        type="email"
+        name="email"
+        msgId="emailMsg"
+        autocomplete="email"
+        required
+        onchange={
+          config.enable_sms
+            ? 'event.target.form.tel.required = !this.value'
+            : undefined
+        }
+      />
+    )}
+    {config.enable_email &&
+      config.enable_sms &&
+      (is_web ? (
+        <div style="margin: 0.5rem 0">or</div>
+      ) : (
+        <div style="margin-inline-start: 1rem; margin-top: 1rem">or</div>
+      ))}
+    {config.enable_sms && (
+      <Field
+        label="Phone number"
+        type="tel"
+        name="tel"
+        msgId="telMsg"
+        autocomplete="tel"
+        required
+        onchange={
+          config.enable_email
+            ? 'event.target.form.email.required = !this.value'
+            : undefined
+        }
+      />
+    )}
+    {is_web ? (
       <div class="field">
         <label>
           <input type="checkbox" name="include_link" /> Include magic link (more
           convince but may be treated as spam)
         </label>
       </div>
-      <input type="submit" value="Verify" />
-    </>
-  ) : (
-    <>
-      <ion-list>
+    ) : (
+      <>
         <ion-item>
-          <ion-input
-            label="Email"
-            label-placement="floating"
-            type="email"
-            name="email"
-            autocomplete="email"
-            required
-            onchange="verifyForm.tel.required = !this.value"
-          ></ion-input>
-        </ion-item>
-        <p style="margin-bottom: 0; margin-left: 1rem">or</p>
-        <ion-item>
-          <ion-input
-            label="Phone number"
-            label-placement="floating"
-            type="tel"
-            name="tel"
-            autocomplete="tel"
-            required
-            onchange="verifyForm.email.required = !this.value"
-          ></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-checkbox name="include_link" slot="start"></ion-checkbox>
-          <ion-label>Include magic link</ion-label>
+          <ion-checkbox slot="start" name="include_link"></ion-checkbox>
+          <ion-label style="pointer-events: none">Include magic link</ion-label>
         </ion-item>
         <ion-note color="dark">
-          <div class="ion-padding-horizontal">
-            (More convince but may be treated as spam)
-          </div>
+          (More convince but may be treated as spam)
         </ion-note>
-      </ion-list>
-      <div class="ion-text-center ion-margin">
-        <ion-button type="submit" fill="block" color="tertiary">
-          Verify
-        </ion-button>
-      </div>
-    </>
-  )
+      </>
+    )}
+    {is_web ? (
+      <input type="submit" value="Verify" />
+    ) : (
+      <ion-button
+        type="submit"
+        class="ion-margin"
+        fill="block"
+        color="tertiary"
+      >
+        Verify
+      </ion-button>
+    )}
+  </>
+)
 
-let passwordFormBody =
-  config.layout_type !== LayoutType.ionic ? (
-    <>
-      <label>
-        Username, email or phone number
-        <div class="input-container">
-          <input name="loginId" autocomplete="username" />
-        </div>
-      </label>
-      <label>
-        Password
-        <div class="input-container">
-          <input
-            name="password"
-            type="password"
-            autocomplete="current-password"
-          />
-        </div>
-      </label>
+let passwordFormBody = (
+  <>
+    <Field
+      label="Username, email or phone number"
+      name="loginId"
+      msgId="loginIdMsg"
+      autocomplete="username"
+      required
+    />
+    <Field
+      label="Password"
+      name="password"
+      msgId="passwordMsg"
+      type="password"
+      autocomplete="current-password"
+      required
+    />
+    {is_web ? (
       <div class="input-container">
         <input type="submit" value="Login" />
       </div>
-      <Message />
-    </>
-  ) : (
-    <>
-      <ion-list>
-        <ion-item>
-          <ion-input
-            label="Username, email or phone number"
-            label-placement="floating"
-            name="loginId"
-            autocomplete="username"
-          ></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-input
-            label="Password"
-            label-placement="floating"
-            name="password"
-            type="password"
-            autocomplete="current-password"
-          ></ion-input>
-        </ion-item>
-      </ion-list>
+    ) : (
       <div class="ion-text-center ion-margin">
         <ion-button type="submit" fill="block" color="primary">
           Login
         </ion-button>
       </div>
-      <Message />
-    </>
-  )
+    )}
+    <Message />
+  </>
+)
 
 let guestView = (
   <>
-    <div>Login with:</div>
-    <form
-      id="verifyForm"
-      method="POST"
-      action="/verify/submit"
-      onsubmit="emitForm(event)"
-    >
-      {verifyFormBody}
-    </form>
-    <div class="or-line flex-center">or</div>
+    {config.use_social_login && (
+      <>
+        <div class="separator-line flex-center">Login with social network</div>
+        <div class="flex-center flex-column">{oauthProviderList}</div>
+      </>
+    )}
+    {(config.enable_email || config.enable_sms) && (
+      <>
+        <div class="separator-line flex-center">
+          Login with verification code
+        </div>
+        <form method="POST" action="/verify/submit" onsubmit="emitForm(event)">
+          {verifyFormBody}
+        </form>
+      </>
+    )}
+    <div class="separator-line flex-center">Login with password</div>
     <form method="post" action="/login/submit">
       {passwordFormBody}
     </form>
+    <div class="separator-line flex-center">
+      New to {config.short_site_name}?
+    </div>
     <div>
-      New to {config.short_site_name}?{' '}
       <Link href="/register">Create an account</Link>.
     </div>
+    {wsStatus.safeArea}
   </>
 )
 
