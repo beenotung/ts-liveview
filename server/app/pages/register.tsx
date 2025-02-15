@@ -33,6 +33,7 @@ import { IonBackButton } from '../components/ion-back-button.js'
 import { wsStatus } from '../components/ws-status.js'
 import { formatTel } from '../components/tel.js'
 import { validateUsername, ValidateUserResult } from '../validate/user.js'
+import { loadClientPlugin } from '../../client-plugin.js'
 
 let style = Style(/* css */ `
 .oauth-provider-list a {
@@ -72,18 +73,24 @@ let style = Style(/* css */ `
 }
 `)
 
+let sweetAlertPlugin = loadClientPlugin({
+  entryFile: 'dist/client/sweetalert.js',
+})
+
 let RegisterPage = (
-  <div id="register">
+  <>
     {style}
-    <h1>Register on {config.short_site_name}</h1>
-    <p hidden>{commonTemplatePageText}</p>
-    <p>
-      Welcome to {config.short_site_name}!
-      <br />
-      Let's begin the adventure~
-    </p>
-    <Main />
-  </div>
+    <div id="register">
+      <h1>Register</h1>
+      <p>
+        Welcome to {config.short_site_name}!
+        <br />
+        Let's begin the adventure~
+      </p>
+      <Main />
+    </div>
+    {sweetAlertPlugin.node}
+  </>
 )
 if (config.layout_type === LayoutType.ionic) {
   RegisterPage = (
