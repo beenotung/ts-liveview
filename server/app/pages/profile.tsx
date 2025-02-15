@@ -90,7 +90,7 @@ let ProfilePage = (_attrs: {}, context: DynamicContext) => {
 
 let toastPlugin = loadClientPlugin({ entryFile: 'dist/client/sweetalert.js' })
 
-function getDisplayName(user: User) {
+export function getDisplayName(user: User) {
   return (
     user.nickname ||
     user.username ||
