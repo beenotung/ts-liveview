@@ -11,13 +11,6 @@ import {
 import { EarlyTerminate } from '../../exception.js'
 import { o } from '../jsx/jsx.js'
 import { find } from 'better-sqlite3-proxy'
-import {
-  appleLogo,
-  facebookLogo,
-  githubLogo,
-  googleLogo,
-  instagramLogo,
-} from '../svgs/logo.js'
 import { proxy } from '../../../db/proxy.js'
 import { ServerMessage } from '../../../client/types.js'
 import { is_email, to_full_hk_mobile_phone } from '@beenotung/tslib/validate.js'
@@ -33,17 +26,12 @@ import { IonBackButton } from '../components/ion-back-button.js'
 import { wsStatus } from '../components/ws-status.js'
 import { formatTel } from '../components/tel.js'
 import { validateUsername, ValidateUserResult } from '../validate/user.js'
+import { oauthProviderList } from '../components/oauth.js'
+import { ClearInputContext, Field, InputContext } from '../components/field.js'
 import { loadClientPlugin } from '../../client-plugin.js'
+import { is_web } from '../components/page.js'
 
 let style = Style(/* css */ `
-.oauth-provider-list a {
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid #888;
-  padding: 0.25rem;
-  border-radius: 0.25rem;
-  margin: 0.25rem;
-}
 #register form .field {
   display: flex;
   flex-wrap: wrap;
@@ -124,23 +112,46 @@ function Main(_attrs: {}, context: Context) {
 
 let verifyFormBody = (
   <>
-    <Field
-      label="Email"
-      type="email"
-      name="email"
-      msgId="emailMsg"
-      oninput="emit('/register/check-email', this.value)"
-      autocomplete="email"
-    />
-    <Field
-      label="Phone number"
-      type="tel"
-      name="tel"
-      msgId="telMsg"
-      oninput="emit('/register/check-tel', this.value)"
-      autocomplete="tel"
-    />
-    {config.layout_type !== LayoutType.ionic ? (
+    {config.enable_email && (
+      <Field
+        label="Email"
+        type="email"
+        name="email"
+        msgId="emailMsg"
+        oninput="emit('/register/check-email', this.value)"
+        autocomplete="email"
+        required
+        onchange={
+          config.enable_sms
+            ? 'event.target.form.tel.required = !this.value'
+            : undefined
+        }
+      />
+    )}
+    {config.enable_email &&
+      config.enable_sms &&
+      (is_web ? (
+        <div style="margin: 0.5rem 0">or</div>
+      ) : (
+        <div style="margin-inline-start: 1rem; margin-top: 1rem">or</div>
+      ))}
+    {config.enable_sms && (
+      <Field
+        label="Phone number"
+        type="tel"
+        name="tel"
+        msgId="telMsg"
+        oninput="emit('/register/check-tel', this.value)"
+        autocomplete="tel"
+        required
+        onchange={
+          config.enable_email
+            ? 'event.target.form.email.required = !this.value'
+            : undefined
+        }
+      />
+    )}
+    {is_web ? (
       <div class="field">
         <label>
           <input type="checkbox" name="include_link" /> Include magic link (more
@@ -148,14 +159,17 @@ let verifyFormBody = (
         </label>
       </div>
     ) : (
-      <ion-item>
-        <ion-checkbox slot="start" name="include_link" />
-        <ion-label>
-          Include magic link (more convince but may be treated as spam)
-        </ion-label>
-      </ion-item>
+      <>
+        <ion-item>
+          <ion-checkbox slot="start" name="include_link" />
+          <ion-label style="pointer-events: none">Include magic link</ion-label>
+        </ion-item>
+        <ion-note color="dark">
+          (More convince but may be treated as spam)
+        </ion-note>
+      </>
     )}
-    {config.layout_type !== LayoutType.ionic ? (
+    {is_web ? (
       <input type="submit" value="Verify" />
     ) : (
       <ion-button
@@ -172,34 +186,31 @@ let verifyFormBody = (
 
 let guestView = (
   <>
-    <p>
-      Already have an account? <Link href="/login">Login</Link>
-    </p>
-    <div class="flex-center flex-column"></div>
-    <div>Register with:</div>
-    {config.use_social_login ? (
+    {config.use_social_login && (
       <>
-        <div class="flex-center flex-column">
-          <div class="oauth-provider-list">
-            <a>{googleLogo}&nbsp;Google</a>
-            <a>{appleLogo}&nbsp;Apple</a>
-            <a>{githubLogo}&nbsp;GitHub</a>
-            <a>{facebookLogo}&nbsp;Facebook</a>
-            <a>{instagramLogo}&nbsp;Instagram</a>
-          </div>
+        <div class="separator-line flex-center">
+          Register with social network
         </div>
-        <div class="or-line flex-center">or</div>
+        <div class="flex-center flex-column">{oauthProviderList}</div>
       </>
-    ) : (
-      <div style="height: 0.5rem"></div>
     )}
-    <form method="POST" action="/verify/submit" onsubmit="emitForm(event)">
-      <p>Register with email or phone number</p>
-      {verifyFormBody}
-    </form>
-    <div class="or-line flex-center">or</div>
-    <form method="POST" action="/register/submit" onsubmit="emitForm(event)">
-      <p>Register with username and password</p>
+    {(config.enable_email || config.enable_sms) && (
+      <>
+        <div class="separator-line flex-center">
+          Register with verification code
+        </div>
+        <form method="POST" action="/verify/submit" onsubmit="emitForm(event)">
+          {verifyFormBody}
+        </form>
+      </>
+    )}
+    <div class="separator-line flex-center">Register with password</div>
+    <form
+      id="verifyForm"
+      method="POST"
+      action="/register/submit"
+      onsubmit="emitForm(event)"
+    >
       <Field
         label="Username"
         name="username"
@@ -264,93 +275,13 @@ function checkPassword (form) {
       </a>{' '}
       to protect your credential against data leak.
     </div>
+    <div class="separator-line flex-center">Already have an account?</div>
+    <div>
+      <Link href="/login">Login</Link>
+    </div>
     {wsStatus.safeArea}
   </>
 )
-
-function Field(
-  attrs: {
-    label: string
-    type?: string
-    name: string
-    oninput: string
-    msgId: string
-    autocomplete?: string
-  },
-  context: InputContext,
-) {
-  let value = context.values?.[attrs.name]
-  let validateResult = context.contextError?.[attrs.msgId]
-  if (config.layout_type === LayoutType.ionic) {
-    return (
-      <>
-        <ion-item>
-          <ion-input
-            type={attrs.type}
-            name={attrs.name}
-            oninput={attrs.oninput}
-            value={value}
-            autocomplete={attrs.autocomplete}
-            label={attrs.label}
-            label-placement="floating"
-          />
-        </ion-item>
-        <div style="margin-inline-start: 1rem">
-          {renderErrorMessage(attrs.msgId, validateResult)}
-        </div>
-      </>
-    )
-  }
-  return (
-    <div class="field">
-      <label>
-        {attrs.label}
-        <div>
-          <input
-            type={attrs.type}
-            name={attrs.name}
-            oninput={attrs.oninput}
-            value={value}
-            autocomplete={attrs.autocomplete}
-          />
-        </div>
-      </label>
-      <div class="space"></div>
-      {renderErrorMessage(attrs.msgId, validateResult)}
-    </div>
-  )
-}
-
-function renderErrorMessage(
-  id: string,
-  result: ValidateUserResult | undefined,
-) {
-  if (!result) {
-    return <div id={id} class="msg"></div>
-  }
-
-  return (
-    <div
-      id={id}
-      class="msg"
-      style={result.type == 'ok' ? 'color:green' : 'color:red'}
-    >
-      {result.text}
-      {result.extra && <span class="extra">{result.extra}</span>}
-    </div>
-  )
-}
-
-function ClearInputContext(_attrs: {}, context: InputContext) {
-  context.contextError = undefined
-  context.values = undefined
-}
-
-type InputContext = Context & {
-  contextError?: ContextError
-  values?: Record<string, string | null>
-}
-type ContextError = Record<string, ValidateUserResult>
 
 let minPassword = 6
 let maxPassword = 256
@@ -562,7 +493,9 @@ function CheckTel(_: {}, context: WsContext) {
   })
 }
 
-async function submit(context: InputContext): Promise<Node> {
+async function submit(
+  context: InputContext<ValidateUserResult>,
+): Promise<Node> {
   try {
     let body = getContextFormBody(context)
     let input = {
