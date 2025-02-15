@@ -194,10 +194,9 @@ let guestView = (
     <div class="separator-line flex-center">
       New to {config.short_site_name}?
     </div>
-    <div>
+    <div style="margin-bottom: 1rem">
       <Link href="/register">Create an account</Link>.
     </div>
-    {wsStatus.safeArea}
   </>
 )
 
