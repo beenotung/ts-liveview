@@ -73,8 +73,8 @@ export function generatePasscode(): string {
 }
 
 let requestVerificationParser = object({
-  email: or([literal(''), email()]),
-  tel: string(),
+  email: optional(or([literal(''), email()])),
+  tel: optional(string()),
   include_link: optional(boolean()),
 })
 
@@ -234,7 +234,10 @@ async function requestVerification(
     }
 
     if (context.type == 'ws') {
-      context.ws.send(['eval', `showAlert(${JSON.stringify(error)},'error')`])
+      context.ws.send([
+        'eval',
+        `showAlert(${JSON.stringify(String(error))},'error')`,
+      ])
       throw EarlyTerminate
     }
 
