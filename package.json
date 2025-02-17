@@ -43,7 +43,7 @@
     "better-sqlite3-proxy": "^2.10.1",
     "better-sqlite3-schema": "^3.1.7",
     "canvas-confetti": "^1.9.3",
-    "cast.ts": "^1.14.3",
+    "cast.ts": "^1.17.1",
     "chart.js": "^4.4.7",
     "cookie-parser": "^1.4.7",
     "datatables.net": "^2.2.1",
