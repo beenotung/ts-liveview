@@ -41,8 +41,8 @@
   "dependencies": {
     "@beenotung/tslib": "^23.12.1",
     "@ionic/core": "^8.4.3",
-    "better-sqlite3-proxy": "^2.10.2",
-    "better-sqlite3-schema": "^3.1.7",
+    "better-sqlite3-proxy": "^2.11.0",
+    "better-sqlite3-schema": "^3.1.8",
     "canvas-confetti": "^1.9.3",
     "cast.ts": "^1.17.1",
     "chart.js": "^4.4.7",
