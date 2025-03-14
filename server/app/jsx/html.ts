@@ -181,17 +181,13 @@ function writeElement(
   }
   if (attrs) {
     Object.entries(attrs).forEach(([name, value]) => {
-      if (value === undefined || value === null) return
-      switch (name) {
-        case 'class':
-        case 'className':
-        case 'style':
-          if (!value) {
-            return
-          }
+      if (value === undefined || value === null || value === false) return
+      if (value === '' || value === true) {
+        html += ` ${name}`
+      } else {
+        value = escapeHTMLAttributeValue(value)
+        html += ` ${name}=${value}`
       }
-      value = escapeHTMLAttributeValue(value)
-      html += ` ${name}=${value}`
     })
   }
   html += '>'
