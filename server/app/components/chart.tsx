@@ -14,7 +14,7 @@ export function Chart(attrs: {
     hidden?: boolean
   }[]
   data_labels: string[]
-  type?: 'line' | 'bar'
+  type?: 'line' | 'bar' | 'radar'
 
   /**
    * @description default: `false`
