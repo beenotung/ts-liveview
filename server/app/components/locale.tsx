@@ -36,6 +36,8 @@ export function Locale<T>(attrs: LocaleVariants<T>, context: Context): T {
   let lang = getContextLanguage(context)
   if (isPreferZhHK(lang)) return attrs.zh_hk
   if (isPreferZhCN(lang)) return attrs.zh_cn
+  // e.g. zh-TW
+  if (isPreferZh(lang)) return attrs.zh_hk
   return attrs.en
 }
 

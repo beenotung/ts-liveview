@@ -125,8 +125,12 @@ connectWS({
     ws.ws.addEventListener('open', mount)
 
     function mount() {
-      let language =
-        navigator && navigator.language ? navigator.language : undefined
+      let language = Object.fromEntries(
+        document.cookie.split(';').map(s => s.trim().split('=')),
+      ).lang
+      if (!language && navigator) {
+        language = navigator.language
+      }
       let url = location.href.replace(origin, '')
       let timeZone = Intl
         ? Intl.DateTimeFormat().resolvedOptions().timeZone
