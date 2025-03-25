@@ -22,8 +22,8 @@ export function PickLanguage(attrs: { style?: string }, context: Context) {
       {mapArray(
         [
           ['en', 'English'],
-          ['zh_HK', '繁體中文'],
-          ['zh_CN', '简体中文'],
+          ['zh-HK', '繁體中文'],
+          ['zh-CN', '简体中文'],
         ],
         ([lang, text]) => (
           <a

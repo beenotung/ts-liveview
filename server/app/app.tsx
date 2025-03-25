@@ -2,6 +2,7 @@ import { o } from './jsx/jsx.js'
 import { scanTemplateDir } from '../template-file.js'
 import { NextFunction, Request, Response, Router } from 'express'
 import type { Context, ExpressContext, WsContext } from './context'
+import { fixLanguage } from './context.js'
 import type { Element } from './jsx/types'
 import {
   escapeHTMLAttributeValue,
@@ -334,7 +335,7 @@ export let onWsMessage: OnWsMessage = async (event, ws, _wss) => {
     event = event as ClientMountMessage
     eventType = 'mount'
     url = event[1]
-    session.language = event[2]
+    session.language = fixLanguage(event[2])
     let timeZone = event[3]
     if (timeZone && timeZone !== 'null') {
       session.timeZone = timeZone

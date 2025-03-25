@@ -114,10 +114,10 @@ export function setCookieLang(context: Context, lang: string) {
 export function getContextLanguage(context: Context): string | undefined {
   let lang = getCookieLang(context)
   if (lang) {
-    return lang
+    return fixLanguage(lang)
   }
   if (context.type === 'static') {
-    return context.language
+    return fixLanguage(context.language)
   }
   if (context.type === 'ws') {
     return fixLanguage(context.session.language)
@@ -131,7 +131,7 @@ export function getContextLanguage(context: Context): string | undefined {
   }
 }
 
-function fixLanguage(language: string | undefined): string | undefined {
+export function fixLanguage(language: string | undefined): string | undefined {
   if (!language || language === '*') {
     return
   }

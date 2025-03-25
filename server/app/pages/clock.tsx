@@ -6,7 +6,7 @@ import {
 import { SECOND } from '@beenotung/tslib/time.js'
 import { toLocaleDateTimeString } from '../components/datetime.js'
 import { sessions } from '../session.js'
-import { Context } from '../context.js'
+import { Context, fixLanguage } from '../context.js'
 import { iife } from '../components/script.js'
 import SourceCode from '../components/source-code.js'
 import { Locale, Title } from '../components/locale.js'
@@ -26,7 +26,8 @@ function startClock() {
       if (session.url !== '/clock') {
         return
       }
-      let text = date.toLocaleString(session.language, {
+      let locale = fixLanguage(session.language)
+      let text = date.toLocaleString(locale, {
         ...options,
         timeZone: session.timeZone,
       })
@@ -69,7 +70,6 @@ const Clock = (
     {iife(
       function (options: Intl.DateTimeFormatOptions) {
         let date = new Date()
-        let lang = navigator.language
         function tickClock() {
           if (typeof scrClock === 'undefined') {
             // stop the loop when this component is out of sight
@@ -77,7 +77,11 @@ const Clock = (
           }
           let time = Date.now()
           date.setTime(time)
-          scrClock.textContent = date.toLocaleString(lang, options)
+          let locale =
+            Object.fromEntries(
+              document.cookie.split(';').map(s => s.trim().split('=')),
+            ).lang || navigator.language
+          scrClock.textContent = date.toLocaleString(locale, options)
           date.setMilliseconds(0)
           let diff = time - date.getTime()
           let interval = 1000 - diff
