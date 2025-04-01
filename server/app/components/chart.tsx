@@ -12,6 +12,8 @@ export function Chart(attrs: {
     label: string
     data: number[]
     hidden?: boolean
+    borderColor?: string
+    backgroundColor?: string
   }[]
   data_labels: string[]
   type?: 'line' | 'bar' | 'radar'
@@ -54,6 +56,8 @@ export function Chart(attrs: {
         data: dataset.data,
         borderWidth: attrs.borderWidth,
         hidden: dataset.hidden,
+        borderColor: dataset.borderColor,
+        backgroundColor: dataset.backgroundColor,
       })),
     },
     options: {
