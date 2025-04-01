@@ -36,8 +36,8 @@ import AppCharacter from './pages/app-character.js'
 import type { renderWebTemplate } from '../../template/web.js'
 import type { renderIonicTemplate } from '../../template/ionic.js'
 import { VNode } from '../../client/jsx/types.js'
-import { renderError } from './components/error.js'
 import { EarlyTerminate, HttpError, MessageException } from '../exception.js'
+import { renderError, showError } from './components/error.js'
 import { evalAttrsLocale, Locale } from './components/locale.js'
 
 let titles: Record<string, string> = {}
@@ -204,11 +204,7 @@ export function errorRoute(
     throw error
   }
   if (context.type == 'ws' && typeof error == 'string') {
-    throw new MessageException([
-      'eval',
-      // `showToast(${JSON.stringify(error)},'error')`,
-      `showAlert(${JSON.stringify(error)},'error')`,
-    ])
+    throw new MessageException(showError(error))
   }
   return {
     title,

@@ -2,6 +2,7 @@ import type { VNode } from '../../../client/jsx/types'
 import type { Context } from '../context'
 import type { ErrorNode, HttpError } from '../../exception'
 import type { Node } from '../jsx/types'
+import type { ServerMessage } from '../../../client/types'
 
 export let ErrorStyle = /* css */ `
 .error {
@@ -32,3 +33,7 @@ function getErrorStatusCode(error: unknown): number {
 }
 
 const defaultErrorStatusCode = 500
+
+export function showError(error: unknown): ServerMessage {
+  return ['eval', `showError(${JSON.stringify(String(error))})`]
+}
