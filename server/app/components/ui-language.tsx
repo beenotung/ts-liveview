@@ -12,6 +12,9 @@ import { toRouteUrl } from '../../url.js'
 import { Redirect } from './router.js'
 import { Locale } from './locale.js'
 import { mapArray } from './fragment.js'
+import { YEAR } from '@beenotung/tslib/time.js'
+
+export let language_max_age = (20 * YEAR) / 1000
 
 export function PickLanguage(attrs: { style?: string }, context: Context) {
   let lang = getContextLanguage(context)
@@ -41,7 +44,7 @@ export function PickLanguage(attrs: { style?: string }, context: Context) {
       {Raw(/* html */ `
 <script>
 function switchLang(event, lang){
-  document.cookie = 'lang=' + lang + ';SameSite=Lax;path=/'
+  document.cookie = 'lang=' + lang + ';SameSite=Lax;path=/;max-age=${language_max_age}'
   remount()
   event.preventDefault()
 }
