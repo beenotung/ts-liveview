@@ -23,7 +23,8 @@ type PageAttrs = {
   backHref?: string | false
   backColor?: ThemeColor
   class?: string
-  color?: ThemeColor
+  headerColor?: ThemeColor
+  contentColor?: ThemeColor
 }
 
 function IonicPage(attrs: PageAttrs) {
@@ -32,7 +33,7 @@ function IonicPage(attrs: PageAttrs) {
     <>
       {backHref || attrs.title ? (
         <ion-header>
-          <ion-toolbar color={attrs.color}>
+          <ion-toolbar color={attrs.headerColor}>
             {backHref ? (
               <IonBackButton
                 href={backHref}
@@ -52,6 +53,7 @@ function IonicPage(attrs: PageAttrs) {
         id={attrs.id}
         class={attrs.class ?? 'ion-padding'}
         style={attrs.style}
+        color={attrs.contentColor}
       >
         {attrs.children ? [attrs.children] : null}
       </ion-content>
