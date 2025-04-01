@@ -81,3 +81,20 @@ export function evalLocale(
   console.error('Invalid node:', node)
   throw new TypeError('Invalid node')
 }
+
+export function makeText(context: Context) {
+  function text(message: LocaleVariants<string>) {
+    return Locale(message, context)
+  }
+  return text
+}
+
+// helper function for making error response to ajax request
+export function makeReject(context: Context) {
+  function reject(message: LocaleVariants<string>) {
+    return {
+      error: Locale(message, context),
+    }
+  }
+  return reject
+}
