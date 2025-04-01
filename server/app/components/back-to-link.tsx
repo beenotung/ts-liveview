@@ -1,5 +1,6 @@
 import { o } from '../jsx/jsx.js'
 import { Content } from './page.js'
+import { Locale } from './locale.js'
 import { Link } from './router.js'
 
 export function BackToLink(attrs: { title: string; href: string }) {
@@ -7,12 +8,12 @@ export function BackToLink(attrs: { title: string; href: string }) {
     <Content
       web={
         <p>
-          Back to <Link href={attrs.href}>{attrs.title}</Link>
+          <Locale en="Back to" zh_hk="返回" zh_cn="返回" /> {attrs.title}
         </p>
       }
       ionic={
         <Link href={attrs.href} tagName="ion-button" is-back>
-          Back to {attrs.title}
+          <Locale en="Back to" zh_hk="返回" zh_cn="返回" /> {attrs.title}
         </Link>
       }
     ></Content>
