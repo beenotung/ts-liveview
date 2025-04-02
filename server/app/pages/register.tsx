@@ -73,7 +73,7 @@ let RegisterPage = (
       backHref="/"
       backText="Home"
       backColor="light"
-      color="primary"
+      headerColor="primary"
     >
       <p>
         Welcome to {config.short_site_name}!

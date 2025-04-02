@@ -44,7 +44,7 @@ let LoginPage = (
       backHref="/"
       backText="Home"
       backColor="light"
-      color="primary"
+      headerColor="primary"
     >
       <p>Welcome back to {config.short_site_name}!</p>
       <Main />
