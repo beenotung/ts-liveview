@@ -84,7 +84,7 @@ let homePage = (
           <br />
           <ion-note>(Cmd key looks like: ⌘)</ion-note>
         </p>
-        <hr style="height:1px; background-color:black;" />
+        <hr />
         <div>
           Fictional characters commonly used as placeholders in discussions
           about cryptographic systems and protocols:
