@@ -51,13 +51,6 @@ let style = Style(/* css */ `
   display: block;
   margin-top: 0.25rem;
 }
-#register .hint {
-  border-inline-start: 3px solid #748;
-  background-color: #edf;
-  padding: 1rem;
-  margin: 0.5rem 0;
-  width: fit-content;
-}
 `)
 
 let sweetAlertPlugin = loadClientPlugin({
@@ -248,7 +241,7 @@ function checkPassword (form) {
       )}
       <ClearInputContext />
     </form>
-    <div class="hint">
+    <div class="hint-block">
       Your password is not be stored in plain text.
       <br />
       Instead, it is processed with{' '}
