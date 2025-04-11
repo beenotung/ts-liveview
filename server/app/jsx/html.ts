@@ -12,7 +12,7 @@ import type {
 } from './types'
 import { HTMLStream, noop } from './stream.js'
 import { Flush } from '../components/flush.js'
-import { renderError, renderErrorNode } from '../components/error.js'
+import { renderError, renderErrorNode, showError } from '../components/error.js'
 import { EarlyTerminate, ErrorNode, MessageException } from '../../exception.js'
 
 const log = debug('html.ts')
@@ -130,6 +130,10 @@ export function writeNode(
         writeNode(stream, renderErrorNode(error, context), context)
       } else {
         console.error('Caught error from componentFn:', error)
+        if (context.type == 'ws') {
+          context.ws.send(showError(error))
+          throw EarlyTerminate
+        }
         writeNode(stream, renderError(error, context), context)
       }
     }
