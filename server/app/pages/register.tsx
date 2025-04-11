@@ -74,9 +74,9 @@ let RegisterPage = (
         Let's begin the adventure~
       </p>
       <Main />
-      {sweetAlertPlugin.node}
       {is_ionic && wsStatus.safeArea}
     </Page>
+    {sweetAlertPlugin.node}
   </>
 )
 
