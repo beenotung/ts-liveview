@@ -6,7 +6,11 @@ declare module 'canvas-confetti' {
   }
 }
 
-function fireConfetti(count = 200) {
+export let confettiConfig = {
+  rate: 1,
+}
+
+export function fireConfetti(count = 200) {
   let defaults: Options = {
     origin: { y: 0.9 },
   }
@@ -14,7 +18,7 @@ function fireConfetti(count = 200) {
     confetti({
       ...defaults,
       ...opts,
-      particleCount: Math.floor(count * particleRatio),
+      particleCount: Math.floor(count * particleRatio * confettiConfig.rate),
     })
   }
   fire(0.25, {
@@ -41,7 +45,7 @@ function fireConfetti(count = 200) {
   })
 }
 
-function fireStar() {
+export function fireStar() {
   var defaults = {
     spread: 360,
     ticks: 150,
@@ -54,14 +58,14 @@ function fireStar() {
   function shoot() {
     confetti({
       ...defaults,
-      particleCount: 60,
+      particleCount: 60 * confettiConfig.rate,
       scalar: 1.2,
       shapes: ['star'],
     })
 
     confetti({
       ...defaults,
-      particleCount: 20,
+      particleCount: 20 * confettiConfig.rate,
       scalar: 0.75,
       shapes: ['circle'],
     })
@@ -80,7 +84,7 @@ function splitEmoji(emoji: string) {
   return chars
 }
 
-function fireEmoji(emoji: string = '🦄🤩🪅') {
+export function fireEmoji(emoji: string = '🦄🤩🪅') {
   var scalar = 2
   var emojiShapes = splitEmoji(emoji).map(text =>
     confetti.shapeFromText({ text, scalar }),
@@ -100,13 +104,13 @@ function fireEmoji(emoji: string = '🦄🤩🪅') {
       confetti({
         ...defaults,
         shapes,
-        particleCount: Math.ceil(30 / emojiShapes.length),
+        particleCount: Math.ceil(30 / emojiShapes.length) * confettiConfig.rate,
       })
 
       confetti({
         ...defaults,
         shapes,
-        particleCount: 2,
+        particleCount: 2 * confettiConfig.rate,
         flat: true,
       })
     }
@@ -116,7 +120,7 @@ function fireEmoji(emoji: string = '🦄🤩🪅') {
 
     confetti({
       ...defaults,
-      particleCount: 15,
+      particleCount: 15 * confettiConfig.rate,
       scalar: scalar / 2,
       shapes: ['circle'],
     })
