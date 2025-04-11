@@ -3,6 +3,7 @@ import Swal, {
   SweetAlertOptions,
   SweetAlertPosition,
 } from 'sweetalert2-unrestricted'
+import { client_config } from './client-config.js'
 
 function showToast(
   title: SweetAlertOptions['title'],
@@ -13,7 +14,7 @@ function showToast(
     toast: true,
     position,
     showConfirmButton: false,
-    timer: 3800,
+    timer: client_config.toast_duration,
     timerProgressBar: true,
     didOpen: toast => {
       toast.onmouseenter = Swal.stopTimer
