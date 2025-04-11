@@ -44,6 +44,9 @@ ion-app.hide {
 hr {
   background-color: var(--ion-color-dark);
 }
+h1 {
+  color: var(--ion-color-primary);
+}
 ion-title.ios {
   min-width: fit-content;
   padding-inline: unset;
