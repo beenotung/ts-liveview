@@ -42,7 +42,7 @@ ion-app.hide {
 
 /* general */
 hr {
-  border-color: var(--ion-color-dark);
+  background-color: var(--ion-color-dark);
 }
 ion-title.ios {
   min-width: fit-content;
