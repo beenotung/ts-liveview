@@ -59,10 +59,6 @@ code.inline-code {
   margin-top: 3rem;
 }
 
-h1 {
-  color: var(--ion-color-primary);
-}
-
 .hint-block {
   border-inline-start: 3px solid #748;
   background-color: #edf;
