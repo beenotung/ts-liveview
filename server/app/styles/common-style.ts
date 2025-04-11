@@ -58,4 +58,16 @@ code.inline-code {
 .ws_status--safe-area {
   margin-top: 3rem;
 }
+
+h1 {
+  color: var(--ion-color-primary);
+}
+
+.hint-block {
+  border-inline-start: 3px solid #748;
+  background-color: #edf;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  width: fit-content;
+}
 `
