@@ -274,11 +274,11 @@ function applySelector(e: Element, selector: string) {
 }
 
 function applyAttrs(e: Element, attrs: attrs) {
-  Object.entries(attrs).forEach(entry => {
-    if (entry[1] === null) {
-      e.removeAttribute(entry[0])
+  Object.entries(attrs).forEach(([name, value]) => {
+    if (value === undefined || value === null || value === false) {
+      e.removeAttribute(name)
     } else {
-      e.setAttribute(entry[0], entry[1] as string)
+      e.setAttribute(name, value as string)
     }
   })
   let input = e as HTMLInputElement
