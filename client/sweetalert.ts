@@ -27,8 +27,11 @@ function showToast(
   })
 }
 
-function showAlert(title: SweetAlertOptions['title'], icon: SweetAlertIcon) {
-  Swal.fire({
+async function showAlert(
+  title: SweetAlertOptions['title'],
+  icon: SweetAlertIcon,
+) {
+  await Swal.fire({
     title,
     icon,
     heightAuto: false,
