@@ -2,7 +2,6 @@
   "recommendations": [
     "Gruntfuggly.todo-tree",
     "PKief.material-icon-theme",
-    "TabNine.tabnine-vscode",
     "Tobermory.es6-string-html",
     "eamodio.gitlens",
     "esbenp.prettier-vscode",
