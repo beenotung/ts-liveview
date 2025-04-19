@@ -26,6 +26,7 @@ type PageAttrs = {
   class?: string
   headerColor?: ThemeColor
   contentColor?: ThemeColor
+  toolbarExtra?: Node
 }
 
 function IonicPage(attrs: PageAttrs, context: Context) {
@@ -48,6 +49,7 @@ function IonicPage(attrs: PageAttrs, context: Context) {
                 {attrs.title}
               </ion-title>
             ) : null}
+            {attrs.toolbarExtra}
           </ion-toolbar>
         </ion-header>
       ) : null}
