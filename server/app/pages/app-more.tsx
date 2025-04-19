@@ -54,11 +54,19 @@ let page = (
         </ion-list-header>
         <Link tagName="ion-item" href="/login" disabled>
           <ion-icon slot="start" name="log-in" />
-          <ion-label>Login / Sign up</ion-label>
+          <ion-label>
+            <Locale
+              en="Login / Sign up"
+              zh_hk="登入 / 註冊"
+              zh_cn="登录 / 注册"
+            />
+          </ion-label>
         </Link>
         <Link tagName="ion-item" href="/settings">
           <ion-icon slot="start" ios="cog" md="settings" />
-          <ion-label>Settings</ion-label>
+          <ion-label>
+            <Locale en="Settings" zh_hk="設定" zh_cn="设置" />
+          </ion-label>
         </Link>
 
         <ion-list-header aria-level="2">
@@ -77,20 +85,30 @@ let page = (
         </ion-list-header>
         <Link tagName="ion-item" href="/app/about?from=more">
           <ion-icon slot="start" name="logo-ionic" />
-          <ion-label>About Us</ion-label>
+          <ion-label>
+            <Locale en="About Us" zh_hk="關於我們" zh_cn="关于我们" />
+          </ion-label>
         </Link>
         <Link tagName="ion-item" href="/terms" disabled>
           <ion-icon slot="start" name="book" />
-          <ion-label>Terms and Conditions</ion-label>
+          <ion-label>
+            <Locale
+              en="Terms and Conditions"
+              zh_hk="使用條款"
+              zh_cn="使用条款"
+            />
+          </ion-label>
         </Link>
         <Link tagName="ion-item" href="/privacy" disabled>
           <ion-icon slot="start" name="glasses" />
-          <ion-label>Privacy Policy</ion-label>
+          <ion-label>
+            <Locale en="Privacy Policy" zh_hk="私隱政策" zh_cn="隐私政策" />
+          </ion-label>
         </Link>
         <ion-item>
           <ion-icon slot="start" name="server" />
           <ion-label>
-            Version{' '}
+            <Locale en="Version" zh_hk="版本" zh_cn="版本" />{' '}
             {JSON.parse(readFileSync('package.json').toString()).version}
           </ion-label>
         </ion-item>
