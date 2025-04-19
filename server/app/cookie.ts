@@ -75,12 +75,18 @@ export function setContextCookie(
   value: string,
   options?: CookieOptions,
 ) {
+  options ||= {}
+  options.sameSite ||= 'lax'
+  options.path ||= '/'
   if (context.type === 'express') {
-    if (options) {
-      context.res.cookie(key, value, options)
-    } else {
-      context.res.cookie(key, value)
+    context.res.cookie(key, value, options)
+  }
+  if (context.type === 'ws' && !options?.httpOnly) {
+    let cookie = `${key}=${value};SameSite=${options.sameSite};path=${options.path}`
+    if (options?.maxAge) {
+      cookie += `;max-age=${options.maxAge}`
     }
+    context.ws.send(['set-cookie', cookie])
   }
   let cookies = getContextCookies(context)
   if (cookies) {
