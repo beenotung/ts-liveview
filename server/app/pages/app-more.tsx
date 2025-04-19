@@ -130,7 +130,7 @@ function UserSection(attrs: {}, context: Context) {
         </>
       ) : (
         <>
-          <Link tagName="ion-item" href="/login" disabled>
+          <Link tagName="ion-item" href="/login">
             <ion-icon slot="start" name="log-in" />
             <ion-label>
               <Locale
