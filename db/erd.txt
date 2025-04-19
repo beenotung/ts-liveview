@@ -134,6 +134,19 @@ email varchar(320) NULL
 tel varchar(16) NULL
 
 
+content_report
+--------------
+id integer PK
+reporter_id integer NULL FK >0- user.id
+type text
+remark text NULL
+submit_time integer
+reviewer_id integer NULL FK >0- user.id
+review_time integer NULL
+accept_time integer NULL
+reject_time integer NULL
+
+
 # zoom: 1.000
 # view: (0, 0)
 # text-bg: #6495ed
