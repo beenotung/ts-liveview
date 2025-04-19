@@ -3,6 +3,7 @@ import {
   DynamicContext,
   getContextLanguage,
   getContextSearchParams,
+  setCookieLang,
 } from '../context.js'
 import { o } from '../jsx/jsx.js'
 import { ResolvedPageRoute, Routes } from '../routes.js'
@@ -13,6 +14,8 @@ import { Redirect } from './router.js'
 import { Locale } from './locale.js'
 import { mapArray } from './fragment.js'
 import { YEAR } from '@beenotung/tslib/time.js'
+import { EarlyTerminate, MessageException } from '../../exception.js'
+import appMore from '../pages/app-more.js'
 
 export let language_max_age = (20 * YEAR) / 1000
 
@@ -56,16 +59,25 @@ function switchLang(event, lang){
 
 function submit(context: DynamicContext): ResolvedPageRoute {
   let lang = context.routerMatch?.params.lang
-  let return_url = getContextSearchParams(context)?.get('return_url')
-  if (context.type == 'express') {
-    context.res.cookie('lang', lang, {
-      sameSite: 'lax',
-      path: '/',
-    })
-  } else {
-    let cookie = 'lang=' + lang + ';SameSite=Lax;path=/'
-    context.ws.send(['set-cookie', cookie])
+  setCookieLang(context, lang, {
+    sameSite: 'lax',
+    path: '/',
+    maxAge: language_max_age,
+  })
+  let return_url =
+    (context.type === 'ws' && (context.args?.[0] as string)) ||
+    getContextSearchParams(context)?.get('return_url')
+
+  if (context.type === 'ws' && return_url) {
+    throw new MessageException([
+      'batch',
+      [
+        ['add-class', 'body', 'no-animation'],
+        ['redirect', return_url],
+      ],
+    ])
   }
+
   return {
     title: apiEndpointTitle,
     description: 'set the locale language',

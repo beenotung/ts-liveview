@@ -6,6 +6,7 @@ import type { PageRoute } from './routes'
 import { getContextCookies, setContextCookie } from './cookie.js'
 import { EarlyTerminate, HttpError, MessageException } from '../exception.js'
 import type { ServerMessage } from '../../client/types'
+import { CookieOptions } from 'express'
 
 export type Context = StaticContext | DynamicContext
 
@@ -107,8 +108,12 @@ export function getCookieLang(context: Context) {
   return getContextCookies(context)?.unsignedCookies.lang
 }
 
-export function setCookieLang(context: Context, lang: string) {
-  setContextCookie(context, 'lang', lang)
+export function setCookieLang(
+  context: Context,
+  lang: string,
+  options?: CookieOptions,
+) {
+  setContextCookie(context, 'lang', lang, options)
 }
 
 export function getContextLanguage(context: Context): string | undefined {
