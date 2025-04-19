@@ -1,4 +1,5 @@
 import { config, LayoutType } from '../../config.js'
+import { Context, getContextSearchParams } from '../context.js'
 import { o } from '../jsx/jsx.js'
 import { Node, NodeList } from '../jsx/types.js'
 import { IonBackButton } from './ion-back-button.js'
@@ -27,8 +28,9 @@ type PageAttrs = {
   contentColor?: ThemeColor
 }
 
-function IonicPage(attrs: PageAttrs) {
-  let backHref = attrs.backHref ?? '/'
+function IonicPage(attrs: PageAttrs, context: Context) {
+  let backHref =
+    attrs.backHref ?? getContextSearchParams(context)?.get('return_url') ?? '/'
   return (
     <>
       {backHref || attrs.title ? (
