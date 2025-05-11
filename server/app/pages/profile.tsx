@@ -25,6 +25,8 @@ import { formatTel } from '../components/tel.js'
 import { validateNickname, validateUsername } from '../validate/user.js'
 import { object, string } from 'cast.ts'
 import { MessageException } from '../../exception.js'
+import { Content, Page } from '../components/page.js'
+import { IonButton } from '../components/ion-button.js'
 
 let style = Style(/* css */ `
 #profile .avatar {
@@ -68,23 +70,24 @@ let ProfilePage = (_attrs: {}, context: DynamicContext) => {
   let user_id = getAuthUserId(context)
 
   return (
-    <div id="profile">
+    <>
       {style}
-      <h1>Profile Page</h1>
-      <p>{commonTemplatePageText}</p>
-      {user_id ? (
-        renderProfile(user_id, context)
-      ) : (
-        <>
-          <p>You are viewing this page as guest.</p>
-          <p>
-            You can <Link href="/login">login</Link> or{' '}
-            <Link href="/register">register</Link> to manage your public profile
-            and exclusive content.
-          </p>
-        </>
-      )}
-    </div>
+      <Page id="profile" backHref="/app/more" title="Profile">
+        <p>{commonTemplatePageText}</p>
+        {user_id ? (
+          renderProfile(user_id, context)
+        ) : (
+          <>
+            <p>You are viewing this page as guest.</p>
+            <p>
+              You can <Link href="/login">login</Link> or{' '}
+              <Link href="/register">register</Link> to manage your public
+              profile and exclusive content.
+            </p>
+          </>
+        )}
+      </Page>
+    </>
   )
 }
 
@@ -246,9 +249,20 @@ async function previewAvatar(input) {
 ${toastPlugin.script}
 `)}
       </form>
-      <a href="/logout" rel="nofollow">
-        Logout
-      </a>
+      <hr style="margin-bottom: 2rem" />
+      {/* TODO make a popup confirm for logout */}
+      <Content
+        web={
+          <a href="/logout" rel="nofollow">
+            Logout
+          </a>
+        }
+        ionic={
+          <IonButton url="/logout" rel="nofollow" color="dark" expand="block">
+            Logout
+          </IonButton>
+        }
+      ></Content>
     </>
   )
 }
