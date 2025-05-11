@@ -16,6 +16,7 @@ export type LinkAttrs = {
   [name: string]: unknown
   'children'?: NodeList
   'hidden'?: boolean | undefined
+  'rel'?: 'nofollow'
 }
 
 export function Link(attrs: LinkAttrs, context: Context) {

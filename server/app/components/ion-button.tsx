@@ -17,6 +17,7 @@ export function IonButton(
     size?: 'small' | 'default' | 'large'
     slot?: 'start' | 'end'
     hidden?: boolean | undefined
+    rel?: 'nofollow'
   } & object,
 ) {
   let { url, children, disabled, ...rest } = attrs
