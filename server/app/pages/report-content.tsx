@@ -1,24 +1,20 @@
-import { count, filter } from 'better-sqlite3-proxy'
+import { count } from 'better-sqlite3-proxy'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
-import { apiEndpointTitle, title } from '../../config.js'
+import { apiEndpointTitle } from '../../config.js'
 import Style from '../components/style.js'
 import {
   Context,
   DynamicContext,
   getContextFormBody,
   getContextSearchParams,
-  getStringCasual,
-  throwIfInAPI,
 } from '../context.js'
 import { mapArray } from '../components/fragment.js'
-import { IonBackButton } from '../components/ion-back-button.js'
-import { LayoutType, config } from '../../config.js'
 import { object, string, values } from 'cast.ts'
-import { Link, Redirect } from '../components/router.js'
+import { Redirect } from '../components/router.js'
 import { renderError } from '../components/error.js'
 import { getAuthUser, getAuthUserRole } from '../auth/user.js'
-import { evalLocale, Locale, Title } from '../components/locale.js'
+import { Locale, Title } from '../components/locale.js'
 import { Page } from '../components/page.js'
 import { toRouteUrl } from '../../url.js'
 import { ContentReport, proxy } from '../../../db/proxy.js'
@@ -28,7 +24,7 @@ import { db } from '../../../db/db.js'
 import { IonButton } from '../components/ion-button.js'
 import DateTimeText from '../components/datetime.js'
 import { getDisplayName } from './profile.js'
-import { EarlyTerminate, HttpError, MessageException } from '../../exception.js'
+import { HttpError, MessageException } from '../../exception.js'
 import httpStatus from 'http-status'
 
 let pageTitle = <Locale en="Report Content" zh_hk="檢舉內容" zh_cn="检举内容" />
