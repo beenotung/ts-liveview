@@ -26,6 +26,7 @@ import DateTimeText from '../components/datetime.js'
 import { getDisplayName } from './profile.js'
 import { HttpError, MessageException } from '../../exception.js'
 import httpStatus from 'http-status'
+import { ionicStyle } from '../styles/ionic-style.js'
 
 let pageTitle = <Locale en="Report Content" zh_hk="檢舉內容" zh_cn="检举内容" />
 
@@ -207,6 +208,7 @@ function ReportPage(attrs: {}, context: Context) {
         ) : null
       }
     >
+      {ionicStyle}
       <p>
         <ion-icon name="warning" color="warning" size="large" />{' '}
         <Locale
@@ -386,6 +388,7 @@ function ReviewPage(attrs: {}, context: DynamicContext) {
   let reports = selectPendingReports()
   return (
     <Page id="Review" title={ReviewPageTitle} class="ion-padding-vertical">
+      {ionicStyle}
       {reviewStyle}
       <p class="ion-padding-horizontal">
         Total <span class="pending-count">{countPendingReports()}</span> reports
