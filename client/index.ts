@@ -268,7 +268,7 @@ win.fetch_json = (input, init) => {
         error: res.statusText || `Status Code: ${res.status}`,
       })),
     )
-    .catch(res => ({ error: String(res) }))
+    .catch(error => ({ error: String(error) }))
     .then(json => {
       if (json.error) {
         showError(json.error)
