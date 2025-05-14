@@ -219,7 +219,7 @@ if (config.setup_robots_txt) {
   }, 1000)
 }
 
-export function apiRoute(options: {
+export function ajaxRoute(options: {
   description: string
   api: (context: ExpressContext) => Promise<object> | object
 }): PageRoute {
