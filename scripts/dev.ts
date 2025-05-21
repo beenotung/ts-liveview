@@ -174,4 +174,16 @@ async function restartServer() {
     }
     return stopServerPromise
   }
+  process.on('SIGINT', () => {
+    // stopped by ctrl+c
+    server.kill('SIGINT')
+  })
+  process.on('SIGTERM', () => {
+    // stopped by kill or pm2
+    server.kill('SIGTERM')
+  })
+  process.on('exit', () => {
+    // stopped by exit
+    server.kill()
+  })
 }
