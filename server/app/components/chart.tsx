@@ -78,15 +78,16 @@ export function Chart(attrs: {
         setTimeout(initChart, 50)
         return
       }
-      const canvas_id = ${JSON.stringify(attrs.canvas_id)}
-      const ctx = document.getElementById(canvas_id)
-      if (!ctx) {
+      let canvas_id = ${JSON.stringify(attrs.canvas_id)}
+      let canvas = document.getElementById(canvas_id)
+      if (!canvas) {
         console.error('Chart: no element found with id: ', canvas_id)
         console.error('Failed to find chart element:', { canvas_id })
         return
       }
-      const options = ${JSON.stringify(options)}
-      const chart = new Chart(ctx, options)
+      let options = ${JSON.stringify(options)}
+      let chart = new Chart(canvas, options)
+      canvas.chart = chart
     })();
   `)
   return (
