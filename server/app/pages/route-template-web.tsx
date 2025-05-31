@@ -187,7 +187,7 @@ let routes = {
       return {
         title: title(t),
         description: 'TODO',
-        node: addPage,
+        node: <AddPage />,
       }
     },
   },
