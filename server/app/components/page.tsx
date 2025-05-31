@@ -1,4 +1,3 @@
-import { config, LayoutType } from '../../config.js'
 import { Context, getContextSearchParams } from '../context.js'
 import { o } from '../jsx/jsx.js'
 import { Node, NodeList } from '../jsx/types.js'
