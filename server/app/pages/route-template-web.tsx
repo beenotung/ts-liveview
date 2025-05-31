@@ -178,7 +178,7 @@ let routes = {
   '/__url__/add': {
     title: <Title t={addPageTitle} />,
     description: 'TODO',
-    node: addPage,
+    node: <AddPage />,
     streaming: false,
   },
   '/__url__/add/submit': {
