@@ -31,6 +31,7 @@ export let config = {
   client_target: 'es2020',
   layout_type: LayoutType.navbar,
   use_social_login: true,
+  use_verification_code: true,
   enable_email: development || env.EMAIL_USER !== 'skip',
   enable_sms: development || env.SMS_API_KEY !== 'skip',
 }
