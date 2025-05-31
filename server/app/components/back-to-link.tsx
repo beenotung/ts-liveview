@@ -1,5 +1,4 @@
 import { o } from '../jsx/jsx.js'
-import { Content } from './page.js'
 import { Locale } from './locale.js'
 import { Link } from './router.js'
 
