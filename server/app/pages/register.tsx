@@ -169,16 +169,21 @@ let guestView = (
         <div class="flex-center flex-column">{oauthProviderList}</div>
       </>
     )}
-    {(config.enable_email || config.enable_sms) && (
-      <>
-        <div class="separator-line flex-center">
-          Register with verification code
-        </div>
-        <form method="POST" action="/verify/submit" onsubmit="emitForm(event)">
-          {verifyFormBody}
-        </form>
-      </>
-    )}
+    {config.use_verification_code &&
+      (config.enable_email || config.enable_sms) && (
+        <>
+          <div class="separator-line flex-center">
+            Register with verification code
+          </div>
+          <form
+            method="POST"
+            action="/verify/submit"
+            onsubmit="emitForm(event)"
+          >
+            {verifyFormBody}
+          </form>
+        </>
+      )}
     <div class="separator-line flex-center">Register with password</div>
     <form
       id="verifyForm"
