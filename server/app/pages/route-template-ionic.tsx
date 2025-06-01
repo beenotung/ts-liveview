@@ -14,7 +14,7 @@ import { object, string } from 'cast.ts'
 import { Link, Redirect } from '../components/router.js'
 import { renderError } from '../components/error.js'
 import { getAuthUser } from '../auth/user.js'
-import { Locale } from '../components/locale.js'
+import { Locale, Title } from '../components/locale.js'
 
 let pageTitle = <Locale en="__title__" zh_hk="__title__" zh_cn="__title__" />
 let addPageTitle = (
