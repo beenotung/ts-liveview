@@ -1,6 +1,6 @@
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
-import { apiEndpointTitle, title } from '../../config.js'
+import { apiEndpointTitle } from '../../config.js'
 import Style from '../components/style.js'
 import {
   Context,
@@ -15,7 +15,7 @@ import { renderError } from '../components/error.js'
 import { Content, Page } from '../components/page.js'
 import { BackToLink } from '../components/back-to-link.js'
 import { getAuthUser } from '../auth/user.js'
-import { evalLocale, Locale } from '../components/locale.js'
+import { Locale, Title } from '../components/locale.js'
 import { Button } from '../components/button.js'
 import { IonButton } from '../components/ion-button.js'
 
