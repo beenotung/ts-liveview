@@ -153,4 +153,13 @@ async function restartServer() {
     }
     return stopServerPromise
   }
+  process.on('SIGINT', () => {
+    server.kill('SIGINT')
+  })
+  process.on('SIGTERM', () => {
+    server.kill('SIGTERM')
+  })
+  process.on('exit', () => {
+    server.kill()
+  })
 }
