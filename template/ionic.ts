@@ -86,12 +86,6 @@ export function renderIonicTemplate(
     <script nomodule src="/npm/@ionic/core/dist/ionic/ionic.js"></script>
     <link rel="stylesheet" href="/npm/@ionic/core/css/ionic.bundle.css" />
     <style>
-      html:not(.hydrated) body {
-        display: initial;
-      }
-      html:not(.hydrated) .app {
-        display: none;
-      }
       .md .ios-only {
         display: none;
       }
