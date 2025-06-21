@@ -4,6 +4,7 @@ import {
   dataURItoFile,
   resizeImage,
   toImage,
+  rotateImage,
 } from '@beenotung/tslib/image.js'
 import { client_config } from './client-config.js'
 import { selectImage } from '@beenotung/tslib/file.js'
@@ -68,10 +69,18 @@ async function compressImageFile(
   return { dataUrl, file }
 }
 
+async function rotateImageInline(image: HTMLImageElement) {
+  let canvas = rotateImage(image)
+  let dataUrl = canvas.toDataURL()
+  image.src = dataUrl
+}
+
 Object.assign(window, {
   compressPhotos,
   selectPhotos,
   compressImageFile,
   selectImage,
   format_byte,
+  rotateImage,
+  rotateImageInline,
 })
