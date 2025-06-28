@@ -14,8 +14,7 @@ import { Redirect } from './router.js'
 import { Locale } from './locale.js'
 import { mapArray } from './fragment.js'
 import { YEAR } from '@beenotung/tslib/time.js'
-import { EarlyTerminate, MessageException } from '../../exception.js'
-import appMore from '../pages/app-more.js'
+import { MessageException } from '../../exception.js'
 
 export let language_max_age = (20 * YEAR) / 1000
 
