@@ -41,6 +41,13 @@ export function Locale<T>(attrs: LocaleVariants<T>, context: Context): T {
   return attrs.en
 }
 
+export function createTranslate<T>(context: Context) {
+  function translate(words: LocaleVariants<T>): T {
+    return Locale(words, context)
+  }
+  return translate
+}
+
 export function Title(
   attrs: {
     t: Component<LocaleVariants<string>>
