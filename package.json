@@ -83,6 +83,7 @@
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "chai": "^5.2.0",
+    "dpdm": "^3.14.0",
     "esbuild": "^0.25.5",
     "eslint": "^8.57.1",
     "fix-esm-import-path": "^1.10.1",
