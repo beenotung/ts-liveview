@@ -105,3 +105,16 @@ export function makeReject(context: Context) {
   }
   return reject
 }
+
+// helper function for throwing error with i18n support
+export function makeThrows(context: Context, options?: { asError?: boolean }) {
+  function throws(messageLocale: LocaleVariants<string>): never {
+    let message = Locale(messageLocale, context)
+    if (options?.asError) {
+      throw new Error(message)
+    } else {
+      throw message
+    }
+  }
+  return throws
+}
