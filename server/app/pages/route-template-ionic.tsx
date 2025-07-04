@@ -16,7 +16,7 @@ import { object, string } from 'cast.ts'
 import { Link, Redirect } from '../components/router.js'
 import { renderError, showError } from '../components/error.js'
 import { EarlyTerminate, MessageException } from '../../exception.js'
-import { Locale, Title } from '../components/locale.js'
+import { Locale, makeThrows, Title } from '../components/locale.js'
 import { proxy } from '../../../db/proxy.js'
 import { env } from '../../env.js'
 import Script from '../components/script.js'
@@ -208,8 +208,14 @@ let submitParser = object({
 
 function Submit(attrs: {}, context: DynamicContext) {
   try {
+    let throws = makeThrows(context)
     let user = getAuthUser(context)
-    if (!user) throw 'You must be logged in to submit ' + pageTitle
+    if (!user)
+      throws({
+        en: 'You must be logged in to submit ' + Locale(pageTitle, context),
+        zh_hk: '您必須登入才能提交 ' + Locale(pageTitle, context),
+        zh_cn: '您必須登入才能提交 ' + Locale(pageTitle, context),
+      })
     let body = getContextFormBody(context)
     let input = submitParser.parse(body)
     let id = items.push({
