@@ -175,7 +175,7 @@ let addPage_ionic = (
       <ion-item>
         <ion-input
           name="title"
-          label="Title*:"
+          label={<Locale en="Title*:" zh_hk="標題*:" zh_cn="標題*:" />}
           label-placement="floating"
           required
           minlength="3"
