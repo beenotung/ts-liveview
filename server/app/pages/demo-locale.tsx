@@ -1,5 +1,4 @@
-import { title } from '../../config.js'
-import { evalLocale, Locale } from '../components/locale.js'
+import { Locale, Title } from '../components/locale.js'
 import SourceCode from '../components/source-code.js'
 import { PickLanguage } from '../components/ui-language.js'
 import { Context, getContextLanguage, getContextTimezone } from '../context.js'
@@ -47,20 +46,15 @@ function DemoLocale(attrs: {}, context: Context) {
 let routes = {
   '/locale': {
     menuText: <Locale en="Locale" zh_hk="本地化" zh_cn="本地化" />,
-    resolve(context) {
-      let t = evalLocale(pageTitle, context)
-      return {
-        title: title(t),
-        description: (
-          <Locale
-            en="Locale demo for multiple languages and timezone (i18n)"
-            zh_hk="示範支援多種語言和時區 (i18n)"
-            zh_cn="示範支援多種語言和時區 (i18n)"
-          />
-        ),
-        node: <DemoLocale />,
-      }
-    },
+    title: <Title t={pageTitle} />,
+    description: (
+      <Locale
+        en="Locale demo for multiple languages and timezone (i18n)"
+        zh_hk="支援多種語言和時區 (i18n) 的本地化示例"
+        zh_cn="支持多语言和时区 (i18n) 的本地化示例"
+      />
+    ),
+    node: <DemoLocale />,
   },
 } satisfies Routes
 
