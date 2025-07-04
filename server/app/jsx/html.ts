@@ -14,6 +14,7 @@ import { HTMLStream, noop } from './stream.js'
 import { Flush } from '../components/flush.js'
 import { renderError, renderErrorNode, showError } from '../components/error.js'
 import { EarlyTerminate, ErrorNode, MessageException } from '../../exception.js'
+import { evalLocale } from '../components/locale.js'
 
 const log = debug('html.ts')
 log.enabled = true
@@ -185,6 +186,7 @@ function writeElement(
   }
   if (attrs) {
     Object.entries(attrs).forEach(([name, value]) => {
+      value = evalLocale(value, context)
       if (value === undefined || value === null || value === false) return
       if (value === '' || value === true) {
         html += ` ${name}`

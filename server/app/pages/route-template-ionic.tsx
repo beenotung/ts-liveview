@@ -1,6 +1,6 @@
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
-import { apiEndpointTitle, title } from '../../config.js'
+import { apiEndpointTitle } from '../../config.js'
 import Style from '../components/style.js'
 import {
   Context,
@@ -13,7 +13,13 @@ import { IonBackButton } from '../components/ion-back-button.js'
 import { object, string } from 'cast.ts'
 import { Link, Redirect } from '../components/router.js'
 import { renderError } from '../components/error.js'
-import { evalLocale, Locale, Title } from '../components/locale.js'
+import { Locale, Title } from '../components/locale.js'
+import { proxy } from '../../../db/proxy.js'
+import { env } from '../../env.js'
+import { Script } from '../components/script.js'
+import { toSlug } from '../format/slug.js'
+import { IonButton } from '../components/ion-button.js'
+import { BackToLink } from '../components/back-to-link.js'
 
 let pageTitle = <Locale en="__title__" zh_hk="__title__" zh_cn="__title__" />
 let addPageTitle = (
@@ -31,7 +37,7 @@ let page = (
     {style}
     <ion-header>
       <ion-toolbar>
-        <IonBackButton href="/" backText="Home" />
+        <IonBackButton href="/" />
         <ion-title role="heading" aria-level="1">
           {pageTitle}
         </ion-title>
@@ -44,6 +50,8 @@ let page = (
   </>
 )
 
+// replace this array with proxy for database-backed persistence
+// e.g. let items = proxy.__table__
 let items = [
   { title: 'Android', slug: 'md' },
   { title: 'iOS', slug: 'ios' },
@@ -59,21 +67,28 @@ function Main(attrs: {}, context: Context) {
           </ion-item>
         ))}
       </ion-list>
-      <Link href="/__url__/add" tagName="ion-button">
-        {addPageTitle}
-      </Link>
+      <IonButton url="/__url__/add">{addPageTitle}</IonButton>
     </>
   )
 }
 
-let addPage = (
-  <>
-    {Style(/* css */ `
+let addPageStyle = Style(/* css */ `
 #Add__id__ .hint {
   margin-inline-start: 1rem;
   margin-block: 0.25rem;
 }
-`)}
+`)
+let addPageScript = Script(/* js */ `
+${toSlug}
+function updateSlugPreview() {
+  let value = addForm.slug.value || addForm.slug.placeholder
+  previewSlug.textContent = toSlug(value)
+}
+updateSlugPreview()
+`)
+let addPage = (
+  <>
+    {addPageStyle}
     <ion-header>
       <ion-toolbar>
         <IonBackButton href="/__url__" backText={pageTitle} />
@@ -92,38 +107,78 @@ let addPage = (
           <ion-item>
             <ion-input
               name="title"
-              label="Title*:"
+              label={<Locale en="Title*:" zh_hk="標題*:" zh_cn="標題*:" />}
               label-placement="floating"
               required
               minlength="3"
               maxlength="50"
             />
           </ion-item>
-          <p class="hint">(3-50 characters)</p>
+          <p class="hint">
+            <Locale
+              en="(3 to 50 characters)"
+              zh_hk="(3 至 50 個字元)"
+              zh_cn="(3 至 50 个字元)"
+            />
+          </p>
           <ion-item>
             <ion-input
               name="slug"
-              label="Slug*: (unique url)"
+              label={
+                <Locale en="Slug*:" zh_hk="短網址碼*:" zh_cn="短网址码*:" />
+              }
               label-placement="floating"
               required
               pattern="(\w|-|\.){1,32}"
             />
           </ion-item>
           <p class="hint">
-            (1-32 characters of: <code>a-z A-Z 0-9 - _ .</code>)
+            (
+            <Locale
+              en="1 to 32 characters of: "
+              zh_hk="1 至 32 個字元："
+              zh_cn="1 至 32 个字元："
+            />
+            <code>a-z A-Z 0-9 - _ .</code>)
+            <br />
+            <Locale
+              en="A unique part of the URL, e.g. "
+              zh_hk="網址的一部分，例如： "
+              zh_cn="网址的一部分，例如： "
+            />
+            <br />
+            <code
+              style="
+                display: inline-block;
+                background-color: #eee;
+                padding: 0.25rem 0.5rem;
+                border-radius: 0.5rem;
+                border: 1px solid #ccc;
+                margin-top: 0.25rem;
+              "
+            >
+              {env.ORIGIN}/<i id="previewSlug">alice-in-wonderland</i>
+            </code>
           </p>
         </ion-list>
         <div style="margin-inline-start: 1rem">
-          <ion-button type="submit">Submit</ion-button>
+          <ion-button type="submit">
+            <Locale en="Submit" zh_hk="提交" zh_cn="提交" />
+          </ion-button>
         </div>
         <p>
-          Remark:
+          <Locale en="Remark:" zh_hk="備註：" zh_cn="备注：" />
           <br />
-          *: mandatory fields
+          <Locale
+            en="* mandatory fields"
+            zh_hk="* 必填欄位"
+            zh_cn="* 必填字段"
+          />
         </p>
         <p id="add-message"></p>
       </form>
     </ion-content>
+    {addPageScript}
   </>
 )
 
@@ -163,7 +218,8 @@ function SubmitResult(attrs: {}, context: DynamicContext) {
         <ion-toolbar>
           <IonBackButton href="/__url__/add" backText="Form" />
           <ion-title role="heading" aria-level="1">
-            Submitted {pageTitle}
+            <Locale en="Submitted" zh_hk="已提交" zh_cn="已提交" />
+            {pageTitle}
           </ion-title>
         </ion-toolbar>
       </ion-header>
@@ -172,10 +228,14 @@ function SubmitResult(attrs: {}, context: DynamicContext) {
           renderError(error, context)
         ) : (
           <>
-            <p>Your submission is received (#{id}).</p>
-            <Link href="/__url__" tagName="ion-button">
-              Back to {pageTitle}
-            </Link>
+            <p>
+              <Locale
+                en={`Your submission is received (#${id}).`}
+                zh_hk={`你的提交已收到 (#${id})。`}
+                zh_cn={`你的提交已收到 (#${id})。`}
+              />
+            </p>
+            <BackToLink href="/__url__" title={pageTitle} />
           </>
         )}
       </ion-content>
@@ -188,6 +248,7 @@ let routes = {
     title: <Title t={pageTitle} />,
     description: 'TODO',
     node: page,
+    menuText: 'x',
   },
   '/__url__/add': {
     title: <Title t={addPageTitle} />,

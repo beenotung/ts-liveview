@@ -75,18 +75,16 @@ export function evalAttrsLocale<T extends object>(
   }
 }
 
-export function evalLocale(
-  node: [componentFn: Function, attrs: LocaleVariants],
+export function evalLocale<T>(
+  node: [componentFn: Function, attrs: LocaleVariants<T>] | T,
   context: Context,
-) {
+): T {
+  if (!Array.isArray(node)) return node
   let component = node[0]
   let attrs = node[1]
-  if (component === Locale || component === Title) {
-    let variants = attrs as LocaleVariants<string>
-    return component(variants, context) as any
-  }
-  console.error('Invalid node:', node)
-  throw new TypeError('Invalid node')
+  if (component !== Locale && component !== Title) return node as T
+  let variants = attrs
+  return component(variants, context)
 }
 
 export function makeText(context: Context) {

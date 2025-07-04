@@ -1,6 +1,6 @@
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
-import { apiEndpointTitle, title } from '../../config.js'
+import { apiEndpointTitle } from '../../config.js'
 import Style from '../components/style.js'
 import {
   Context,
@@ -12,7 +12,12 @@ import { mapArray } from '../components/fragment.js'
 import { object, string } from 'cast.ts'
 import { Link, Redirect } from '../components/router.js'
 import { renderError } from '../components/error.js'
-import { evalLocale, Locale, Title } from '../components/locale.js'
+import { Locale, Title } from '../components/locale.js'
+import { proxy } from '../../../db/proxy.js'
+import { env } from '../../env.js'
+import { Script } from '../components/script.js'
+import { toSlug } from '../format/slug.js'
+import { BackToLink } from '../components/back-to-link.js'
 
 let pageTitle = <Locale en="__title__" zh_hk="__title__" zh_cn="__title__" />
 let addPageTitle = (
@@ -35,6 +40,8 @@ let page = (
   </>
 )
 
+// replace this array with proxy for database-backed persistence
+// e.g. let items = proxy.__table__
 let items = [
   { title: 'Android', slug: 'md' },
   { title: 'iOS', slug: 'ios' },
@@ -57,9 +64,7 @@ function Main(attrs: {}, context: Context) {
   )
 }
 
-let addPage = (
-  <div id="Add__id__">
-    {Style(/* css */ `
+let addPageStyle = Style(/* css */ `
 #Add__id__ .field {
   margin-block-end: 1rem;
 }
@@ -71,39 +76,86 @@ let addPage = (
   display: block;
   margin-block-start: 0.25rem;
 }
-`)}
-    <h1>{addPageTitle}</h1>
-    <form method="POST" action="/__url__/add/submit" onsubmit="emitForm(event)">
-      <div class="field">
-        <label>
-          Title*:
-          <input name="title" required minlength="3" maxlength="50" />
-          <p class="hint">(3-50 characters)</p>
-        </label>
-      </div>
-      <div class="field">
-        <label>
-          Slug*:
-          <input
-            name="slug"
-            required
-            placeholder="should be unique"
-            pattern="(\w|-|\.){1,32}"
+`)
+let addPageScript = Script(/* js */ `
+${toSlug}
+function updateSlugPreview() {
+  let value = addForm.slug.value || addForm.slug.placeholder
+  previewSlug.textContent = toSlug(value)
+}
+updateSlugPreview()
+`)
+let addPage = (
+  <>
+    {addPageStyle}
+    <div id="Add__id__">
+      <h1>{addPageTitle}</h1>
+      <form
+        id="addForm"
+        method="POST"
+        action="/__url__/add/submit"
+        onsubmit="emitForm(event)"
+      >
+        <div class="field">
+          <label>
+            <Locale en="Title" zh_hk="標題" zh_cn="標題" />
+            *:
+            <input name="title" required minlength="3" maxlength="50" />
+            <p class="hint">
+              <Locale
+                en="(3 to 50 characters)"
+                zh_hk="(3 至 50 個字元)"
+                zh_cn="(3 至 50 个字元)"
+              />
+            </p>
+          </label>
+        </div>
+        <div class="field">
+          <label>
+            <Locale en="Short URL Code" zh_hk="短網址碼" zh_cn="短网址码" />
+            *:
+            <input
+              name="slug"
+              required
+              placeholder="e.g. alice-in-wonderland"
+              pattern="(\w|-|\.){1,32}"
+              oninput="updateSlugPreview()"
+            />
+            <p class="hint">
+              (
+              <Locale
+                en="1 to 32 characters of: "
+                zh_hk="1 至 32 個字元："
+                zh_cn="1 至 32 个字元："
+              />
+              <code>a-z A-Z 0-9 - _ .</code>)
+              <br />
+              <Locale
+                en="A unique part of the URL, e.g. "
+                zh_hk="網址的一部分，例如："
+                zh_cn="网址的一部分，例如："
+              />
+              <code>
+                {env.ORIGIN}/<i id="previewSlug">alice-in-wonderland</i>
+              </code>
+            </p>
+          </label>
+        </div>
+        <input type="submit" value="Submit" />
+        <p>
+          <Locale en="Remark:" zh_hk="備註：" zh_cn="备注：" />
+          <br />
+          <Locale
+            en="* mandatory fields"
+            zh_hk="* 必填欄位"
+            zh_cn="* 必填字段"
           />
-          <p class="hint">
-            (1-32 characters of: <code>a-z A-Z 0-9 - _ .</code>)
-          </p>
-        </label>
-      </div>
-      <input type="submit" value="Submit" />
-      <p>
-        Remark:
-        <br />
-        *: mandatory fields
-      </p>
-      <p id="add-message"></p>
-    </form>
-  </div>
+        </p>
+        <p id="add-message"></p>
+      </form>
+    </div>
+    {addPageScript}
+  </>
 )
 
 let submitParser = object({
@@ -142,10 +194,14 @@ function SubmitResult(attrs: {}, context: DynamicContext) {
         renderError(error, context)
       ) : (
         <>
-          <p>Your submission is received (#{id}).</p>
           <p>
-            Back to <Link href="/__url__">{pageTitle}</Link>
+            <Locale
+              en={`Your submission is received (#${id}).`}
+              zh_hk={`你的提交已收到 (#${id})。`}
+              zh_cn={`你的提交已收到 (#${id})。`}
+            />
           </p>
+          <BackToLink href="/__url__" title={pageTitle} />
         </>
       )}
     </div>
