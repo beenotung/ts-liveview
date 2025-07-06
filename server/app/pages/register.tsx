@@ -98,7 +98,7 @@ let verifyFormBody = (
   <>
     {config.enable_email && (
       <Field
-        label="Email"
+        label={<Locale en="Email" zh_hk="電郵地址" zh_cn="电子邮件地址" />}
         type="email"
         name="email"
         msgId="emailMsg"
@@ -115,13 +115,17 @@ let verifyFormBody = (
     {config.enable_email &&
       config.enable_sms &&
       (is_web ? (
-        <div style="margin: 0.5rem 0">or</div>
+        <div style="margin: 0.5rem 0">
+          <Locale en="or" zh_hk="或" zh_cn="或" />
+        </div>
       ) : (
-        <div style="margin-inline-start: 1rem; margin-top: 1rem">or</div>
+        <div style="margin-inline-start: 1rem; margin-top: 1rem">
+          <Locale en="or" zh_hk="或" zh_cn="或" />
+        </div>
       ))}
     {config.enable_sms && (
       <Field
-        label="Phone number"
+        label={<Locale en="Phone number" zh_hk="電話號碼" zh_cn="电话号码" />}
         type="tel"
         name="tel"
         msgId="telMsg"
@@ -138,7 +142,7 @@ let verifyFormBody = (
     {is_web ? (
       <div class="field">
         <label>
-          <input type="checkbox" name="include_link" />
+          <input type="checkbox" name="include_link" />{' '}
           <Locale
             en="Include magic link (more convenient but may be treated as spam)"
             zh_hk="包含登入鏈接 (更方便但可能被視為垃圾郵件)"
@@ -168,7 +172,10 @@ let verifyFormBody = (
       </>
     )}
     {is_web ? (
-      <input type="submit" value="Verify" />
+      <input
+        type="submit"
+        value={<Locale en="Verify" zh_hk="驗證" zh_cn="验证" />}
+      />
     ) : (
       <ion-button
         type="submit"
@@ -229,14 +236,14 @@ let guestView = (
       onsubmit="emitForm(event)"
     >
       <Field
-        label="Username"
+        label={<Locale en="Username" zh_hk="用戶名" zh_cn="用户名" />}
         name="username"
         msgId="usernameMsg"
         oninput="emit('/register/check-username', this.value)"
         autocomplete="username"
       />
       <Field
-        label="Password"
+        label={<Locale en="Password" zh_hk="密碼" zh_cn="密码" />}
         type="password"
         name="password"
         msgId="passwordMsg"
@@ -245,7 +252,9 @@ let guestView = (
       />
 
       <Field
-        label="Confirm password"
+        label={
+          <Locale en="Confirm password" zh_hk="確認密碼" zh_cn="确认密码" />
+        }
         type="password"
         name="confirm_password"
         msgId="confirmPasswordMsg"
@@ -270,7 +279,10 @@ function checkPassword (form) {
 }
 </script>`)}
       {is_web ? (
-        <input type="submit" value="Register" />
+        <input
+          type="submit"
+          value={<Locale en="Register" zh_hk="註冊" zh_cn="注册" />}
+        />
       ) : (
         <ion-button
           type="submit"
