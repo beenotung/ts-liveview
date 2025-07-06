@@ -70,7 +70,7 @@ let verifyFormBody = (
   <>
     {config.enable_email && (
       <Field
-        label="Email"
+        label={<Locale en="Email" zh_hk="電郵地址" zh_cn="电子邮件地址" />}
         type="email"
         name="email"
         msgId="emailMsg"
@@ -86,13 +86,17 @@ let verifyFormBody = (
     {config.enable_email &&
       config.enable_sms &&
       (is_web ? (
-        <div style="margin: 0.5rem 0">or</div>
+        <div style="margin: 0.5rem 0">
+          <Locale en="or" zh_hk="或" zh_cn="或" />
+        </div>
       ) : (
-        <div style="margin-inline-start: 1rem; margin-top: 1rem">or</div>
+        <div style="margin-inline-start: 1rem; margin-top: 1rem">
+          <Locale en="or" zh_hk="或" zh_cn="或" />
+        </div>
       ))}
     {config.enable_sms && (
       <Field
-        label="Phone number"
+        label={<Locale en="Phone number" zh_hk="電話號碼" zh_cn="电话号码" />}
         type="tel"
         name="tel"
         msgId="telMsg"
@@ -108,7 +112,7 @@ let verifyFormBody = (
     {is_web ? (
       <div class="field">
         <label>
-          <input type="checkbox" name="include_link" />
+          <input type="checkbox" name="include_link" />{' '}
           <Locale
             en="Include magic link (more convenient but may be treated as spam)"
             zh_hk="包含登入鏈接 (更方便但可能被視為垃圾郵件)"
@@ -138,7 +142,10 @@ let verifyFormBody = (
       </>
     )}
     {is_web ? (
-      <input type="submit" value="Verify" />
+      <input
+        type="submit"
+        value={<Locale en="Verify" zh_hk="驗證" zh_cn="验证" />}
+      />
     ) : (
       <ion-button
         type="submit"
@@ -155,14 +162,20 @@ let verifyFormBody = (
 let passwordFormBody = (
   <>
     <Field
-      label="Username, email or phone number"
+      label={
+        <Locale
+          en="Username, email, or phone number"
+          zh_hk="用戶名, 電郵地址, 或電話號碼"
+          zh_cn="用户名, 电子邮件地址, 或电话号码"
+        />
+      }
       name="loginId"
       msgId="loginIdMsg"
       autocomplete="username"
       required
     />
     <Field
-      label="Password"
+      label={<Locale en="Password" zh_hk="密碼" zh_cn="密码" />}
       name="password"
       msgId="passwordMsg"
       type="password"
@@ -171,12 +184,15 @@ let passwordFormBody = (
     />
     {is_web ? (
       <div class="input-container">
-        <input type="submit" value="Login" />
+        <input
+          type="submit"
+          value={<Locale en="Login" zh_hk="登入" zh_cn="登录" />}
+        />
       </div>
     ) : (
       <div class="ion-text-center ion-margin">
         <ion-button type="submit" fill="block" color="primary">
-          Login
+          <Locale en="Login" zh_hk="登入" zh_cn="登录" />
         </ion-button>
       </div>
     )}
@@ -228,7 +244,11 @@ let guestView = (
       {passwordFormBody}
     </form>
     <div class="separator-line flex-center">
-      New to {config.short_site_name}?
+      <Locale
+        en={`New to ${config.short_site_name}?`}
+        zh_hk={`新來 ${config.short_site_name}？`}
+        zh_cn={`新来 ${config.short_site_name}？`}
+      />
     </div>
     <div style="margin-bottom: 1rem">
       {is_web ? (
