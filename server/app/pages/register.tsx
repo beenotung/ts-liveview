@@ -29,6 +29,7 @@ import { ClearInputContext, Field, InputContext } from '../components/field.js'
 import { loadClientPlugin } from '../../client-plugin.js'
 import { is_ionic, is_web, Page } from '../components/page.js'
 import { IonButton } from '../components/ion-button.js'
+import { Locale } from '../components/locale.js'
 
 let style = Style(/* css */ `
 #register form .field {
@@ -69,9 +70,17 @@ let RegisterPage = (
       headerColor="primary"
     >
       <p>
-        Welcome to {config.short_site_name}!
+        <Locale
+          en={`Welcome to ${config.short_site_name}!`}
+          zh_hk={`歡迎來到 ${config.short_site_name}！`}
+          zh_cn={`欢迎来到 ${config.short_site_name}！`}
+        />
         <br />
-        Let's begin the adventure~
+        <Locale
+          en="Let's begin the adventure~"
+          zh_hk="讓我們開始這場冒險吧~"
+          zh_cn="让我们开始这场冒险吧~"
+        />
       </p>
       <Main />
       {is_ionic && wsStatus.safeArea}
@@ -129,18 +138,32 @@ let verifyFormBody = (
     {is_web ? (
       <div class="field">
         <label>
-          <input type="checkbox" name="include_link" /> Include magic link (more
-          convince but may be treated as spam)
+          <input type="checkbox" name="include_link" />
+          <Locale
+            en="Include magic link (more convenient but may be treated as spam)"
+            zh_hk="包含登入鏈接 (更方便但可能被視為垃圾郵件)"
+            zh_cn="包含登录链接 (更方便但可能被视为垃圾邮件)"
+          />
         </label>
       </div>
     ) : (
       <>
         <ion-item>
           <ion-checkbox slot="start" name="include_link" />
-          <ion-label style="pointer-events: none">Include magic link</ion-label>
+          <ion-label style="pointer-events: none">
+            <Locale
+              en="Include magic link"
+              zh_hk="包含登入鏈接"
+              zh_cn="包含登录链接"
+            />
+          </ion-label>
         </ion-item>
         <ion-note color="dark">
-          (More convince but may be treated as spam)
+          <Locale
+            en="(More convenient but may be treated as spam)"
+            zh_hk="(更方便但可能被視為垃圾郵件)"
+            zh_cn="(更方便但可能被视为垃圾邮件)"
+          />
         </ion-note>
       </>
     )}
@@ -153,7 +176,7 @@ let verifyFormBody = (
         fill="block"
         color="tertiary"
       >
-        Verify
+        <Locale en="Verify" zh_hk="驗證" zh_cn="验证" />
       </ion-button>
     )}
   </>
@@ -164,7 +187,11 @@ let guestView = (
     {config.use_social_login && (
       <>
         <div class="separator-line flex-center">
-          Register with social network
+          <Locale
+            en="Register with social network"
+            zh_hk="使用社交網絡註冊"
+            zh_cn="使用社交网络注册"
+          />
         </div>
         <div class="flex-center flex-column">{oauthProviderList}</div>
       </>
@@ -173,7 +200,11 @@ let guestView = (
       (config.enable_email || config.enable_sms) && (
         <>
           <div class="separator-line flex-center">
-            Register with verification code
+            <Locale
+              en="Register with verification code"
+              zh_hk="使用驗證碼註冊"
+              zh_cn="使用验证码注册"
+            />
           </div>
           <form
             method="POST"
@@ -184,7 +215,13 @@ let guestView = (
           </form>
         </>
       )}
-    <div class="separator-line flex-center">Register with password</div>
+    <div class="separator-line flex-center">
+      <Locale
+        en="Register with password"
+        zh_hk="使用密碼註冊"
+        zh_cn="使用密码注册"
+      />
+    </div>
     <form
       id="verifyForm"
       method="POST"
@@ -241,24 +278,60 @@ function checkPassword (form) {
           expand="block"
           color="primary"
         >
-          Register
+          <Locale en="Register" zh_hk="註冊" zh_cn="注册" />
         </ion-button>
       )}
       <ClearInputContext />
     </form>
     <div class="hint-block">
-      Your password is not be stored in plain text.
+      <Locale
+        en="Your password is not be stored in plain text."
+        zh_hk="你的密碼不會被儲存為明文。"
+        zh_cn="你的密码不会被存储为明文。"
+      />
       <br />
-      Instead, it is processed with{' '}
-      <a href="https://en.wikipedia.org/wiki/Argon2" target="_blank">
-        Argon2 algorithm
-      </a>{' '}
-      to protect your credential against data leak.
+      <Locale
+        en={
+          <>
+            Instead, it is processed with{' '}
+            <a href="https://en.wikipedia.org/wiki/Argon2" target="_blank">
+              Argon2 algorithm
+            </a>{' '}
+            to protect your password against data leak.
+          </>
+        }
+        zh_hk={
+          <>
+            相反，它使用{' '}
+            <a href="https://zh.wikipedia.org/zh-hk/Argon2" target="_blank">
+              Argon2 算法
+            </a>{' '}
+            來保護你的密碼免受數據洩漏。
+          </>
+        }
+        zh_cn={
+          <>
+            相反，它使用{' '}
+            <a href="https://zh.wikipedia.org/zh-cn/Argon2" target="_blank">
+              Argon2 算法
+            </a>{' '}
+            来保护你的密码免受数据泄露。
+          </>
+        }
+      />
     </div>
-    <div class="separator-line flex-center">Already have an account?</div>
+    <div class="separator-line flex-center">
+      <Locale
+        en="Already have an account?"
+        zh_hk="已經有帳號了嗎？"
+        zh_cn="已经有一个账号了吗？"
+      />
+    </div>
     <div style="margin-bottom: 1rem">
       {is_web ? (
-        <Link href="/login">Login</Link>
+        <Link href="/login">
+          <Locale en="Login" zh_hk="登入" zh_cn="登录" />
+        </Link>
       ) : (
         <IonButton
           url="/login"
@@ -266,7 +339,7 @@ function checkPassword (form) {
           class="ion-margin"
           color="secondary"
         >
-          Login
+          <Locale en="Login" zh_hk="登入" zh_cn="登录" />
         </IonButton>
       )}
     </div>
@@ -546,17 +619,43 @@ fetch('/login/submit',{
     } else {
       main = (
         <p>
-          You can now <a href="/login">login</a> to the system.
+          <Locale
+            en={
+              <>
+                You can now <a href="/login">login</a> to the system.
+              </>
+            }
+            zh_hk={
+              <>
+                你現在可以 <a href="/login">登入</a> 系統。
+              </>
+            }
+            zh_cn={
+              <>
+                你现在可以 <a href="/login">登录</a> 系统。
+              </>
+            }
+          />
         </p>
       )
     }
 
     return (
       <div>
-        <p>Register successfully.</p>
+        <p>
+          <Locale
+            en="Register successfully."
+            zh_hk="註冊成功。"
+            zh_cn="注册成功。"
+          />
+        </p>
         <p hidden>
-          TODO: A verification email has already been sent to your email
-          address. Please check your inbox and spam folder.
+          TODO:
+          <Locale
+            en="A verification email has already been sent to your email address. Please check your inbox and spam folder."
+            zh_hk="已經向你的電郵地址發送了驗證電郵。請檢查你的收件箱和垃圾郵件文件夾。"
+            zh_cn="已经向你的电子邮件地址发送了验证电子邮件。请检查你的收件箱和垃圾邮件文件夹。"
+          />
         </p>
         {main}
       </div>
@@ -573,9 +672,15 @@ fetch('/login/submit',{
 
 let routes = {
   '/register': {
-    title: title('Register'),
-    description: `Register to access exclusive content and functionality. Join our community on ${config.short_site_name}.`,
-    menuText: 'Register',
+    title: <Locale en="Register" zh_hk="註冊" zh_cn="注册" />,
+    description: (
+      <Locale
+        en={`Register to access exclusive content and functionality. Join our community on ${config.short_site_name}.`}
+        zh_hk={`註冊以獲取獨家內容及功能。加入我們的社區，${config.short_site_name}。`}
+        zh_cn={`注册以获取独家内容和功能。加入我们的社区，${config.short_site_name}。`}
+      />
+    ),
+    menuText: <Locale en="Register" zh_hk="註冊" zh_cn="注册" />,
     menuUrl: '/register',
     guestOnly: true,
     node: RegisterPage,
