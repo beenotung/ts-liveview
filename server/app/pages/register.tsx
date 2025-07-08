@@ -661,12 +661,11 @@ fetch('/login/submit',{
             zh_cn="注册成功。"
           />
         </p>
-        <p hidden>
-          TODO:
+        <p>
           <Locale
             en="A verification email has already been sent to your email address. Please check your inbox and spam folder."
-            zh_hk="已經向你的電郵地址發送了驗證電郵。請檢查你的收件箱和垃圾郵件文件夾。"
-            zh_cn="已经向你的电子邮件地址发送了验证电子邮件。请检查你的收件箱和垃圾邮件文件夹。"
+            zh_hk="系統已經向你的電郵地址發送了驗證電郵。請檢查你的收件箱和垃圾郵件文件夾。"
+            zh_cn="系统已经向你的电子邮件地址发送了验证电子邮件。请检查你的收件箱和垃圾邮件文件夹。"
           />
         </p>
         {main}
