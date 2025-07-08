@@ -225,7 +225,10 @@ let home = (
 )
 
 // And it can be pre-rendered into html as well
-
+//
+// This route is optimized for static content,
+// you can reference other pages for routes with dynamic content
+// using <Title> and <Locale> in route title and description
 let route: LocaleVariants<ResolvedPageRoute> = {
   en: {
     title: title('Home'),
