@@ -1,4 +1,4 @@
-import { apiEndpointTitle, config, title } from '../../config.js'
+import { apiEndpointTitle, config } from '../../config.js'
 import { Link } from '../components/router.js'
 import Style from '../components/style.js'
 import {
