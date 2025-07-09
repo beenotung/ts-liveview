@@ -23,7 +23,7 @@ import { Field } from '../components/field.js'
 import { is_ionic, is_web, Page } from '../components/page.js'
 import { loadClientPlugin } from '../../client-plugin.js'
 import { IonButton } from '../components/ion-button.js'
-import { Locale } from '../components/locale.js'
+import { Locale, Title } from '../components/locale.js'
 
 let style = Style(/* css */ `
 #login .field {
@@ -41,9 +41,9 @@ let LoginPage = (
     {style}
     <Page
       id="login"
-      title="Login"
+      title={<Title t={<Locale en="Login" zh_hk="登入" zh_cn="登录" />} />}
       backHref="/"
-      backText="Home"
+      backText={<Locale en="Home" zh_hk="主頁" zh_cn="主页" />}
       backColor="light"
       headerColor="primary"
     >

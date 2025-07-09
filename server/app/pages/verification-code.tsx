@@ -27,6 +27,8 @@ import { randomUUID } from 'crypto'
 import { sendSMS } from '../../sms.js'
 import { to_full_hk_mobile_phone } from '@beenotung/tslib/validate.js'
 import { formatTel } from '../components/tel.js'
+import { createTranslate, Locale, makeThrows } from '../components/locale.js'
+import { Title } from '../components/locale.js'
 
 let log = debugLog('app:verification-code')
 log.enabled = true
@@ -83,6 +85,8 @@ async function requestVerification(
 ): Promise<StaticPageRoute> {
   let mode: 'email' | 'sms' | null = null
   try {
+    let throws = makeThrows(context)
+    let translate = createTranslate<string>(context)
     let body = getContextFormBody(context)
     let input = requestVerificationParser.parse(body, { name: 'body' })
 
@@ -90,7 +94,11 @@ async function requestVerification(
     let tel = input.tel || null
 
     if (!email && !tel) {
-      throw 'email or tel is required'
+      throws({
+        en: 'email or tel is required',
+        zh_hk: '電郵或電話號碼是必需的',
+        zh_cn: '电子邮件或电话号码是必需的',
+      })
     }
 
     mode = email ? 'email' : 'sms'
@@ -98,7 +106,11 @@ async function requestVerification(
     if (tel) {
       tel = to_full_hk_mobile_phone(tel)
       if (!tel) {
-        throw 'not a valid HK mobile phone number'
+        throws({
+          en: 'not a valid HK mobile phone number',
+          zh_hk: '不是有效的香港手機號碼',
+          zh_cn: '不是有效的香港手机号码',
+        })
       }
     }
 
@@ -108,7 +120,11 @@ async function requestVerification(
       if (authUser && authUser.email != email) {
         // changing email, check if the new email is already registered
         if (count(proxy.user, { email })) {
-          throw 'this email is already registered by another account'
+          throws({
+            en: 'this email is already registered by another account',
+            zh_hk: '這個電郵已經被另一個帳戶註冊',
+            zh_cn: '这个电子邮件已经被另一个账户注册',
+          })
         }
       }
     }
@@ -117,7 +133,11 @@ async function requestVerification(
       if (authUser && authUser.tel != tel) {
         // changing tel, check if the new tel is already registered
         if (count(proxy.user, { tel })) {
-          throw 'this phone number is already registered by another account'
+          throws({
+            en: 'this phone number is already registered by another account',
+            zh_hk: '這個電話號碼已經被另一個帳戶註冊',
+            zh_cn: '这个电话号码已经被另一个账户注册',
+          })
         }
       }
     }
@@ -151,7 +171,11 @@ async function requestVerification(
       let info = await sendEmail({
         from: `${config.site_name} <${env.EMAIL_USER}>`,
         to: input.email,
-        subject: title('Email Verification'),
+        subject: translate({
+          en: 'Email Verification',
+          zh_hk: '電郵驗證',
+          zh_cn: '电子邮件验证',
+        }),
         html,
         text,
       })
@@ -174,7 +198,7 @@ async function requestVerification(
         throw new HttpError(502, info.response)
       }
       return {
-        title: title('Email Verification'),
+        title: apiEndpointTitle,
         description:
           'API Endpoint to request email verification code for authentication',
         node: (
@@ -186,21 +210,29 @@ async function requestVerification(
     }
 
     async function sendBySMS(): Promise<StaticPageRoute> {
-      if (!input.tel) {
-        throw 'missing phone number'
+      let tel = input.tel!
+      if (!tel) {
+        throws({
+          en: 'missing phone number',
+          zh_hk: '缺少電話號碼',
+          zh_cn: '缺少电话号码',
+        })
       }
-      let text = verificationCodeSMS({
-        passcode,
-        uuid,
-        include_link: input.include_link || false,
-      })
+      let text = verificationCodeSMS(
+        {
+          passcode,
+          uuid,
+          include_link: input.include_link || false,
+        },
+        context,
+      )
       let res = await sendSMS({
         from: config.site_name,
-        to: input.tel,
+        to: tel,
         text,
       })
       if (res.ok) {
-        log('sent passcode sms to:', input.tel)
+        log('sent passcode sms to:', tel)
         if (
           env.SMS_ACCOUNT_KEY == 'skip' &&
           context.type == 'ws' &&
@@ -219,7 +251,7 @@ async function requestVerification(
         throw new HttpError(502, text)
       }
       return {
-        title: title('SMS Verification'),
+        title: apiEndpointTitle,
         description:
           'API Endpoint to request sms verification code for authentication',
         node: (
@@ -246,7 +278,7 @@ async function requestVerification(
 
     if (mode === 'email') {
       return {
-        title: title('Email Verification'),
+        title: apiEndpointTitle,
         description:
           'API Endpoint to request email verification code for authentication',
         node: (
@@ -262,7 +294,7 @@ async function requestVerification(
 
     if (mode === 'sms') {
       return {
-        title: title('SMS Verification'),
+        title: apiEndpointTitle,
         description:
           'API Endpoint to request sms verification code for authentication',
         node: (
@@ -277,7 +309,7 @@ async function requestVerification(
     }
 
     return {
-      title: title('Authentication Verification'),
+      title: apiEndpointTitle,
       description:
         'API Endpoint to request verification code for authentication',
       node: (
@@ -292,6 +324,20 @@ async function requestVerification(
   }
 }
 
+function SiteName(context: Context): string {
+  if (config.site_name == config.short_site_name) {
+    return config.site_name
+  }
+  return Locale(
+    {
+      en: `${config.site_name} (${config.short_site_name} in short)`,
+      zh_hk: `${config.site_name} (簡稱 ${config.short_site_name} )`,
+      zh_cn: `${config.site_name} (简称 ${config.short_site_name} )`,
+    },
+    context,
+  )
+}
+
 export function verificationCodeEmail(
   attrs: {
     uuid: string
@@ -300,6 +346,7 @@ export function verificationCodeEmail(
   },
   context: Context,
 ) {
+  let translate = createTranslate<string>(context)
   let url = attrs.include_link
     ? env.ORIGIN +
       '/verify/email/result?' +
@@ -308,50 +355,84 @@ export function verificationCodeEmail(
         uuid: attrs.uuid,
       })
     : null
+  let codeNode = (
+    <code style="background-color: #eee; padding: 0.25rem; border-radius: 0.25rem">
+      {attrs.passcode}
+    </code>
+  )
+  let site_name = SiteName(context)
   let node = (
     <div style="font-size: 1rem">
       <p>
-        <code style="background-color: #eee; padding: 0.25rem; border-radius: 0.25rem">
-          {attrs.passcode}
-        </code>{' '}
-        is your verification code.
+        <Locale
+          en={<>{codeNode} is your verification code.</>}
+          zh_hk={<>{codeNode} 是您的驗證碼。</>}
+          zh_cn={<>{codeNode} 是您的验证码。</>}
+        />
       </p>
       <p>
-        To complete the email verification process, please copy the code above
-        and paste it to the form.
+        <Locale
+          en="To complete the email verification process, please copy the code above and paste it to the form."
+          zh_hk="為了完成電郵驗證過程，請複製上述驗證碼並貼到表單中。"
+          zh_cn="为了完成电子邮件验证过程，请复制上述验证码并粘贴到表单中。"
+        />
       </p>
       {url ? (
         <p>
-          You can also verify your email by opening this link:{' '}
+          <Locale
+            en="You can also verify your email by opening this link:"
+            zh_hk="您也可以通過打開此鏈接來驗證您的電郵："
+            zh_cn="您也可以通过打开此链接来验证您的电子邮件："
+          />{' '}
           <a href={url}>{url}</a>
         </p>
       ) : null}
       <p>
-        If you did not request to authenticate on {config.site_name} (
-        {config.short_site_name} in short), it is safe to ignore this email.
+        <Locale
+          en={`If you did not request to authenticate on ${site_name}, it is safe to ignore this email.`}
+          zh_hk={`若您沒有請求在 ${site_name} 進行身份驗證，則可以忽略此電郵。`}
+          zh_cn={`若您没有请求在 ${site_name} 进行身份验证，则可以忽略此电子邮件。`}
+        />
       </p>
     </div>
   )
   let html = nodeToHTML(node, context)
-  let site_name =
-    config.site_name != config.short_site_name
-      ? `${config.site_name} (${config.short_site_name} in short)`
-      : config.site_name
-  let text = `
+  let text = translate({
+    en: `
 ${attrs.passcode} is your verification code.
 
 To complete the email verification process, please copy the code above and paste it to the form.
 
 If you did not request to authenticate on ${site_name}, it is safe to ignore this email.
-`.trim()
+`,
+    zh_hk: `
+${attrs.passcode} 是您的驗證碼。
+
+為了完成電郵驗證過程，請複製上述驗證碼並貼到表單中。
+
+若您沒有請求在 ${site_name} 進行身份驗證，則可以忽略此電郵。
+`,
+    zh_cn: `
+${attrs.passcode} 是您的验证码。
+
+为了完成电子邮件验证过程，请复制上述验证码并粘贴到表单中。
+
+若您没有请求在 ${site_name} 进行身份验证，则可以忽略此电子邮件。
+`,
+  }).trim()
   return { html, text }
 }
 
-export function verificationCodeSMS(attrs: {
-  uuid: string
-  passcode: string
-  include_link: boolean
-}): string {
+export function verificationCodeSMS(
+  attrs: {
+    uuid: string
+    passcode: string
+    include_link: boolean
+  },
+  context: Context,
+): string {
+  let translate = createTranslate<string>(context)
+  let site_name = SiteName(context)
   let url = attrs.include_link
     ? env.ORIGIN +
       '/verify/sms/result?' +
@@ -360,11 +441,21 @@ export function verificationCodeSMS(attrs: {
         uuid: attrs.uuid,
       })
     : null
-  let text = `${attrs.passcode} is your verification code.`
+  let text = translate({
+    en: `${attrs.passcode} is your verification code.`,
+    zh_hk: `${attrs.passcode} 是您的驗證碼。`,
+    zh_cn: `${attrs.passcode} 是您的验证码。`,
+  })
   if (url) {
     text += '\n\n' + url
   }
-  text += `\n\nIf you did not request to authenticate on ${config.site_name}, it is safe to ignore this message.`
+  text +=
+    `\n\n` +
+    translate({
+      en: `If you did not request to authenticate on ${site_name}, it is safe to ignore this message.`,
+      zh_hk: `若您沒有請求在 ${site_name} 進行身份驗證，則可以忽略此訊息。`,
+      zh_cn: `若您没有请求在 ${site_name} 进行身份验证，则可以忽略此消息。`,
+    })
   return text
 }
 
@@ -380,6 +471,7 @@ form .field input {
 `)
 
 function VerifyEmailPage(attrs: {}, context: DynamicContext) {
+  let translate = createTranslate<string>(context)
   let params = new URLSearchParams(context.routerMatch?.search)
   let error = params.get('error')
   let title = params.get('title')
@@ -388,26 +480,61 @@ function VerifyEmailPage(attrs: {}, context: DynamicContext) {
   let uuid = params.get('uuid')
   let email = uuid ? find(proxy.verification_code, { uuid })?.email : null
   if (!email) {
-    error ||= 'invalid verification link'
+    error ||= translate({
+      en: 'invalid verification link',
+      zh_hk: '無效的驗證連結',
+      zh_cn: '无效的验证链接',
+    })
   }
+  title ||= translate({
+    en: 'Failed to send verification code to your email',
+    zh_hk: '發送驗證碼到您的電郵失敗',
+    zh_cn: '发送验证码到您的电子邮件失败',
+  })
   let node = error ? (
     <>
-      <p>{title || 'Failed to send verification code to your email'}.</p>
+      <p>{title}.</p>
       {renderError(error, context)}
       <p>
-        You can request another verification code in the{' '}
-        <Link href="/login">login page</Link> or{' '}
-        <Link href="/register">register page</Link>.
+        <Locale
+          en={
+            <>
+              You can get another verification code in the{' '}
+              <Link href="/login">login page</Link> or{' '}
+              <Link href="/register">register page</Link>.
+            </>
+          }
+          zh_hk={
+            <>
+              您可以在<Link href="/login">登入頁面</Link>或
+              <Link href="/register">註冊頁面</Link>獲取另一個驗證碼。
+            </>
+          }
+          zh_cn={
+            <>
+              您可以在<Link href="/login">登录页面</Link>或
+              <Link href="/register">注册页面</Link>获取另一个验证码。
+            </>
+          }
+        />
       </p>
     </>
   ) : (
     <>
       <p>
         <span style="display: inline-block">
-          A verification code is sent to your email address.
+          <Locale
+            en="A verification code is sent to your email address."
+            zh_hk="驗證碼已發送到您的電郵地址。"
+            zh_cn="验证码已发送到您的电子邮件地址。"
+          />
         </span>{' '}
         <span style="display: inline-block">
-          Please check your inbox and spam folder.
+          <Locale
+            en="Please check your inbox and spam folder."
+            zh_hk="請檢查您的收件箱和垃圾郵件文件夾。"
+            zh_cn="请检查您的收件箱和垃圾邮件文件夹。"
+          />
         </span>
       </p>
 
@@ -451,7 +578,7 @@ function VerifyEmailForm(attrs: {
     <form method="post" action="/verify/email/code/submit">
       <input type="hidden" name="uuid" value={attrs.uuid} />
       <Field
-        label="Email"
+        label={<Locale en="Email" zh_hk="電郵地址" zh_cn="电子邮件" />}
         input={
           <input
             type="email"
@@ -464,7 +591,7 @@ function VerifyEmailForm(attrs: {
         }
       />
       <Field
-        label="Verification code"
+        label={<Locale en="Verification code" zh_hk="驗證碼" zh_cn="验证码" />}
         input={
           <input
             style={`font-family: monospace; width: ${config.layout_type == LayoutType.ionic ? '8ch' : '6ch'}; padding: 0.5ch`}
@@ -480,13 +607,17 @@ function VerifyEmailForm(attrs: {
         }
       />
       <div>
-        <input type="submit" value="Verify" />
+        <input
+          type="submit"
+          value={<Locale en="Verify" zh_hk="驗證" zh_cn="验证" />}
+        />
       </div>
     </form>
   )
 }
 
 function VerifySMSPage(attrs: {}, context: DynamicContext) {
+  let translate = createTranslate<string>(context)
   let params = new URLSearchParams(context.routerMatch?.search)
   let error = params.get('error')
   let title = params.get('title')
@@ -495,26 +626,61 @@ function VerifySMSPage(attrs: {}, context: DynamicContext) {
   let uuid = params.get('uuid')
   let tel = uuid ? find(proxy.verification_code, { uuid })?.tel : null
   if (!tel) {
-    error ||= 'invalid verification link'
+    error ||= translate({
+      en: 'invalid verification link',
+      zh_hk: '無效的驗證連結',
+      zh_cn: '无效的验证链接',
+    })
   }
+  title ||= translate({
+    en: 'Failed to send verification code to your phone',
+    zh_hk: '發送驗證碼到您的電話失敗',
+    zh_cn: '发送验证码到您的电话失败',
+  })
   let node = error ? (
     <>
-      <p>{title || 'Failed to send verification code to your phone'}.</p>
+      <p>{title}.</p>
       {renderError(error, context)}
       <p>
-        You can request another verification code in the{' '}
-        <Link href="/login">login page</Link> or{' '}
-        <Link href="/register">register page</Link>.
+        <Locale
+          en={
+            <>
+              You can get another verification code in the{' '}
+              <Link href="/login">login page</Link> or{' '}
+              <Link href="/register">register page</Link>.
+            </>
+          }
+          zh_hk={
+            <>
+              您可以在<Link href="/login">登入頁面</Link>或
+              <Link href="/register">註冊頁面</Link>獲取另一個驗證碼。
+            </>
+          }
+          zh_cn={
+            <>
+              您可以在<Link href="/login">登录页面</Link>或
+              <Link href="/register">注册页面</Link>获取另一个验证码。
+            </>
+          }
+        />
       </p>
     </>
   ) : (
     <>
       <p>
         <span style="display: inline-block">
-          A verification code is sent to your phone number.
+          <Locale
+            en="A verification code is sent to your phone number."
+            zh_hk="驗證碼已發送到您的電話號碼。"
+            zh_cn="验证码已发送到您的电话号码。"
+          />
         </span>{' '}
         <span style="display: inline-block">
-          Please check your inbox and spam folder.
+          <Locale
+            en="Please check your inbox and spam folder."
+            zh_hk="請檢查您的收件箱和垃圾郵件文件夾。"
+            zh_cn="请检查您的收件箱和垃圾邮件文件夹。"
+          />
         </span>
       </p>
 
@@ -558,7 +724,7 @@ function VerifySMSForm(attrs: {
     <form method="post" action="/verify/sms/code/submit">
       <input type="hidden" name="uuid" value={attrs.uuid} />
       <Field
-        label="Phone number"
+        label={<Locale en="Phone number" zh_hk="電話號碼" zh_cn="电话号码" />}
         input={
           <input
             type="tel"
@@ -571,7 +737,7 @@ function VerifySMSForm(attrs: {
         }
       />
       <Field
-        label="Verification code"
+        label={<Locale en="Verification code" zh_hk="驗證碼" zh_cn="验证码" />}
         input={
           <input
             style={`font-family: monospace; width: ${config.layout_type == LayoutType.ionic ? '8ch' : '6ch'}; padding: 0.5ch`}
@@ -587,13 +753,16 @@ function VerifySMSForm(attrs: {
         }
       />
       <div>
-        <input type="submit" value="Verify" />
+        <input
+          type="submit"
+          value={<Locale en="Verify" zh_hk="驗證" zh_cn="验证" />}
+        />
       </div>
     </form>
   )
 }
 
-function Field(attrs: { label: string; input: Node }) {
+function Field(attrs: { label: Node; input: Node }) {
   return (
     <div class="field">
       <label>
@@ -874,8 +1043,24 @@ let routes = {
     resolve: requestVerification,
   },
   '/verify/email/result': {
-    title: title('Email Verification'),
-    description: 'Input email verification code for authentication',
+    title: (
+      <Title
+        t={
+          <Locale
+            en="Email Verification"
+            zh_hk="電郵驗證"
+            zh_cn="电子邮件验证"
+          />
+        }
+      />
+    ),
+    description: (
+      <Locale
+        en="Input email verification code for authentication"
+        zh_hk="輸入電郵驗證碼以進行身份驗證"
+        zh_cn="输入电子邮件验证码以进行身份验证"
+      />
+    ),
     node: <VerifyEmailPage />,
   },
   '/verify/email/code/submit': {
@@ -883,8 +1068,18 @@ let routes = {
     resolve: checkEmailVerificationCode,
   },
   '/verify/sms/result': {
-    title: title('SMS Verification'),
-    description: 'Input SMS verification code for authentication',
+    title: (
+      <Title
+        t={<Locale en="SMS Verification" zh_hk="短信驗證" zh_cn="短信验证" />}
+      />
+    ),
+    description: (
+      <Locale
+        en="Input SMS verification code for authentication"
+        zh_hk="輸入短信驗證碼以進行身份驗證"
+        zh_cn="输入短信验证码以进行身份验证"
+      />
+    ),
     node: <VerifySMSPage />,
   },
   '/verify/sms/code/submit': {
