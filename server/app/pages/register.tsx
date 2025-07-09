@@ -29,7 +29,7 @@ import { ClearInputContext, Field, InputContext } from '../components/field.js'
 import { loadClientPlugin } from '../../client-plugin.js'
 import { is_ionic, is_web, Page } from '../components/page.js'
 import { IonButton } from '../components/ion-button.js'
-import { Locale } from '../components/locale.js'
+import { Locale, Title } from '../components/locale.js'
 
 let style = Style(/* css */ `
 #register form .field {
@@ -63,9 +63,9 @@ let RegisterPage = (
     {style}
     <Page
       id="register"
-      title="Register"
+      title={<Title t={<Locale en="Register" zh_hk="註冊" zh_cn="注册" />} />}
       backHref="/"
-      backText="Home"
+      backText={<Locale en="Home" zh_hk="主頁" zh_cn="主页" />}
       backColor="light"
       headerColor="primary"
     >
