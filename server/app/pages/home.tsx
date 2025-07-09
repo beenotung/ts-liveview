@@ -85,16 +85,10 @@ setInterval(tick, 1000)
 // This function will be called on the server-side when the '/inc' endpoint is hit
 function Inc(attrs: {}, context: Context) {
   count++
+  broadcast(['update-text', '#count', count])
   if (context.type == 'ws') {
-    broadcast(['update-text', '#count', count])
-    if (context.type == 'ws') {
-      context.ws.send([
-        'update-attrs',
-        '#home button',
-        { style: 'color:green' },
-      ])
-      throw EarlyTerminate
-    }
+    context.ws.send(['update-attrs', '#home button', { style: 'color:green' }])
+    throw EarlyTerminate
   }
   return <Redirect href="/" />
 }
