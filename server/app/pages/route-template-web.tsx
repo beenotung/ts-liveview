@@ -141,7 +141,10 @@ let addPage = (
             </p>
           </label>
         </div>
-        <input type="submit" value="Submit" />
+        <input
+          type="submit"
+          value={<Locale en="Submit" zh_hk="提交" zh_cn="提交" />}
+        />
         <p>
           <Locale en="Remark:" zh_hk="備註：" zh_cn="备注：" />
           <br />
