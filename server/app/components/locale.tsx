@@ -41,7 +41,7 @@ export function Locale<T>(attrs: LocaleVariants<T>, context: Context): T {
   return attrs.en
 }
 
-export function createTranslate<T>(context: Context) {
+export function createTranslate<T = string>(context: Context) {
   function translate(words: LocaleVariants<T>): T {
     return Locale(words, context)
   }
