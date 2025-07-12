@@ -27,7 +27,7 @@ import { randomUUID } from 'crypto'
 import { sendSMS } from '../../sms.js'
 import { to_full_hk_mobile_phone } from '@beenotung/tslib/validate.js'
 import { formatTel } from '../components/tel.js'
-import { createTranslate, Locale, makeThrows } from '../components/locale.js'
+import { makeTranslate, Locale, makeThrows } from '../components/locale.js'
 import { Title } from '../components/locale.js'
 
 let log = debugLog('app:verification-code')
@@ -86,7 +86,7 @@ async function requestVerification(
   let mode: 'email' | 'sms' | null = null
   try {
     let throws = makeThrows(context)
-    let translate = createTranslate<string>(context)
+    let translate = makeTranslate(context)
     let body = getContextFormBody(context)
     let input = requestVerificationParser.parse(body, { name: 'body' })
 
@@ -346,7 +346,7 @@ export function verificationCodeEmail(
   },
   context: Context,
 ) {
-  let translate = createTranslate<string>(context)
+  let translate = makeTranslate(context)
   let url = attrs.include_link
     ? env.ORIGIN +
       '/verify/email/result?' +
@@ -431,7 +431,7 @@ export function verificationCodeSMS(
   },
   context: Context,
 ): string {
-  let translate = createTranslate<string>(context)
+  let translate = makeTranslate(context)
   let site_name = SiteName(context)
   let url = attrs.include_link
     ? env.ORIGIN +
@@ -471,7 +471,7 @@ form .field input {
 `)
 
 function VerifyEmailPage(attrs: {}, context: DynamicContext) {
-  let translate = createTranslate<string>(context)
+  let translate = makeTranslate(context)
   let params = new URLSearchParams(context.routerMatch?.search)
   let error = params.get('error')
   let title = params.get('title')
@@ -617,7 +617,7 @@ function VerifyEmailForm(attrs: {
 }
 
 function VerifySMSPage(attrs: {}, context: DynamicContext) {
-  let translate = createTranslate<string>(context)
+  let translate = makeTranslate(context)
   let params = new URLSearchParams(context.routerMatch?.search)
   let error = params.get('error')
   let title = params.get('title')
