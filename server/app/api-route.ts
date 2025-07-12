@@ -41,10 +41,11 @@ export function ajaxRoute<T extends object>(options: {
   }
 }
 
-export function wsRoute(options: {
-  description: string
-  api: (context: WsContext) => Promise<ServerMessage> | ServerMessage
-}): PageRoute {
+export type WsAPI = (
+  context: WsContext,
+) => Promise<ServerMessage> | ServerMessage
+
+export function wsRoute(options: { description: string; api: WsAPI }) {
   return {
     title: apiEndpointTitle,
     description: options.description,
@@ -67,6 +68,9 @@ export function wsRoute(options: {
       }
       throw EarlyTerminate
     },
+    api: options.api,
+  } satisfies PageRoute & {
+    api: WsAPI
   }
 }
 
