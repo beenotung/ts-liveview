@@ -80,7 +80,7 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
 - [x] Follow the DOM convention
   - [x] `class`, `style`, `onclick` e.t.c. are string attributes, with helper functions to convert from objects
   - [x] Compatible with css frameworks and web components (doesn't require framework specific wrappers unlike react)
-  - [x] Support inline script and Immediately Invoked Function Expression (IIFE）
+  - [x] Support inline script and Immediately Invoked Function Expression (IIFE)
 - [x] Enable interactive UI with minimal amount of javascript to be downloaded
 - [x] Only load client-side library on used pages, for example:
   - [x] image compression (preview & upload)
