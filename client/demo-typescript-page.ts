@@ -56,6 +56,8 @@ async function startCamera() {
     await loop(faceLandmarker)
   } catch (error) {
     win.showError(String(error))
+  } finally {
+    stopStream()
   }
 }
 
@@ -80,7 +82,15 @@ async function loop(faceLandmarker: FaceLandmarker) {
   faceBlendshapesContainer.style.maxHeight = `${rect.height * 2}px`
   canvas.width = rect.width
   canvas.height = rect.height
-  for (; !video.paused; ) {
+  for (;;) {
+    if (typeof video === 'undefined') {
+      // e.g. when switch to other pages
+      break
+    }
+    if (video.paused) {
+      // e.g. when stopped by user
+      break
+    }
     context.clearRect(0, 0, canvas.width, canvas.height)
     let faceLandmarkerResult = faceLandmarker.detectForVideo(
       video,
