@@ -66,6 +66,10 @@ h2 {
   flex-wrap: wrap;
   gap: 0.5rem;
 }
+#demo-chart-container {
+  max-width: 320px;
+  margin: auto;
+}
 `)}
     <h1>
       <Locale
@@ -85,34 +89,11 @@ h2 {
     <hr />
 
     <h2>
-      <Locale en="Swiper Demo" zh_hk="Swiper 示範" zh_cn="Swiper 示范" />
-    </h2>
-    <Swiper
-      id="demo-swiper"
-      slides={[<p>Slice 1</p>, <p>Slice 2</p>, <p>Slice 3</p>]}
-      showPagination
-      showArrow
-    />
-
-    <hr />
-
-    <h2>
-      <Locale en="Chart Demo" zh_hk="圖表示範" zh_cn="图表示范" />
-    </h2>
-    {ChartScript}
-    <Chart
-      canvas_id="demo-chart"
-      data_labels={demo_chart_label}
-      datasets={[{ label: 'PI Digits', data: demo_chart_data }]}
-      borderWidth={1}
-      min={0}
-      max={9}
-    />
-
-    <hr />
-
-    <h2>
-      <Locale en="Confetti Demo" zh_hk="彩紙示範" zh_cn="彩纸示范" />
+      <Locale
+        en="Canvas Confetti Demo"
+        zh_hk="彩紙示範 (canvas-confetti)"
+        zh_cn="彩纸示范 (canvas-confetti)"
+      />
     </h2>
     <div className="demo-buttons">
       <button onclick="fireConfetti()">
@@ -126,14 +107,55 @@ h2 {
       </button>
     </div>
     {confettiPlugin.node}
+    {Script(/* javascript */ `
+// play the effect once automatically when enter the page
+fireConfetti()
+`)}
 
     <hr />
 
     <h2>
       <Locale
-        en="Sweet Alert Demo"
-        zh_hk="Sweet Alert 示範"
-        zh_cn="Sweet Alert 示範"
+        en="Swiper/Slider Demo"
+        zh_hk="Swiper/Slider 示範"
+        zh_cn="Swiper/Slider 示范"
+      />
+    </h2>
+    <Swiper
+      id="demo-swiper"
+      slides={[<p>Slice 1</p>, <p>Slice 2</p>, <p>Slice 3</p>]}
+      showPagination
+      showArrow
+    />
+
+    <hr />
+
+    <h2>
+      <Locale
+        en="Chart.js Demo"
+        zh_hk="圖表示範 (chart.js)"
+        zh_cn="图表示范 (chart.js)"
+      />
+    </h2>
+    {ChartScript}
+    <div id="demo-chart-container">
+      <Chart
+        canvas_id="demo-chart"
+        data_labels={demo_chart_label}
+        datasets={[{ label: 'PI Digits', data: demo_chart_data }]}
+        borderWidth={1}
+        min={0}
+        max={9}
+      />
+    </div>
+
+    <hr />
+
+    <h2>
+      <Locale
+        en="SweetAlert2 Demo"
+        zh_hk="通知彈出視窗示範 (SweetAlert2)"
+        zh_cn="通知弹出窗口示範 (SweetAlert2)"
       />
     </h2>
     {sweetAlertPlugin.node}
@@ -201,9 +223,9 @@ async function demoConfirm(icon) {
 
     <h2>
       <Locale
-        en="DataTable Demo"
-        zh_hk="DataTable 示範"
-        zh_cn="DataTable 示范"
+        en="DataTables.net Demo"
+        zh_hk="表格示範 (DataTables.net)"
+        zh_cn="表格示范 (DataTables.net)"
       />
     </h2>
     <table id="demo-dataTable">
