@@ -3,6 +3,7 @@ import { Routes } from '../routes.js'
 import Style from '../components/style.js'
 import { Locale, Title } from '../components/locale.js'
 import { loadClientPlugin } from '../../client-plugin.js'
+import SourceCode from '../components/source-code.js'
 
 // for error display
 let sweetAlertPlugin = loadClientPlugin({
@@ -96,6 +97,11 @@ let page = (
           </table>
         </div>
       </div>
+      <SourceCode page="demo-typescript-page.tsx" />
+      <SourceCode
+        page="demo-typescript-page.ts"
+        file="client/demo-typescript-page.ts"
+      />
     </div>
     {sweetAlertPlugin.node}
     {pagePlugin.node}
