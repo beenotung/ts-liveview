@@ -41,6 +41,7 @@
   "dependencies": {
     "@beenotung/tslib": "^23.12.1",
     "@ionic/core": "^8.6.1",
+    "@mediapipe/tasks-vision": "0.10.22-rc.20250304",
     "better-sqlite3-proxy": "^2.11.1",
     "better-sqlite3-schema": "^3.1.8",
     "canvas-confetti": "^1.9.3",

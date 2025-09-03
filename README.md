@@ -82,13 +82,17 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
   - [x] Compatible with css frameworks and web components (doesn't require framework specific wrappers unlike react)
   - [x] Support inline script and Immediately Invoked Function Expression (IIFE)
 - [x] Enable interactive UI with minimal amount of javascript to be downloaded
-- [x] Only load client-side library on used pages, for example:
-  - [x] image compression (preview & upload)
-  - [x] sweetalert (unrestricted)
-  - [x] swiper (slides / images carousel)
-  - [x] chart.js (canvas based line chart, bar chart, and more)
-  - [x] canvas-confetti (fireworks animation)
-  - [x] DataTables (pagination / search)
+- [x] Load only what you need, when you need it
+  - [x] **Built-in libraries**:
+    - [x] image compression (preview & upload)
+    - [x] sweetalert (unrestricted)
+    - [x] swiper (slides / images carousel)
+    - [x] chart.js (canvas based line chart, bar chart, and more)
+    - [x] canvas-confetti (fireworks animation)
+    - [x] DataTables (pagination / search)
+  - [x] **Custom client-side code**:
+    - [x] Simple code: use JavaScript inline within pages
+    - [x] Organized code: use TypeScript modules for type checking
 - [x] Still functional when javascript is disabled on client device with links and forms [[5]](#feature-5)
 - [x] Support to develop with [JSX](#jsx), AST, component, or html template
 - [x] Error boundary for each component [[6]](#feature-6)
@@ -145,6 +149,32 @@ The entry point of ts-liveview app can be wrapped as an express middleware
 
 <span id='feature-9'>[9]</span>
 ts-liveview is provided as a template (rather than a library), hence any part can be modified to suit your need
+
+## Custom Client-Side Code for Complex Interactions
+
+While ts-liveview is designed for a server-centric experience, it doesn't limit you to simple interactions. For client-side logic, you have two approaches:
+
+**Simple code**: Write JavaScript inline within your pages for quick, direct functionality.
+
+**Organized code**: Use TypeScript modules for more complex flows where type checking helps maintain code quality. Load them via the `loadClientPlugin` function, which allows you to:
+
+- Write code in TypeScript (instead of JavaScript strings inline)
+- Import other files and npm packages
+- Bundle code specifically for that page
+
+The bundle is only loaded on pages that use it, so initial loading times for other pages remain fast.
+
+**Concrete Examples:**
+
+- **Canvas Animations**: Use `canvas-confetti` for interactive fireworks and particle effects
+- **Rich UI Components**: Integrate `sweetalert2` for advanced modal dialogs and notifications
+- **Real-time Media Processing**: Build custom AI-powered features like:
+  - MediaPipe for real-time hand tracking and gesture recognition
+  - TensorFlow.js for on-device machine learning inference
+  - WebRTC for live video streaming with real-time analysis
+  - Canvas-based rendering for custom visualizations and games
+
+See the [Client-Side Library Integrations Demo](./server/app/pages/demo-plugin.tsx) for examples of third-party library integrations and the [TypeScript Page Demo](./server/app/pages/demo-typescript-page.tsx) for complex custom features like camera streams and AI models.
 
 ## Size Comparison with other tools
 
@@ -242,16 +272,32 @@ Example using _getter and setter_ see [thermostat.tsx](./server/app/pages/thermo
 
 ## Examples / Demo
 
+### Libraries & Integrations
+
+- [x] **Client-side library integrations demo** (confetti, sweetalert, charts, swiper, datatables) [[source](./server/app/pages/demo-plugin.tsx)]
+- [x] **TypeScript page demo** (custom TypeScript code for more complex features, e.g. realtime camera streams processing with AI models) [[source](./server/app/pages/demo-typescript-page.tsx)]
+
+### Core Functionality
+
+- [x] Pre-rendered Page [[source](./server/app/pages/home.tsx) | [demo](https://liveviews.cc/)]
+- [x] Form and Sanitizing user-generated content (prevent XSS attack by default) [[source](./server/app/pages/demo-form.tsx) | [demo](https://liveviews.cc/form)]
+- [x] SPA with url-based routing [source: [app.tsx](./server/app/app.tsx), [routes.tsx](./server/app/routes.tsx), [menu.tsx](./server/app/menu.tsx) | [demo](https://liveviews.cc/)]
+
+### Real-time Features
+
 - [x] Thermostat [[source](./server/app/pages/thermostat.tsx) | [demo](https://liveviews.cc/thermostat)]
 - [x] Image Editor [[source](./server/app/pages/editor.tsx) | [demo](https://liveviews.cc/editor)]
 - [x] Autocomplete Searching [[source](./server/app/pages/auto-complete-demo.tsx) | [demo](https://liveviews.cc/auto-complete)]
-- [x] Form and Sanitizing user-generated content (prevent XSS attack by default) [[source](./server/app/pages/demo-form.tsx) | [demo](https://liveviews.cc/form)]
-- [x] Pre-rendered Page [[source](./server/app/pages/home.tsx) | [demo](https://liveviews.cc/)]
-- [x] SPA with url-based routing [source: [app.tsx](./server/app/app.tsx), [routes.tsx](./server/app/routes.tsx), [menu.tsx](./server/app/menu.tsx) | [demo](https://liveviews.cc/)]
 - [x] Chatroom with locales and timezone support [source: [chatroom.tsx](./server/app/pages/chatroom.tsx) | [demo](https://liveviews.cc/chatroom)]
 - [x] Chatroom with database and realtime update [[source](https://github.com/beenotung/live-chat)]
-- [x] User Agents from sqlite3 database [[source](./server/app/pages/user-agents.tsx) | [demo](https://liveviews.cc/user-agents)]
-- [x] Image compression and file uploading [[source](./server/app/pages/demo-upload.tsx)] | [demo](https://liveviews.cc/upload)]
+
+### Data Handling
+
+- [x] Image compression and file uploading [[source](./server/app/pages/demo-upload.tsx)] | [[demo](https://liveviews.cc/upload)]
+- [x] User Agents statistics from sqlite3 database [[source](./server/app/pages/user-agents.tsx) | [demo](https://liveviews.cc/user-agents)]
+
+### Complete Applications
+
 - [x] Realtime Collaborative Painting [[source](https://github.com/beenotung/live-paint) | [demo](https://paint.liveviews.cc)]
 - [x] Hacker News Clone [[source](https://github.com/beenotung/liveview-hn) | [demo](https://hn.liveviews.cc)]
 - [x] Multi-Player Apple Chess Board Game [[source](https://github.com/beenotung/live-chess) | [demo](https://chess.liveviews.cc/)]

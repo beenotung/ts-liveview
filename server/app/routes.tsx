@@ -1,3 +1,4 @@
+import DemoTypescriptPage from './pages/demo-typescript-page.js'
 import AppNotice from './pages/app-notice.js'
 import AppChat from './pages/app-chat.js'
 import AppSettings from './pages/app-settings.js'
@@ -97,6 +98,7 @@ let routeDict = {
   ...DemoPlugin.routes,
   ...DemoUpload.routes,
   ...DemoCookieSession.routes,
+  ...DemoTypescriptPage.routes,
   ...Chatroom.routes,
   ...DemoLocale.routes,
   ...UILanguage.routes,
