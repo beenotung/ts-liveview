@@ -21,8 +21,8 @@ details.source-code details summary {
 }
 `
 
-function SourceCode(attrs: { page: string; style?: string }) {
-  let file = join('server', 'app', 'pages', attrs.page)
+function SourceCode(attrs: { page: string; style?: string; file?: string }) {
+  let file = attrs.file || join('server', 'app', 'pages', attrs.page)
   let source = readFileSync(file).toString()
   let parts = source.split('\n\n')
   let importPart: string | undefined
