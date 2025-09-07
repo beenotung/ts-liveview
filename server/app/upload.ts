@@ -31,6 +31,7 @@ function detectExtname(part: Part): string {
 
 export let MimeTypeRegex = {
   any_image: /^image\/.+/,
+  any_video: /^video\/.+/,
 }
 
 export function createUploadForm(options?: {
