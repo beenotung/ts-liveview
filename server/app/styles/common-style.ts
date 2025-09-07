@@ -70,9 +70,12 @@ code.inline-code {
 .common-table {
   border-collapse: collapse;
 }
+.common-table th {
+  background-color: #f0f0f0;
+}
 .common-table th,
 .common-table td {
-  border: 1px solid var(--text-color, black);
+  border: 1px solid #ccc;
   padding: 0.25rem 0.5rem;
 }
 `
