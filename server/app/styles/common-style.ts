@@ -66,4 +66,13 @@ code.inline-code {
   margin: 0.5rem 0;
   width: fit-content;
 }
+
+.common-table {
+  border-collapse: collapse;
+}
+.common-table th,
+.common-table td {
+  border: 1px solid var(--text-color, black);
+  padding: 0.25rem 0.5rem;
+}
 `
