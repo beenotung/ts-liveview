@@ -4,6 +4,7 @@ import { Context, WsContext } from '../context.js'
 import { TimezoneDate } from 'timezone-date.ts'
 import { d2 } from 'cast.ts'
 import { isPreferZh } from './locale.js'
+import { toLocaleDateTimeString } from './datetime.js'
 
 /** output format: `2 minutes ago` or `12.5 分鐘後` */
 export function relative_timestamp(time: number, context: Context) {
@@ -36,4 +37,14 @@ export function absolute_timestamp(time: number, context: Context) {
       {y}-{m}-{d} {H}:{M}
     </time>
   )
+}
+
+/** output format: `18:07:54` */
+export function feedback_timestamp(context: Context, time = Date.now()) {
+  return toLocaleDateTimeString(time, context, {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  })
 }
