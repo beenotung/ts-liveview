@@ -36,3 +36,25 @@ export function mapArray<T>(
   }
   return [array.map(fn)]
 }
+
+/** for finding out performance bottleneck */
+export function mapArrayTimed<T>(
+  consoleTime: string,
+  array: T[],
+  fn: (item: T, index: number, array: T[]) => Node,
+  separator?: Node,
+): Fragment {
+  console.time(consoleTime)
+  if (separator) {
+    let nodeList: Node[] = []
+    array.forEach((item, index, array) =>
+      nodeList.push(fn(item, index, array), separator),
+    )
+    nodeList.pop()
+    console.timeEnd(consoleTime)
+    return [nodeList]
+  }
+  let result = [array.map(fn)] satisfies Fragment
+  console.timeEnd(consoleTime)
+  return result
+}
