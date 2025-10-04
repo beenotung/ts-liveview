@@ -139,7 +139,7 @@ let addPage = (
               zh_hk="1 至 32 個字元："
               zh_cn="1 至 32 个字元："
             />
-            <code>a-z A-Z 0-9 - _ .</code>)
+            <code>a-z 0-9 - _ .</code>)
             <br />
             <Locale
               en="A unique part of the URL, e.g. "
@@ -184,7 +184,7 @@ let addPage = (
 
 let submitParser = object({
   title: string({ minLength: 3, maxLength: 50 }),
-  slug: string({ match: /^[\w-]{1,32}$/ }),
+  slug: string({ match: /^[\w\-.]{1,32}$/, case: 'lower' }),
 })
 
 function Submit(attrs: {}, context: DynamicContext) {

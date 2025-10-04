@@ -20,5 +20,6 @@ export function toSlug(value: string): string {
     .replaceAll("'", '-')
     .replaceAll('&', '-')
     .replaceAll('?', '-')
+    .toLowerCase()
   return value
 }
