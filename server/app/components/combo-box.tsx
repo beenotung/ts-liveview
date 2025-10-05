@@ -93,6 +93,12 @@ function comboBoxToggleOption(event) {
     composed: true,
     cancelable: true,
   })
+
+  if (comboBox.hasAttribute('close-on-select')) {
+    requestAnimationFrame(() => {
+      comboBox.classList.remove('active')
+    })
+  }
 }
 
 function getComboBoxOptionValue(option) {
@@ -198,6 +204,7 @@ export function ComboBox(attrs: {
   'auto-set'?: 'label' | 'value'
   'multiple'?: boolean
   'case-sensitive'?: boolean
+  'close-on-select'?: boolean
 }) {
   let skipAssets = attrs['skip-assets']
   let className = 'combo-box'
@@ -214,6 +221,7 @@ export function ComboBox(attrs: {
         multiple={attrs.multiple}
         auto-set={attrs['auto-set']}
         case-sensitive={attrs['case-sensitive']}
+        close-on-select={attrs['close-on-select']}
       >
         <input
           name={attrs.name}
