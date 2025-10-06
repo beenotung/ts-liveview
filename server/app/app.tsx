@@ -379,6 +379,11 @@ export let onWsMessage: OnWsMessage = async (event, ws, _wss) => {
     await then(
       matchRoute(context),
       route => {
+        if (eventType === 'mount') {
+          if (config.production) {
+            return
+          }
+        }
         let App = layouts[route.layout_type || config.layout_type]
         let node = App(route)
         if (navigation_type === 'express' && navigation_method !== 'GET') return
