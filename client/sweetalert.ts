@@ -9,12 +9,13 @@ function showToast(
   title: SweetAlertOptions['title'],
   icon: SweetAlertIcon,
   position: SweetAlertPosition = 'top-end',
+  timer: number = client_config.toast_duration,
 ) {
   const Toast = Swal.mixin({
     toast: true,
     position,
     showConfirmButton: false,
-    timer: client_config.toast_duration,
+    timer,
     timerProgressBar: true,
     didOpen: toast => {
       toast.onmouseenter = Swal.stopTimer
