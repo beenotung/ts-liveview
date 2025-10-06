@@ -331,9 +331,9 @@ export let onWsMessage: OnWsMessage = async (event, ws, _wss) => {
   let session = getWSSession(ws)
   let navigation_type: WindowStub['_navigation_type_']
   let navigation_method: WindowStub['_navigation_method_']
-  if (event[0] === 'mount') {
+  if (event[0] === 'mount' || event[0] === 'remount') {
     event = event as ClientMountMessage
-    eventType = 'mount'
+    eventType = event[0]
     url = event[1]
     session.language = fixLanguage(event[2])
     let timeZone = event[3]
@@ -381,6 +381,8 @@ export let onWsMessage: OnWsMessage = async (event, ws, _wss) => {
       route => {
         if (eventType === 'mount') {
           if (config.production) {
+            // in production mode, skip hot reload when the server is restarted
+            // so the client state will not be reset in the middle of form filling
             return
           }
         }

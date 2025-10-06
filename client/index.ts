@@ -120,11 +120,11 @@ connectWS({
     win.emitHref = emitHref
     win.emitForm = emitForm
     win.submitForm = submitForm
-    win.remount = mount
+    win.remount = () => mount('remount')
 
-    ws.ws.addEventListener('open', mount)
+    ws.ws.addEventListener('open', () => mount('mount'))
 
-    function mount() {
+    function mount(type: 'mount' | 'remount' = 'mount') {
       let language = Object.fromEntries(
         document.cookie.split(';').map(s => s.trim().split('=')),
       ).lang
@@ -137,7 +137,7 @@ connectWS({
         : undefined
       let timezoneOffset = new Date().getTimezoneOffset()
       let message: ClientMessage = [
-        'mount',
+        type,
         url,
         language,
         timeZone,

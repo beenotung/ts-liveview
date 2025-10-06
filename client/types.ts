@@ -9,7 +9,7 @@ import type {
 } from './jsx/types'
 
 export type ClientMountMessage = [
-  type: 'mount',
+  type: 'mount' | 'remount',
   url: string,
   locale: string | undefined,
   timeZone: string | undefined,
