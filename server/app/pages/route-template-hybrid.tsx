@@ -85,7 +85,7 @@ function Main(attrs: {}, context: Context) {
 let addPageScript = Script(/* js */ `
 ${toSlug}
 function updateSlugPreview() {
-  if (addForm.slug) return
+  if (!addForm.slug) return
   let value = addForm.slug.value || addForm.slug.placeholder
   previewSlug.textContent = toSlug(value)
 }

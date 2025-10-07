@@ -80,7 +80,7 @@ let addPageStyle = Style(/* css */ `
 let addPageScript = Script(/* js */ `
 ${toSlug}
 function updateSlugPreview() {
-  if (addForm.slug) return
+  if (!addForm.slug) return
   let value = addForm.slug.value || addForm.slug.placeholder
   previewSlug.textContent = toSlug(value)
 }
