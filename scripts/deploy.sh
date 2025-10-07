@@ -46,6 +46,7 @@ elif [ "$MODE" == "quick" ]; then
     set -e
     source ~/.nvm/nvm.sh
     pm2 reload $pm2_name
+    pm2 logs $pm2_name
   "
 else
   npm run build
@@ -84,5 +85,6 @@ else
     $rebuild_cmd
     npm run setup
     $pm2_cmd
+    pm2 logs $pm2_name
   "
 fi
