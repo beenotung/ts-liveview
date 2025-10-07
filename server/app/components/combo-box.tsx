@@ -211,6 +211,9 @@ export function ComboBox(attrs: {
   if (attrs.class) {
     className += ' ' + attrs.class
   }
+  if (!attrs.multiple) {
+    attrs['close-on-select'] ??= true
+  }
   return (
     <>
       {skipAssets ? null : ComboBoxStyle}
