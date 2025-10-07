@@ -161,7 +161,6 @@ let addPage_web = (
       <Locale en="* mandatory fields" zh_hk="* 必填欄位" zh_cn="* 必填字段" />
     </p>
     <p id="add-message"></p>
-    {addPageScript}
   </>
 )
 let addPage_ionic = (
@@ -240,7 +239,6 @@ let addPage_ionic = (
       <Locale en="* mandatory fields" zh_hk="* 必填欄位" zh_cn="* 必填字段" />
     </p>
     <p id="add-message"></p>
-    {addPageScript}
   </>
 )
 let addPage = (
@@ -258,6 +256,7 @@ let addPage = (
     >
       <Content web={addPage_web} ionic={addPage_ionic} />
     </form>
+    {addPageScript}
   </Page>
 )
 
