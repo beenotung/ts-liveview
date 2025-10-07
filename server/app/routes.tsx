@@ -132,6 +132,7 @@ Object.entries(routeDict as Routes).forEach(([url, route]) => {
   pageRouter.add(url, { url, ...route })
   if (route.menuText) {
     menuRoutes.push({
+      ...route,
       url,
       menuText: route.menuText,
       menuUrl: route.menuUrl || url,
