@@ -18,11 +18,22 @@ import { MessageException } from '../../exception.js'
 
 export let language_max_age = (20 * YEAR) / 1000
 
-export function PickLanguage(attrs: { style?: string }, context: Context) {
+export function PickLanguage(
+  attrs: {
+    style?: string
+    /** default is horizontal */
+    direction?: 'vertical' | 'horizontal'
+  },
+  context: Context,
+) {
   let lang = getContextLanguage(context)
   let return_url = context.type == 'static' ? '' : context.url
+  let style = attrs.style || ''
+  if (attrs.direction === 'vertical') {
+    style += '; display: flex; flex-direction: column; gap: 0.5rem;'
+  }
   return (
-    <div style={attrs.style}>
+    <div style={style}>
       🌏 <Locale en="Language" zh_hk="語言" zh_cn="语言" />:{' '}
       {mapArray(
         [
@@ -41,7 +52,7 @@ export function PickLanguage(attrs: { style?: string }, context: Context) {
             <button>{text}</button>
           </a>
         ),
-        ' | ',
+        attrs.direction === 'vertical' ? null : ' | ',
       )}
       {Raw(/* html */ `
 <script>

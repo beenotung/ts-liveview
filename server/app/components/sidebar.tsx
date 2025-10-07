@@ -152,7 +152,7 @@ function Sidebar(
             </a>
           ))}
         </div>
-        <PickLanguage style="margin: 1rem" />
+        <PickLanguage style="margin: 1rem" direction="vertical" />
       </div>
     </nav>
   )
