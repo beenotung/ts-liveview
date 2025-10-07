@@ -249,7 +249,6 @@ let routes = {
     title: <Title t={pageTitle} />,
     description: 'TODO',
     node: page,
-    menuText: 'x',
   },
   '/__url__/add': {
     title: <Title t={addPageTitle} />,
