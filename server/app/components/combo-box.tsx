@@ -1,8 +1,6 @@
 import { o } from '../jsx/jsx.js'
 import { Node } from '../jsx/types.js'
-import { Button } from './button.js'
 import { mapArray } from './fragment.js'
-import { IonButton } from './ion-button.js'
 import { Script } from './script.js'
 import Style from './style.js'
 
