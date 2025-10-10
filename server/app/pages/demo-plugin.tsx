@@ -1,6 +1,6 @@
 import { loadClientPlugin } from '../../client-plugin.js'
 import { allNames } from '@beenotung/tslib/constant/character-name.js'
-import { dataTableAsset, enableDataTable } from '../components/data-table.js'
+import { DataTable } from '../components/data-table.js'
 import { mapArray } from '../components/fragment.js'
 import { Locale, Title } from '../components/locale.js'
 import { Script } from '../components/script.js'
@@ -228,41 +228,31 @@ async function demoConfirm(icon) {
         zh_cn="表格示范 (DataTables.net)"
       />
     </h2>
-    <table id="demo-dataTable">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Username</th>
-          <th>Status</th>
-          <th>Icon</th>
-        </tr>
-      </thead>
-      <tbody>
-        {mapArray(allNames, (name, index) => {
-          let icon = icons[index % icons.length]
-          return (
-            <tr>
-              <td>{index + 1}</td>
-              <td>{name}</td>
-              <td>{icon}</td>
-              <th>
-                <div
-                  class={`swal2-icon swal2-${icon} swal2-icon-show`}
-                  style="display: flex;"
-                >
-                  <div class="swal2-icon-content">!</div>
-                </div>
-              </th>
-            </tr>
-          )
-        })}
-      </tbody>
-    </table>
-    {dataTableAsset}
-    {enableDataTable('demo-dataTable', {
-      pageLength: 3,
-      lengthMenu: [1, 2, 3, 5, 10, 25],
-    })}
+    <DataTable
+      id="demo-dataTable"
+      headers={{
+        id: <Locale en="ID" zh_hk="ID" zh_cn="ID" />,
+        name: <Locale en="Username" zh_hk="用戶名" zh_cn="用户名" />,
+        status: <Locale en="Status" zh_hk="狀態" zh_cn="状态" />,
+        icon: <Locale en="Icon" zh_hk="圖示" zh_cn="图示" />,
+      }}
+      rows={allNames.map((name, index) => {
+        let icon = icons[index % icons.length]
+        return {
+          id: index + 1,
+          name,
+          status: icon,
+          icon: (
+            <div
+              class={`swal2-icon swal2-${icon} swal2-icon-show`}
+              style="display: flex;"
+            >
+              <div class="swal2-icon-content">!</div>
+            </div>
+          ),
+        }
+      })}
+    />
 
     <hr />
 

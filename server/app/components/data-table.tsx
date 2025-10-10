@@ -31,29 +31,33 @@ export function enableDataTable(id: string, config: Config = {}) {
 
 export function DataTable<T>(attrs: {
   'id': string
-  'headers': {
-    col: keyof T
-    label: Node
-  }[]
+  'headers': Partial<Record<keyof T, Node>>
   'rows': T[]
   'skip-assets'?: boolean
+  /** default 3 */
+  'page-length'?: number
+  /** default [1, 2, 3, 5, 10, 25] */
+  'length-menu'?: number[]
 }) {
   let skipAssets = attrs['skip-assets']
+  let pageLength = attrs['page-length'] ?? 3
+  let lengthMenu = attrs['length-menu'] ?? [1, 2, 3, 5, 10, 25]
+  let fields = Object.keys(attrs.headers) as (keyof T)[]
   return (
     <>
       <table id={attrs.id}>
         <thead>
           <tr>
-            {mapArray(attrs.headers, header => (
-              <th>{header.label}</th>
+            {mapArray(Object.values(attrs.headers), label => (
+              <th>{label}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {mapArray(attrs.rows, row => (
             <tr>
-              {mapArray(attrs.headers, header => (
-                <td>{row[header.col]}</td>
+              {mapArray(fields, field => (
+                <td>{row[field]}</td>
               ))}
             </tr>
           ))}
@@ -61,8 +65,8 @@ export function DataTable<T>(attrs: {
       </table>
       {skipAssets ? null : dataTableAsset}
       {enableDataTable(attrs.id, {
-        pageLength: 3,
-        lengthMenu: [1, 2, 3, 5, 10, 25],
+        pageLength,
+        lengthMenu,
       })}
     </>
   )
