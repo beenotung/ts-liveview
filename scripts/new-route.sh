@@ -51,11 +51,11 @@ if [ -f "$file" ]; then
 fi
 
 cat "$template_file" \
-  | sed "s/__id__/$id/" \
+  | sed "s/__id__/$id/g" \
   | sed "s/__title__/$title/g" \
-  | sed "s/__name__/$name/" \
-  | sed "s/__url__/$url/" \
-  | sed "s/__table__/$table/" \
+  | sed "s/__name__/$name/g" \
+  | sed "s/__url__/$url/g" \
+  | sed "s/__table__/$table/g" \
   > "$file"
 
 echo "saved to $file"
