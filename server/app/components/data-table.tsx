@@ -1,4 +1,5 @@
 import { o } from '../jsx/jsx.js'
+import { mapArray } from './fragment.js'
 import { Script } from './script.js'
 import { Config } from 'datatables.net-dt'
 
@@ -26,4 +27,43 @@ export function enableDataTable(id: string, config: Config = {}) {
   let dataTable = new DataTable(table, ${JSON.stringify(config)});
 })()
 `)
+}
+
+export function DataTable<T>(attrs: {
+  'id': string
+  'headers': {
+    col: keyof T
+    label: Node
+  }[]
+  'rows': T[]
+  'skip-assets'?: boolean
+}) {
+  let skipAssets = attrs['skip-assets']
+  return (
+    <>
+      <table id={attrs.id}>
+        <thead>
+          <tr>
+            {mapArray(attrs.headers, header => (
+              <th>{header.label}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {mapArray(attrs.rows, row => (
+            <tr>
+              {mapArray(attrs.headers, header => (
+                <td>{row[header.col]}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {skipAssets ? null : dataTableAsset}
+      {enableDataTable(attrs.id, {
+        pageLength: 3,
+        lengthMenu: [1, 2, 3, 5, 10, 25],
+      })}
+    </>
+  )
 }
