@@ -125,14 +125,21 @@ async function postBuild() {
     await main()
     return
   }
-  fix()
+  await fix()
   if (mode == 'serve') {
     restartServer()
   }
 }
 
-function fix() {
+async function fix() {
+  let ps = []
+  ps.push(fix_proxy())
+  await Promise.all(ps)
+}
+
+async function fix_proxy() {
   let file = path.join('dist', 'db', 'proxy.js')
+  await wait_file(file)
   let text = fs.readFileSync(file).toString()
   if (!text.includes(`import { db } from "./db"`)) return
   text = text.replace(
@@ -140,6 +147,16 @@ function fix() {
     `import { db } from "./db.js"`,
   )
   fs.writeFileSync(file, text)
+}
+
+async function wait_file(file: string) {
+  let wait_intervals = [10, 20, 50, 100, 200, 250, 500]
+  let default_interval = wait_intervals.pop()!
+  while (!fs.existsSync(file)) {
+    let interval = wait_intervals.shift() || default_interval
+    console.log(`waiting file: ${file} (for ${interval}ms)`)
+    await new Promise(resolve => setTimeout(resolve, interval))
+  }
 }
 
 let stopServer = () => Promise.resolve()
