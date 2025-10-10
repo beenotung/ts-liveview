@@ -134,6 +134,7 @@ async function postBuild() {
 async function fix() {
   let ps = []
   ps.push(fix_proxy())
+  // add custom fixes here
   await Promise.all(ps)
 }
 
