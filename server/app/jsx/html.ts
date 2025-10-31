@@ -26,18 +26,19 @@ export function escapeHTMLTextContent(str: string): string {
   str = str.replace(/&/g, '&amp;')
   str = str.replace(/</g, '&lt;')
   str = str.replace(/>/g, '&gt;')
-  // str = str.replace(/"/g, '&quot;')
-  // str = str.replace(/'/g, '&#39;')
   return str
 }
 
 export function escapeHTMLAttributeValue(
   value: string | number | boolean,
 ): string {
-  if (typeof value === 'string' && value.includes('"')) {
-    return '"' + value.replace(/&/g, '&amp;').replace(/"/g, '&quot;') + '"'
-  }
-  return JSON.stringify(value).replaceAll('\\\\', '\\')
+  let str = String(value)
+  str = str.replace(/&/g, '&amp;')
+  str = str.replace(/</g, '&lt;')
+  str = str.replace(/>/g, '&gt;')
+  str = str.replace(/"/g, '&quot;')
+  str = str.replace(/'/g, '&#39;')
+  return `"${str}"`
 }
 
 // to be used in template that has already wrapped the attribute value in double quotes
