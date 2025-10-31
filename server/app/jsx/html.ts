@@ -32,7 +32,11 @@ export function escapeHTMLTextContent(str: string): string {
 export function escapeHTMLAttributeValue(
   value: string | number | boolean,
 ): string {
+  let type = typeof value
   let str = String(value)
+  if (type === 'number' || type === 'boolean') {
+    return str
+  }
   str = str.replace(/&/g, '&amp;')
   str = str.replace(/</g, '&lt;')
   str = str.replace(/>/g, '&gt;')
