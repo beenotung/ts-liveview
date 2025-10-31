@@ -37,6 +37,7 @@ export function escapeHTMLAttributeValue(
   if (type === 'number' || type === 'boolean') {
     return str
   }
+  // using replace with /g is 8-10% faster than replaceAll
   str = str.replace(/&/g, '&amp;')
   str = str.replace(/</g, '&lt;')
   str = str.replace(/>/g, '&gt;')
