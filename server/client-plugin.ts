@@ -3,6 +3,7 @@ import * as path from 'path'
 import { config } from './config.js'
 import { Raw } from './app/components/raw.js'
 import { Raw as RawType } from './app/jsx/types.js'
+import { escapeHTMLAttributeValue } from './app/jsx/html.js'
 
 let cache = new Map<string, { script: string; node: RawType }>()
 
@@ -13,6 +14,7 @@ export function loadClientPlugin(options: {
   outFilename?: string
   async?: boolean
   onload?: string
+  onerror?: string
 }) {
   let { entryFile } = options
   if (!entryFile.startsWith('dist/client/')) {
@@ -45,7 +47,19 @@ export function loadClientPlugin(options: {
   // e.g. js/image.bundle.js
   let scriptSrc = '/js/' + outFilename
 
-  let script = /* html */ `<script src="${scriptSrc}" ${options.async ? 'async defer' : ''} ${options.onload ? `onload=` + JSON.stringify(options.onload) : ''}></script>`
+  let attrs: string[] = []
+  attrs.push(`src="${scriptSrc}"`)
+  if (options.async) {
+    attrs.push('async defer')
+  }
+  if (options.onload) {
+    attrs.push(`onload=${escapeHTMLAttributeValue(options.onload)}`)
+  }
+  if (options.onerror) {
+    attrs.push(`onerror=${JSON.stringify(options.onerror)}`)
+  }
+
+  let script = /* html */ `<script ${attrs.join(' ')}></script>`
 
   let node = Raw(script)
 
