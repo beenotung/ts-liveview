@@ -3,6 +3,9 @@ import type { JSXFragment, Element, NodeList, attrs } from './types'
 /**
  * @alias createElement
  * It can be specified in per-file basis: https://www.typescriptlang.org/tsconfig#jsxFactory
+ *
+ * features:
+ * - rename attribute "className" to "class"
  */
 export function o(
   tagName: string,
