@@ -6,6 +6,7 @@ loadEnv()
 
 export let env = {
   NODE_ENV: 'development' as 'development' | 'production',
+  CADDY_PROXY: 'skip' as 'skip' | 'enable',
   PORT: 8100,
   COOKIE_SECRET: '',
   EPOCH: 1, // to distinct initial run or restart in serve mode
@@ -22,3 +23,9 @@ function applyDefaultEnv() {
 }
 
 populateEnv(env, { mode: 'halt' })
+
+if (env.CADDY_PROXY.toLocaleLowerCase().startsWith('enable')) {
+  env.CADDY_PROXY = 'enable'
+} else {
+  env.CADDY_PROXY = 'skip'
+}

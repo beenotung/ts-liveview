@@ -18,6 +18,7 @@ localhost_*.report.html
 # config
 .env
 .open
+Caddyfile
 
 # MacOS
 .DS_Store

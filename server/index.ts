@@ -14,6 +14,7 @@ import { print } from 'listening-on'
 import { logRequest } from './app/log.js'
 import { env } from './env.js'
 import { HttpError, EarlyTerminate } from './exception.js'
+import { setCaddy } from './caddy.js'
 
 const log = debugLog('index.ts')
 log.enabled = true
@@ -77,6 +78,9 @@ app.use((error: HttpError, req: Request, res: Response, next: NextFunction) => {
 const port = env.PORT
 server.listen(port, () => {
   print(port)
+  if (env.CADDY_PROXY === 'enable') {
+    setCaddy(port)
+  }
   if (config.auto_open) {
     open(`http://localhost:${port}`)
   }
