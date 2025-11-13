@@ -36,8 +36,10 @@ To update database schema, see [db/README.md](./db/README.md)
 
 To deploy, setup [scripts/config](./scripts/config) then run `./scripts/deploy.sh`, which will build and deploy the server with knex migrate and pm2.
 
-To test https-required functions during development, run `./scripts/caddy-run.sh`, which will start a https reverse proxy.
-You can install caddy with `./scripts/caddy-install.sh` on Mac or Linux, or `./scripts/caddy-install.ps1` on Windows.
+To test https-required functions during development (e.g., camera, microphone):
+
+1. Install caddy: `./scripts/caddy-install.sh` (Mac/Linux) or `./scripts/caddy-install.ps1` (Windows)
+2. Enable the caddy https proxy in `.env` file: `CADDY_PROXY=enable`
 
 Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liveview)
 
