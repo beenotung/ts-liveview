@@ -110,4 +110,3 @@ export function Router(
 export type SwitchRoutes = {
   [url: string]: Node
 }
-export type Route = [url: string, node: Node]
