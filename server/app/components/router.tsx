@@ -85,7 +85,7 @@ export function renderRedirect(href: string): string {
 `
 }
 
-export function Switch(routes: Routes, defaultNode?: Node): Node {
+export function Switch(routes: SwitchRoutes, defaultNode?: Node): Node {
   const router = new UrlRouter<Node>()
   Object.entries(routes).forEach(([url, node]) => {
     router.add(url, node)
@@ -107,7 +107,7 @@ export function Router(
   return match.value
 }
 
-export type Routes = {
+export type SwitchRoutes = {
   [url: string]: Node
 }
 export type Route = [url: string, node: Node]
