@@ -106,9 +106,14 @@ function classifyUserAgent(ua: string) {
   else if (ua.includes('Links')) return { type: 'Links' }
   else if (ua.includes('Android') || ua.includes('Nokia'))
     return { type: 'Android' }
+  else if (ua.includes('SonyEricsson')) return { type: 'SonyEricsson' }
+  else if (ua.includes('BlackBerry')) return { type: 'BlackBerry' }
   else if (ua.includes('X11; CrOS x86_64')) return { type: 'ChromeOS' }
   else if (ua.includes('Windows')) return { type: 'Windows' }
   else if (ua.includes('Linux')) return { type: 'Linux' }
+  else if (ua.includes('FreeBSD')) return { type: 'FreeBSD' }
+  else if (ua.includes('NetBSD')) return { type: 'NetBSD' }
+  else if (ua.includes('OpenBSD')) return { type: 'OpenBSD' }
   // e.g. "Dart/2.15 (dart:io)"
   else if (/^Dart\/[\d.]+ \(dart:io\)$/.test(ua)) return { bot: 'DartBot' }
   else if (
