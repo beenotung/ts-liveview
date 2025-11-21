@@ -59,6 +59,9 @@ function classifyUserAgent(ua: string) {
   else if (ua.includes('http://www.google.com/bot.html'))
     return { bot: 'GoogleBot' }
   else if (ua.includes('Googlebot-Image')) return { bot: 'GoogleBot' }
+  else if (ua.includes('Googlebot-News')) return { bot: 'GoogleBot' }
+  else if (ua.includes('AdsBot-Google')) return { bot: 'AdsBot-Google' }
+  else if (ua.includes('Google-Apps-Script')) return { bot: 'GoogleAppsScript' }
   else if (ua.includes('http://duckduckgo.com')) return { bot: 'DuckDuckGoBot' }
   else if (ua.includes('http://yandex.com/bots')) return { bot: 'YandexBot' }
   else if (ua.includes('http://www.baidu.com')) return { bot: 'BaiduBot' }
@@ -96,6 +99,9 @@ function classifyUserAgent(ua: string) {
   else if (ua.includes('Sogou') || ua.includes('sogou web spider'))
     return { bot: 'SogouBot' }
   else if (ua.includes('Scrapy')) return { bot: 'Scrapy' }
+  else if (ua.includes('TurnitinBot')) return { bot: 'TurnitinBot' }
+  else if (ua.includes('zoombot') || ua.includes('suite.seozoom.it/bot.html'))
+    return { bot: 'ZoomBot' }
   else if (ua.includes('iPhone')) return { type: 'iPhone' }
   else if (ua.includes('iPad')) return { type: 'iPad' }
   else if (ua.includes('Macintosh')) return { type: 'MacOS' }
