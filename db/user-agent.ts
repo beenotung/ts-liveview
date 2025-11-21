@@ -88,6 +88,14 @@ function classifyUserAgent(ua: string) {
     return { bot: 'LinkAffinityBot' }
   else if (ua.includes('https://dataforseo.com/dataforseo-bot'))
     return { bot: 'DataForSeoBot' }
+  else if (ua.includes('PerplexityBot')) return { bot: 'PerplexityBot' }
+  else if (ua.includes('AliyunSecBot')) return { bot: 'AliyunSecBot' }
+  else if (ua.includes('YisouSpider')) return { bot: 'YisouSpider' }
+  else if (ua.includes('SafeDNSBot')) return { bot: 'SafeDNSBot' }
+  else if (ua.includes('HawaiiBot')) return { bot: 'HawaiiBot' }
+  else if (ua.includes('Sogou') || ua.includes('sogou web spider'))
+    return { bot: 'SogouBot' }
+  else if (ua.includes('Scrapy')) return { bot: 'Scrapy' }
   else if (ua.includes('iPhone')) return { type: 'iPhone' }
   else if (ua.includes('iPad')) return { type: 'iPad' }
   else if (ua.includes('Macintosh')) return { type: 'MacOS' }
