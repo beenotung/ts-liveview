@@ -42,7 +42,14 @@ function classifyUserAgent(ua: string) {
   else if (ua.includes('http://mj12bot.com/')) return { bot: 'MJ12Bot' }
   else if (ua.includes('https://babbar.tech/crawler'))
     return { bot: 'BarkrowlerBot' }
-  else if (ua.includes('http://webmeup-crawler.com/')) return { bot: 'BLEXBot' }
+  else if (ua.includes('http://webmeup-crawler.com/') || ua.includes('BLEXBot'))
+    return { bot: 'BLEXBot' }
+  else if (ua.includes('Amazonbot')) return { bot: 'Amazonbot' }
+  else if (ua.includes('ClaudeBot')) return { bot: 'ClaudeBot' }
+  else if (ua.includes('CCBot') || ua.includes('commoncrawl'))
+    return { bot: 'CCBot' }
+  else if (ua.includes('coccocbot') || ua.includes('CocCocBot'))
+    return { bot: 'coccocbot' }
   else if (ua.includes('https://openai.com/')) return { bot: 'OpenAIBot' }
   else if (ua.includes('http://www.linkdex.com/bots/'))
     return { bot: 'LinkdexBot' }
@@ -57,11 +64,16 @@ function classifyUserAgent(ua: string) {
   else if (ua.includes('http://www.baidu.com')) return { bot: 'BaiduBot' }
   else if (ua.includes('https://www.mojeek.com/bot.html'))
     return { bot: 'MojeekBot' }
-  else if (ua.includes('http://napoveda.seznam.cz')) return { bot: 'SeznamBot' }
+  else if (ua.includes('http://napoveda.seznam.cz') || ua.includes('SeznamBot'))
+    return { bot: 'SeznamBot' }
   else if (ua.includes('https://about.censys.io'))
     return { bot: 'CensysInspect' }
   else if (ua.includes('crawler@mixrank.com')) return { bot: 'MixrankBot' }
-  else if (ua.includes('facebookexternalhit')) return { bot: 'FacebookBot' }
+  else if (
+    ua.includes('facebookexternalhit') ||
+    ua.includes('developers.facebook.com/docs/sharing/webmasters/crawler')
+  )
+    return { bot: 'FacebookBot' }
   else if (ua.includes('Mastodon')) return { bot: 'MastodonBot' }
   // e.g. "Slack-ImgProxy (+https://api.slack.com/robots)"
   // e.g. "Slackbot-LinkExpanding 1.0 (+https://api.slack.com/robots)"
