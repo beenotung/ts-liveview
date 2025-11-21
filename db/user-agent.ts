@@ -204,7 +204,7 @@ let resetStats = db.transaction(() => {
 })
 
 let versionFile = join('data', 'user-agent-version.txt')
-let version = 2
+let version = 3
 function autoResetStats() {
   if (loadNumber(versionFile) == version) return
   resetStats()
