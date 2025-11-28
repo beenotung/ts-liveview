@@ -171,7 +171,7 @@ The bundle is only loaded on pages that use it, so initial loading times for oth
 - **Canvas Animations**: Use `canvas-confetti` for interactive fireworks and particle effects
 - **Rich UI Components**: Integrate `sweetalert2` for advanced modal dialogs and notifications
 - **Real-time Media Processing**: Build custom AI-powered features like:
-  - MediaPipe for real-time hand tracking and gesture recognition
+  - MediaPipe for real-time face landmark detection, hand tracking, and gesture recognition
   - TensorFlow.js for on-device machine learning inference
   - WebRTC for live video streaming with real-time analysis
   - Canvas-based rendering for custom visualizations and games
