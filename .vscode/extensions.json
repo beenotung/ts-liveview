@@ -1,5 +1,6 @@
 {
   "recommendations": [
+    "formulahendry.code-runner",
     "Gruntfuggly.todo-tree",
     "PKief.material-icon-theme",
     "Tobermory.es6-string-html",
