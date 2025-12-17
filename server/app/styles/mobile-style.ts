@@ -57,6 +57,10 @@ ion-title.ios {
 .margin-half {
   --ion-margin: 8px;
 }
+
+ion-item.with-checkbox {
+  user-select: none;
+}
 `
 
 let themeStyle = readFileSync('public/theme.css').toString()
@@ -125,6 +129,35 @@ function afterNavigation() {
     app.classList.remove('hide')
     body.classList.remove('back')
   },1)
+}
+// auto toggle ion-checkbox in ion-item with class "with-checkbox"
+function autoToggleCheckboxInItem() {
+  window.addEventListener('click', event => {
+    let item = event.target.closest('ion-item')
+    if (!item) return
+    if (!item.classList.contains('with-checkbox')) return
+
+    let checkbox = item.querySelector('ion-checkbox')
+
+    // Don't trigger if clicking on the checkbox itself (it has its own handler)
+    if (event.target === checkbox || checkbox.contains(event.target)) {
+      return
+    }
+
+    // Toggle the checkbox
+    checkbox.checked = !checkbox.checked;
+
+    // Trigger the ionChange event manually
+    const ionChangeEvent = new CustomEvent('ionChange', {
+      detail: { checked: checkbox.checked },
+      bubbles: true
+    });
+    checkbox.dispatchEvent(ionChangeEvent);
+  })
+  window.autoToggleCheckboxInItem_ = 1
+}
+if (!window.autoToggleCheckboxInItem_) {
+  autoToggleCheckboxInItem()
 }
 `)
 
