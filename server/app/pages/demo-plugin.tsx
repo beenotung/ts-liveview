@@ -164,13 +164,11 @@ fireConfetti()
     </h3>
     <div class="demo-buttons">
       <button onclick="showToast('sample text message')">default</button>
-      {[
-        icons.map(icon => (
-          <button onclick={`showToast('sample ${icon} message', '${icon}')`}>
-            {icon}
-          </button>
-        )),
-      ]}
+      {mapArray(icons, icon => (
+        <button onclick={`showToast('sample ${icon} message', '${icon}')`}>
+          {icon}
+        </button>
+      ))}
     </div>
     <h3>
       <Locale
@@ -181,13 +179,11 @@ fireConfetti()
     </h3>
     <div class="demo-buttons">
       <button onclick="showAlert('sample text message')">default</button>
-      {[
-        icons.map(icon => (
-          <button onclick={`showAlert('sample ${icon} message', '${icon}')`}>
-            {icon}
-          </button>
-        )),
-      ]}
+      {mapArray(icons, icon => (
+        <button onclick={`showAlert('sample ${icon} message', '${icon}')`}>
+          {icon}
+        </button>
+      ))}
     </div>
     <h3>
       <Locale
@@ -198,11 +194,9 @@ fireConfetti()
     </h3>
     <div class="demo-buttons">
       <button onclick="demoConfirm()">default</button>
-      {[
-        icons.map(icon => (
-          <button onclick={`demoConfirm('${icon}')`}>{icon}</button>
-        )),
-      ]}
+      {mapArray(icons, icon => (
+        <button onclick={`demoConfirm('${icon}')`}>{icon}</button>
+      ))}
     </div>
     {Script(/* javascript */ `
 async function demoConfirm(icon) {
