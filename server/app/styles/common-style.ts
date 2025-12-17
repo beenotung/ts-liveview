@@ -78,4 +78,16 @@ code.inline-code {
   border: 1px solid #ccc;
   padding: 0.25rem 0.5rem;
 }
+
+@media (max-width: 525px) {
+  .hide-on-phone {
+    display: none;
+  }
+}
+
+@media (min-width: 526px) {
+  .hide-on-desktop {
+    display: none;
+  }
+}
 `
