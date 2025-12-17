@@ -104,7 +104,9 @@ async function fitIonFooter() {
 }
 function selectIonTab(tab) {
   let ionTab = document.querySelector('ion-tab-bar ion-tab-button[tab="'+tab+'"]')
+  if (!ionTab) return
   let ionIcon = ionTab.querySelector('ion-icon')
+  if (!ionIcon) return
   ionTab.classList.add('tab-selected')
   if (ionIcon.name) ionIcon.name = ionIcon.name.replace('-outline', '')
   if (ionIcon.ios) ionIcon.ios = ionIcon.ios.replace('-outline', '')
