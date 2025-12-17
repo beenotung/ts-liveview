@@ -1,4 +1,4 @@
-import { loadClientPlugin } from '../../client-plugin.js'
+import { confettiPlugin, sweetAlertPlugin } from '../../client-plugins.js'
 import { allNames } from '@beenotung/tslib/constant/character-name.js'
 import { DataTable } from '../components/data-table.js'
 import { mapArray } from '../components/fragment.js'
@@ -10,14 +10,6 @@ import { Swiper } from '../components/swiper.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 import { Chart, ChartScript } from '../components/chart.js'
-
-let sweetAlertPlugin = loadClientPlugin({
-  entryFile: 'dist/client/sweetalert.js',
-})
-
-let confettiPlugin = loadClientPlugin({
-  entryFile: 'dist/client/confetti.js',
-})
 
 let icons = ['success', 'error', 'warning', 'info', 'question']
 

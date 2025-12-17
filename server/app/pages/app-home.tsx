@@ -1,4 +1,4 @@
-import { loadClientPlugin } from '../../client-plugin.js'
+import { sweetAlertPlugin } from '../../client-plugins.js'
 import { LayoutType, config, title } from '../../config.js'
 import { appIonTabBar } from '../components/app-tab-bar.js'
 import { mapArray } from '../components/fragment.js'
@@ -31,10 +31,6 @@ function selectMenu(event, flag) {
   }
 }
 `)
-
-let sweetAlertPlugin = loadClientPlugin({
-  entryFile: 'dist/client/sweetalert.js',
-})
 
 let homePage = (
   <>

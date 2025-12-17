@@ -3,12 +3,8 @@ import { Routes } from '../routes.js'
 import Style from '../components/style.js'
 import { Locale, Title } from '../components/locale.js'
 import { loadClientPlugin } from '../../client-plugin.js'
+import { sweetAlertPlugin } from '../../client-plugins.js'
 import SourceCode from '../components/source-code.js'
-
-// for error display
-let sweetAlertPlugin = loadClientPlugin({
-  entryFile: 'dist/client/sweetalert.js',
-})
 
 // for complete page interaction
 let pagePlugin = loadClientPlugin({

@@ -14,16 +14,12 @@ import { SECOND } from '@beenotung/tslib/time.js'
 import { debugLog } from '../../debug.js'
 import { nodeListToHTML } from '../jsx/html.js'
 import { toExpressContext } from '../context.js'
-import { loadClientPlugin } from '../../client-plugin.js'
+import { imagePlugin } from '../../client-plugins.js'
 import SourceCode from '../components/source-code.js'
 import { env } from '../../env.js'
 
 let log = debugLog('demo-upload.tsx')
 log.enabled = true
-
-let imagePlugin = loadClientPlugin({
-  entryFile: 'dist/client/image.js',
-})
 
 const maxFiles = 5
 const maxFileSize = 300 * KB * maxFiles
