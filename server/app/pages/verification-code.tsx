@@ -93,7 +93,7 @@ async function requestEmailVerification(
       request_time,
       revoke_time: null,
       match_id: null,
-      user_id: find(proxy.user, {email: input.email})?.id || null,
+      user_id: find(proxy.user, { email: input.email })?.id || null,
     })
     let { html, text } = verificationCodeEmail(
       { passcode, email: input.include_link ? input.email : null },
@@ -316,13 +316,13 @@ async function checkEmailVerificationCode(
     email = input.email
     let is_expired = false
     let matched_verification_code: VerificationCode | null = null
-    let user_id : number | null = null
+    let user_id: number | null = null
     db.transaction(() => {
       let verification_code_rows = filter(proxy.verification_code, {
         passcode: input.code,
         email: input.email,
         revoke_time: null,
-        match_id: null
+        match_id: null,
       })
       let now = Date.now()
       for (let verification_code of verification_code_rows) {
