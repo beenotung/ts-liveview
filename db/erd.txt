@@ -169,3 +169,4 @@ reject_time integer NULL
 # error_log (627, 158)
 # verification_code (50, 550)
 # verification_attempt (50, 372)
+# content_report (844, 573)
