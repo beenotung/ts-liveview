@@ -1,4 +1,5 @@
 import type { Knex } from 'knex'
+import { dropIndexIfExists } from '../migrate-helpers'
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.alterTable('verification_code', table => {
@@ -8,8 +9,6 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  await knex.schema.alterTable('verification_code', table => {
-    table.dropIndex(['passcode'])
-    table.dropIndex(['request_time'])
-  })
+  await dropIndexIfExists(knex, 'verification_code', 'passcode')
+  await dropIndexIfExists(knex, 'verification_code', 'request_time')
 }
