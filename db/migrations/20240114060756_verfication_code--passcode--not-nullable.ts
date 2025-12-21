@@ -23,6 +23,13 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
+  await knex.schema
+    .alterTable('verification_code', table => {
+      table.index(['passcode'])
+    })
+    .catch(() => {
+      // index already exists
+    })
   await knex.schema.alterTable('verification_code', table => {
     table.dropIndex(['passcode'])
   })
