@@ -140,3 +140,4 @@ reject_time integer NULL
 # user (450, 680)
 # verification_code (50, 550)
 # verification_attempt (50, 372)
+# content_report (844, 573)
