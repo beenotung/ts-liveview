@@ -1,4 +1,5 @@
 import { o } from '../jsx/jsx.js'
+import type { ServerMessage } from '../../../client/types'
 import { Routes } from '../routes.js'
 import { apiEndpointTitle, title } from '../../config.js'
 import Style from '../components/style.js'
@@ -7,17 +8,20 @@ import {
   DynamicContext,
   getContextFormBody,
   throwIfInAPI,
+  WsContext,
 } from '../context.js'
 import { mapArray } from '../components/fragment.js'
 import { object, string } from 'cast.ts'
 import { Link, Redirect } from '../components/router.js'
-import { renderError } from '../components/error.js'
+import { renderError, showError } from '../components/error.js'
+import { EarlyTerminate, MessageException } from '../../exception.js'
 import { Locale, Title } from '../components/locale.js'
 import { proxy } from '../../../db/proxy.js'
 import { env } from '../../env.js'
 import { Script } from '../components/script.js'
 import { toSlug } from '../format/slug.js'
 import { BackToLink } from '../components/back-to-link.js'
+import { sweetAlertPlugin } from '../../client-plugins.js'
 
 let pageTitle = <Locale en="__title__" zh_hk="__title__" zh_cn="__title__" />
 let addPageTitle = (
@@ -188,29 +192,168 @@ function Submit(attrs: {}, context: DynamicContext) {
   }
 }
 
+let detailPageStyle = Style(/* css */ `
+#Detail__id__ input[name="title"] { min-width: 12.5rem; }
+`)
+
+let detailPageScript = Script(/* js */ `
+function setEditMode(event, mode) {
+  let field = event.target.closest('.field')
+
+  if (mode === 'edit') {
+    // Entering edit mode - copy view mode text to input
+    let value = field.querySelector('.view-mode').textContent.trim()
+    let input = field.querySelector('input')
+    input.value = value
+  }
+
+  field.dataset.mode = mode
+}
+function saveField(button) {
+  let field = button.closest('.field')
+  let input = field.querySelector('input')
+  if (!input.checkValidity()) {
+    input.reportValidity()
+    return
+  }
+  let value = input.value
+  emit(button.dataset.url, value)
+}
+function handleFieldKeydown(event) {
+  if (event.key === 'Enter') {
+    event.preventDefault()
+    let field = event.target.closest('.field')
+    let button = field.querySelector('.edit-mode button:first-child')
+    button.click()
+  } else if (event.key === 'Escape') {
+    event.preventDefault()
+    setEditMode(event, 'view')
+  }
+}
+`)
+
 function DetailPage(
   attrs: { item: (typeof items)[0] },
   context: DynamicContext,
 ) {
   let { item } = attrs
   return (
-    <div>
-      <h1>{item.title}</h1>
-      <dl>
-        <dt>
-          <Locale en="Title" zh_hk="標題" zh_cn="標題" />
-        </dt>
-        <dd>{item.title}</dd>
-        <dt>
-          <Locale en="Slug" zh_hk="短網址碼" zh_cn="短网址码" />
-        </dt>
-        <dd>
-          <code>{item.slug}</code>
-        </dd>
-      </dl>
-      <BackToLink href="/__url__" title={pageTitle} />
-    </div>
+    <>
+      {detailPageStyle}
+      <div id="Detail__id__">
+        <h1>{item.title}</h1>
+        <dl>
+          <dt>
+            <Locale en="Title" zh_hk="標題" zh_cn="標題" />
+          </dt>
+          <dd
+            class="field inline-edit-field"
+            data-field="title"
+            data-mode="view"
+          >
+            <span class="view-mode">{item.title}</span>
+            <span class="edit-mode">
+              <input
+                name="title"
+                required
+                minlength="3"
+                maxlength="50"
+                onkeydown="handleFieldKeydown(event)"
+              />
+            </span>
+            <button
+              type="button"
+              onclick="setEditMode(event, 'edit')"
+              class="view-mode"
+            >
+              <Locale en="Edit" zh_hk="編輯" zh_cn="编辑" />
+            </button>
+            <span class="edit-mode">
+              <button
+                type="button"
+                data-url={`/__url__/${item.slug}/update/title`}
+                onclick="saveField(this)"
+              >
+                <Locale en="Save" zh_hk="保存" zh_cn="保存" />
+              </button>
+              <button type="button" onclick="setEditMode(event, 'view')">
+                <Locale en="Cancel" zh_hk="取消" zh_cn="取消" />
+              </button>
+            </span>
+          </dd>
+          <dt>
+            <Locale en="Slug" zh_hk="短網址碼" zh_cn="短网址码" />
+          </dt>
+          <dd>
+            <code>{item.slug}</code>
+          </dd>
+        </dl>
+        <BackToLink href="/__url__" title={pageTitle} />
+      </div>
+      {sweetAlertPlugin.node}
+      {detailPageScript}
+    </>
   )
+}
+
+function UpdateField(attrs: {}, context: WsContext) {
+  if (context.type !== 'ws') {
+    throw new Error('This endpoint only supports WebSocket')
+  }
+  try {
+    let slug = context.routerMatch?.params.slug
+    let field = context.routerMatch?.params.field
+    let value = context.args?.[0] as string
+
+    if (!field) throw `Missing field name`
+    if (!value) throw `Missing value`
+
+    let itemIndex = items.findIndex(item => item.slug === slug)
+    if (itemIndex === -1) throw `Item not found: ${slug}`
+
+    let container = `#Detail__id__`
+    function commitField(extra?: ServerMessage[]) {
+      let messages: ServerMessage[] = [
+        [
+          'update-text',
+          `${container} .field[data-field="${field}"] .view-mode`,
+          value,
+        ],
+        [
+          'update-attrs',
+          `${container} .field[data-field="${field}"]`,
+          { 'data-mode': 'view' },
+        ],
+      ]
+      if (extra) {
+        messages.push(...extra)
+      }
+      context.ws.send(['batch', messages])
+    }
+
+    switch (field) {
+      case 'title':
+        if (value == slug) {
+          throw `demo validation error: slug cannot be the same as title`
+        }
+        items[itemIndex].title = value
+        commitField([
+          /* special case also update the page title */
+          ['update-text', '#Detail__id__ h1', value],
+          ['set-title', 'Details of ' + value],
+        ])
+        throw EarlyTerminate
+      default:
+        throw `Unknown field: ${field}`
+    }
+  } catch (error) {
+    if (error instanceof MessageException) {
+      context.ws.send(error.message)
+    } else if (error != EarlyTerminate) {
+      context.ws.send(showError(error))
+    }
+    throw EarlyTerminate
+  }
 }
 
 function SubmitResult(attrs: {}, context: DynamicContext) {
@@ -261,6 +404,12 @@ let routes = {
         node: DetailPage({ item }, context),
       }
     },
+  },
+  '/__url__/:slug/update/:field': {
+    title: apiEndpointTitle,
+    description: 'TODO',
+    node: <UpdateField />,
+    streaming: false,
   },
   '/__url__/add': {
     title: <Title t={addPageTitle} />,
