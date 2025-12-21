@@ -30,6 +30,9 @@ let style = Style(/* css */ `
 }
 `)
 
+let script = Script(/* js */ `
+`)
+
 let page = (
   <>
     {style}
@@ -37,6 +40,7 @@ let page = (
       <Content ionic="Items" />
       <Main />
     </Page>
+    {script}
   </>
 )
 

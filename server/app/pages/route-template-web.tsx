@@ -30,6 +30,9 @@ let style = Style(/* css */ `
 }
 `)
 
+let script = Script(/* js */ `
+`)
+
 let page = (
   <>
     {style}
@@ -37,6 +40,7 @@ let page = (
       <h1>{pageTitle}</h1>
       <Main />
     </div>
+    {script}
   </>
 )
 

@@ -32,6 +32,9 @@ let style = Style(/* css */ `
 }
 `)
 
+let script = Script(/* js */ `
+`)
+
 let page = (
   <>
     {style}
@@ -47,6 +50,7 @@ let page = (
       Items
       <Main />
     </ion-content>
+    {script}
   </>
 )
 
