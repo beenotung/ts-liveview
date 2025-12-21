@@ -21,7 +21,9 @@ export async function up(knex: Knex): Promise<void> {
 export async function down(knex: Knex): Promise<void> {
   {
     const rows = await knex.select('id', 'passcode').from('verification_code')
-    await knex.raw('alter table `verification_code` drop column `passcode`')
+    await knex.schema.alterTable('verification_code', table => {
+      table.dropColumn('passcode')
+    })
     await knex.raw(
       'alter table `verification_code` add column `passcode` text null',
     )
