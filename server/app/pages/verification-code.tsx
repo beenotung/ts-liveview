@@ -2,11 +2,7 @@ import { Random, digits } from '@beenotung/tslib/random.js'
 import { MINUTE } from '@beenotung/tslib/time.js'
 import { db } from '../../../db/db.js'
 import { HttpError } from '../../exception.js'
-import {
-  VerificationAttempt,
-  VerificationCode,
-  proxy,
-} from '../../../db/proxy.js'
+import { VerificationCode, proxy } from '../../../db/proxy.js'
 import { boolean, email, object, optional, string } from 'cast.ts'
 import { sendEmail } from '../../email.js'
 import { apiEndpointTitle, config, title } from '../../config.js'
@@ -20,14 +16,12 @@ import { Routes, StaticPageRoute } from '../routes.js'
 import { o } from '../jsx/jsx.js'
 import { Link, Redirect } from '../components/router.js'
 import { nodeToHTML } from '../jsx/html.js'
-import NotImplemented from './not-implemented.js'
 import Style from '../components/style.js'
 import { Node } from '../jsx/types.js'
 import { renderError } from '../components/error.js'
 import { debugLog } from '../../debug.js'
-import { filter, find, seedRow } from 'better-sqlite3-proxy'
-import { getContextCookies } from '../cookie.js'
-import { getAuthUserId, writeUserIdToCookie } from '../auth/user.js'
+import { filter, find } from 'better-sqlite3-proxy'
+import { writeUserIdToCookie } from '../auth/user.js'
 import { env } from '../../env.js'
 
 let log = debugLog('app:verification-code')
