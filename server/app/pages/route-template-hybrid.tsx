@@ -33,17 +33,6 @@ let style = Style(/* css */ `
 let script = Script(/* js */ `
 `)
 
-let page = (
-  <>
-    {style}
-    <Page id="__id__" title={pageTitle} backHref="/" backText="Home">
-      <Content ionic="Items" />
-      <Main />
-    </Page>
-    {script}
-  </>
-)
-
 // replace this array with proxy for database-backed persistence
 // e.g. let items = proxy.__table__
 let items = [
@@ -51,38 +40,44 @@ let items = [
   { title: 'iOS', slug: 'ios' },
 ]
 
-function Main(attrs: {}, context: Context) {
+function ListPage(attrs: {}, context: Context) {
   return (
-    <Content
-      web={
-        <>
-          <ul>
-            {mapArray(items, item => (
-              <li>
-                {item.title} ({item.slug})
-              </li>
-            ))}
-          </ul>
-          <Link href="/__url__/add">
-            <button>{addPageTitle}</button>
-          </Link>
-        </>
-      }
-      ionic={
-        <>
-          <ion-list>
-            {mapArray(items, item => (
-              <ion-item>
-                {item.title} ({item.slug})
-              </ion-item>
-            ))}
-          </ion-list>
-          <Link href="/__url__/add" tagName="ion-button">
-            {addPageTitle}
-          </Link>
-        </>
-      }
-    />
+    <>
+      {style}
+      <Page id="__id__" title={pageTitle} backHref="/" backText="Home">
+        <Content
+          web={
+            <>
+              <ul>
+                {mapArray(items, item => (
+                  <li>
+                    {item.title} ({item.slug})
+                  </li>
+                ))}
+              </ul>
+              <Link href="/__url__/add">
+                <button>{addPageTitle}</button>
+              </Link>
+            </>
+          }
+          ionic={
+            <>
+              <ion-list>
+                {mapArray(items, item => (
+                  <ion-item>
+                    {item.title} ({item.slug})
+                  </ion-item>
+                ))}
+              </ion-list>
+              <Link href="/__url__/add" tagName="ion-button">
+                {addPageTitle}
+              </Link>
+            </>
+          }
+        />
+      </Page>
+      {script}
+    </>
   )
 }
 
@@ -324,7 +319,7 @@ let routes = {
     menuText: pageTitle,
     title: <Title t={pageTitle} />,
     description: 'TODO',
-    node: page,
+    node: <ListPage />,
   },
   '/__url__/add': {
     title: <Title t={addPageTitle} />,

@@ -33,17 +33,6 @@ let style = Style(/* css */ `
 let script = Script(/* js */ `
 `)
 
-let page = (
-  <>
-    {style}
-    <div id="__id__">
-      <h1>{pageTitle}</h1>
-      <Main />
-    </div>
-    {script}
-  </>
-)
-
 // replace this array with proxy for database-backed persistence
 // e.g. let items = proxy.__table__
 let items = [
@@ -51,19 +40,24 @@ let items = [
   { title: 'iOS', slug: 'ios' },
 ]
 
-function Main(attrs: {}, context: Context) {
+function ListPage(attrs: {}, context: Context) {
   return (
     <>
-      <ul>
-        {mapArray(items, item => (
-          <li>
-            {item.title} ({item.slug})
-          </li>
-        ))}
-      </ul>
-      <Link href="/__url__/add">
-        <button>{addPageTitle}</button>
-      </Link>
+      {style}
+      <div id="__id__">
+        <h1>{pageTitle}</h1>
+        <ul>
+          {mapArray(items, item => (
+            <li>
+              {item.title} ({item.slug})
+            </li>
+          ))}
+        </ul>
+        <Link href="/__url__/add">
+          <button>{addPageTitle}</button>
+        </Link>
+      </div>
+      {script}
     </>
   )
 }
@@ -221,7 +215,7 @@ let routes = {
     menuText: pageTitle,
     title: <Title t={pageTitle} />,
     description: 'TODO',
-    node: page,
+    node: <ListPage />,
   },
   '/__url__/add': {
     title: <Title t={addPageTitle} />,

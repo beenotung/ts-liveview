@@ -35,25 +35,6 @@ let style = Style(/* css */ `
 let script = Script(/* js */ `
 `)
 
-let page = (
-  <>
-    {style}
-    <ion-header>
-      <ion-toolbar>
-        <IonBackButton href="/" />
-        <ion-title role="heading" aria-level="1">
-          {pageTitle}
-        </ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content id="__id__" class="ion-padding">
-      Items
-      <Main />
-    </ion-content>
-    {script}
-  </>
-)
-
 // replace this array with proxy for database-backed persistence
 // e.g. let items = proxy.__table__
 let items = [
@@ -61,17 +42,30 @@ let items = [
   { title: 'iOS', slug: 'ios' },
 ]
 
-function Main(attrs: {}, context: Context) {
+function ListPage(attrs: {}, context: Context) {
   return (
     <>
-      <ion-list>
-        {mapArray(items, item => (
-          <ion-item>
-            {item.title} ({item.slug})
-          </ion-item>
-        ))}
-      </ion-list>
-      <IonButton url="/__url__/add">{addPageTitle}</IonButton>
+      {style}
+      <ion-header>
+        <ion-toolbar>
+          <IonBackButton href="/" />
+          <ion-title role="heading" aria-level="1">
+            {pageTitle}
+          </ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content id="__id__" class="ion-padding">
+        Items
+        <ion-list>
+          {mapArray(items, item => (
+            <ion-item>
+              {item.title} ({item.slug})
+            </ion-item>
+          ))}
+        </ion-list>
+        <IonButton url="/__url__/add">{addPageTitle}</IonButton>
+      </ion-content>
+      {script}
     </>
   )
 }
@@ -252,7 +246,7 @@ let routes = {
   '/__url__': {
     title: <Title t={pageTitle} />,
     description: 'TODO',
-    node: page,
+    node: <ListPage />,
   },
   '/__url__/add': {
     title: <Title t={addPageTitle} />,
