@@ -1,6 +1,6 @@
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
-import { apiEndpointTitle } from '../../config.js'
+import { apiEndpointTitle, title } from '../../config.js'
 import Style from '../components/style.js'
 import {
   Context,
@@ -59,7 +59,9 @@ function ListPage(attrs: {}, context: Context) {
         <ion-list>
           {mapArray(items, item => (
             <ion-item>
-              {item.title} ({item.slug})
+              <Link href={`/__url__/${item.slug}`}>
+                {item.title} ({item.slug})
+              </Link>
             </ion-item>
           ))}
         </ion-list>
@@ -156,7 +158,7 @@ let addPage = (
                 margin-top: 0.25rem;
               "
             >
-              {env.ORIGIN}/<i id="previewSlug">alice-in-wonderland</i>
+              {env.ORIGIN}/__url__/<i id="previewSlug">alice-in-wonderland</i>
             </code>
           </p>
         </ion-list>
@@ -207,6 +209,40 @@ function Submit(attrs: {}, context: DynamicContext) {
   }
 }
 
+function DetailPage(
+  attrs: { item: (typeof items)[0] },
+  context: DynamicContext,
+) {
+  let { item } = attrs
+  return (
+    <>
+      <ion-header>
+        <ion-toolbar>
+          <IonBackButton href="/__url__" backText={pageTitle} />
+          <ion-title role="heading" aria-level="1">
+            {item.title}
+          </ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <dl>
+          <dt>
+            <Locale en="Title" zh_hk="標題" zh_cn="標題" />
+          </dt>
+          <dd>{item.title}</dd>
+          <dt>
+            <Locale en="Slug" zh_hk="短網址碼" zh_cn="短网址码" />
+          </dt>
+          <dd>
+            <code>{item.slug}</code>
+          </dd>
+        </dl>
+        <BackToLink href="/__url__" title={pageTitle} />
+      </ion-content>
+    </>
+  )
+}
+
 function SubmitResult(attrs: {}, context: DynamicContext) {
   let params = new URLSearchParams(context.routerMatch?.search)
   let error = params.get('error')
@@ -247,6 +283,24 @@ let routes = {
     title: <Title t={pageTitle} />,
     description: 'TODO',
     node: <ListPage />,
+  },
+  '/__url__/:slug': {
+    resolve(context) {
+      let slug = context.routerMatch?.params.slug
+      let item = items.find(item => item.slug === slug)
+      if (!item) {
+        return {
+          title: apiEndpointTitle,
+          description: '__title__ item not found',
+          node: renderError('__title__ item not found, slug: ' + slug, context),
+        }
+      }
+      return {
+        title: title('Details of ' + item.title),
+        description: 'Details of ' + item.title,
+        node: DetailPage({ item }, context),
+      }
+    },
   },
   '/__url__/add': {
     title: <Title t={addPageTitle} />,
