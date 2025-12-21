@@ -22,6 +22,8 @@ import { env } from '../../env.js'
 import { Script } from '../components/script.js'
 import { toSlug } from '../format/slug.js'
 import { sweetAlertPlugin } from '../../client-plugins.js'
+import { getAuthUser } from '../auth/user.js'
+import { proxy } from '../../../db/proxy.js'
 
 let pageTitle = <Locale en="__title__" zh_hk="__title__" zh_cn="__title__" />
 let addPageTitle = (
@@ -45,6 +47,7 @@ let items = [
 ]
 
 function ListPage(attrs: {}, context: Context) {
+  let user = getAuthUser(context)
   return (
     <>
       {style}
@@ -61,9 +64,15 @@ function ListPage(attrs: {}, context: Context) {
                   </li>
                 ))}
               </ul>
-              <Link href="/__url__/add">
-                <button>{addPageTitle}</button>
-              </Link>
+              {user ? (
+                <Link href="/__url__/add">
+                  <button>{addPageTitle}</button>
+                </Link>
+              ) : (
+                <p>
+                  You can add item after <Link href="/register">register</Link>.
+                </p>
+              )}
             </>
           }
           ionic={
@@ -77,9 +86,15 @@ function ListPage(attrs: {}, context: Context) {
                   </ion-item>
                 ))}
               </ion-list>
-              <Link href="/__url__/add" tagName="ion-button">
-                {addPageTitle}
-              </Link>
+              {user ? (
+                <Link href="/__url__/add" tagName="ion-button">
+                  {addPageTitle}
+                </Link>
+              ) : (
+                <p>
+                  You can add item after <Link href="/register">register</Link>.
+                </p>
+              )}
             </>
           }
         />
@@ -266,6 +281,11 @@ let addPage = (
     {addPageScript}
   </Page>
 )
+function AddPage(attrs: {}, context: DynamicContext) {
+  let user = getAuthUser(context)
+  if (!user) return <Redirect href="/login" />
+  return addPage
+}
 
 let submitParser = object({
   title: string({ minLength: 3, maxLength: 50 }),
@@ -274,6 +294,8 @@ let submitParser = object({
 
 function Submit(attrs: {}, context: DynamicContext) {
   try {
+    let user = getAuthUser(context)
+    if (!user) throw 'You must be logged in to submit ' + pageTitle
     let body = getContextFormBody(context)
     let input = submitParser.parse(body)
     let id = items.push({
@@ -379,7 +401,11 @@ function DetailPage(
                 <dt>
                   <Locale en="Title" zh_hk="標題" zh_cn="標題" />
                 </dt>
-                <dd class="field inline-edit-field" data-field="title" data-mode="view">
+                <dd
+                  class="field inline-edit-field"
+                  data-field="title"
+                  data-mode="view"
+                >
                   <span class="view-mode">{item.title}</span>
                   <span class="edit-mode">
                     <input
@@ -468,7 +494,9 @@ function DetailPage(
                 <ion-item>
                   <ion-input
                     label-placement="floating"
-                    label={<Locale en="Slug" zh_hk="短網址碼" zh_cn="短网址码" />}
+                    label={
+                      <Locale en="Slug" zh_hk="短網址碼" zh_cn="短网址码" />
+                    }
                     value={item.slug}
                     readonly
                   ></ion-input>
@@ -632,7 +660,7 @@ let routes = {
   '/__url__/add': {
     title: <Title t={addPageTitle} />,
     description: 'TODO',
-    node: addPage,
+    node: <AddPage />,
     streaming: false,
   },
   '/__url__/add/submit': {
