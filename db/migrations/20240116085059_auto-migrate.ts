@@ -28,8 +28,10 @@ export async function up(knex: Knex): Promise<void> {
 
 export async function down(knex: Knex): Promise<void> {
   let attempts = await knex.select('id', 'match_id').from('verification_code')
-  await knex.raw('alter table `verification_code` drop column `user_id`')
-  await knex.raw('alter table `verification_code` drop column `match_id`')
+  await knex.schema.alterTable('verification_code', table => {
+    table.dropColumn('user_id')
+    table.dropColumn('match_id')
+  })
   await knex.raw(
     'alter table `verification_attempt` add column `match_id` integer null references `verification_code`(`id`)',
   )
