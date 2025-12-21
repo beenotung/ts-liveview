@@ -69,14 +69,18 @@ function comboBoxToggleOption(event) {
   let auto_set = comboBox.getAttribute('auto-set')
   if (auto_set) {
     let input = comboBox.querySelector('.combo-box--input')
-    switch (auto_set) {
-      case 'label':
-        input.value = option.innerText.trim()
-        break
-      case 'value':
-        input.value = option.dataset.value
-        break
-    }
+    let selectedOptions = comboBox.querySelectorAll('.combo-box--option-selected')
+    let values = Array.from(selectedOptions).map(opt => {
+      switch (auto_set) {
+        case 'label':
+          return opt.innerText.trim()
+        case 'value':
+          return opt.dataset.value
+        default:
+          return opt.innerText.trim()
+      }
+    })
+    input.value = values.join(', ')
   }
 
   let customEvent = new CustomEvent('change', {
@@ -85,12 +89,11 @@ function comboBoxToggleOption(event) {
       option: getComboBoxOptionValue(option),
       selected: option.classList.contains('combo-box--option-selected'),
     },
-  })
-  comboBox.dispatchEvent(customEvent, {
     bubbles: true,
     composed: true,
     cancelable: true,
   })
+  comboBox.dispatchEvent(customEvent)
 
   if (comboBox.hasAttribute('close-on-select')) {
     requestAnimationFrame(() => {
@@ -196,6 +199,7 @@ export function ComboBox(attrs: {
   }[]
   'onchange'?: string
   'style'?: string
+  'id'?: string
   'class'?: string
   'skip-assets'?: boolean
   'placeholder'?: string
@@ -216,6 +220,7 @@ export function ComboBox(attrs: {
     <>
       {skipAssets ? null : ComboBoxStyle}
       <combo-box
+        id={attrs.id}
         class={className}
         style={attrs.style}
         onchange={attrs.onchange}

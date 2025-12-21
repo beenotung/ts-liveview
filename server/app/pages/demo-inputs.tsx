@@ -7,6 +7,7 @@ import Menu from '../components/menu.js'
 import { Switch } from '../components/router.js'
 import DemoSelect from './demo-inputs/demo-select.js'
 import DemoSingleFieldForm from './demo-inputs/demo-single-field-form.js'
+import DemoComboBox from './demo-inputs/demo-combo-box.js'
 import SourceCode from '../components/source-code.js'
 
 const log = debug('demo-single-field-form.tsx')
@@ -40,6 +41,7 @@ let content = (
         <Menu
           routes={[
             { url: '/inputs/select', menuText: '<Select/>' },
+            { url: '/inputs/combo-box', menuText: '<ComboBox/>' },
             {
               url: '/inputs/single-field-form',
               menuText: 'newSingleFieldForm()',
@@ -51,6 +53,7 @@ let content = (
       {Switch({
         '/inputs': DemoSelect,
         '/inputs/select': DemoSelect,
+        '/inputs/combo-box': DemoComboBox,
         '/inputs/single-field-form': DemoSingleFieldForm.content,
       })}
     </fieldset>
@@ -69,6 +72,12 @@ let routes = {
     title: title('Demo <Select/> components'),
     description:
       'Demonstrate building select and option elements with <Select/>',
+    node: content,
+  },
+  '/inputs/combo-box': {
+    title: title('Demo <ComboBox/> component'),
+    description:
+      'Demonstrate searchable dropdown component with single or multiple selection',
     node: content,
   },
   '/inputs/single-field-form': {
