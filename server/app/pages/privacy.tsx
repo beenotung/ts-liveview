@@ -220,10 +220,11 @@ let page = (
       <Locale
         en={
           <>
-            We honor the Do Not Track (DNT) browser preference. When you enable DNT
-            in your browser settings, we automatically disable geolocation data and
-            user agent collection for all your visits. This preference is respected
-            immediately and requires no additional action on your part.
+            We honor the Do Not Track (DNT) browser preference. When you enable
+            DNT in your browser settings, we automatically disable geolocation
+            data and user agent collection for all your visits. This preference
+            is respected immediately and requires no additional action on your
+            part.
           </>
         }
         zh_hk={
