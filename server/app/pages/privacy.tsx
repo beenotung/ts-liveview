@@ -213,6 +213,35 @@ let page = (
     </p>
 
     <h2>
+      <Locale en="Do Not Track" zh_hk="請勿追蹤" zh_cn="请勿追踪" />
+    </h2>
+
+    <p>
+      <Locale
+        en={
+          <>
+            We honor the Do Not Track (DNT) browser preference. When you enable DNT
+            in your browser settings, we automatically disable geolocation data
+            collection for all your visits. This preference is respected immediately
+            and requires no additional action on your part.
+          </>
+        }
+        zh_hk={
+          <>
+            我們尊重「請勿追蹤」(DNT) 瀏覽器偏好設定。當您在瀏覽器設置中啟用 DNT
+            後，我們會自動停止為您的所有訪問收集地理位置數據。此偏好設定會立即生效，無需您採取任何額外操作。
+          </>
+        }
+        zh_cn={
+          <>
+            我们尊重「请勿追踪」(DNT) 浏览器偏好设置。当您在浏览器设置中启用 DNT
+            后，我们会自动停止为您的所有访问收集地理位置数据。此偏好设置会立即生效，无需您采取任何额外操作。
+          </>
+        }
+      />
+    </p>
+
+    <h2>
       <Locale en="Your Rights" zh_hk="您的權利" zh_cn="您的权利" />
     </h2>
 

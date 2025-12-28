@@ -15,6 +15,12 @@ export function logRequest(
     session_id,
   })
 
+  // Respect Do Not Track header - skip geolocation logging if DNT is enabled
+  let dnt = req.headers['dnt']
+  if (dnt === '1') {
+    return
+  }
+
   // Asynchronously fetch and store geolocation data (without storing IP)
   let ip = req.ip
   if (ip) {
