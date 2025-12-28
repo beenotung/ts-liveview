@@ -17,7 +17,6 @@ import { EarlyTerminate, MessageException } from '../exception.js'
 import { getWSSession } from './session.js'
 import { Flush } from './components/flush.js'
 import { LayoutType, config } from '../config.js'
-import Stats from './components/stats.js'
 import { MuteConsole, Script } from './components/script.js'
 import {
   matchRoute,
@@ -35,9 +34,7 @@ import { HTMLStream } from './jsx/stream.js'
 import { getWsCookies } from './cookie.js'
 import Navbar from './components/navbar.js'
 import Sidebar from './components/sidebar.js'
-import { logRequest } from './log.js'
 import { WindowStub } from '../../client/internal.js'
-import { updateRequestSession } from '../../db/request-log.js'
 import { Link } from './components/router.js'
 import ErrorLog from './store/error-log.js'
 
@@ -195,7 +192,6 @@ function Footer(attrs: { style?: string }) {
           Beeno
         </a>
       </div>
-      <Stats />
     </footer>
   )
 }
@@ -337,7 +333,6 @@ export let onWsMessage: OnWsMessage = async (event, ws, _wss) => {
       session.timeZone = timeZone
     }
     session.timezoneOffset = event[4]
-    updateRequestSession(ws.session_id, session)
     let cookie = event[5]
     if (cookie) {
       getWsCookies(ws.ws).unsignedCookies = Object.fromEntries(
@@ -351,13 +346,11 @@ export let onWsMessage: OnWsMessage = async (event, ws, _wss) => {
     }
     navigation_type = event[6]
     navigation_method = event[7]
-    logRequest(ws.request, 'ws', url, ws.session_id)
   } else if (event[0][0] === '/') {
     event = event as ClientRouteMessage
     eventType = 'route'
     url = event[0]
     args = event.slice(1)
-    logRequest(ws.request, 'ws', url, ws.session_id)
   } else {
     console.log('unknown type of ws message:', event)
     return
