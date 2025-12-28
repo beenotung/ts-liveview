@@ -11,7 +11,7 @@ import { ServerMessage } from '../../../client/types.js'
 import { format_time_duration } from '@beenotung/tslib/format.js'
 import { Context } from '../context.js'
 import { EarlyTerminate } from '../../exception.js'
-import { Redirect } from '../components/router.js'
+import { Link, Redirect } from '../components/router.js'
 
 // Calling <Component/> will transform the JSX into AST for each rendering.
 // You can reuse a pre-compute AST like `let component = <Component/>`.
@@ -59,6 +59,21 @@ let home = (
         zh_hk={introduction_zh_hk}
         zh_cn={introduction_zh_cn}
       />
+      {/* ------------------------------ */}
+      <h2>
+        <Locale en="Database Demo" zh_hk="數據庫示範" zh_cn="数据库示范" />
+      </h2>
+      <p>
+        <Locale en="Try the " zh_hk="試試 " zh_cn="试试 " />
+        <Link href="/task-demo">
+          <Locale en="Task Demo" zh_hk="任務示範" zh_cn="任务示范" />
+        </Link>
+        <Locale
+          en=" to see a simple CRUD example with database."
+          zh_hk=" 來查看一個簡單的數據庫 CRUD 範例。"
+          zh_cn=" 来查看一个简单的数据库 CRUD 示例。"
+        />
+      </p>
       {/* ------------------------------ */}
       <h2>Demo updates from server-side</h2>
       <p>The uptime is updated by server every second.</p>
