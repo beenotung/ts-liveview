@@ -8,6 +8,7 @@ import type { DynamicContext, ExpressContext } from './context'
 import { o } from './jsx/jsx.js'
 import type { Node } from './jsx/types'
 import Home from './pages/home.js'
+import TaskDemo from './pages/task-demo.js'
 import NotFoundPageRoute from './pages/not-found.js'
 import { then } from '@beenotung/tslib/result.js'
 import type { MenuRoute } from './components/menu'
@@ -66,6 +67,7 @@ export type Routes = Record<string, PageRoute>
 // TODO direct support alternative urls instead of having to repeat the entry
 let routeDict = {
   ...Home.routes,
+  ...TaskDemo.routes,
   ...DemoPlugin.routes,
   ...UILanguage.routes,
 } satisfies Routes
