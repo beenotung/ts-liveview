@@ -1,13 +1,13 @@
 import type WebSocket from 'ws'
 import type { Server } from 'ws'
 import type { ClientMessage, ServerMessage } from '../../client/types'
-import { Request } from 'express'
+import type { Request } from 'express'
 
 export type ManagedWebsocket = {
   ws: WebSocket
   wss: Server
   request: Request
-  session_id: number
+  session_id: string
   send(event: ServerMessage): void
   close(code?: number, reason?: Buffer): void
 }
