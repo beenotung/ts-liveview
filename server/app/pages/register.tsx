@@ -191,6 +191,26 @@ let verifyFormBody = (
 
 let guestView = (
   <>
+    <p>
+      <Locale
+        en={
+          <>
+            By continuing to use this service, you agree to our{' '}
+            <a href="/privacy">privacy policy</a>.
+          </>
+        }
+        zh_hk={
+          <>
+            繼續使用本服務即表示您同意我們的<a href="/privacy">私隱政策</a>。
+          </>
+        }
+        zh_cn={
+          <>
+            继续使用本服务即表示您同意我们的<a href="/privacy">隐私政策</a>。
+          </>
+        }
+      />
+    </p>
     {config.use_social_login && (
       <>
         <div class="separator-line flex-center">
