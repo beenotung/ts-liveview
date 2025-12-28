@@ -2,8 +2,14 @@ import type { ServerMessage } from '../../client/types'
 import { apiEndpointTitle } from '../config.js'
 import { EarlyTerminate, MessageException, HttpError } from '../exception.js'
 import { renderError, showError } from './components/error.js'
-import type { Context, ExpressContext, WsContext } from './context'
+import type {
+  Context,
+  ExpressContext,
+  WsContext,
+  DynamicContext,
+} from './context'
 import type { PageRoute, StaticPageRoute } from './routes'
+import type { Node } from './jsx/types'
 
 export type ExpressAPI<T extends object> = (
   context: ExpressContext,
@@ -72,6 +78,39 @@ export function wsRoute(options: { description: string; api: WsAPI }) {
   } satisfies PageRoute & {
     api: WsAPI
   }
+}
+
+export type UnifiedAPI = (
+  context: DynamicContext,
+) =>
+  | Promise<Node | { message: ServerMessage }>
+  | Node
+  | { message: ServerMessage }
+
+export function apiRoute(options: { description: string; api: UnifiedAPI }) {
+  return {
+    title: apiEndpointTitle,
+    description: options.description,
+    streaming: false,
+    async resolve(context: DynamicContext): Promise<StaticPageRoute> {
+      let result = await options.api(context)
+      if (isMessageObject(result)) {
+        throw new MessageException(result.message)
+      }
+      return {
+        title: apiEndpointTitle,
+        description: options.description,
+        node: result,
+      }
+    },
+    api: options.api,
+  } satisfies PageRoute & {
+    api: UnifiedAPI
+  }
+}
+
+function isMessageObject(value: unknown): value is { message: ServerMessage } {
+  return value !== null && typeof value === 'object' && 'message' in value
 }
 
 export function errorRoute(
