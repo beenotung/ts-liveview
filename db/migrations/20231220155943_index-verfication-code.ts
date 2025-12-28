@@ -1,5 +1,5 @@
 import type { Knex } from 'knex'
-import { dropIndexIfExists } from '../migrate-helpers'
+import { dropIndexIfExists } from '../schema-helpers'
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.alterTable('verification_code', table => {
