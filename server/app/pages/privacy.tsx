@@ -139,6 +139,44 @@ let page = (
       />
     </p>
 
+    <h3>
+      <Locale
+        en="Authentication Data"
+        zh_hk="身份驗證資料"
+        zh_cn="身份验证资料"
+      />
+    </h3>
+
+    <p>
+      <Locale
+        en={
+          <>
+            This includes login identifiers such as your email address or phone
+            number used to authenticate your account. Passwords are stored
+            securely as hashed values and cannot be recovered. When you register
+            or sign in, we collect contact information (for example, your email
+            address and phone number) together with a hashed password or
+            verification code. To send verification codes, we transmit your
+            email address to your email provider and your phone number to SMS
+            service providers. This is required for account verification. SMS
+            messages are delivered via Wavecell.
+          </>
+        }
+        zh_hk={
+          <>
+            此為登入識別資料，例如您的電子郵件或電話號碼，用於驗證您的帳戶。密碼以雜湊形式安全儲存，且不可回復。當您註冊或登入時，我們會收集聯絡資訊（例如您的電子郵件地址與電話號碼），並搭配雜湊密碼或驗證碼。為了發送驗證碼，我們會將您的電子郵件地址傳送給您的電子郵件提供商，並將您的電話號碼傳送給短信服務提供商。這是帳戶驗證所必需的。簡訊由
+            Wavecell 提供。
+          </>
+        }
+        zh_cn={
+          <>
+            这包括用于账户认证的邮箱地址或电话号码等登录标识。密码以哈希形式安全存储，且不可恢复。当您注册或登录时，我们会收集联系信息（例如您的电子邮件地址和电话号码），并附带哈希密码或验证码。为了发送验证码，我们会将您的电子邮件地址传送给您的电子邮件提供商，并将您的电话号码传送给短信服务提供商。这是账户验证所必需的。短信通过
+            Wavecell 发送。
+          </>
+        }
+      />
+    </p>
+
     <h2>
       <Locale
         en="How We Use Your Information"
