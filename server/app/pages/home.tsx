@@ -213,6 +213,24 @@ let content = (
       </Link>
     </p>
 
+    <h2>
+      <Locale en="Privacy Policy" zh_hk="私隱政策" zh_cn="隐私政策" />
+    </h2>
+    <p>
+      <Locale
+        en="This website collects geolocation data (country and city level) and browser information for analytics purposes. Exact IP addresses are not stored."
+        zh_hk="本網站會收集地理位置數據（國家和城市級別）和瀏覽器資訊，用於分析目的。精確的 IP 地址不會被存儲。"
+        zh_cn="本网站会收集地理位置数据（国家和城市级别）和浏览器信息，用于分析目的。精确的 IP 地址不会被存储。"
+      />
+    </p>
+    <Link href="/privacy">
+      <Locale
+        en="Learn more about our privacy policy."
+        zh_hk="了解更多關於我們的私隱政策。"
+        zh_cn="了解更多关于我们的隐私政策。"
+      />
+    </Link>
+
     <SourceCode page="home.tsx" />
   </div>
 )

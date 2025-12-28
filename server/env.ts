@@ -12,6 +12,7 @@ export let env = {
   EPOCH: 1, // to distinct initial run or restart in serve mode
   UPLOAD_DIR: 'uploads',
   ORIGIN: '',
+  FIND_IP_API_KEY: 'skip', // Optional: API key for findip.net geolocation service
 }
 applyDefaultEnv()
 

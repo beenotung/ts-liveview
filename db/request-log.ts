@@ -48,10 +48,12 @@ export function storeRequestLog(request: {
     method_id: getMethodId(request.method),
     url_id: getUrlId(request.url),
     user_agent_id: user_agent ? getUserAgentId(user_agent) : null,
+    geo_ip_id: null,
     request_session_id: request.session_id,
     timestamp: Date.now(),
   })
   checkNewRequestLog(log_id)
+  return log_id
 }
 
 export function newRequestSession() {

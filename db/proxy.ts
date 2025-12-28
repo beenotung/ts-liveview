@@ -17,6 +17,18 @@ export type UaType = {
   count: number
 }
 
+export type GeoIpParts = {
+  id?: null | number
+  hash: string
+  content: string
+}
+
+export type GeoIp = {
+  id?: null | number
+  hash: string
+  content: string
+}
+
 export type RequestSession = {
   id?: null | number
   language: null | string
@@ -53,6 +65,8 @@ export type RequestLog = {
   url?: Url
   user_agent_id: null | number
   user_agent?: UserAgent
+  geo_ip_id: null | number
+  geo_ip?: GeoIp
   request_session_id: null | number
   request_session?: RequestSession
   timestamp: number
@@ -62,6 +76,8 @@ export type DBProxy = {
   method: Method[]
   url: Url[]
   ua_type: UaType[]
+  geo_ip_parts: GeoIpParts[]
+  geo_ip: GeoIp[]
   request_session: RequestSession[]
   ua_bot: UaBot[]
   user_agent: UserAgent[]
@@ -75,6 +91,8 @@ export let proxy = proxySchema<DBProxy>({
     method: [],
     url: [],
     ua_type: [],
+    geo_ip_parts: [],
+    geo_ip: [],
     request_session: [],
     ua_bot: [],
     user_agent: [
@@ -88,6 +106,7 @@ export let proxy = proxySchema<DBProxy>({
       ['method', { field: 'method_id', table: 'method' }],
       ['url', { field: 'url_id', table: 'url' }],
       ['user_agent', { field: 'user_agent_id', table: 'user_agent' }],
+      ['geo_ip', { field: 'geo_ip_id', table: 'geo_ip' }],
       ['request_session', { field: 'request_session_id', table: 'request_session' }],
     ],
   },

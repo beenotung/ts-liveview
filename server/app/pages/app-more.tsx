@@ -99,7 +99,7 @@ let page = (
             />
           </ion-label>
         </Link>
-        <Link tagName="ion-item" href="/privacy" disabled>
+        <Link tagName="ion-item" href="/privacy">
           <ion-icon slot="start" name="glasses" />
           <ion-label>
             <Locale en="Privacy Policy" zh_hk="私隱政策" zh_cn="隐私政策" />

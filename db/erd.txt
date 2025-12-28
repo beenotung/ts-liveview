@@ -21,6 +21,7 @@ id integer PK
 method_id integer FK >- method.id
 url_id integer FK >- url.id
 user_agent_id integer NULL FK >- user_agent.id
+geo_ip_id integer NULL FK >- geo_ip.id
 request_session_id integer NULL FK >0- request_session.id
 timestamp integer
 
@@ -35,6 +36,20 @@ url
 ---
 id integer PK
 url text unique
+
+
+geo_ip_parts
+------------
+id integer PK
+hash text unique
+content text
+
+
+geo_ip
+------
+id integer PK
+hash text unique
+content text
 
 
 user_agent
@@ -85,6 +100,8 @@ timezone_offset integer NULL
 # request_log (50, 120)
 # method (450, 15)
 # url (450, 130)
+# geo_ip_parts (46, 530)
+# geo_ip (45, 386)
 # user_agent (450, 245)
 # ua_type (845, 250)
 # ua_bot (845, 410)

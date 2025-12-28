@@ -20,6 +20,10 @@ const log = debugLog('index.ts')
 log.enabled = true
 
 const app = express()
+
+// Enable trusted proxy behavior to use req.ip correctly
+app.set('trust proxy', true)
+
 const server = http.createServer(app)
 const wss = new WebSocketServer({ server })
 listenWSSCookie(wss)
