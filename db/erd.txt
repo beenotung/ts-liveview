@@ -15,6 +15,13 @@
 ////////////////////////////////////
 
 
+task
+----
+id integer PK
+title text
+completed boolean
+
+
 # zoom: 1.000
 # view: (0, 0)
 # text-bg: #6495ed
@@ -23,3 +30,4 @@
 # diagram-text: #000000
 # table-bg: #ffffff
 # table-text: #000000
+# task (53, 41)
