@@ -219,9 +219,9 @@ let content = (
 
     <p>
       <Locale
-        en="This website collects geolocation data (country and city level) and browser information for analytics purposes. Exact IP addresses are not stored. We honor the Do Not Track (DNT) browser preference - when enabled, geolocation data collection is automatically disabled for your visits."
-        zh_hk="本網站會收集地理位置數據（國家和城市級別）和瀏覽器資訊，用於分析目的。精確的 IP 地址不會被存儲。我們尊重「請勿追蹤」(DNT) 瀏覽器偏好設定 - 啟用後，我們會自動停止為您的訪問收集地理位置數據。"
-        zh_cn="本网站会收集地理位置数据（国家和城市级别）和浏览器信息，用于分析目的。精确的 IP 地址不会被存储。我们尊重「请勿追踪」(DNT) 浏览器偏好设置 - 启用后，我们会自动停止为您的访问收集地理位置数据。"
+        en="This website collects geolocation data (country and city level) and browser information for analytics purposes. Exact IP addresses are not stored. We honor the Do Not Track (DNT) browser preference - when enabled, geolocation and user agent data collection is automatically disabled for your visits."
+        zh_hk="本網站會收集地理位置數據（國家和城市級別）和瀏覽器資訊，用於分析目的。精確的 IP 地址不會被存儲。我們尊重「請勿追蹤」(DNT) 瀏覽器偏好設定 - 啟用後，我們會自動停止為您的訪問收集地理位置數據和用戶代理資訊。"
+        zh_cn="本网站会收集地理位置数据（国家和城市级别）和浏览器信息，用于分析目的。精确的 IP 地址不会被存储。我们尊重「请勿追踪」(DNT) 浏览器偏好设置 - 启用后，我们会自动停止为您的访问收集地理位置数据和用户代理信息。"
       />
     </p>
     <Link href="/privacy">

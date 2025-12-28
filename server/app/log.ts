@@ -8,15 +8,18 @@ export function logRequest(
   url: string,
   session_id: number | null,
 ) {
+  // Respect Do Not Track header - skip tracking data collection if DNT is enabled
+  let dnt = req.headers['dnt']
+  let user_agent = dnt === '1' ? null : req.headers['user-agent'] || null
+
   let log_id = storeRequestLog({
     method,
     url,
-    user_agent: req.headers['user-agent'] || null,
+    user_agent,
     session_id,
   })
 
-  // Respect Do Not Track header - skip geolocation logging if DNT is enabled
-  let dnt = req.headers['dnt']
+  // Skip geolocation logging if DNT is enabled
   if (dnt === '1') {
     return
   }
