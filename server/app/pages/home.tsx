@@ -6,6 +6,7 @@ import { ResolvedPageRoute, Routes } from '../routes.js'
 import { title } from '../../config.js'
 import Style from '../components/style.js'
 import { Locale, LocaleVariants } from '../components/locale.js'
+import { Link } from '../components/router.js'
 
 // Calling <Component/> will transform the JSX into AST for each rendering.
 // You can reuse a pre-compute AST like `let component = <Component/>`.
