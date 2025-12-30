@@ -1,7 +1,7 @@
 import { o } from '../jsx/jsx.js'
 import { NodeList } from '../jsx/types.js'
 import { ThemeColor } from './page.js'
-import { Link } from './router.js'
+import { Link, LinkAttrs } from './router.js'
 
 export function IonButton(
   attrs: {
@@ -18,7 +18,8 @@ export function IonButton(
     slot?: 'start' | 'end'
     hidden?: boolean | undefined
     rel?: 'nofollow'
-  } & object,
+  } & Omit<LinkAttrs, 'tagName' | 'href'> &
+    object,
 ) {
   let { url, children, disabled, ...rest } = attrs
   return (
