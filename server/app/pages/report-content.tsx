@@ -231,28 +231,34 @@ function ReportPage(attrs: {}, context: Context) {
             <Locale en="Problem Categories" zh_hk="問題分類" zh_cn="问题分类" />
           </ion-list-header>
           <ion-radio-group name="type">
-            {mapArray(reasonCategories, category => (
-              <ion-item-group>
-                <ion-item-divider>
-                  <Locale
-                    en={category.en}
-                    zh_hk={category.zh_hk}
-                    zh_cn={category.zh_cn}
-                  />
-                </ion-item-divider>
-                {mapArray(category.types, type => (
-                  <ion-item>
-                    <ion-radio value={type.code}>
+            <ion-accordion-group>
+              {mapArray(reasonCategories, category => (
+                <ion-accordion value={category.code}>
+                  <ion-item slot="header">
+                    <ion-label>
                       <Locale
-                        en={type.en}
-                        zh_hk={type.zh_hk}
-                        zh_cn={type.zh_cn}
+                        en={category.en}
+                        zh_hk={category.zh_hk}
+                        zh_cn={category.zh_cn}
                       />
-                    </ion-radio>
+                    </ion-label>
                   </ion-item>
-                ))}
-              </ion-item-group>
-            ))}
+                  {mapArray(category.types, type => (
+                    <ion-item slot="content">
+                      <ion-radio value={type.code}>
+                        <span class="ion-text-wrap">
+                          <Locale
+                            en={type.en}
+                            zh_hk={type.zh_hk}
+                            zh_cn={type.zh_cn}
+                          />
+                        </span>
+                      </ion-radio>
+                    </ion-item>
+                  ))}
+                </ion-accordion>
+              ))}
+            </ion-accordion-group>
           </ion-radio-group>
           <ion-list-header>
             <Locale en="Additional Details" zh_hk="補充資料" zh_cn="补充资料" />
