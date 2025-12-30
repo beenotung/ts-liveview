@@ -98,6 +98,12 @@ let page = (
             <Locale en="Privacy Policy" zh_hk="私隱政策" zh_cn="隐私政策" />
           </ion-label>
         </Link>
+        <Link tagName="ion-item" href="/report-content?return_url=/app/more">
+          <ion-icon slot="start" name="warning" />
+          <ion-label>
+            <Locale en="Report Content" zh_hk="檢舉內容" zh_cn="举报内容" />
+          </ion-label>
+        </Link>
         <ion-item>
           <ion-icon slot="start" name="server" />
           <ion-label>
