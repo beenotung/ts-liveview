@@ -73,6 +73,26 @@ let content = (
     </p>
 
     <h2>
+      <Locale en="Content Reporting" zh_hk="內容檢舉" zh_cn="内容举报" />
+    </h2>
+    <ul>
+      <li>
+        <Link href="/report-content?return_url=/">
+          <Locale en="Report Content" zh_hk="檢舉內容" zh_cn="举报内容" />
+        </Link>
+      </li>
+      <li>
+        <Link href="/report-content/review">
+          <Locale
+            en="Review Content Report"
+            zh_hk="審視檢舉"
+            zh_cn="审查检举"
+          />
+        </Link>
+      </li>
+    </ul>
+
+    <h2>
       <Locale en="Privacy Policy" zh_hk="私隱政策" zh_cn="隐私政策" />
     </h2>
 
