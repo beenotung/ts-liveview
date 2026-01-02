@@ -3,7 +3,6 @@ import {
   getOtherUserAgents,
   getUAStatsProgress,
 } from '../../../db/user-agent.js'
-import { mapArray } from '../components/fragment.js'
 import { Locale, Title } from '../components/locale.js'
 import SourceCode from '../components/source-code.js'
 import Style from '../components/style.js'
