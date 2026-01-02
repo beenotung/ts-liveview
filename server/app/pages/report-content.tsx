@@ -35,6 +35,7 @@ type ReasonCategory = {
   en: string
   zh_hk: string
   zh_cn: string
+  icon: string
   types: ReasonType[]
 }
 
@@ -43,6 +44,7 @@ type ReasonType = {
   en: string
   zh_hk: string
   zh_cn: string
+  icon: string
 }
 
 let reasonCategories: ReasonCategory[] = [
@@ -51,24 +53,28 @@ let reasonCategories: ReasonCategory[] = [
     en: 'Emergency & Safety',
     zh_hk: '緊急及安全',
     zh_cn: '紧急及安全',
+    icon: 'alert-circle',
     types: [
       {
         code: 'child_safety',
         en: 'Problem involving someone under 18',
         zh_hk: '涉及未成年人士的問題',
         zh_cn: '涉及未成年人士的问题',
+        icon: 'shield',
       },
       {
         code: 'self_harm',
         en: 'Suicide or self-harm',
         zh_hk: '自殺或自殘',
         zh_cn: '自杀或自残',
+        icon: 'heart-dislike',
       },
       {
         code: 'violence',
         en: 'Violence or gore',
         zh_hk: '暴力或血腥內容',
         zh_cn: '暴力或血腥内容',
+        icon: 'alert-circle',
       },
     ],
   },
@@ -77,24 +83,28 @@ let reasonCategories: ReasonCategory[] = [
     en: 'Abuse & Harassment',
     zh_hk: '濫用及騷擾',
     zh_cn: '滥用及骚扰',
+    icon: 'shield',
     types: [
       {
         code: 'harassment',
         en: 'Bullying, harassment or abuse',
         zh_hk: '欺凌、騷擾或虐待',
         zh_cn: '欺凌、骚扰或虐待',
+        icon: 'ban',
       },
       {
         code: 'hate',
         en: 'Hate speech or discrimination',
         zh_hk: '仇恨言論或歧視',
         zh_cn: '仇恨言论或歧视',
+        icon: 'close-circle',
       },
       {
         code: 'disturbing',
         en: 'Disturbing or distressing content',
         zh_hk: '令人不安或困擾的內容',
         zh_cn: '令人不安或困扰的内容',
+        icon: 'alert',
       },
     ],
   },
@@ -103,24 +113,28 @@ let reasonCategories: ReasonCategory[] = [
     en: 'Scams & Deception',
     zh_hk: '詐騙及欺詐',
     zh_cn: '诈骗及欺诈',
+    icon: 'warning',
     types: [
       {
         code: 'scam',
         en: 'Scam or fraud',
         zh_hk: '詐騙或欺詐',
         zh_cn: '诈骗或欺诈',
+        icon: 'warning',
       },
       {
         code: 'impersonation',
         en: 'Impersonation or fake accounts',
         zh_hk: '冒充或假冒帳號',
         zh_cn: '冒充或假冒账号',
+        icon: 'person-circle',
       },
       {
         code: 'misinformation',
         en: 'False or misleading information',
         zh_hk: '虛假或誤導性資訊',
         zh_cn: '虚假或误导性信息',
+        icon: 'document',
       },
     ],
   },
@@ -129,30 +143,35 @@ let reasonCategories: ReasonCategory[] = [
     en: 'Prohibited Content & Activities',
     zh_hk: '違規內容及行為',
     zh_cn: '违规内容及行为',
+    icon: 'ban',
     types: [
       {
         code: 'illegal',
         en: 'Illegal content or activities',
         zh_hk: '非法內容或活動',
         zh_cn: '非法内容或活动',
+        icon: 'ban',
       },
       {
         code: 'restricted_items',
         en: 'Selling or promoting restricted items or services',
         zh_hk: '銷售或推廣受限制物品或服務',
         zh_cn: '销售或推广受限制物品或服务',
+        icon: 'close-circle',
       },
       {
         code: 'adult',
         en: 'Adult content',
         zh_hk: '成人內容',
         zh_cn: '成人内容',
+        icon: 'eye-off',
       },
       {
         code: 'ip',
         en: 'Intellectual property violation',
         zh_hk: '侵犯知識產權',
         zh_cn: '侵犯知识产权',
+        icon: 'copy',
       },
     ],
   },
@@ -161,18 +180,21 @@ let reasonCategories: ReasonCategory[] = [
     en: 'Content Quality & Relevance',
     zh_hk: '內容質素及相關性',
     zh_cn: '内容质量及相关性',
+    icon: 'document',
     types: [
       {
         code: 'spam',
         en: 'Spam or irrelevant content',
         zh_hk: '垃圾訊息或不相關內容',
         zh_cn: '垃圾信息或不相关内容',
+        icon: 'trash',
       },
       {
         code: 'unwanted',
         en: "I don't want to see this",
         zh_hk: '我不想看到這個內容',
         zh_cn: '我不想看到这个内容',
+        icon: 'eye-off',
       },
     ],
   },
@@ -310,6 +332,12 @@ function ReportPage(attrs: {}, context: Context) {
                     {mapArray(reasonCategories, category => (
                       <ion-accordion value={category.code}>
                         <ion-item slot="header">
+                          <ion-icon
+                            slot="start"
+                            name={category.icon}
+                            size="small"
+                            color="medium"
+                          />
                           <ion-label>
                             <Locale
                               en={category.en}
@@ -320,7 +348,13 @@ function ReportPage(attrs: {}, context: Context) {
                         </ion-item>
                         {mapArray(category.types, type => (
                           <ion-item slot="content">
-                            <ion-radio value={type.code}>
+                            <ion-icon
+                              slot="start"
+                              name={type.icon}
+                              size="small"
+                              color="warning"
+                            />
+                            <ion-radio value={type.code} color="warning">
                               <span class="ion-text-wrap">
                                 <Locale
                                   en={type.en}
