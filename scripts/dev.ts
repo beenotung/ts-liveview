@@ -132,15 +132,36 @@ async function postBuild() {
 }
 
 async function fix() {
+  let last_line = ''
+  function update(new_line: string) {
+    if (last_line) {
+      process.stdout.write(
+        '\r' + ' '.repeat(last_line.length) + '\r' + new_line,
+      )
+    } else {
+      process.stdout.write(new_line)
+    }
+    last_line = new_line
+  }
+
   let ps = []
-  ps.push(fix_proxy())
+  ps.push(fix_proxy({ update }))
   // add custom fixes here
   await Promise.all(ps)
+
+  if (last_line) {
+    update('')
+    console.log()
+  }
 }
 
-async function fix_proxy() {
+type FixContext = {
+  update(new_line: string): void
+}
+
+async function fix_proxy(context: FixContext) {
   let file = path.join('dist', 'db', 'proxy.js')
-  await wait_file(file)
+  await wait_file(context, file)
   let text = fs.readFileSync(file).toString()
   if (!text.includes(`import { db } from "./db"`)) return
   text = text.replace(
@@ -150,14 +171,36 @@ async function fix_proxy() {
   fs.writeFileSync(file, text)
 }
 
-async function wait_file(file: string) {
-  let wait_intervals = [10, 20, 50, 100, 200, 250, 500]
+async function wait_file(context: FixContext, file: string) {
+  let wait_intervals = [10, 20, 50, 100, 200, 250, 500, 1000]
   let default_interval = wait_intervals.pop()!
+  let start_time = Date.now()
   while (!fs.existsSync(file)) {
+    let passed = Date.now() - start_time
+    if (passed === 0) {
+      context.update(`waiting file: ${file}`)
+    } else {
+      context.update(`waiting file: ${file} (for ${format_time(passed)})`)
+    }
     let interval = wait_intervals.shift() || default_interval
-    console.log(`waiting file: ${file} (for ${interval}ms)`)
     await new Promise(resolve => setTimeout(resolve, interval))
   }
+}
+
+function format_time(time: number) {
+  if (time < 1000) {
+    return time + 'ms'
+  }
+  if (time < 1000 * 2) {
+    return (time / 1000).toFixed(1) + 's'
+  }
+  if (time < 1000 * 60) {
+    return (time / 1000).toFixed(0) + 's'
+  }
+  if (time < 1000 * 60 * 60) {
+    return (time / 1000 / 60).toFixed(1) + 'min'
+  }
+  return (time / 1000 / 60 / 60).toFixed(1) + 'hr'
 }
 
 let stopServer = () => Promise.resolve()
