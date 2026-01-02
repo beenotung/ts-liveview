@@ -149,6 +149,38 @@ export function getContextTimezone(context: Context): string | undefined {
   }
 }
 
+export function getContextUserAgent(context: Context): string | undefined {
+  if (context.type === 'express') {
+    return context.req.headers['user-agent']
+  }
+  if (context.type === 'ws') {
+    return context.session.ws.request.headers['user-agent']
+  }
+}
+
+let mobileUserAgents = [
+  /Android/i,
+  /webOS/i,
+  /iPhone/i,
+  /iPad/i,
+  /iPod/i,
+  /BlackBerry/i,
+  /Windows Phone/i,
+  /Mobile/i,
+]
+
+export function getContextIsMobile(context: Context): boolean | undefined {
+  let userAgent = getContextUserAgent(context)
+  if (!userAgent) return undefined
+  return mobileUserAgents.some(pattern => pattern.test(userAgent))
+}
+
+export function getContextIsDesktop(context: Context): boolean | undefined {
+  let userAgent = getContextUserAgent(context)
+  if (!userAgent) return undefined
+  return mobileUserAgents.every(pattern => !pattern.test(userAgent))
+}
+
 export function isAjax(context: Context): boolean {
   if (context.type !== 'express') return false
   let mode = context.req.header('Sec-Fetch-Mode')
