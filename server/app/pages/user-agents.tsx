@@ -3,13 +3,19 @@ import {
   getOtherUserAgents,
   getUAStatsProgress,
 } from '../../../db/user-agent.js'
+import { mapArray } from '../components/fragment.js'
 import { Locale, Title } from '../components/locale.js'
 import SourceCode from '../components/source-code.js'
 import Style from '../components/style.js'
+import { Context, getContextLanguage } from '../context.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 
-function agentTable(title: string, rows: [name: string, count: number][]) {
+function agentTable(
+  title: string,
+  rows: [name: string, count: number][],
+  locales: string,
+) {
   if (rows.length === 0) return
   rows.sort((a, b) => b[1] - a[1])
   return (
@@ -25,7 +31,7 @@ function agentTable(title: string, rows: [name: string, count: number][]) {
           rows.map(([name, count]) => (
             <tr>
               <td>{name}</td>
-              <td>{count}</td>
+              <td>{count.toLocaleString(locales)}</td>
             </tr>
           )),
         ]}
@@ -34,21 +40,25 @@ function agentTable(title: string, rows: [name: string, count: number][]) {
   )
 }
 
-function Tables() {
+function Tables(attrs: {}, context: Context) {
+  let locales = getContextLanguage(context) || 'en-US'
   return (
     <>
       <p>{getUAStatsProgress()}</p>
       {agentTable(
         'User Agent',
         proxy.ua_type.map(row => [row.name, row.count]),
+        locales,
       )}
       {agentTable(
         'Bot Agent',
         proxy.ua_bot.map(row => [row.name, row.count]),
+        locales,
       )}
       {agentTable(
         'Other Agent',
         getOtherUserAgents().map(row => [row.user_agent, row.count]),
+        locales,
       )}
     </>
   )
