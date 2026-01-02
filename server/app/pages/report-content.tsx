@@ -469,13 +469,6 @@ let ReviewPageTitle = (
   <Locale en="Review Content Report" zh_hk="審視檢舉" zh_cn="审查检举" />
 )
 
-let webReviewStyle = Style(/* css */ `
-body {
-  overflow-y: unset;
-  position: unset;
-}
-`)
-
 let reviewStyle = Style(/* css */ `
 .report-card {
   font-size: 1rem;
@@ -504,6 +497,64 @@ function countPendingReports() {
   })
 }
 
+let webReviewStyle = Style(/* css */ `
+.report-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: fit-content;
+}
+.report-card {
+  display: block;
+  border: 1px solid #e0e0e0;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.1);
+}
+.report-card ion-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+.report-card ion-buttons ion-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.report-card ion-button:hover {
+  border-color: var(--theme-color);
+}
+.report-card ion-button[color="primary"] {
+  --theme-color: #007bff;
+  --theme-background: #fff;
+}
+.report-card ion-button[color="danger"] {
+  --theme-color: #eb445a;
+  --theme-background: #fff;
+}
+.report-card ion-button[color="dark"] {
+  --theme-color: #222;
+  --theme-background: #fff;
+}
+.report-card ion-button[fill="solid"] {
+  background-color: var(--theme-color);
+  color: var(--theme-background);
+}
+.report-card ion-button[fill="outline"] {
+  background-color: var(--theme-background);
+  color: var(--theme-color);
+  border-color: var(--theme-color);
+}
+`)
+
 // TODO show determined reports in different segments
 function ReviewPage(attrs: {}, context: DynamicContext) {
   let role = getAuthUserRole(context)
@@ -517,14 +568,13 @@ function ReviewPage(attrs: {}, context: DynamicContext) {
   let reports = selectPendingReports()
   return (
     <Page id="Review" title={ReviewPageTitle} class="ion-padding-vertical">
-      {ionicStyle}
-      <Content web={webReviewStyle} />
+      <Content web={webReviewStyle} ionic={ionicStyle} />
       {reviewStyle}
       <p class="ion-padding-horizontal">
         Total <span class="pending-count">{countPendingReports()}</span> reports
         pending for review
       </p>
-      <ion-list>
+      <ion-list class="report-list">
         {mapArray(reports, report => {
           let type_code = report.type
           let category = reasonCategories.find(category =>
@@ -673,21 +723,21 @@ function updateReportList(report: ContentReport) {
     [
       ['update-text', '.pending-count', countPendingReports()],
       [
-        'update-props',
+        'update-attrs',
         `[data-report-id="${report.id}"] .review-button`,
         {
           fill: report.review_time ? 'solid' : 'outline',
         },
       ],
       [
-        'update-props',
+        'update-attrs',
         `[data-report-id="${report.id}"] .accept-button`,
         {
           fill: report.accept_time ? 'solid' : 'outline',
         },
       ],
       [
-        'update-props',
+        'update-attrs',
         `[data-report-id="${report.id}"] .reject-button`,
         {
           fill: report.reject_time ? 'solid' : 'outline',
