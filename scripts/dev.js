@@ -125,8 +125,9 @@ async function fix() {
     }
     last_line = new_line
   }
+  let context = { update }
   let ps = []
-  ps.push(fix_proxy({ update }))
+  ps.push(fix_proxy(context))
   await Promise.all(ps)
   if (last_line) {
     update('')
