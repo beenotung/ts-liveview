@@ -143,9 +143,10 @@ async function fix() {
     }
     last_line = new_line
   }
+  let context: FixContext = { update }
 
   let ps = []
-  ps.push(fix_proxy({ update }))
+  ps.push(fix_proxy(context))
   // add custom fixes here
   await Promise.all(ps)
 
