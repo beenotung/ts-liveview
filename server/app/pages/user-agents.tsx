@@ -1,4 +1,5 @@
 import { proxy } from '../../../db/proxy.js'
+import { pick } from 'better-sqlite3-proxy'
 import {
   getOtherUserAgents,
   getUAStatsProgress,
@@ -15,8 +16,15 @@ function agentTable(
   rows: [name: string, count: number][],
   locales: string,
 ) {
+  // skip rows with zero count
+  rows = rows.filter(row => row[1] > 0)
+
+  // skip empty table
   if (rows.length === 0) return
+
+  // sort by count descending
   rows.sort((a, b) => b[1] - a[1])
+
   return (
     <table>
       <thead>
@@ -46,12 +54,15 @@ function Tables(attrs: {}, context: Context) {
       <p>{getUAStatsProgress()}</p>
       {agentTable(
         'User Agent',
-        proxy.ua_type.map(row => [row.name, row.count]),
+        pick(proxy.ua_type, ['name', 'count']).map(row => [
+          row.name,
+          row.count,
+        ]),
         locales,
       )}
       {agentTable(
         'Bot Agent',
-        proxy.ua_bot.map(row => [row.name, row.count]),
+        pick(proxy.ua_bot, ['name', 'count']).map(row => [row.name, row.count]),
         locales,
       )}
       {agentTable(
