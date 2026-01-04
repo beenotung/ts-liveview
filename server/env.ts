@@ -9,7 +9,7 @@ export let env = {
   CADDY_PROXY: 'skip' as 'skip' | 'enable',
   PORT: 8100,
   COOKIE_SECRET: '',
-  EPOCH: 1, // to distinct initial run or restart in serve mode
+  EPOCH: 1, // to distinct initial run or restart in serve mode, auto-managed by dev.ts
   UPLOAD_DIR: 'uploads',
   ORIGIN: '',
   FIND_IP_API_KEY: 'skip', // Optional: API key for findip.net geolocation service
