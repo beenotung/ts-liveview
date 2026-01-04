@@ -1,6 +1,6 @@
+import { randomUUID } from 'crypto'
 import { config as loadEnv } from 'dotenv'
-import { populateEnv } from 'populate-env'
-import { cwd } from 'process'
+import { populateEnv, saveEnv } from 'populate-env'
 
 loadEnv()
 
@@ -17,10 +17,13 @@ export let env = {
 applyDefaultEnv()
 
 function applyDefaultEnv() {
+  if (!process.env.COOKIE_SECRET) {
+    env.COOKIE_SECRET = randomUUID()
+    saveEnv({ env, key: 'COOKIE_SECRET' })
+  }
   if (process.env.NODE_ENV === 'production') return
   let PORT = process.env.PORT || env.PORT
   env.ORIGIN ||= process.env.ORIGIN || `http://localhost:${PORT}`
-  env.COOKIE_SECRET ||= process.env.COOKIE_SECRET || cwd()
 }
 
 populateEnv(env, { mode: 'halt' })
