@@ -5,6 +5,7 @@ import { Link, LinkAttrs } from './router.js'
 
 export function IonButton(
   attrs: {
+    id?: string
     url: string
     class?: string
     style?: string
