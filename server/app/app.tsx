@@ -42,6 +42,7 @@ import { logRequest } from './log.js'
 import { WindowStub } from '../../client/internal.js'
 import { updateRequestSession } from '../../db/request-log.js'
 import { Link } from './components/router.js'
+import ErrorLog from './store/error-log.js'
 
 if (config.development) {
   scanTemplateDir('template')
@@ -208,6 +209,7 @@ export function attachRoutes(app: Router) {
   DemoCookieSession.attachRoutes(app)
   Chatroom.attachRoutes(app)
   DemoUpload.attachRoutes(app)
+  ErrorLog.attachRoutes(app)
 
   // redirect routes
   Object.entries(redirectDict).forEach(([from, to]) =>

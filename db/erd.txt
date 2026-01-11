@@ -89,6 +89,17 @@ timezone text NULL
 timezone_offset integer NULL
 
 
+error_log
+---------
+id integer PK
+timestamp integer
+title text
+error text
+client_url_id integer FK >- url.id
+api_url_id integer FK >- url.id
+request_log_id integer FK >0- request_log.id
+
+
 # zoom: 1.000
 # view: (0, 0)
 # text-bg: #6495ed
@@ -107,3 +118,4 @@ timezone_offset integer NULL
 # ua_bot (845, 410)
 # ua_stat (715, 60)
 # request_session (450, 445)
+# error_log (627, 158)

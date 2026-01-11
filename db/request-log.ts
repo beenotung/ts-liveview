@@ -13,7 +13,7 @@ function getMethodId(method: string): number {
 }
 
 let url_cache = new Map<string, number>()
-function getUrlId(url: string): number {
+export function getUrlId(url: string): number {
   let id = url_cache.get(url)
   if (id) return id
   id = find(proxy.url, { url })?.id || proxy.url.push({ url })

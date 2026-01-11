@@ -2,6 +2,14 @@ import type { Request } from 'express'
 import { storeRequestLog } from '../../db/request-log.js'
 import { logIPInfo } from './ip.js'
 
+declare global {
+  namespace Express {
+    interface Request {
+      request_log_id?: number
+    }
+  }
+}
+
 export function logRequest(
   req: Request,
   method: string,
@@ -18,6 +26,7 @@ export function logRequest(
     user_agent,
     session_id,
   })
+  req.request_log_id = log_id
 
   // Skip geolocation logging if DNT is enabled
   if (dnt === '1') {

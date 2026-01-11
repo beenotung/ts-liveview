@@ -9,7 +9,7 @@ import { loadNumber, saveNumber } from '../server/app/data/version-number.js'
 let log = debugLog('user-agent')
 log.enabled = true
 
-function classifyUserAgent(ua: string) {
+export function classifyUserAgent(ua: string) {
   if (ua == 'node' || ua == 'node-fetch' || /^axios\/[\d.]+$/.test(ua))
     return { bot: 'NodeBot' }
   else if (ua.startsWith('HackerNews')) return { bot: 'HackerNewsBot' }

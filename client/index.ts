@@ -264,7 +264,7 @@ win.upload = upload
 win.fetch_json = (input, init) => {
   return fetch(input, init)
     .then(res =>
-      res.json().catch(() => ({
+      res.json().catch(error => ({
         error: res.statusText || `Status Code: ${res.status}`,
       })),
     )
@@ -272,12 +272,42 @@ win.fetch_json = (input, init) => {
     .then(json => {
       if (json.error) {
         showError(json.error)
+        reportError({
+          title: init?.title || 'fetch_json',
+          error: json.error,
+          api_url: input.toString(),
+        })
       }
       if (json.message) {
         onServerMessage(json.message)
       }
       return json
     })
+}
+
+function reportError(options: {
+  title: string
+  error: unknown
+  api_url: string
+}) {
+  fetch('/error-log', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      title: options.title,
+      error: String(options.error),
+      client_url: location.href,
+      api_url: options.api_url,
+      timestamp: Date.now(),
+    }),
+  }).catch(error => {
+    console.error('failed to report error:', error)
+    setTimeout(() => {
+      reportError(options)
+    }, 2000)
+  })
 }
 
 // in sweetalert client plugin

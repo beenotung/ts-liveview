@@ -72,6 +72,19 @@ export type RequestLog = {
   timestamp: number
 }
 
+export type ErrorLog = {
+  id?: null | number
+  timestamp: number
+  title: string
+  error: string
+  client_url_id: number
+  client_url?: Url
+  api_url_id: number
+  api_url?: Url
+  request_log_id: number
+  request_log?: RequestLog
+}
+
 export type DBProxy = {
   method: Method[]
   url: Url[]
@@ -83,6 +96,7 @@ export type DBProxy = {
   user_agent: UserAgent[]
   ua_stat: UaStat[]
   request_log: RequestLog[]
+  error_log: ErrorLog[]
 }
 
 export let proxy = proxySchema<DBProxy>({
@@ -108,6 +122,12 @@ export let proxy = proxySchema<DBProxy>({
       ['user_agent', { field: 'user_agent_id', table: 'user_agent' }],
       ['geo_ip', { field: 'geo_ip_id', table: 'geo_ip' }],
       ['request_session', { field: 'request_session_id', table: 'request_session' }],
+    ],
+    error_log: [
+      /* foreign references */
+      ['client_url', { field: 'client_url_id', table: 'url' }],
+      ['api_url', { field: 'api_url_id', table: 'url' }],
+      ['request_log', { field: 'request_log_id', table: 'request_log' }],
     ],
   },
 })

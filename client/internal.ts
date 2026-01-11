@@ -12,7 +12,10 @@ export type WindowStub = {
   uploadForm(event: Event): Promise<Response>
   upload(url: string, formData: FormData): Promise<Response>
   remount(): void
-  fetch_json(input: RequestInfo | URL, init?: RequestInit): Promise<any>
+  fetch_json(
+    input: RequestInfo | URL,
+    init: RequestInit & { title: string },
+  ): Promise<any>
   showError(error: unknown): void
   _navigation_type_: 'static' | 'express' | 'ws'
   _navigation_method_: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
