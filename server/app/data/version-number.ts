@@ -1,7 +1,8 @@
 import { mkdirSync, existsSync, readFileSync, writeFile, rename } from 'fs'
 import { debugLog } from '../../debug.js'
+import { dataDir } from '../../../db/db.js'
 
-mkdirSync('data', { recursive: true })
+mkdirSync(dataDir, { recursive: true })
 
 let log = debugLog('version-number.ts')
 log.enabled = true

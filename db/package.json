@@ -20,7 +20,8 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-      "better-sqlite3"
+      "better-sqlite3",
+      "esbuild"
     ]
   },
   "dependencies": {
@@ -35,6 +36,7 @@
     "npm-run-all": "^4.1.5",
     "quick-erd": "^4.29.1",
     "ts-node": "^10.9.2",
+    "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   }
 }
