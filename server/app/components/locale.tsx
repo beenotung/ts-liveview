@@ -1,4 +1,5 @@
 import { title } from '../../config.js'
+import { HttpError } from '../../exception.js'
 import { Context, getContextLanguage } from '../context.js'
 import { Component, Node } from '../jsx/types.js'
 
@@ -119,6 +120,18 @@ export function makeThrows(context: Context, options?: { asError?: boolean }) {
     } else {
       throw message
     }
+  }
+  return throws
+}
+
+// similar to makeThrows, throws HttpError with status code
+export function makeHttpThrows(context: Context) {
+  function throws(
+    statusCode: number,
+    messageLocale: LocaleVariants<string>,
+  ): never {
+    let message = Locale(messageLocale, context)
+    throw new HttpError(statusCode, message)
   }
   return throws
 }
