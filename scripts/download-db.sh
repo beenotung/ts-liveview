@@ -9,6 +9,7 @@ ssh "$user@$host" "
   cd $root_dir/data
   ls -lh db.sqlite3
   sqlite3 db.sqlite3 '.dump' | zstd > dump.sql.zst
+  ls -lh dump.sql.zst
 "
 
 rsync -SavLP "$user@$host:$root_dir/data/dump.sql.zst" "data/"
