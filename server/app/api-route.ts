@@ -15,7 +15,40 @@ export type ExpressAPI<T extends object> = (
   context: ExpressContext,
 ) => Promise<T> | T
 
-export function ajaxRoute<T extends object>(options: {
+type APIResult =
+  /* server message */
+  | ServerMessage
+  | { message: ServerMessage }
+  /* error */
+  | Error
+  | { error: string }
+  /* other custom data */
+  | object
+
+function normalizeAPIResult(result: APIResult) {
+  if (result == null || typeof result !== 'object') return result
+
+  if ('error' in result || 'message' in result) {
+    return result
+  }
+
+  if (
+    Array.isArray(result) &&
+    result.length > 0 &&
+    typeof result[0] === 'string'
+  ) {
+    return { message: result }
+  }
+
+  if (result instanceof Error) {
+    return { error: String(result) }
+  }
+
+  /* other custom data */
+  return result
+}
+
+export function ajaxRoute<T extends APIResult>(options: {
   description: string
   api: ExpressAPI<T>
 }) {
@@ -30,6 +63,7 @@ export function ajaxRoute<T extends object>(options: {
       let res = context.res
       try {
         let json = await options.api(context)
+        json = normalizeAPIResult(json) as Awaited<T>
         res.json(json)
       } catch (error) {
         let statusCode = 500
