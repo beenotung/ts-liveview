@@ -22,7 +22,6 @@ export enum LayoutType {
 export let config = {
   production,
   development,
-  minify: production,
   site_name: 'ts-liveview',
   site_description: 'Demo website of ts-liveview',
   setup_robots_txt: false,
