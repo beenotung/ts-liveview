@@ -29,7 +29,7 @@ export type Cookies = {
   signedCookies: CookieDict
 }
 
-const ws_cookies = new WeakMap<WebSocket, Cookies>()
+export const ws_cookies = new WeakMap<WebSocket, Cookies>()
 
 export function listenWSSCookie(wss: ws.Server) {
   wss.on('connection', (ws, request) => {
