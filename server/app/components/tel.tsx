@@ -11,7 +11,7 @@ export function Tel(tel: string) {
   return <a href={'tel:' + full_tel}>{formatted_tel}</a>
 }
 
-export function formatTel(tel: string | null): string | null {
+export function formatTel(tel: string | null | undefined): string | null {
   if (!tel) return null
   return format_mobile_phone(tel)
 }
