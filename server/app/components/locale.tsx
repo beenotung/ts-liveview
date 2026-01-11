@@ -41,6 +41,9 @@ export function Locale<T>(attrs: LocaleVariants<T>, context: Context): T {
   return attrs.en
 }
 
+/**
+ * similar to makeText, but supports generic type
+ */
 export function makeTranslate<T = string>(context: Context) {
   function translate(words: LocaleVariants<T>): T {
     return Locale(words, context)
@@ -87,6 +90,9 @@ export function evalLocale<T>(
   return component(variants, context)
 }
 
+/**
+ * similar to makeTranslate, but only for string
+ */
 export function makeText(context: Context) {
   function text(message: LocaleVariants<string>) {
     return Locale(message, context)
