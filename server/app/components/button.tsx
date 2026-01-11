@@ -3,6 +3,7 @@ import { NodeList } from '../jsx/types.js'
 export function Button(
   attrs: {
     url: string
+    type?: 'button' | 'submit' | 'reset'
     class?: string
     style?: string
     children?: NodeList
