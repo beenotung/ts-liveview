@@ -11,7 +11,7 @@ import { Raw } from './raw.js'
 import { apiEndpointTitle } from '../../config.js'
 import { toRouteUrl } from '../../url.js'
 import { Redirect } from './router.js'
-import { Locale } from './locale.js'
+import { languages, Locale } from './locale.js'
 import { mapArray } from './fragment.js'
 import { YEAR } from '@beenotung/tslib/time.js'
 import { MessageException } from '../../exception.js'
@@ -36,20 +36,16 @@ export function PickLanguage(
     <div style={style}>
       🌏 <Locale en="Language" zh_hk="語言" zh_cn="语言" />:{' '}
       {mapArray(
-        [
-          ['en', 'English'],
-          ['zh-HK', '繁體中文'],
-          ['zh-CN', '简体中文'],
-        ],
-        ([lang, text]) => (
+        languages,
+        lang => (
           <a
-            onclick={`switchLang(event, '${lang}')`}
+            onclick={`switchLang(event, '${lang.code}')`}
             href={toRouteUrl(routes, '/set-lang/:lang', {
-              params: { lang },
+              params: { lang: lang.code },
               query: { return_url },
             })}
           >
-            <button>{text}</button>
+            <button>{lang.name}</button>
           </a>
         ),
         attrs.direction === 'vertical' ? null : ' | ',

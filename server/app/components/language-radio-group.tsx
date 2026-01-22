@@ -1,5 +1,7 @@
 import { Context, getContextLanguage } from '../context.js'
 import { o } from '../jsx/jsx.js'
+import { mapArray } from './fragment.js'
+import { languages } from './locale.js'
 import { Script } from './script.js'
 import { language_max_age } from './ui-language.js'
 
@@ -22,15 +24,11 @@ export function LanguageRadioGroup(attrs: {}, context: Context) {
   return (
     <>
       <ion-radio-group id="languageRadioGroup" value={lang}>
-        <ion-item>
-          <ion-radio value="en">English</ion-radio>
-        </ion-item>
-        <ion-item>
-          <ion-radio value="zh-hk">繁體中文</ion-radio>
-        </ion-item>
-        <ion-item>
-          <ion-radio value="zh-cn">简体中文</ion-radio>
-        </ion-item>
+        {mapArray(languages, lang => (
+          <ion-item>
+            <ion-radio value={lang.code}>{lang.name}</ion-radio>
+          </ion-item>
+        ))}
       </ion-radio-group>
       {script}
     </>

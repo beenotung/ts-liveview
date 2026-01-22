@@ -9,6 +9,12 @@ export type LocaleVariants<T = Node> = {
   zh_cn: T
 }
 
+export let languages = [
+  { code: 'en', name: 'English' },
+  { code: 'zh-hk', name: '繁體中文' },
+  { code: 'zh-cn', name: '简体中文' },
+]
+
 export function isPreferZh(context_or_lang: Context | string | undefined) {
   let lang =
     typeof context_or_lang === 'object'
