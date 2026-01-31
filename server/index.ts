@@ -39,7 +39,6 @@ listenWSSConnection({
   onMessage: onWsMessage,
 })
 
-
 if (config.development) {
   app.use('/js', express.static(join('dist', 'client')))
 }
