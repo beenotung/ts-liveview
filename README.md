@@ -111,6 +111,7 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
   - [ ] Auto send accumulated offline messages when network resume (WIP)
 - [x] Work well with express.js [[8]](#feature-8)
 - [x] Built-in locale support (language and timezone)
+- [x] CSRF protection via `SameSite=Lax` cookies (in auth templates)
 - [x] Fully customizable [[9]](#feature-9)
 - [x] Multiple starter templates
   - [x] v5-demo (kitchen sink demos)
