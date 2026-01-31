@@ -2,7 +2,6 @@ import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
 import Style from '../components/style.js'
 import { title } from '../../config.js'
-import { proxy } from '../../../db/proxy.js'
 import {
   DynamicContext,
   getContextFormBody,
@@ -50,6 +49,15 @@ let style = Style(/* css */ `
   width: 100%;
 }
 `)
+
+type Task = {
+  id: number
+  title: string
+  completed: boolean
+}
+let proxy = {
+  task: [] as Task[],
+}
 
 function TaskList(attrs: {}, context: DynamicContext) {
   let tasks = proxy.task
@@ -109,7 +117,9 @@ function AddTask(context: DynamicContext) {
   if (!title) {
     throw EarlyTerminate
   }
+  let id = proxy.task.length + 1
   proxy.task.push({
+    id,
     title,
     completed: false,
   })
