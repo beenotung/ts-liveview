@@ -46,7 +46,7 @@ export function fireConfetti(count = 200) {
 }
 
 export function fireStar() {
-  var defaults = {
+  let defaults = {
     spread: 360,
     ticks: 150,
     gravity: 0,
@@ -85,12 +85,12 @@ function splitEmoji(emoji: string) {
 }
 
 export function fireEmoji(emoji: string = '🦄🤩🪅') {
-  var scalar = 2
-  var emojiShapes = splitEmoji(emoji).map(text =>
+  let scalar = 2
+  let emojiShapes = splitEmoji(emoji).map(text =>
     confetti.shapeFromText({ text, scalar }),
   )
 
-  var defaults = {
+  let defaults = {
     spread: 360,
     ticks: 300,
     gravity: 0,

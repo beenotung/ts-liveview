@@ -6,9 +6,9 @@ import {
   FilesetResolver,
 } from '@mediapipe/tasks-vision'
 
-var win: WindowStub = window as any
-var stream: MediaStream | undefined
-var faceLandmarkerPromise: Promise<FaceLandmarker> | undefined
+let win: WindowStub = window as any
+let stream: MediaStream | undefined
+let faceLandmarkerPromise: Promise<FaceLandmarker> | undefined
 
 declare const startButton: HTMLButtonElement
 declare const stopButton: HTMLButtonElement
@@ -18,8 +18,8 @@ declare const canvas: HTMLCanvasElement
 declare const faceBlendshapesContainer: HTMLDivElement
 declare const faceBlendshapesTableBody: HTMLTableSectionElement
 
-var context = canvas.getContext('2d')!
-var drawingUtils = new DrawingUtils(context)
+let context = canvas.getContext('2d')!
+let drawingUtils = new DrawingUtils(context)
 
 function stopStream() {
   if (stream) {
