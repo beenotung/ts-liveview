@@ -3,6 +3,7 @@ import { proxy } from '../../db/proxy.js'
 import { debugLog } from '../debug.js'
 import { hashText } from '../hash.js'
 import { env } from '../env.js'
+import { Request } from 'express'
 
 let log = debugLog('ip')
 log.enabled = true
@@ -37,6 +38,29 @@ export async function getFindIPInfo(ip: string) {
   let res = await fetch(url)
   let info: Record<string, object> = await res.json()
   return info
+}
+
+export function getRequestIP(req: Request): string | null {
+  // Try req.ip (set by Express with trust proxy)
+  if (req.ip) return req.ip
+
+  // Try x-forwarded-for header
+  let x_forwarded_for = req.headers['x-forwarded-for']
+  if (x_forwarded_for) {
+    let ip = Array.isArray(x_forwarded_for)
+      ? x_forwarded_for[0]
+      : x_forwarded_for.split(',')[0]
+    return ip?.trim() || null
+  }
+
+  // Try x-real-ip header (used by nginx)
+  let x_real_ip = req.headers['x-real-ip']
+  if (x_real_ip) {
+    return Array.isArray(x_real_ip) ? x_real_ip[0] : x_real_ip
+  }
+
+  // Fallback to socket remote address
+  return req.socket?.remoteAddress || null
 }
 
 export async function logIPInfo(ip: string, log_id: number) {

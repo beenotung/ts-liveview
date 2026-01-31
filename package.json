@@ -69,6 +69,7 @@
     "sweetalert2-unrestricted": "^11.10.5",
     "swiper": "^11.2.10",
     "timezone-date.ts": "^2.1.0",
+    "token-bucket.ts": "^1.1.0",
     "url-router.ts": "^1.2.1",
     "ws": "^8.19.0"
   },

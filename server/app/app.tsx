@@ -13,7 +13,9 @@ import {
 import { sendHTMLHeader } from './express.js'
 import { OnWsMessage } from '../ws/wss.js'
 import { dispatchUpdate } from './jsx/dispatch.js'
-import { EarlyTerminate, MessageException } from '../exception.js'
+import { EarlyTerminate, HttpError, MessageException } from '../exception.js'
+import { getRateLimitContext } from '../rate-limit.js'
+import { get_rate_limit } from '../rate-limits.js'
 import { getWSSession } from './session.js'
 import DemoCookieSession from './pages/demo-cookie-session.js'
 import { Flush } from './components/flush.js'
@@ -221,8 +223,6 @@ export function attachRoutes(app: Router) {
 }
 
 async function handleLiveView(req: Request, res: Response, next: NextFunction) {
-  sendHTMLHeader(res)
-
   let context: ExpressContext = {
     type: 'express',
     req,
@@ -230,6 +230,20 @@ async function handleLiveView(req: Request, res: Response, next: NextFunction) {
     next,
     url: req.url,
   }
+
+  // Rate limit GET requests
+  try {
+    let rateLimitCtx = getRateLimitContext(context)
+    get_rate_limit.consume(rateLimitCtx)
+  } catch (error) {
+    if (error instanceof HttpError) {
+      res.status(error.statusCode).json({ error: error.message })
+      return
+    }
+    throw error
+  }
+
+  sendHTMLHeader(res)
 
   try {
     await then(
@@ -258,6 +272,11 @@ async function handleLiveView(req: Request, res: Response, next: NextFunction) {
     }
     if (error instanceof MessageException) {
       res.json({ message: error.message })
+      return
+    }
+    if (error instanceof HttpError) {
+      res.status(error.statusCode)
+      res.json({ error: error.message })
       return
     }
     res.status(500)
@@ -377,6 +396,19 @@ export let onWsMessage: OnWsMessage = async (event, ws, _wss) => {
     event: eventType,
     session,
   }
+
+  // Rate limit WebSocket messages
+  try {
+    let rateLimitCtx = getRateLimitContext(context)
+    get_rate_limit.consume(rateLimitCtx)
+  } catch (error) {
+    if (error instanceof HttpError) {
+      ws.send(['eval', `showToast('${error.message}','error')`])
+      return
+    }
+    throw error
+  }
+
   try {
     await then(
       matchRoute(context),
@@ -404,6 +436,10 @@ export let onWsMessage: OnWsMessage = async (event, ws, _wss) => {
     }
     if (error instanceof MessageException) {
       ws.send(error.message)
+      return
+    }
+    if (error instanceof HttpError) {
+      ws.send(['eval', `showToast('${error.message}','error')`])
       return
     }
     console.error(error)

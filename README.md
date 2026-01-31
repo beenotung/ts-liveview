@@ -112,6 +112,7 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
 - [x] Work well with express.js [[8]](#feature-8)
 - [x] Built-in locale support (language and timezone)
 - [x] CSRF protection via `SameSite=Lax` cookies (in auth templates)
+- [x] Multi-dimensional rate limiting with token bucket algorithm (IP, user, target, global)
 - [x] Fully customizable [[9]](#feature-9)
 - [x] Multiple starter templates
   - [x] v5-demo (kitchen sink demos)
@@ -272,6 +273,33 @@ Example using _getter and setter_ see [thermostat.tsx](./server/app/pages/thermo
 - [x] SMS verification
 - [ ] Reset password
 - [ ] Login History
+
+## Rate Limiting
+
+Configure in [server/rate-limits.ts](./server/rate-limits.ts). Uses token bucket algorithm with dimensions: IP, user, target (email/phone), and global.
+
+### Configuration
+
+```typescript
+{
+  capacity: number    // Burst limit
+  interval: number    // Refill interval (use SECOND / N for N req/s)
+  cooldown?: number   // Min time between requests (default: 0)
+}
+```
+
+### Usage
+
+```typescript
+import { getRateLimitContext } from '../rate-limit.js'
+import { api_rate_limit, email_rate_limit } from '../rate-limits.js'
+
+let ctx = getRateLimitContext(context)
+api_rate_limit.consume(ctx) // throws 429 if limited
+
+// For email/SMS OTP sending, use target to limit per recipient:
+email_rate_limit.consume({ ...ctx, target: email })
+```
 
 ## Examples / Demo
 

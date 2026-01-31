@@ -8,6 +8,8 @@ import { Script } from '../components/script.js'
 import debug from 'debug'
 import SourceCode from '../components/source-code.js'
 import { Context, getContextFormBody } from '../context.js'
+import { getRateLimitContext } from '../../rate-limit.js'
+import { api_rate_limit } from '../../rate-limits.js'
 import {
   checkbox,
   color,
@@ -23,6 +25,7 @@ import { Link } from '../components/router.js'
 import { apiEndpointTitle, title } from '../../config.js'
 import { Routes } from '../routes.js'
 import { toRouteUrl } from '../../url.js'
+import { sweetAlertPlugin } from '../../client-plugins.js'
 
 const log = debug('demo-form.tsx')
 log.enabled = true
@@ -131,6 +134,12 @@ function SetKey(_attrs: attrs, context: Context) {
 }
 
 function Submit(_attrs: attrs, context: Context) {
+  // Rate limit form submissions
+  if (context.type !== 'static') {
+    let ctx = getRateLimitContext(context)
+    api_rate_limit.consume(ctx) // throws RateLimitError (429) if rate limited
+  }
+
   let body = getContextFormBody(context)
   let input: ParseResult<typeof formBody> | undefined = undefined
   let err = null
@@ -294,6 +303,7 @@ function DemoForm() {
       </div>
 
       <SourceCode page="demo-form.tsx" />
+      {sweetAlertPlugin.node}
     </div>
   )
 }
