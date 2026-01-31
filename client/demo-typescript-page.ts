@@ -2,7 +2,6 @@ import { WindowStub } from './internal'
 import {
   DrawingUtils,
   FaceLandmarker,
-  FaceLandmarkerResult,
   FilesetResolver,
 } from '@mediapipe/tasks-vision'
 
