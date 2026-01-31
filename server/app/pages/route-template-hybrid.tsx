@@ -379,7 +379,11 @@ function DetailPage(
                 <dt>
                   <Locale en="Title" zh_hk="標題" zh_cn="標題" />
                 </dt>
-                <dd class="field inline-edit-field" data-field="title" data-mode="view">
+                <dd
+                  class="field inline-edit-field"
+                  data-field="title"
+                  data-mode="view"
+                >
                   <span class="view-mode">{item.title}</span>
                   <span class="edit-mode">
                     <input
@@ -468,7 +472,9 @@ function DetailPage(
                 <ion-item>
                   <ion-input
                     label-placement="floating"
-                    label={<Locale en="Slug" zh_hk="短網址碼" zh_cn="短网址码" />}
+                    label={
+                      <Locale en="Slug" zh_hk="短網址碼" zh_cn="短网址码" />
+                    }
                     value={item.slug}
                     readonly
                   ></ion-input>

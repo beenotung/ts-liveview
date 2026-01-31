@@ -5,7 +5,6 @@
 2022 - Present
 
 - Enhanced support on html streaming to both static parts in template file and dynamic parts in typescript
-
   - The template file is pre-generated with response streaming enabled
 
   The signature of generated template function is now: `(stream, options) => void`, and the options is an object of string or "html chunk sink" (a.k.a. stream consumer function)
@@ -26,7 +25,6 @@
 2022
 
 - Changed signature of component function
-
   - Move `children?: NodeList` from 2nd argument into optional property of attrs (1st argument)
   - Pass context to component function explicitly as 2nd argument
 
