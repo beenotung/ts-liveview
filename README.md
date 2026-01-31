@@ -43,6 +43,12 @@ To test https-required functions during development (e.g., camera, microphone):
 
 Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liveview)
 
+## Configuration
+
+- Environment variables: `.env` (see [.env.example](./.env.example) and [server/env.ts](./server/env.ts))
+- Site settings: [server/config.ts](./server/config.ts)
+- Database schema: [db/README.md](./db/README.md)
+
 ## Available npm scripts
 
 `npm start`:
