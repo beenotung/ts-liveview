@@ -12,7 +12,6 @@ export let env = {
   EPOCH: 1, // to distinct initial run or restart in serve mode, auto-managed by dev.ts
   UPLOAD_DIR: 'uploads',
   ORIGIN: '',
-  FIND_IP_API_KEY: 'skip', // Optional: API key for findip.net geolocation service
 }
 applyDefaultEnv()
 
@@ -32,9 +31,4 @@ if (env.CADDY_PROXY.toLocaleLowerCase().startsWith('enable')) {
   env.CADDY_PROXY = 'enable'
 } else {
   env.CADDY_PROXY = 'skip'
-}
-
-if (env.FIND_IP_API_KEY.toLocaleLowerCase() == 'skip') {
-  env.FIND_IP_API_KEY = 'skip'
-  console.warn('feat: FIND_IP_API_KEY not set, geolocation logging is disabled')
 }
