@@ -113,7 +113,9 @@ let verifyFormBody = (
       />
     )}
     {config.enable_email && config.enable_sms && (
-      <div style="margin-inline-start: 1rem; margin-top: 1rem"><Locale en="or" zh_hk="或" zh_cn="或" /></div>
+      <div style="margin-inline-start: 1rem; margin-top: 1rem">
+        <Locale en="or" zh_hk="或" zh_cn="或" />
+      </div>
     )}
     {config.enable_sms && (
       <Field
