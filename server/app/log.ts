@@ -1,6 +1,7 @@
 import type { Request } from 'express'
 import { storeRequestLog } from '../../db/request-log.js'
 import { logIPInfo } from './ip.js'
+import { env } from '../env.js'
 
 declare global {
   namespace Express {
@@ -35,7 +36,7 @@ export function logRequest(
 
   // Asynchronously fetch and store geolocation data (without storing IP)
   let ip = req.ip
-  if (ip) {
+  if (ip && env.FIND_IP_API_KEY !== 'skip') {
     logIPInfo(ip, log_id).catch(error => {
       console.error('failed to log ip info for request log:', error)
     })

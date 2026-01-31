@@ -33,3 +33,8 @@ if (env.CADDY_PROXY.toLocaleLowerCase().startsWith('enable')) {
 } else {
   env.CADDY_PROXY = 'skip'
 }
+
+if (env.FIND_IP_API_KEY.toLocaleLowerCase() == 'skip') {
+  env.FIND_IP_API_KEY = 'skip'
+  console.warn('feat: FIND_IP_API_KEY not set, geolocation logging is disabled')
+}
