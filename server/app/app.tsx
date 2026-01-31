@@ -14,8 +14,6 @@ import { sendHTMLHeader } from './express.js'
 import { OnWsMessage } from '../ws/wss.js'
 import { dispatchUpdate } from './jsx/dispatch.js'
 import { EarlyTerminate, HttpError, MessageException } from '../exception.js'
-import { getRateLimitContext } from '../rate-limit.js'
-import { get_rate_limit } from '../rate-limits.js'
 import { getWSSession } from './session.js'
 import { Flush } from './components/flush.js'
 import { LayoutType, config } from '../config.js'
@@ -221,18 +219,6 @@ async function handleLiveView(req: Request, res: Response, next: NextFunction) {
     url: req.url,
   }
 
-  // Rate limit GET requests
-  try {
-    let rateLimitCtx = getRateLimitContext(context)
-    get_rate_limit.consume(rateLimitCtx)
-  } catch (error) {
-    if (error instanceof HttpError) {
-      res.status(error.statusCode).json({ error: error.message })
-      return
-    }
-    throw error
-  }
-
   sendHTMLHeader(res)
 
   try {
@@ -379,18 +365,6 @@ export let onWsMessage: OnWsMessage = async (event, ws, _wss) => {
     args,
     event: eventType,
     session,
-  }
-
-  // Rate limit WebSocket messages
-  try {
-    let rateLimitCtx = getRateLimitContext(context)
-    get_rate_limit.consume(rateLimitCtx)
-  } catch (error) {
-    if (error instanceof HttpError) {
-      ws.send(['eval', `showToast('${error.message}','error')`])
-      return
-    }
-    throw error
   }
 
   try {

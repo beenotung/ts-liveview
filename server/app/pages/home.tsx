@@ -1,4 +1,3 @@
-import { Link } from '../components/router.js'
 import { o } from '../jsx/jsx.js'
 import { prerender } from '../jsx/html.js'
 import SourceCode from '../components/source-code.js'
