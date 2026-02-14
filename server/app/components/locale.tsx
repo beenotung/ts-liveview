@@ -48,16 +48,6 @@ export function Locale<T>(attrs: LocaleVariants<T>, context: Context): T {
   return attrs.en
 }
 
-/**
- * similar to makeText, but supports generic type
- */
-export function makeTranslate<T = string>(context: Context) {
-  function translate(words: LocaleVariants<T>): T {
-    return Locale(words, context)
-  }
-  return translate
-}
-
 export function Title(
   attrs: {
     t: Component<LocaleVariants<string>>
@@ -95,6 +85,16 @@ export function evalLocale<T>(
   if (component !== Locale && component !== Title) return node as T
   let variants = attrs
   return component(variants, context)
+}
+
+/**
+ * similar to makeText, but supports generic type
+ */
+export function makeTranslate<T = string>(context: Context) {
+  function translate(words: LocaleVariants<T>): T {
+    return Locale(words, context)
+  }
+  return translate
 }
 
 /**
