@@ -146,7 +146,7 @@ async function fix() {
   let context: FixContext = { update }
 
   let ps = []
-  ps.push(fix_proxy(context))
+  ps.push(fix_import(context, ['dist', 'db', 'proxy.js'], ['./db']))
   // add custom fixes here
   await Promise.all(ps)
 
@@ -160,16 +160,23 @@ type FixContext = {
   update(new_line: string): void
 }
 
-async function fix_proxy(context: FixContext) {
-  let file = path.join('dist', 'db', 'proxy.js')
+async function fix_import(
+  context: FixContext,
+  file: string[] | string,
+  import_paths: string[],
+) {
+  file = Array.isArray(file) ? path.join(...file) : file
   await wait_file(context, file)
   let text = fs.readFileSync(file).toString()
-  if (!text.includes(`import { db } from "./db"`)) return
-  text = text.replace(
-    `import { db } from "./db"`,
-    `import { db } from "./db.js"`,
-  )
-  fs.writeFileSync(file, text)
+  let new_text = text
+  for (let import_path of import_paths) {
+    new_text = new_text.replace(
+      ` from "${import_path}"`,
+      ` from "${import_path}.js"`,
+    )
+  }
+  if (new_text === text) return
+  fs.writeFileSync(file, new_text)
 }
 
 async function wait_file(context: FixContext, file: string) {
