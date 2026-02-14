@@ -107,6 +107,24 @@ export function makeText(context: Context) {
   return text
 }
 
+/**
+ * similar to makeTranslate, but for a dictionary of values.
+ * - makeTranslate only translates a single pair of LocaleVariants<T>
+ * - makeDict translates a set of LocaleVariants<T> (input an output are a dictionary of the same keys)
+ */
+export function makeDict<K extends string, T>(
+  localeVariantsDict: Record<K, LocaleVariants<T>>,
+) {
+  function translate(context: Context): Record<K, T> {
+    let i18n: Record<K, T> = {} as any
+    for (let key in localeVariantsDict) {
+      i18n[key] = Locale(localeVariantsDict[key], context)
+    }
+    return i18n
+  }
+  return translate
+}
+
 // helper function for making error response to ajax request
 export function makeReject(context: Context) {
   function reject(message: LocaleVariants<string>) {
