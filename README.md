@@ -307,6 +307,96 @@ api_rate_limit.consume(ctx) // throws 429 if limited
 email_rate_limit.consume({ ...ctx, target: email })
 ```
 
+## Quick Example
+
+Before writing pages, note these patterns to help avoid common pitfalls:
+
+### Style and Script placement
+
+Import `Style` and `Script` from the components. For multi-line scripts, define at top level (like Style). The `Script` component minifies in production and skips minification in development for readability when debugging.
+
+```tsx
+import Style from '../components/style.js'
+import Script from '../components/script.js'
+
+let style = Style(/* css */ `
+#my-page button {
+  margin: 0.5rem;
+}
+`)
+let script = Script(/* js */ `
+function showGreeting() {
+  greeting.textContent = 'Hello!'
+}
+`)
+function Page() {
+  return (
+    <>
+      {style}
+      <div id="my-page">
+        <span id="greeting"></span>
+        <button onclick="showGreeting()">Say Hello</button>
+      </div>
+      {script}
+    </>
+  )
+}
+```
+
+**Tips:**
+
+You can have multiple nodes as needed. Style scoping (e.g. `#my-page button { ... }`) is less critical for pages but helpful for reusable components.
+
+`onclick` is an HTML attribute (string), not a React-style callback — use `onclick="functionName()"`.
+
+Elements with an `id` are exposed as global variables (e.g. `greeting` for `id="greeting"`).
+
+Single-line value assignment is fine inline. For a select's initial value:
+
+```tsx
+{Script(`form.field.value=${JSON.stringify(value)}`)}
+```
+
+### Map/Loop in JSX
+
+`{items.map(...)}` is **invalid** — a plain array does not match the expected AST structure. Import `mapArray` from `../components/fragment.js` and use either:
+
+```tsx
+{mapArray(items, item => (
+  <li>{item.name}</li>
+))}
+```
+
+Or wrap with extra brackets:
+
+```tsx
+{[items.map(item => (
+  <li>{item.name}</li>
+))]}
+```
+
+`mapArray(array, fn, separator?)` — the optional third parameter is a delimiter; it can be any node (including strings), e.g. `', '`, `' | '`, or `<br />`.
+
+### Prefer `Script` component over raw `<script>` tag
+
+A raw `<script>` tag with template literals also works, but the `Script` component is preferred for minification and caching. For server communication, use the global `emit(url, ...args)` function (defined in client/index.ts).
+
+```tsx
+// Works, but prefer Script component
+<script>{`
+function inc() {
+  testBtn.textContent++
+}
+`}</script>
+
+// Preferred: Script component
+let script = Script(/* js */ `
+function inc() {
+  testBtn.textContent++
+}
+`)
+```
+
 ## Examples / Demo
 
 ### Libraries & Integrations

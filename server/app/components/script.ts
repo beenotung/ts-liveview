@@ -31,8 +31,10 @@ function minify(js: string): string {
 export type ScriptFlag = 'no-minify' | 'minify'
 
 /**
- * @description For static script.
- * Minimize in production mode and memorized (cached).
+ * For static script. Minimize in production mode and memorized (cached).
+ * Prefer defining at module top level (like Style) for multi-line scripts; single-line
+ * value assignment (e.g. form.field.value=...) is fine inline.
+ * Prefer over raw <script> tag for minification and caching; raw <script> also works.
  * @returns script element
  */
 export function Script(js: string, flag?: ScriptFlag): Raw {
