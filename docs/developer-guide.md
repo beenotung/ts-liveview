@@ -2,6 +2,10 @@
 
 **Complete guide for new team members**
 
+> **Note:** This document was AI-generated and has not been fully reviewed. It may
+> contain errors or outdated information. Please take it with a grain of salt and
+> verify against the codebase when in doubt.
+
 ---
 
 ## 🚀 Quick Start (5 Minutes)

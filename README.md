@@ -439,6 +439,10 @@ Examples to be done:
 - [ ] Survey form
 - [ ] Content marketing with lead magnet
 
+Docs to review:
+
+- [ ] Review docs/developer-guide.md and docs/examples/ (AI-generated, not fully reviewed)
+
 ## Inspired from
 
 - [Phoenix LiveView](https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript) for the idea of initial html response and realtime updates over websocket

@@ -2,6 +2,9 @@
 
 Complete CRUD example with database, real-time updates, and session.
 
+> **Note:** AI-generated, not fully reviewed. May contain errors. Verify against
+> the codebase when in doubt.
+
 [Back to Developer Guide](../developer-guide.md)
 
 ---
