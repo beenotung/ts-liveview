@@ -246,23 +246,20 @@ async function handleLiveView(req: Request, res: Response, next: NextFunction) {
   sendHTMLHeader(res)
 
   try {
-    await then(
-      matchRoute(context),
-      route => {
-        if (route.status) {
-          res.status(route.status)
-        }
+    await then(matchRoute(context), route => {
+      if (route.status) {
+        res.status(route.status)
+      }
 
-        route.description = route.description.replace(/"/g, "'")
+      route.description = route.description.replace(/"/g, "'")
 
-        if (route.streaming === false) {
-          responseHTML(res, context, route)
-        } else {
-          streamHTML(res, context, route)
-        }
-      },
-      onError,
-    )
+      if (route.streaming === false) {
+        responseHTML(res, context, route)
+      } else {
+        res.setHeader('Content-Type', 'text/html; charset=UTF-8')
+        streamHTML(res, context, route)
+      }
+    })
   } catch (error) {
     onError(error)
   }
@@ -410,23 +407,19 @@ export let onWsMessage: OnWsMessage = async (event, ws, _wss) => {
   }
 
   try {
-    await then(
-      matchRoute(context),
-      route => {
-        if (eventType === 'mount') {
-          if (config.production) {
-            // in production mode, skip hot reload when the server is restarted
-            // so the client state will not be reset in the middle of form filling
-            return
-          }
+    await then(matchRoute(context), route => {
+      if (eventType === 'mount') {
+        if (config.production) {
+          // in production mode, skip hot reload when the server is restarted
+          // so the client state will not be reset in the middle of form filling
+          return
         }
-        let App = layouts[route.layout_type || config.layout_type]
-        let node = App(route)
-        if (navigation_type === 'express' && navigation_method !== 'GET') return
-        dispatchUpdate(context, node, route.title)
-      },
-      onError,
-    )
+      }
+      let App = layouts[route.layout_type || config.layout_type]
+      let node = App(route)
+      if (navigation_type === 'express' && navigation_method !== 'GET') return
+      dispatchUpdate(context, node, route.title)
+    })
   } catch (error) {
     onError(error)
   }
