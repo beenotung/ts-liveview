@@ -19,7 +19,7 @@ import { Content, Page, is_ionic } from '../components/page.js'
 import { BackToLink } from '../components/back-to-link.js'
 import { Locale, Title } from '../components/locale.js'
 import { env } from '../../env.js'
-import { Script } from '../components/script.js'
+import Script from '../components/script.js'
 import { toSlug } from '../format/slug.js'
 import { sweetAlertPlugin } from '../../client-plugins.js'
 

@@ -42,6 +42,8 @@ export function Script(js: string, flag?: ScriptFlag): Raw {
   return ['raw', `<script>${js}</script>`]
 }
 
+export default Script
+
 /**
  * @description use iife (Immediately Invoked Function Expression) to avoid name clash with other parts of the page.
  * */
