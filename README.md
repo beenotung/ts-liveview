@@ -43,6 +43,8 @@ To test https-required functions during development (e.g., camera, microphone):
 
 Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liveview)
 
+For team onboarding and detailed patterns, see [docs/developer-guide.md](./docs/developer-guide.md).
+
 ## Configuration
 
 - Environment variables: `.env` (see [.env.example](./.env.example) and [server/env.ts](./server/env.ts))
@@ -309,7 +311,7 @@ email_rate_limit.consume({ ...ctx, target: email })
 
 ## Quick Example
 
-Before writing pages, note these patterns to help avoid common pitfalls:
+Before writing pages, note these patterns to help avoid common pitfalls. See the full guide in [Get Started](#get-started) above.
 
 ### Style and Script placement
 
