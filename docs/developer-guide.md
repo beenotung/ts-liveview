@@ -61,11 +61,13 @@ This starter template helps you build fast, interactive web applications with:
 ### 1. Array Rendering - Use `mapArray()` or Wrap
 
 ❌ **WRONG:**
+
 ```typescript
 {products.map(product => <div>{product.name}</div>)}
 ```
 
 ✅ **CORRECT Option 1:**
+
 ```typescript
 import { mapArray } from '../components/fragment.js'
 
@@ -73,6 +75,7 @@ import { mapArray } from '../components/fragment.js'
 ```
 
 ✅ **CORRECT Option 2:**
+
 ```typescript
 {[products.map(product => <div>{product.name}</div>)]}
 ```
@@ -89,6 +92,7 @@ server communication. The server routes messages by URL.
 ### 3. Scripts - Define at Top Level
 
 ❌ **WRONG:**
+
 ```typescript
 function Page() {
   return (
@@ -101,6 +105,7 @@ function Page() {
 ```
 
 ✅ **CORRECT:**
+
 ```typescript
 import Script from '../components/script.js'
 
@@ -451,7 +456,7 @@ import { proxy } from '../../db/proxy.js'
 // Insert
 let newUserId = proxy.user.push({
   name: 'John',
-  email: 'john@example.com'
+  email: 'john@example.com',
 })
 
 // Update
@@ -519,6 +524,7 @@ for a full CRUD example.
 ## ✅ Best Practices
 
 ### DO:
+
 - ✅ Use `mapArray()` or `[array.map(...)]` for arrays
 - ✅ Define scripts/styles at top level with `Script()` and `Style()`
 - ✅ Use `emit(url, data)` for server communication
@@ -533,6 +539,7 @@ for a full CRUD example.
 - ✅ Use descriptive component names
 
 ### DON'T:
+
 - ❌ Use `.map()` directly in JSX without wrapping
   (plain array doesn't match JSX AST; see Critical Patterns above)
 - ❌ Put `<script>` or `<style>` inline in component JSX
@@ -628,17 +635,20 @@ See [Import Patterns](#import-patterns) in Quick Reference below.
 ## 🔗 Resources
 
 ### Official
+
 - **GitHub**: [github.com/beenotung/ts-liveview](https://github.com/beenotung/ts-liveview)
 - **Website**: [liveviews.cc](https://liveviews.cc/)
 - **npm**: [npmjs.com/package/ts-liveview](https://www.npmjs.com/package/ts-liveview)
 
 ### Examples
+
 - Thermostat Demo: [liveviews.cc/thermostat](https://liveviews.cc/thermostat)
 - Form Demo: [liveviews.cc/form](https://liveviews.cc/form)
 - Chat Room: [liveviews.cc/chatroom](https://liveviews.cc/chatroom)
 - User Agents: [liveviews.cc/user-agents](https://liveviews.cc/user-agents)
 
 ### Related
+
 - **TypeScript**: [typescriptlang.org/docs](https://www.typescriptlang.org/docs/)
 - **Express.js**: [expressjs.com](https://expressjs.com/)
 - **better-sqlite3**: [github.com/WiseLibs/better-sqlite3](https://github.com/WiseLibs/better-sqlite3)
@@ -649,6 +659,7 @@ See [Import Patterns](#import-patterns) in Quick Reference below.
 ## 🚀 Next Steps
 
 1. **Clone/Create Project**
+
    ```bash
    npx create-ts-liveview@latest my-first-app
    cd my-first-app
@@ -736,6 +747,7 @@ import { Routes } from '../routes.js'
 ### Common Patterns Quick Copy
 
 #### Basic Page
+
 (See [Creating Your First Page](#-creating-your-first-page) for full example.)
 
 ```typescript
@@ -751,6 +763,7 @@ export default function MyPage() {
 ```
 
 #### Page with Style & Script
+
 (See [Creating Your First Page](#-creating-your-first-page).)
 
 ```typescript
@@ -781,6 +794,7 @@ export default function MyPage() {
 ```
 
 #### List from Database
+
 ```typescript
 import { o } from '../jsx/jsx.js'
 import { proxy } from '../../db/proxy.js'
@@ -789,7 +803,7 @@ import { pick } from 'better-sqlite3-proxy'
 
 export default function ListPage() {
   let items = pick(proxy.items, ['id', 'name'])
-  
+
   return (
     <div>
       <ul>
@@ -803,19 +817,20 @@ export default function ListPage() {
 ```
 
 #### Form Handler
+
 ```typescript
 // In routes.tsx or api handler
 app.post('/api/contact', (req, res) => {
   let { name, email, message } = req.body
-  
+
   // Validate
   if (!name || !email || !message) {
     return res.status(400).json({ error: 'Missing fields' })
   }
-  
+
   // Save to database
   proxy.contact.push({ name, email, message })
-  
+
   res.json({ success: true })
 })
 ```
@@ -860,12 +875,12 @@ let routes: Routes = {
     title: 'Home',
     resolve: () => ({ node: <HomePage /> })
   },
-  
+
   // Dynamic (use routerMatch.params for route params)
   '/post/:id': {
     resolve: (ctx) => ({ node: <Post id={ctx.routerMatch?.params.id} /> })
   },
-  
+
   // Protected (session from ctx.session for ws, ctx.req?.session for express)
   '/admin': {
     resolve: (ctx) => {
@@ -876,7 +891,7 @@ let routes: Routes = {
       return { node: <AdminPage /> }
     }
   },
-  
+
   // 404
   '*': {
     resolve: () => ({ node: <NotFound /> })
@@ -898,7 +913,7 @@ function sendData(data) {
 export function handleMyEvent(data, context) {
   // Process data
   context.session.set('someValue', data.value)
-  
+
   // Return updated component
   return <UpdatedComponent />
 }
@@ -906,17 +921,17 @@ export function handleMyEvent(data, context) {
 
 ### DO / DON'T Summary
 
-| ✅ DO | ❌ DON'T |
-|-------|----------|
-| `{mapArray(arr, ...)}` | `{arr.map(...)}` |
-| `{[arr.map(...)]}` | Direct `.map()` |
-| `let script = Script(...)` | Inline `<script>` |
-| `let style = Style(...)` | Inline `<style>` |
-| Top-level definitions | Inline definitions |
-| `proxy.user.push({...})` | `db.insert(...)` |
-| `find(proxy.user, {...})` | `await db.query...` |
-| Server validation | Client-only validation |
-| `pick()` for fields | Query all fields |
+| ✅ DO                      | ❌ DON'T               |
+| -------------------------- | ---------------------- |
+| `{mapArray(arr, ...)}`     | `{arr.map(...)}`       |
+| `{[arr.map(...)]}`         | Direct `.map()`        |
+| `let script = Script(...)` | Inline `<script>`      |
+| `let style = Style(...)`   | Inline `<style>`       |
+| Top-level definitions      | Inline definitions     |
+| `proxy.user.push({...})`   | `db.insert(...)`       |
+| `find(proxy.user, {...})`  | `await db.query...`    |
+| Server validation          | Client-only validation |
+| `pick()` for fields        | Query all fields       |
 
 ---
 
@@ -989,4 +1004,3 @@ CRUD example with database, real-time updates, session management, and route wir
 ---
 
 **That's everything you need to get started! Welcome to the team! 🚀**
-
