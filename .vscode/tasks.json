@@ -1,0 +1,42 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "start",
+      "problemMatcher": [],
+      "label": "start dev server",
+      "detail": "run-s watch:*",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": false
+      }
+    },
+    {
+      "type": "npm",
+      "script": "type-check",
+      "problemMatcher": "$tsc-watch",
+      "label": "check typescript errors",
+      "detail": "tsc -p . --watch --noEmit",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": false
+      }
+    },
+    {
+      "label": "dev: all",
+      "dependsOn": [
+        "start dev server",
+        "check typescript errors"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}

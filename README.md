@@ -72,6 +72,8 @@ Lint the codebase with eslint and apply auto fix if possible.
 `npm run size`:
 Build the frontend and check the size of bundled, minified, and gzipped versions respectively.
 
+**VSCode/Cursor**: `Ctrl+Shift+P` → "Tasks: Run Build Task" to run dev server + type-check in parallel. See [.vscode/tasks.json](./.vscode/tasks.json).
+
 ## Features
 
 - [x] Support hybrid rendering mode
