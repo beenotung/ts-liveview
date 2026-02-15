@@ -49,7 +49,7 @@ For team onboarding and detailed patterns, see [docs/developer-guide.md](./docs/
 
 - Environment variables: `.env` (see [.env.example](./.env.example) and [server/env.ts](./server/env.ts))
 - Site settings: [server/config.ts](./server/config.ts)
-- Database schema: [db/README.md](./db/README.md)
+- Database: **SQLite** with better-sqlite3-proxy and knex migrations — included and usable out of the box. No ORM (Prisma, Drizzle, etc.) or other database needed unless you choose to modify. See [db/README.md](./db/README.md).
 
 ## Available npm scripts
 

@@ -1,6 +1,6 @@
 # Database
 
-This session description the workflow related to `erd.txt` and database schema migration.
+This project uses **SQLite** with better-sqlite3-proxy and knex migrations. The setup is included and usable out of the box. This section describes the workflow related to `erd.txt` and database schema migration.
 
 ## Viewing database schema
 

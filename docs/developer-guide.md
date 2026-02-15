@@ -390,7 +390,9 @@ resolution (initial page load), use `context.req` and your session middleware
 
 ## 💾 Database (better-sqlite3-proxy)
 
-The project uses `better-sqlite3-proxy` for type-safe database access.
+The project includes **SQLite** with `better-sqlite3-proxy` for type-safe database access. This setup is ready out of the box — no ORM or other database needed. You can modify to use other databases if you prefer.
+
+Use the proxy for type-safe CRUD and basic searching (`find`, `filter`, `pick`). For complex queries (joins, `ORDER BY`, `LIMIT`), use prepared statements on the underlying `db`.
 
 ### Setup
 
