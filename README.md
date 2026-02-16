@@ -72,7 +72,7 @@ Lint the codebase with eslint and apply auto fix if possible.
 `npm run size`:
 Build the frontend and check the size of bundled, minified, and gzipped versions respectively.
 
-**VSCode/Cursor**: `Ctrl+Shift+P` → "Tasks: Run Build Task" to run dev server + type-check in parallel. See [.vscode/tasks.json](./.vscode/tasks.json).
+**VSCode/Cursor**: `Ctrl+Shift+P` → "Run Build Task", which auto runs dev server + type-check in two terminal windows. Details see [.vscode/tasks.json](./.vscode/tasks.json).
 
 ## Features
 
@@ -358,7 +358,9 @@ Elements with an `id` are exposed as global variables (e.g. `greeting` for `id="
 Single-line value assignment is fine inline. For a select's initial value:
 
 ```tsx
-{Script(`form.field.value=${JSON.stringify(value)}`)}
+{
+  Script(`form.field.value=${JSON.stringify(value)}`)
+}
 ```
 
 ### Map/Loop in JSX
@@ -366,17 +368,17 @@ Single-line value assignment is fine inline. For a select's initial value:
 `{items.map(...)}` is **invalid** — a plain array does not match the expected AST structure. Import `mapArray` from `../components/fragment.js` and use either:
 
 ```tsx
-{mapArray(items, item => (
-  <li>{item.name}</li>
-))}
+{
+  mapArray(items, item => <li>{item.name}</li>)
+}
 ```
 
 Or wrap with extra brackets:
 
 ```tsx
-{[items.map(item => (
-  <li>{item.name}</li>
-))]}
+{
+  ;[items.map(item => <li>{item.name}</li>)]
+}
 ```
 
 `mapArray(array, fn, separator?)` — the optional third parameter is a delimiter; it can be any node (including strings), e.g. `', '`, `' | '`, or `<br />`.
@@ -387,7 +389,7 @@ A raw `<script>` tag with template literals also works, but the `Script` compone
 
 ```tsx
 // Works, but prefer Script component
-<script>{`
+;<script>{`
 function inc() {
   testBtn.textContent++
 }
