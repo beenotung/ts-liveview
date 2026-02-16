@@ -2,11 +2,14 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
       "type": "npm",
       "script": "start",
       "problemMatcher": [],
-      "label": "start dev server",
-      "detail": "run-s watch:*",
+      "label": "server",
+      "detail": "Start server in watch mode",
       "isBackground": true,
       "presentation": {
         "reveal": "always",
@@ -15,11 +18,14 @@
       }
     },
     {
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
       "type": "npm",
       "script": "type-check",
       "problemMatcher": "$tsc-watch",
-      "label": "check typescript errors",
-      "detail": "tsc -p . --watch --noEmit",
+      "label": "type-check",
+      "detail": "TypeScript check in watch mode",
       "isBackground": true,
       "presentation": {
         "reveal": "always",
@@ -28,10 +34,14 @@
       }
     },
     {
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
       "label": "dev: all",
+      "detail": "Start server and type-check in watch mode",
       "dependsOn": [
-        "start dev server",
-        "check typescript errors"
+        "server",
+        "type-check"
       ],
       "group": {
         "kind": "build",
