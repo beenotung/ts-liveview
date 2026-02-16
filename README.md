@@ -72,7 +72,7 @@ Lint the codebase with eslint and apply auto fix if possible.
 `npm run size`:
 Build the frontend and check the size of bundled, minified, and gzipped versions respectively.
 
-**VSCode/Cursor**: `Ctrl+Shift+P` → "Run Build Task", which auto runs dev server + type-check in two terminal windows. Details see [.vscode/tasks.json](./.vscode/tasks.json).
+**VSCode/Cursor**: `Ctrl+Shift+P` → "Run Build Task", which auto runs dev server + type-check in two terminal windows (config in [.vscode/tasks.json](./.vscode/tasks.json)).
 
 ## Features
 
