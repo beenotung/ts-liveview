@@ -246,7 +246,7 @@ function applySelector(e: Element, selector: string) {
   if (tagNameMatch) {
     selector = selector.slice(tagNameMatch[0].length)
   }
-  for (let attrMatch of selector.matchAll(attrListRegex)) {
+  for (let attrMatch of Array.from(selector.matchAll(attrListRegex))) {
     selector = selector.replace(attrMatch[0], '')
     let key = attrMatch[1]
     let value = attrMatch[2]
@@ -264,7 +264,7 @@ function applySelector(e: Element, selector: string) {
     selector = selector.replace(idMatch[0], '')
     e.id = idMatch[1]
   }
-  for (let classMatch of selector.matchAll(classListRegex)) {
+  for (let classMatch of Array.from(selector.matchAll(classListRegex))) {
     selector = selector.replace(classMatch[0], '')
     e.classList.add(classMatch[1])
   }
