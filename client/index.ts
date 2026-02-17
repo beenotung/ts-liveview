@@ -321,3 +321,8 @@ function showError(error: unknown) {
   }
 }
 win.showError = showError
+
+// fallback implementation before ws is connected
+win.goto ||= (url: string) => {
+  location.href = url
+}
