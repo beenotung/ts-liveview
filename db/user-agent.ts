@@ -21,6 +21,7 @@ export function classifyUserAgent(ua: string) {
   else if (ua.includes('DomainStatsBot')) return { bot: 'DomainStatsBot' }
   else if (ua.startsWith('Akkoma ')) return { bot: 'AkkomaBot' }
   else if (
+    ua.startsWith('python-httpx') ||
     ua.startsWith('python-requests') ||
     // e.g. "Python-urllib/3.7"
     /^Python-urllib\/[\d.]+$/.test(ua) ||
@@ -56,10 +57,14 @@ export function classifyUserAgent(ua: string) {
   else if (ua.includes('https://opensiteexplorer.org/dotbot'))
     return { bot: 'DotBot' }
   else if (ua.includes('http://ahrefs.com/robot/')) return { bot: 'AhrefsBot' }
-  else if (ua.includes('http://www.google.com/bot.html'))
+  else if (
+    ua.includes('http://www.google.com/bot.html') ||
+    ua.includes('http://www.googlebot.com/bot.html')
+  )
     return { bot: 'GoogleBot' }
   else if (ua.includes('Googlebot-Image')) return { bot: 'GoogleBot' }
   else if (ua.includes('Googlebot-News')) return { bot: 'GoogleBot' }
+  else if (ua.includes('Googlebot-Video')) return { bot: 'GoogleBot' }
   else if (ua.includes('AdsBot-Google')) return { bot: 'AdsBot-Google' }
   else if (ua.includes('Google-Apps-Script')) return { bot: 'GoogleAppsScript' }
   else if (ua.includes('http://duckduckgo.com')) return { bot: 'DuckDuckGoBot' }
@@ -87,10 +92,13 @@ export function classifyUserAgent(ua: string) {
   else if (ua.includes('https://internet-measurement.com'))
     return { bot: 'InternetMeasurement' }
   else if (ua.includes('https://seolyt.com')) return { bot: 'SEOlytBot' }
+  else if (ua.includes('Dub.co Bot')) return { bot: 'Dub.co Bot' }
+  else if (ua.includes('Discu.eu bot')) return { bot: 'Dub.co Bot' }
   else if (ua.includes('http://linkaffinity.io'))
     return { bot: 'LinkAffinityBot' }
   else if (ua.includes('https://dataforseo.com/dataforseo-bot'))
     return { bot: 'DataForSeoBot' }
+  else if (ua.includes('VertexWP')) return { bot: 'VertexWP Bot' }
   else if (ua.includes('PerplexityBot')) return { bot: 'PerplexityBot' }
   else if (ua.includes('AliyunSecBot')) return { bot: 'AliyunSecBot' }
   else if (ua.includes('YisouSpider')) return { bot: 'YisouSpider' }
@@ -102,6 +110,8 @@ export function classifyUserAgent(ua: string) {
   else if (ua.includes('TurnitinBot')) return { bot: 'TurnitinBot' }
   else if (ua.includes('zoombot') || ua.includes('suite.seozoom.it/bot.html'))
     return { bot: 'ZoomBot' }
+  else if (ua.includes('Gulper Web Bot') || ua.includes('GulperBot'))
+    return { bot: 'GulperBot' }
   else if (ua.includes('iPhone')) return { type: 'iPhone' }
   else if (ua.includes('iPad')) return { type: 'iPad' }
   else if (ua.includes('Macintosh')) return { type: 'MacOS' }
@@ -134,7 +144,26 @@ export function classifyUserAgent(ua: string) {
   // e.g. "Go-http-client/1.1"
   else if (/^Go-http-client\/[\d.]+$/.test(ua)) return { bot: 'GoBot' }
   else if (ua.startsWith('Hackers/')) return { bot: 'HackerNewsBot' }
-  else return { type: 'Other' }
+  else {
+    let botName = ua
+      .split(' ')
+      .flatMap(part => part.split('/'))
+      .flatMap(part => part.split('.'))
+      .flatMap(part => part.split(';'))
+      .find(part => {
+        part = part.trim()
+        if (part.toLowerCase().endsWith('bot')) {
+          return part
+        }
+      })
+    if (botName) {
+      if (botName.toLowerCase() == 'bot') {
+        log('unknown bot name:', ua)
+      }
+      return { bot: botName }
+    }
+    return { type: 'Other' }
+  }
 }
 
 let timePerLog = 1
@@ -204,7 +233,7 @@ let resetStats = db.transaction(() => {
 })
 
 let versionFile = join(dataDir, 'user-agent-version.txt')
-let version = 3
+let version = 4
 function autoResetStats() {
   if (loadNumber(versionFile) == version) return
   resetStats()
