@@ -3,7 +3,7 @@
   "short_name": "ts-liveview",
   "start_url": "/",
   "display": "standalone",
-  "orientation": "any",
+  "orientation": "natural",
   "icons": [
     {
       "src": "/icon-192.png",
