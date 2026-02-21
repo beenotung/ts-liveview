@@ -45,8 +45,8 @@ import { WindowStub } from '../../client/internal.js'
 import { updateRequestSession } from '../../db/request-log.js'
 import { Link } from './components/router.js'
 import ErrorLog from './store/error-log.js'
-import { existsSync } from 'fs'
-import { Locale, LocaleVariants } from './components/locale.js'
+import { Locale } from './components/locale.js'
+import { manifest_files, theme_color } from './manifest.js'
 
 if (config.development) {
   scanTemplateDir('template')
@@ -56,14 +56,7 @@ function renderTemplate(
   context: Context,
   route: PageRouteMatch,
 ) {
-  let manifest_file = Locale(
-    {
-      en: '/manifest-en.json',
-      zh_hk: '/manifest-zh-hk.json',
-      zh_cn: '/manifest-zh-cn.json',
-    },
-    context,
-  )
+  let manifest_file = Locale(manifest_files, context)
   let layout_type = route.layout_type || config.layout_type
   let App = layouts[layout_type]
   let app = App(route)
@@ -74,6 +67,7 @@ function renderTemplate(
     site_name: config.site_name,
     title: escapeHTMLTextContent(route.title),
     description: unquote(escapeHTMLAttributeValue(route.description)),
+    theme_color,
     manifest_file,
     app:
       typeof app == 'string' ? app : stream => writeNode(stream, app, context),

@@ -1,6 +1,6 @@
 {
-  "name": "ts-liveview 示範",
-  "short_name": "ts-liveview 示範",
+  "name": "ts-liveview 示例",
+  "short_name": "示例",
   "start_url": "/",
   "display": "standalone",
   "orientation": "natural",
@@ -16,6 +16,6 @@
       "type": "image/png"
     }
   ],
-  "background_color": "#00ffee",
-  "theme_color": "#00ffee"
+  "background_color": "#ffffff",
+  "theme_color": "#000000"
 }

@@ -8,6 +8,7 @@ export type WebOptions = {
   title: string | HTMLFunc
   description: string | HTMLFunc
   site_name: string | HTMLFunc
+  theme_color: string | HTMLFunc
   manifest_file: string | HTMLFunc
   app: string | HTMLFunc
 }
@@ -33,7 +34,9 @@ export function renderWebTemplate(
   stream.write(/* html */ `" />
 
     <!-- For Progressive Web App (PWA) -->
-    <meta name="theme-color" content="#00ffee" />
+    <meta name="theme-color" content="`)
+  typeof options.theme_color == 'function' ? options.theme_color(stream) : stream.write(options.theme_color)
+  stream.write(/* html */ `" />
 
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
