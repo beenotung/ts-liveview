@@ -7,6 +7,7 @@ type HTMLFunc = (stream: HTMLStream) => void
 export type IonicOptions = {
   title: string | HTMLFunc
   description: string | HTMLFunc
+  site_name: string | HTMLFunc
   app: string | HTMLFunc
 }
 
@@ -29,6 +30,25 @@ export function renderIonicTemplate(
     <meta name="description" content="`)
   typeof options.description == 'function' ? options.description(stream) : stream.write(options.description)
   stream.write(/* html */ `" />
+
+    <!-- For Progressive Web App (PWA) -->
+    <meta name="theme-color" content="#00ffee" />
+
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="`)
+  typeof options.site_name == 'function' ? options.site_name(stream) : stream.write(options.site_name)
+  stream.write(/* html */ `" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+    <meta http-equiv="x-ua-compatible" content="IE=Edge" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="manifest" href="/manifest.json" />
   </head>
   <body>
     <div id="noscript" aria-hidden="true">

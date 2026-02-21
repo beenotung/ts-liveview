@@ -61,6 +61,7 @@ function renderTemplate(
     route.renderTemplate ||
     (App == IonicApp ? renderIonicTemplate : renderWebTemplate)
   render(stream, {
+    site_name: config.site_name,
     title: escapeHTMLTextContent(route.title),
     description: unquote(escapeHTMLAttributeValue(route.description)),
     app:
