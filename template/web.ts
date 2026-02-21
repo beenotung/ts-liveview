@@ -8,6 +8,7 @@ export type WebOptions = {
   title: string | HTMLFunc
   description: string | HTMLFunc
   site_name: string | HTMLFunc
+  manifest_file: string | HTMLFunc
   app: string | HTMLFunc
 }
 
@@ -48,7 +49,9 @@ export function renderWebTemplate(
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="`)
+  typeof options.manifest_file == 'function' ? options.manifest_file(stream) : stream.write(options.manifest_file)
+  stream.write(/* html */ `" />
   </head>
   <body>
     <div id="noscript" aria-hidden="true">

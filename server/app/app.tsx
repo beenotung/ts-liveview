@@ -2,7 +2,7 @@ import { o } from './jsx/jsx.js'
 import { scanTemplateDir } from '../template-file.js'
 import { NextFunction, Request, Response, Router } from 'express'
 import type { Context, ExpressContext, WsContext } from './context'
-import { fixLanguage } from './context.js'
+import { fixLanguage, getContextLanguage } from './context.js'
 import type { Element } from './jsx/types'
 import {
   escapeHTMLAttributeValue,
@@ -45,6 +45,8 @@ import { WindowStub } from '../../client/internal.js'
 import { updateRequestSession } from '../../db/request-log.js'
 import { Link } from './components/router.js'
 import ErrorLog from './store/error-log.js'
+import { existsSync } from 'fs'
+import { Locale, LocaleVariants } from './components/locale.js'
 
 if (config.development) {
   scanTemplateDir('template')
@@ -54,6 +56,14 @@ function renderTemplate(
   context: Context,
   route: PageRouteMatch,
 ) {
+  let manifest_file = Locale(
+    {
+      en: '/manifest-en.json',
+      zh_hk: '/manifest-zh-hk.json',
+      zh_cn: '/manifest-zh-cn.json',
+    },
+    context,
+  )
   let layout_type = route.layout_type || config.layout_type
   let App = layouts[layout_type]
   let app = App(route)
@@ -64,6 +74,7 @@ function renderTemplate(
     site_name: config.site_name,
     title: escapeHTMLTextContent(route.title),
     description: unquote(escapeHTMLAttributeValue(route.description)),
+    manifest_file,
     app:
       typeof app == 'string' ? app : stream => writeNode(stream, app, context),
   })
