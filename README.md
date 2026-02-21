@@ -50,6 +50,11 @@ For team onboarding and detailed patterns, see [docs/developer-guide.md](./docs/
 - Environment variables: `.env` (see [.env.example](./.env.example) and [server/env.ts](./server/env.ts))
 - Site settings: [server/config.ts](./server/config.ts)
 - Database: **SQLite** with better-sqlite3-proxy and knex migrations — included and usable out of the box. No ORM (Prisma, Drizzle, etc.) or other database needed unless you choose to modify. See [db/README.md](./db/README.md).
+- PWA <span id="pwa"></span>: Working setup included.
+  - **[public/manifest.json](./public/manifest.json)** — set `name`, `short_name`, `orientation` (e.g. `portrait`, `landscape`, `natural`), `theme_color`, `background_color`.
+  - **Theme color** — keep in sync in both `manifest.json` and `<meta name="theme-color">` in your HTML template ([template/web.html](./template/web.html), [template/ionic.html](./template/ionic.html)).
+  - **Icons** — replace [icon-192.png](./public/icon-192.png) and [icon-512.png](./public/icon-512.png) with your logo (and optionally `favicon.ico`, `apple-touch-icon.png`).
+  - **Tip:** You can use [App Store Images](https://app-store-images.surge.sh/) — a simple single-file HTML webapp that generates PWA and app-store icons from one image. ([Source](https://github.com/beenotung/app-store-images))
 
 ## Available npm scripts
 
@@ -124,6 +129,7 @@ Build the frontend and check the size of bundled, minified, and gzipped versions
 - [x] CSRF protection via `SameSite=Lax` cookies (in auth templates)
 - [x] Multi-dimensional rate limiting with token bucket algorithm (IP, user, target, global)
 - [x] Fully customizable [[9]](#feature-9)
+- [x] Working PWA setup — see [Configuration](#pwa)
 - [x] Multiple starter templates
   - [x] v5-demo (kitchen sink demos)
   - [x] v5-minimal-template (single page starter)
