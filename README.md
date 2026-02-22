@@ -43,7 +43,9 @@ To test https-required functions during development (e.g., camera, microphone):
 
 Details refer to [create-ts-liveview](https://github.com/beenotung/create-ts-liveview)
 
-For team onboarding and detailed patterns, see [docs/developer-guide.md](./docs/developer-guide.md).
+For team onboarding and detailed patterns, see [docs/developer-guide.md](./docs/developer-guide.md). To configure how AI assistants (e.g. Cursor) should behave when editing code, see [docs/ai-agent-guidelines.md](./docs/ai-agent-guidelines.md).
+
+To keep track of tasks, you may log them in `tasks/*.md` so they aren't lost while you design, implement, review, and commit — run `./scripts/new-task.sh <name>` to create one, or you may use your preferred IDE/cli/AI assistant to create the files.
 
 ## Configuration
 
