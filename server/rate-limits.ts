@@ -16,28 +16,28 @@ export let api_rate_limit = createRateLimit({
 // Email - moderate capacity, cooldown on target
 export let email_rate_limit = createRateLimit({
   ip: { capacity: 8, interval: 3 * MINUTE },
-  target: { capacity: 3, interval: 10 * MINUTE, cooldown: 30 * SECOND },
+  target: { capacity: 6, interval: 15 * MINUTE, cooldown: 30 * SECOND },
   global: { capacity: 100, interval: SECOND / 2 },
 })
 
 // SMS - low capacity, long interval, cooldown on target
 export let sms_rate_limit = createRateLimit({
   ip: { capacity: 5, interval: 5 * MINUTE },
-  target: { capacity: 3, interval: 10 * MINUTE, cooldown: 30 * SECOND },
+  target: { capacity: 5, interval: 15 * MINUTE, cooldown: 30 * SECOND },
   global: { capacity: 50, interval: 1 * SECOND },
 })
 
 // Password login - protect against brute force (not needed for OTP-only auth)
 export let password_rate_limit = createRateLimit({
   ip: { capacity: 10, interval: 2 * MINUTE },
-  target: { capacity: 5, interval: 5 * MINUTE, cooldown: 5 * SECOND },
+  target: { capacity: 10, interval: 15 * MINUTE, cooldown: 5 * SECOND },
   global: { capacity: 100, interval: 1 * SECOND },
 })
 
 // Register - prevent spam on specific email
 export let register_rate_limit = createRateLimit({
   ip: { capacity: 5, interval: 10 * MINUTE },
-  target: { capacity: 3, interval: 15 * MINUTE },
+  target: { capacity: 5, interval: 15 * MINUTE },
   global: { capacity: 50, interval: 1 * SECOND },
 })
 
