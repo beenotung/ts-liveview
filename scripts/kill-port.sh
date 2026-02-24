@@ -3,7 +3,7 @@ set -e
 set -o pipefail
 
 ## there is a optional variable PORT in .env file
-source .env
+[ -f .env ] && source .env
 
 ## find the default port number in env.ts
 default_port=$(grep -oE '\bPORT: [0-9]+\b' server/env.ts | awk '{print $2}')
