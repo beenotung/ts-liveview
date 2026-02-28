@@ -73,7 +73,7 @@
     "populate-env": "^2.4.3",
     "sanitize-html": "^2.17.1",
     "sweetalert2-unrestricted": "^11.10.5",
-    "swiper": "^11.2.10",
+    "swiper": "^12.1.2",
     "timezone-date.ts": "^2.1.0",
     "token-bucket.ts": "^1.1.0",
     "url-router.ts": "^1.2.1",
