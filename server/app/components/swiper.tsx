@@ -185,6 +185,7 @@ function swiperSetup(swiper, index, interval) {
   }
   let timer
   function start() {
+    if (timer) clearInterval(timer)
     timer = setInterval(autoSlide, interval)
   }
   function pause() {
