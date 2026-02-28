@@ -7,8 +7,8 @@ type HTMLFunc = (stream: HTMLStream) => void
 export type WebOptions = {
   title: string | HTMLFunc
   description: string | HTMLFunc
-  site_name: string | HTMLFunc
   theme_color: string | HTMLFunc
+  site_name: string | HTMLFunc
   manifest_file: string | HTMLFunc
   app: string | HTMLFunc
 }
