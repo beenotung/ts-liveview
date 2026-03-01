@@ -55,14 +55,26 @@ export function Swiper(
 }
 .swiper-pagination-images {
   display: flex;
-  position: static;
+  align-items: center;
+  justify-content: center;
+  bottom: var(--swiper-pagination-bottom,8px);
+  left: 0;
+  top: var(--swiper-pagination-top,auto);
+  width: 100%;
 }
 .swiper-pagination-images img {
   width: var(--swiper-pagination-image-size,3rem);
   height: var(--swiper-pagination-image-size,3rem);
+  object-fit: cover;
 }
 .swiper-pagination-image {
-  display: flex;
+  display: inline-flex;
+  cursor: pointer;
+  margin: 0 var(--swiper-pagination-image-horizontal-gap,4px);
+  opacity: var(--swiper-pagination-image-inactive-opacity,.5);
+}
+.swiper-pagination-image-active {
+  opacity: var(--swiper-pagination-image-opacity,1);
 }
 `
   }
@@ -174,6 +186,15 @@ function swiperSlide(swiper, dir) {
     } else {
       e.removeAttribute('aria-current')
       e.classList.remove('swiper-pagination-bullet-active')
+    }
+  })
+  swiper.querySelectorAll('.swiper-pagination-image').forEach((e, i) => {
+    if (i == index) {
+      e.setAttribute('aria-current', 'true')
+      e.classList.add('swiper-pagination-image-active')
+    } else {
+      e.removeAttribute('aria-current')
+      e.classList.remove('swiper-pagination-image-active')
     }
   })
 }
