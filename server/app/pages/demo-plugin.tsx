@@ -34,14 +34,17 @@ h2 {
   margin: 1em 0.25em;
   border-color: #5555;
 }
-#demo-swiper {
+#demo-swiper, #demo-image-swiper {
   outline: 1px solid black;
   max-width: 300px;
   height: 150px;
   background-color: #f552;
   --swiper-theme-color: red;
 }
-#demo-swiper .swiper-slide {
+#demo-image-swiper {
+  --swiper-theme-color: bisque;
+}
+#demo-swiper .swiper-slide, #demo-image-swiper .swiper-slide {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -113,11 +116,29 @@ fireConfetti()
         zh_cn="Swiper/Slider 示范"
       />
     </h2>
+    <h3>
+      <Locale en="Text Slides" zh_hk="文字幻燈片" zh_cn="文字幻灯片" />
+    </h3>
     <Swiper
       id="demo-swiper"
       slides={[<p>Slice 1</p>, <p>Slice 2</p>, <p>Slice 3</p>]}
       showPagination
       showArrow
+      interval={3000}
+    />
+    <h3>
+      <Locale en="Image Slides" zh_hk="圖片幻燈片" zh_cn="图片幻灯片" />
+    </h3>
+    <Swiper
+      id="demo-image-swiper"
+      images={[
+        <img src="https://picsum.photos/seed/2/300/150" />,
+        <img src="https://picsum.photos/seed/3/300/150" />,
+        <img src="https://picsum.photos/seed/4/300/150" />,
+      ]}
+      showArrow
+      showPagination
+      interval={3000}
     />
 
     <hr />
