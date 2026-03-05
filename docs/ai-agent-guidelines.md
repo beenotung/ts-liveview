@@ -89,7 +89,7 @@ Do not use `alert(...)`, `confirm(...)`, or `prompt(...)`. They block the JS run
 ---
 
 **Database: proxy for simple CRUD, prepared statements for complex**  
-For simple single-table CRUD, use the **proxy** and **filter / find / pick** helper functions with static type checking. Use **prepared statements** when the query is complex (joins, subqueries, etc.).
+For simple single-table CRUD, use the **proxy** and **filter / find / pick** helper functions from `better-sqlite3-proxy` with static type checking. Use **prepared statements** when the query is complex (joins, subqueries, etc.). **Do not** use array methods on proxy tables (`proxy.table.filter(...)`, `proxy.table.find(...)`) — that iterates all rows in memory; use `filter(proxy.table, { col: value })` and `find(proxy.table, { col: value })` instead.
 
 ---
 

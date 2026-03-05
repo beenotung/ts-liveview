@@ -399,6 +399,8 @@ The project includes **SQLite** with `better-sqlite3-proxy` for type-safe databa
 
 Use the proxy for type-safe CRUD and basic searching (`find`, `filter`, `pick`). For complex queries (joins, `ORDER BY`, `LIMIT`), use prepared statements on the underlying `db`.
 
+**Avoid:** Do **not** use array methods on proxy tables (e.g. `proxy.label.filter(...)`, `proxy.user.find(...)`). The proxy is backed by the DB table; `.filter` / `.find` would iterate all rows in memory. Use the helpers from `better-sqlite3-proxy` instead: `filter(proxy.label, { project_id })`, `find(proxy.user, { id: userId })`.
+
 ### Setup
 
 **File:** `db/proxy.ts` (auto-generated from erd.txt)
@@ -438,8 +440,10 @@ let users = proxy.user
 // Find one user
 let user = find(proxy.user, { id: userId })
 
-// Filter users
+// Filter users (DB-backed; does not loop all rows in JS)
 let activeUsers = filter(proxy.user, { active: true })
+
+// ❌ Avoid: proxy.user.filter(u => u.active) — iterates entire table in memory
 
 // Custom query with pick
 import { pick } from 'better-sqlite3-proxy'
