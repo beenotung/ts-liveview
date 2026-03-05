@@ -152,17 +152,22 @@ function Page() {
 my-app/
 ├── server/
 │   ├── app/
-│   │   ├── pages/         # Your page components
+│   │   ├── pages/         # Page components
 │   │   ├── components/    # Reusable components
-│   │   ├── routes.tsx      # Route definitions
-│   │   └── app.ts
+│   │   ├── routes.tsx     # Route definitions (routeDict from page .routes)
+│   │   ├── app.tsx        # App layout
+│   │   └── express.ts     # Express app setup
 │   └── index.ts           # Server entry point
 ├── db/                    # Database schema & migrations
 │   ├── erd.txt            # Schema (ERD format)
-│   ├── proxy.ts           # Database proxy (typed, auto-generated)
-│   └── ...
+│   ├── proxy.ts           # Database proxy (typed, auto-generated from erd.txt)
+│   └── migrations/
+├── docs/                  # Developer guide, AI agent guidelines, examples
+├── client/                # Client bundle source
+├── build/                 # Built client bundle
 ├── public/                # Static assets (css, js, images)
-├── scripts/               # Setup & deployment scripts
+├── scripts/               # Setup & deployment scripts (init.sh, new-task.sh, deploy.sh, ...)
+├── tasks/                 # Optional: task backlog & planning (.md files; created by new-task.sh or manually)
 └── package.json
 ```
 
@@ -981,7 +986,7 @@ let routes = {
 export default { routes }
 ```
 
-Then in `server/app/routes.tsx`: `...BlogPosts.routes,`
+Then in `server/app/routes.tsx`: add `...BlogPosts.routes` (or your module name) to `routeDict`. If you create the page with `./scripts/new-route.sh`, it inserts this line and the import automatically.
 
 ### Deploy
 
