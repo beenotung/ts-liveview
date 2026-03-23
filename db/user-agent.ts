@@ -79,7 +79,8 @@ export function classifyUserAgent(ua: string) {
   else if (ua.includes('crawler@mixrank.com')) return { bot: 'MixrankBot' }
   else if (
     ua.includes('facebookexternalhit') ||
-    ua.includes('developers.facebook.com/docs/sharing/webmasters/crawler')
+    ua.includes('developers.facebook.com/docs/sharing/webmasters/crawler') ||
+    ua.includes('meta-externalagent')
   )
     return { bot: 'FacebookBot' }
   else if (ua.includes('Mastodon')) return { bot: 'MastodonBot' }
@@ -104,6 +105,10 @@ export function classifyUserAgent(ua: string) {
   else if (ua.includes('YisouSpider')) return { bot: 'YisouSpider' }
   else if (ua.includes('SafeDNSBot')) return { bot: 'SafeDNSBot' }
   else if (ua.includes('HawaiiBot')) return { bot: 'HawaiiBot' }
+  else if (ua.includes('SERankingBacklinksBot'))
+    return { bot: 'SERankingBacklinksBot' }
+  else if (ua.includes('SleepBot')) return { bot: 'SleepBot' }
+  else if (ua.includes('netEstate')) return { bot: 'netEstateBot' }
   else if (ua.includes('Sogou') || ua.includes('sogou web spider'))
     return { bot: 'SogouBot' }
   else if (ua.includes('Scrapy')) return { bot: 'Scrapy' }
@@ -233,7 +238,7 @@ let resetStats = db.transaction(() => {
 })
 
 let versionFile = join(dataDir, 'user-agent-version.txt')
-let version = 4
+let version = 5
 function autoResetStats() {
   if (loadNumber(versionFile) == version) return
   resetStats()
