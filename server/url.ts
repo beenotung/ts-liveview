@@ -68,6 +68,8 @@ export function toUrl<K extends string>(
     let searchParams = new URLSearchParams(options.search)
     if (options.query) {
       for (let [key, value] of Object.entries(options.query)) {
+        if (value === undefined) continue
+        if (value === null) continue
         if (Array.isArray(value)) {
           for (let val of value) {
             searchParams.append(key, val)
