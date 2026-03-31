@@ -43,6 +43,8 @@ export function toUrl<K extends string>(
     search?: string
     /** @description to apply `JSON.stringify()` on the result if enabled */
     json?: boolean
+    /** @description preserve the original symbols like '@' and '[]' (enabled by default) */
+    preserve?: boolean
   },
 ): string {
   let params = (options?.params || {}) as Record<string, string | number>
@@ -80,7 +82,19 @@ export function toUrl<K extends string>(
       }
     }
     if (searchParams.size > 0) {
-      url += '?' + searchParams
+      let params = searchParams.toString()
+      if (options.preserve !== false) {
+        params = params
+          .replaceAll('%40', '@')
+          .replaceAll('%3A', ':')
+          .replaceAll('%2C', ',')
+          .replaceAll('%3D', '=')
+          .replaceAll('%5B', '[')
+          .replaceAll('%5D', ']')
+          .replaceAll('%28', '(')
+          .replaceAll('%29', ')')
+      }
+      url += '?' + params
     }
   }
 
