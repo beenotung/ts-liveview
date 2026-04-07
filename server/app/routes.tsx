@@ -1,3 +1,4 @@
+import DemoPagination from './pages/demo-pagination.js'
 import DemoTypescriptPage from './pages/demo-typescript-page.js'
 import AppNotice from './pages/app-notice.js'
 import AppChat from './pages/app-chat.js'
@@ -93,6 +94,7 @@ let routeDict = {
   ...Thermostat.routes,
   ...Editor.routes,
   ...AutoCompleteDemo.routes,
+  ...DemoPagination.routes,
   ...DemoForm.routes,
   ...DemoInputComponents.routes,
   ...UserList.routes,

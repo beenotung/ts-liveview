@@ -35,6 +35,18 @@ export function Pagination(
     'style'?: string
     'class'?: string
     'base-url'?: string
+    /**
+     * number of pages before / after the current page to display
+     *
+     * default 2
+     **/
+    'wrap'?: number
+    /**
+     * to show more pages at the beginning and end of the pagination
+     *
+     * default `wrap * 2 + 1`
+     **/
+    'edge-page-count'?: number
   } & (
     | {
         'current-page': number
@@ -74,9 +86,23 @@ export function Pagination(
   pages.push(min_page)
 
   // current page and surrounding pages
-  let wrap = 2
+  let wrap = attrs.wrap ?? 2
+  let edgePageCount = attrs['edge-page-count'] ?? wrap * 2 + 1
+  let edgeRange = (edgePageCount - 1) / 2
   let from = Math.max(min_page + 1, current - wrap)
   let to = Math.min(current + wrap, max_page)
+  if (current <= edgeRange) {
+    to = Math.min(edgePageCount, max_page)
+  } else if (current >= max_page - edgeRange + 1) {
+    from = Math.max(min_page + 1, max_page - edgePageCount + 1)
+  }
+
+  console.log({
+    current,
+    from,
+    to,
+    max_page,
+  })
 
   // surrounding pages
   for (let page = from; page <= to; page++) {
