@@ -24,6 +24,7 @@ import { is_ionic, is_web, Page } from '../components/page.js'
 import { loadClientPlugin } from '../../client-plugin.js'
 import { IonButton } from '../components/ion-button.js'
 import { Locale, Title } from '../components/locale.js'
+import { env } from '../../env.js'
 
 let style = Style(/* css */ `
 #login .field {
@@ -253,16 +254,20 @@ let guestView = (
           </form>
         </>
       )}
-    <div class="separator-line flex-center">
-      <Locale
-        en="Login with password"
-        zh_hk="使用密碼登入"
-        zh_cn="使用密码登录"
-      />
-    </div>
-    <form method="post" action="/login/submit">
-      {passwordFormBody}
-    </form>
+    {env.PASSWORD_LOGIN && (
+      <>
+        <div class="separator-line flex-center">
+          <Locale
+            en="Login with password"
+            zh_hk="使用密碼登入"
+            zh_cn="使用密码登录"
+          />
+        </div>
+        <form method="post" action="/login/submit">
+          {passwordFormBody}
+        </form>
+      </>
+    )}
     <div class="separator-line flex-center">
       <Locale
         en={`New to ${config.short_site_name}?`}
