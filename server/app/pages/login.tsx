@@ -24,7 +24,6 @@ import { is_ionic, is_web, Page } from '../components/page.js'
 import { loadClientPlugin } from '../../client-plugin.js'
 import { IonButton } from '../components/ion-button.js'
 import { Locale, Title } from '../components/locale.js'
-import { env } from '../../env.js'
 
 let style = Style(/* css */ `
 #login .field {
@@ -254,7 +253,7 @@ let guestView = (
           </form>
         </>
       )}
-    {env.PASSWORD_LOGIN && (
+    {config.use_password_login && (
       <>
         <div class="separator-line flex-center">
           <Locale

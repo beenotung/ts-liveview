@@ -30,6 +30,7 @@ export let config = {
   auto_open: !production && development && epoch === 1,
   client_target: 'es2020',
   layout_type: LayoutType.navbar,
+  use_password_login: true,
   use_social_login: true,
   use_verification_code: true,
   enable_email: development || env.EMAIL_USER !== 'skip',

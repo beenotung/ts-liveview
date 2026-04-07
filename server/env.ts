@@ -36,7 +36,6 @@ export let env = {
   EMAIL_PASSWORD: '',
   SMS_ACCOUNT_KEY: '',
   SMS_API_KEY: '',
-  PASSWORD_LOGIN: true,
 }
 applyDefaultEnv()
 
