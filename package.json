@@ -19,7 +19,8 @@
     "fix": "run-p fix:*",
     "fix:server": "fix-esm-import-path --preserve-import-type server/index.ts",
     "fix:client": "fix-esm-import-path --preserve-import-type client/index.ts",
-    "type-check": "tsc -p . --watch --noEmit",
+    "tsc": "tsc -p . --noEmit",
+    "type-check": "npm run tsc -- --watch",
     "build": "run-p build:*",
     "build:dev": "esbuild scripts/dev.ts --target=es2022 --outfile=scripts/dev.js && prettier --write scripts/dev.js",
     "build:server": "node scripts/dev.js build",
@@ -38,7 +39,7 @@
   "lint-staged": {
     "**/*.{ts,tsx,css,md}": "prettier --write",
     "**/*.json": "format-json-cli",
-    "**/*.{ts,tsx}": "tsc --noEmit --skipLibCheck"
+    "**/*.{ts,tsx}": "npm run tsc"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
