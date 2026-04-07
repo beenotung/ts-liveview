@@ -30,6 +30,7 @@ import { loadClientPlugin } from '../../client-plugin.js'
 import { is_ionic, is_web, Page } from '../components/page.js'
 import { IonButton } from '../components/ion-button.js'
 import { Locale, Title } from '../components/locale.js'
+import { env } from '../../env.js'
 
 let style = Style(/* css */ `
 #register form .field {
@@ -242,46 +243,48 @@ let guestView = (
           </form>
         </>
       )}
-    <div class="separator-line flex-center">
-      <Locale
-        en="Register with password"
-        zh_hk="使用密碼註冊"
-        zh_cn="使用密码注册"
-      />
-    </div>
-    <form
-      id="verifyForm"
-      method="POST"
-      action="/register/submit"
-      onsubmit="emitForm(event)"
-    >
-      <Field
-        label={<Locale en="Username" zh_hk="用戶名" zh_cn="用户名" />}
-        name="username"
-        msgId="usernameMsg"
-        oninput="emit('/register/check-username', this.value)"
-        autocomplete="username"
-      />
-      <Field
-        label={<Locale en="Password" zh_hk="密碼" zh_cn="密码" />}
-        type="password"
-        name="password"
-        msgId="passwordMsg"
-        oninput="emit('/register/check-password', this.value);this.form.confirm_password.value=''"
-        autocomplete="new-password"
-      />
+    {env.PASSWORD_LOGIN && (
+      <>
+        <div class="separator-line flex-center">
+          <Locale
+            en="Register with password"
+            zh_hk="使用密碼註冊"
+            zh_cn="使用密码注册"
+          />
+        </div>
+        <form
+          id="verifyForm"
+          method="POST"
+          action="/register/submit"
+          onsubmit="emitForm(event)"
+        >
+          <Field
+            label={<Locale en="Username" zh_hk="用戶名" zh_cn="用户名" />}
+            name="username"
+            msgId="usernameMsg"
+            oninput="emit('/register/check-username', this.value)"
+            autocomplete="username"
+          />
+          <Field
+            label={<Locale en="Password" zh_hk="密碼" zh_cn="密码" />}
+            type="password"
+            name="password"
+            msgId="passwordMsg"
+            oninput="emit('/register/check-password', this.value);this.form.confirm_password.value=''"
+            autocomplete="new-password"
+          />
 
-      <Field
-        label={
-          <Locale en="Confirm password" zh_hk="確認密碼" zh_cn="确认密码" />
-        }
-        type="password"
-        name="confirm_password"
-        msgId="confirmPasswordMsg"
-        oninput="checkPassword(this.form||this.closest('form'))"
-        autocomplete="new-password"
-      />
-      {Raw(/* html */ `<script>
+          <Field
+            label={
+              <Locale en="Confirm password" zh_hk="確認密碼" zh_cn="确认密码" />
+            }
+            type="password"
+            name="confirm_password"
+            msgId="confirmPasswordMsg"
+            oninput="checkPassword(this.form||this.closest('form'))"
+            autocomplete="new-password"
+          />
+          {Raw(/* html */ `<script>
 function checkPassword (form) {
   let c = form.confirm_password.value
   if (c.length == 0) {
@@ -298,60 +301,62 @@ function checkPassword (form) {
   confirmPasswordMsg.style.color = 'green'
 }
 </script>`)}
-      {is_web ? (
-        <input
-          type="submit"
-          value={<Locale en="Register" zh_hk="註冊" zh_cn="注册" />}
-        />
-      ) : (
-        <ion-button
-          type="submit"
-          class="ion-margin"
-          expand="block"
-          color="primary"
-        >
-          <Locale en="Register" zh_hk="註冊" zh_cn="注册" />
-        </ion-button>
-      )}
-      <ClearInputContext />
-    </form>
-    <div class="hint-block">
-      <Locale
-        en="Your password is not be stored in plain text."
-        zh_hk="你的密碼不會被儲存為明文。"
-        zh_cn="你的密码不会被存储为明文。"
-      />
-      <br />
-      <Locale
-        en={
-          <>
-            Instead, it is processed with{' '}
-            <a href="https://en.wikipedia.org/wiki/Argon2" target="_blank">
-              Argon2 algorithm
-            </a>{' '}
-            to protect your password against data leak.
-          </>
-        }
-        zh_hk={
-          <>
-            相反，它使用{' '}
-            <a href="https://zh.wikipedia.org/zh-hk/Argon2" target="_blank">
-              Argon2 算法
-            </a>{' '}
-            來保護你的密碼免受數據洩漏。
-          </>
-        }
-        zh_cn={
-          <>
-            相反，它使用{' '}
-            <a href="https://zh.wikipedia.org/zh-cn/Argon2" target="_blank">
-              Argon2 算法
-            </a>{' '}
-            来保护你的密码免受数据泄露。
-          </>
-        }
-      />
-    </div>
+          {is_web ? (
+            <input
+              type="submit"
+              value={<Locale en="Register" zh_hk="註冊" zh_cn="注册" />}
+            />
+          ) : (
+            <ion-button
+              type="submit"
+              class="ion-margin"
+              expand="block"
+              color="primary"
+            >
+              <Locale en="Register" zh_hk="註冊" zh_cn="注册" />
+            </ion-button>
+          )}
+          <ClearInputContext />
+        </form>
+        <div class="hint-block">
+          <Locale
+            en="Your password is not be stored in plain text."
+            zh_hk="你的密碼不會被儲存為明文。"
+            zh_cn="你的密码不会被存储为明文。"
+          />
+          <br />
+          <Locale
+            en={
+              <>
+                Instead, it is processed with{' '}
+                <a href="https://en.wikipedia.org/wiki/Argon2" target="_blank">
+                  Argon2 algorithm
+                </a>{' '}
+                to protect your password against data leak.
+              </>
+            }
+            zh_hk={
+              <>
+                相反，它使用{' '}
+                <a href="https://zh.wikipedia.org/zh-hk/Argon2" target="_blank">
+                  Argon2 算法
+                </a>{' '}
+                來保護你的密碼免受數據洩漏。
+              </>
+            }
+            zh_cn={
+              <>
+                相反，它使用{' '}
+                <a href="https://zh.wikipedia.org/zh-cn/Argon2" target="_blank">
+                  Argon2 算法
+                </a>{' '}
+                来保护你的密码免受数据泄露。
+              </>
+            }
+          />
+        </div>
+      </>
+    )}
     <div class="separator-line flex-center">
       <Locale
         en="Already have an account?"
