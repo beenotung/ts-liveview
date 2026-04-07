@@ -2,7 +2,7 @@ import type { ServerMessage } from '../../../client/types'
 import type { ManagedWebsocket } from '../../ws/wss.js'
 import { o } from '../jsx/jsx.js'
 import { onWsSessionClose, sessions } from '../session.js'
-import { existsSync, renameSync } from 'fs'
+import { existsSync, mkdirSync, renameSync } from 'fs'
 import { join } from 'path'
 import { getContextLanguage, type Context } from '../context.js'
 import { loadNumber, saveNumber } from '../data/version-number.js'
@@ -14,6 +14,8 @@ function sendMessage(message: ServerMessage, skip?: ManagedWebsocket) {
     }
   })
 }
+
+mkdirSync('data', { recursive: true })
 
 let visitFile = join('data', 'visit.txt')
 let _visitorFile = join('data', 'visitor.txt')
