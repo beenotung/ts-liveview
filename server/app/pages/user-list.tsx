@@ -8,7 +8,7 @@ import { Routes } from '../routes.js'
 
 let style = Style(/* css */ `
 #user-list fieldset {
-  max-width: 20rem;
+  width: fit-content;
 }
 #user-list legend {
   margin-bottom: 0.75rem;
