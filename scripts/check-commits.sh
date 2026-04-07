@@ -11,6 +11,7 @@ function check_commit {
 }
 
 matched=()
+mismatched=()
 function check {
   name="$1"
 
@@ -23,6 +24,7 @@ function check {
   if [ "$local_date" == "$remote_date" ]; then
     matched+=("$name")
   else
+    mismatched+=("$name")
     echo "mismatch: $name"
     echo "$local"
     echo "$remote"
@@ -40,3 +42,10 @@ check v5-auth-web-template
 check v5-auth-ionic-template
 
 echo "matched branches: ${matched[@]}"
+
+if [ ${#mismatched[@]} -eq 0 ]; then
+  echo "all branches are matching."
+else
+  echo "${#mismatched[@]} branches are not matching."
+  exit 1
+fi
