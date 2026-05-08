@@ -4,18 +4,36 @@ import { ResolvedPageRoute, Routes } from '../routes.js'
 import { title } from '../../config.js'
 import { Locale, LocaleVariants } from '../components/locale.js'
 import { Page } from '../components/page.js'
+import { TimezoneDate } from 'timezone-date.ts'
+import DateTimeText, {
+  formatDateTimeText,
+  toLocaleDateTimeString,
+} from '../components/datetime.js'
+import { Context } from '../context.js'
 
 let pageTitle = <Locale en="Privacy Policy" zh_hk="私隱政策" zh_cn="隐私政策" />
+
+let lastUpdate = new TimezoneDate()
+lastUpdate.timezone = +8
+lastUpdate.setUTCFullYear(2025, 12 - 1, 29)
+lastUpdate.setHours(3, 10, 37, 0)
+let lastUpdateTime = lastUpdate.getTime()
+
+function LastUpdate(attrs: {}, context: Context) {
+  return toLocaleDateTimeString(lastUpdateTime, context, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
 
 let page = (
   <Page id="privacy" title={pageTitle} backHref="/">
     <p>
       <Locale en="Last updated: " zh_hk="最後更新：" zh_cn="最后更新：" />
-      {new Date().toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })}
+      <LastUpdate />
     </p>
 
     <h2>
