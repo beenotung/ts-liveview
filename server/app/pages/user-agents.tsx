@@ -30,7 +30,7 @@ function agentTable(
       <thead>
         <tr>
           <th>{title}</th>
-          <th>Count</th>
+          <th style="word-break: normal;">Count</th>
         </tr>
       </thead>
       <tbody>
