@@ -93,10 +93,10 @@ code.inline-code {
 
 /* inline edit field */
 .inline-edit-field[data-mode="view"] .edit-mode {
-  display: none;
+  display: none !important;
 }
 .inline-edit-field[data-mode="edit"] .view-mode {
-  display: none;
+  display: none !important;
 }
 .inline-edit-field input {
   margin-inline: 0.5rem;
