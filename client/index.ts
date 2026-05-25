@@ -12,6 +12,9 @@ import {
   redirect,
   addClass,
   removeClass,
+  removeAttr,
+  hide,
+  show,
 } from './jsx/dom.js'
 import { connectWS } from './ws/ws-lite.js'
 import type { LinkFlag, WindowStub } from './internal'
@@ -211,6 +214,15 @@ function onServerMessage(message: ServerMessage) {
       break
     case 'remove-class':
       removeClass(message[1], message[2])
+      break
+    case 'remove-attr':
+      removeAttr(message[1], message[2])
+      break
+    case 'hide':
+      hide(message[1])
+      break
+    case 'show':
+      show(message[1])
       break
     case 'batch':
       message[1].forEach(onServerMessage)

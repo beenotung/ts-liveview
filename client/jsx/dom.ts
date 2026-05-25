@@ -176,6 +176,50 @@ export function removeClass(selector: string, className: string) {
   className.split(' ').forEach(c => e.classList.remove(c))
 }
 
+export function removeAttr(selector: string, attr: string) {
+  let e = document.querySelector(selector)
+  if (!e) {
+    console.error(
+      'Failed to query selector when removeAttr, selector:',
+      selector,
+    )
+    throw new Error('Failed to query selector when removeAttr')
+  }
+  e.removeAttribute(attr)
+}
+
+export function hide(selector: string | string[]) {
+  if (Array.isArray(selector)) {
+    selector.forEach(s => hide(s))
+    return
+  }
+  let e = document.querySelector<HTMLElement>(selector)
+  if (!e) {
+    console.error(
+      'Failed to query selector when hide element, selector:',
+      selector,
+    )
+    throw new Error('Failed to query selector when hide element')
+  }
+  e.hidden = true
+}
+
+export function show(selector: string | string[]) {
+  if (Array.isArray(selector)) {
+    selector.forEach(s => show(s))
+    return
+  }
+  let e = document.querySelector<HTMLElement>(selector)
+  if (!e) {
+    console.error(
+      'Failed to query selector when show element, selector:',
+      selector,
+    )
+    throw new Error('Failed to query selector when show element')
+  }
+  e.hidden = false
+}
+
 function mountElement(e: Element, element: VElement) {
   let [selector, attrs, children] = element
   applySelector(e, selector)
