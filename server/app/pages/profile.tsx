@@ -1,10 +1,13 @@
 import { apiEndpointTitle, title } from '../../config.js'
 import { commonTemplatePageText } from '../components/common-template.js'
 import { Link, Redirect } from '../components/router.js'
-import { DynamicContext, ExpressContext } from '../context.js'
+import {
+  DynamicContext,
+  ExpressContext,
+  getContextSearchParams,
+} from '../context.js'
 import { o } from '../jsx/jsx.js'
 import { Routes } from '../routes.js'
-import { getContextSearchParams } from '../context.js'
 import { proxy } from '../../../db/proxy.js'
 import { eraseUserIdFromCookie, getAuthUserId } from '../auth/user.js'
 import { Router } from 'express'

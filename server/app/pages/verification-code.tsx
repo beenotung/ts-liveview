@@ -17,7 +17,6 @@ import {
   getContextFormBody,
 } from '../context.js'
 import { Routes, StaticPageRoute } from '../routes.js'
-import { getContextSearchParams } from '../context.js'
 import { o } from '../jsx/jsx.js'
 import { Link, Redirect } from '../components/router.js'
 import { nodeToHTML } from '../jsx/html.js'
