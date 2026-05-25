@@ -70,7 +70,7 @@ let SignUpPage = (
   <div id="sign-up">
     {style}
     <h2>Sign up</h2>
-    {commonTemplatePageText}
+    <p>{commonTemplatePageText}</p>
     <p>
       Welcome to {config.short_site_name}!
       <br />

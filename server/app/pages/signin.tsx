@@ -6,7 +6,7 @@ import { o } from '../jsx/jsx.js'
 let SignIn = (
   <div id="sign-in">
     <h2>Sign in to {config.short_site_name}</h2>
-    {commonTemplatePageText}
+    <p>{commonTemplatePageText}</p>
     <form>
       <label>
         Username or email address
