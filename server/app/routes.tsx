@@ -87,11 +87,12 @@ let routeDict = {
     menuText: 'Login',
     node: SignIn.index,
   },
-  '/register': {
+  '/register/:action?': {
     title: title('Join ' + config.short_site_name),
     description: commonTemplatePageText,
     menuText: 'Register',
-    node: Signup.index,
+    menuUrl: '/register',
+    node: Signup,
   },
   ...AppHome.routes,
   ...AppCharacter.routes,
