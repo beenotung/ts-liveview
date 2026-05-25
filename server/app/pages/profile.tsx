@@ -3,12 +3,13 @@ import { commonTemplatePageText } from '../components/common-template.js'
 import { Link, Redirect } from '../components/router.js'
 import { DynamicContext, ExpressContext } from '../context.js'
 import { o } from '../jsx/jsx.js'
-import { Routes, getContextSearchParams } from '../routes.js'
+import { Routes } from '../routes.js'
+import { getContextSearchParams } from '../context.js'
 import { proxy } from '../../../db/proxy.js'
 import { eraseUserIdFromCookie, getAuthUserId } from '../auth/user.js'
 import { Router } from 'express'
 import { createUploadForm } from '../upload.js'
-import { HttpError } from '../../http-error.js'
+import { HttpError } from '../../exception.js'
 import Style from '../components/style.js'
 import { renderError } from '../components/error.js'
 import { Raw } from '../components/raw.js'
@@ -56,7 +57,7 @@ let ProfilePage = (_attrs: {}, context: DynamicContext) => {
 function renderProfile(user_id: number, context: DynamicContext) {
   let user = proxy.user[user_id]
   let params = getContextSearchParams(context)
-  let error = params.get('error')
+  let error = params?.get('error')
   return (
     <>
       <p>Welcome back, {user.username}</p>

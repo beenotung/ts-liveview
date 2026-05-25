@@ -110,6 +110,22 @@ let guestView = (
       </div>
     </div>
     <div class="or-line flex-center">or</div>
+    <form
+      method="POST"
+      action="/verify/email"
+      // onsubmit="emitForm(event)"
+    >
+      <Field
+        label="Email"
+        type="email"
+        name="email"
+        msgId="emailMsg"
+        oninput="emit('/register/check-email', this.value)"
+        autocomplete="email"
+      />
+      <input type="submit" value="Verify" />
+    </form>
+    <div class="or-line flex-center">or</div>
     <form method="POST" action="/register/submit" onsubmit="emitForm(event)">
       <Field
         label="Username"
@@ -117,14 +133,6 @@ let guestView = (
         msgId="usernameMsg"
         oninput="emit('/register/check-username', this.value)"
         autocomplete="username"
-      />
-      <Field
-        label="Email (optional)"
-        type="email"
-        name="email"
-        msgId="emailMsg"
-        oninput="emit('/register/check-email', this.value)"
-        autocomplete="email"
       />
       <Field
         label="Password"
