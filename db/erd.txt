@@ -89,15 +89,24 @@ timezone text NULL
 timezone_offset integer NULL
 
 
+user
+----
+id
+username varchar(32)
+password_hash char(60) null
+email varchar(320) null
+tel varchar(16) null
+
+
 error_log
 ---------
 id integer PK
 timestamp integer
 title text
 error text
-request_log_id integer FK >0- request_log.id
 client_url_id integer FK >- url.id
 api_url_id integer FK >- url.id
+request_log_id integer FK >0- request_log.id
 
 
 # zoom: 1.000
@@ -118,4 +127,5 @@ api_url_id integer FK >- url.id
 # ua_bot (845, 410)
 # ua_stat (1013, 69)
 # request_session (450, 445)
+# user (450, 680)
 # error_log (722, 7)
