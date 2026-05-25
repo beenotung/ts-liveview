@@ -167,6 +167,6 @@ reject_time integer NULL
 # request_session (450, 445)
 # user (450, 680)
 # error_log (722, 7)
-# verification_code (50, 550)
-# verification_attempt (50, 372)
+# verification_code (46, 673)
+# verification_attempt (45, 973)
 # content_report (844, 573)
