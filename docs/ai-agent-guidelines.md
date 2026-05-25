@@ -118,3 +118,42 @@ Use **`<Locale />`** in JSX for translatable UI text. Use **`t = makeText(contex
 
 **Prefer JSX over HTML-in-string for DOM**  
 When building UI that gets inserted into the page, use **JSX markup with `id` or stable selectors** and reference those elements in code. Do not use `innerHTML`, template literals that build tags, or string concatenation for markup. JSX gives type safety, auto-escaping (XSS safety), easier passing of server-side variables, syntax highlighting, and better tooling. Don't add new string-based markup.
+
+---
+
+**Commit messages**  
+Use format: `{tag}: {description}` with tags like `feat:`, `ui:`, `db:`, `chore:`, `patch:`. Examples:
+
+Single tag (end-to-end flow - no need to repeat ui/db):
+
+```
+feat: support image thumbnail in <Swiper>
+```
+
+Multiple tags (only when commit spans independent areas, each tag on its own line):
+
+```
+feat: support custom wrap-size and edge-page-count
+demo: add demo page for <Pagination> component
+```
+
+Or with repeated tag for related changes:
+
+```
+ui: hide the view/edit field even using custom display
+ui: show the save button in the same line of input field
+```
+
+With bullet points (for explaining purpose or providing detail):
+
+```
+feat: add ServerMessage type remove-attr, show, hide
+- making it easier to toggle DOM state
+```
+
+Guidelines:
+
+- Small, self-contained commits are preferred
+- Case by case - use one tag for end-to-end flow, multiple tags only when commit spans independent areas
+- Always use a tag - no plain messages without tag
+- Bullets for sub-details under a tag
