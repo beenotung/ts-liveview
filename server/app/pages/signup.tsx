@@ -1,4 +1,4 @@
-import { config } from '../../config.js'
+import { config, title } from '../../config.js'
 import { commonTemplatePageText } from '../components/common-template.js'
 import { Link } from '../components/router.js'
 import Style from '../components/style.js'
@@ -19,7 +19,6 @@ import { is_email } from '@beenotung/tslib'
 import { Raw } from '../components/raw.js'
 import { hashPassword } from '../../hash.js'
 import { PageRoute, StaticPageRoute } from '../routes.js'
-import { title } from '../../config.js'
 import { Node } from '../jsx/types.js'
 
 let style = Style(/* css */ `

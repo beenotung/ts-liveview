@@ -1,4 +1,4 @@
-import { config } from '../../config.js'
+import { config, title } from '../../config.js'
 import { commonTemplatePageText } from '../components/common-template.js'
 import { Link } from '../components/router.js'
 import { o } from '../jsx/jsx.js'
