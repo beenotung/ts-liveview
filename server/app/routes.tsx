@@ -7,7 +7,6 @@ import type express from 'express'
 import type { DynamicContext, ExpressContext } from './context'
 import { o } from './jsx/jsx.js'
 import type { Node } from './jsx/types'
-import UserAgents from './pages/user-agents.js'
 import Home from './pages/home.js'
 import NotFoundPageRoute from './pages/not-found.js'
 import { then } from '@beenotung/tslib/result.js'
@@ -69,7 +68,6 @@ let routeDict = {
   ...Home.routes,
   ...DemoPlugin.routes,
   ...UILanguage.routes,
-  ...UserAgents.routes,
 } satisfies Routes
 
 export let redirectDict: Record<string, string> = {

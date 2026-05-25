@@ -1,6 +1,4 @@
 import type { Router } from 'express'
-import { proxy } from '../../../db/proxy.js'
-import { getUrlId } from '../../../db/request-log.js'
 import { toExpressContext } from '../context.js'
 import { DynamicContext } from '../context.js'
 
@@ -15,19 +13,7 @@ export function storeErrorLog(
   },
   context: DynamicContext,
 ) {
-  let error = String(options.error)
-  if (error == '[object Object]') {
-    error = JSON.stringify(options.error)
-  }
-  let req = context.type === 'express' ? context.req : context.ws.request
-  proxy.error_log.push({
-    timestamp: options.timestamp,
-    title: options.title,
-    error,
-    client_url_id: getUrlId(options.client_url),
-    api_url_id: getUrlId(options.api_url),
-    request_log_id: req.request_log_id!,
-  })
+  console.log('stub: storeErrorLog', options)
 }
 
 function attachRoutes(app: Router) {

@@ -4,7 +4,7 @@ import { debugLog } from '../debug.js'
 import type { ManagedWebsocket, OnWsMessage } from './wss'
 import type { ServerMessage } from '../../client/types'
 import { Request } from 'express'
-import { newRequestSession } from '../../db/request-log.js'
+import { randomUUID } from 'crypto'
 
 let log = debugLog('wss-lite.ts')
 log.enabled = true
@@ -57,7 +57,7 @@ export function listenWSSConnection(options: {
       ws,
       wss,
       request: request as Request,
-      session_id: newRequestSession(),
+      session_id: randomUUID(),
       send,
       close,
     }

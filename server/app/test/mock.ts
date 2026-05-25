@@ -69,7 +69,7 @@ function mockWs(args: { request: Request }): ManagedWebsocket {
     ws,
     wss: {} as Server,
     request,
-    session_id: 1,
+    session_id: '1',
     send: sinon.fake(),
     close: sinon.fake(),
   }

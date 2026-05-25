@@ -14,12 +14,9 @@ import { sendHTMLHeader } from './express.js'
 import { OnWsMessage } from '../ws/wss.js'
 import { dispatchUpdate } from './jsx/dispatch.js'
 import { EarlyTerminate, HttpError, MessageException } from '../exception.js'
-import { getRateLimitContext } from '../rate-limit.js'
-import { get_rate_limit } from '../rate-limits.js'
 import { getWSSession } from './session.js'
 import { Flush } from './components/flush.js'
 import { LayoutType, config } from '../config.js'
-import Stats from './components/stats.js'
 import { MuteConsole, Script } from './components/script.js'
 import {
   matchRoute,
@@ -37,9 +34,7 @@ import { HTMLStream } from './jsx/stream.js'
 import { getWsCookies } from './cookie.js'
 import Navbar from './components/navbar.js'
 import Sidebar from './components/sidebar.js'
-import { logRequest } from './log.js'
 import { WindowStub } from '../../client/internal.js'
-import { updateRequestSession } from '../../db/request-log.js'
 import { Link } from './components/router.js'
 import ErrorLog from './store/error-log.js'
 import { Locale } from './components/locale.js'
@@ -203,7 +198,6 @@ function Footer(attrs: { style?: string }) {
           Beeno
         </a>
       </div>
-      <Stats />
     </footer>
   )
 }
@@ -229,18 +223,6 @@ async function handleLiveView(req: Request, res: Response, next: NextFunction) {
     res,
     next,
     url: req.url,
-  }
-
-  // Rate limit GET requests
-  try {
-    let rateLimitCtx = getRateLimitContext(context)
-    get_rate_limit.consume(rateLimitCtx)
-  } catch (error) {
-    if (error instanceof HttpError) {
-      res.status(error.statusCode).json({ error: error.message })
-      return
-    }
-    throw error
   }
 
   sendHTMLHeader(res)
@@ -359,7 +341,6 @@ export let onWsMessage: OnWsMessage = async (event, ws, _wss) => {
       session.timeZone = timeZone
     }
     session.timezoneOffset = event[4]
-    updateRequestSession(ws.session_id, session)
     let cookie = event[5]
     if (cookie) {
       getWsCookies(ws.ws).unsignedCookies = Object.fromEntries(
@@ -373,13 +354,11 @@ export let onWsMessage: OnWsMessage = async (event, ws, _wss) => {
     }
     navigation_type = event[6]
     navigation_method = event[7]
-    logRequest(ws.request, 'ws', url, ws.session_id)
   } else if (event[0][0] === '/') {
     event = event as ClientRouteMessage
     eventType = 'route'
     url = event[0]
     args = event.slice(1)
-    logRequest(ws.request, 'ws', url, ws.session_id)
   } else {
     console.log('unknown type of ws message:', event)
     return
@@ -392,18 +371,6 @@ export let onWsMessage: OnWsMessage = async (event, ws, _wss) => {
     args,
     event: eventType,
     session,
-  }
-
-  // Rate limit WebSocket messages
-  try {
-    let rateLimitCtx = getRateLimitContext(context)
-    get_rate_limit.consume(rateLimitCtx)
-  } catch (error) {
-    if (error instanceof HttpError) {
-      ws.send(['eval', `showToast('${error.message}','error')`])
-      return
-    }
-    throw error
   }
 
   try {

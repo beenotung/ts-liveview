@@ -11,7 +11,6 @@ import open from 'open'
 import { cookieMiddleware } from './app/cookie.js'
 import { listenWSSCookie } from './app/cookie.js'
 import { print } from 'listening-on'
-import { logRequest } from './app/log.js'
 import { env } from './env.js'
 import { HttpError, EarlyTerminate } from './exception.js'
 import { setCaddy } from './caddy.js'
@@ -38,11 +37,6 @@ listenWSSConnection({
     closeSession(ws)
   },
   onMessage: onWsMessage,
-})
-
-app.use((req, res, next) => {
-  logRequest(req, req.method, req.url, null)
-  next()
 })
 
 if (config.development) {
