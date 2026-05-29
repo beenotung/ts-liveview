@@ -23,6 +23,8 @@ let stop = async () => {
   /* this callback will be replaced to dispose current context */
 }
 
+let shutdown = false
+
 if (mode === 'serve') {
   process.stdin.on('data', async chunk => {
     if (chunk.toString().trim() == 'rs') {
@@ -30,6 +32,21 @@ if (mode === 'serve') {
       await stop()
       main()
     }
+  })
+  process.on('SIGINT', () => {
+    // stopped by ctrl+c
+    shutdown = true
+    stopServer('SIGINT')
+  })
+  process.on('SIGTERM', () => {
+    // stopped by kill or pm2
+    shutdown = true
+    stopServer('SIGTERM')
+  })
+  process.on('exit', () => {
+    // stopped by exit
+    shutdown = true
+    stopServer()
   })
 }
 
@@ -211,7 +228,11 @@ function format_time(time: number) {
   return (time / 1000 / 60 / 60).toFixed(1) + 'hr'
 }
 
-let stopServer = () => Promise.resolve()
+let stopServer = async (signal?: NodeJS.Signals) => {
+  if (shutdown) {
+    process.exit(0)
+  }
+}
 
 let EPOCH = 0
 
@@ -230,29 +251,18 @@ async function restartServer() {
   let stopServerPromise = new Promise<void>(resolve => {
     server.on('close', () => {
       stopped = true
-      log('server stopped')
+      log('server closed.')
       resolve()
     })
   })
-  stopServer = () => {
-    if (stopped) {
-      log('server already stopped')
-    } else {
+  stopServer = async (signal?: NodeJS.Signals) => {
+    if (!stopped) {
       log('stopping server...')
-      server.kill()
+      server.kill(signal)
+      await stopServerPromise
     }
-    return stopServerPromise
+    if (shutdown) {
+      process.exit(0)
+    }
   }
-  process.on('SIGINT', () => {
-    // stopped by ctrl+c
-    server.kill('SIGINT')
-  })
-  process.on('SIGTERM', () => {
-    // stopped by kill or pm2
-    server.kill('SIGTERM')
-  })
-  process.on('exit', () => {
-    // stopped by exit
-    server.kill()
-  })
 }
