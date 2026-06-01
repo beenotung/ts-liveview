@@ -58,7 +58,6 @@
     "datatables.net": "^2.3.7",
     "datatables.net-dt": "^2.3.7",
     "debug": "^4.4.3",
-    "dotenv": "^16.6.1",
     "esbuild": "^0.25.12",
     "express": "^4.22.1",
     "fastest-levenshtein": "^1.0.16",
