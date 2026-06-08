@@ -119,6 +119,15 @@ Use **`<Locale />`** in JSX for translatable UI text. Use **`t = makeText(contex
 **Prefer JSX over HTML-in-string for DOM**  
 When building UI that gets inserted into the page, use **JSX markup with `id` or stable selectors** and reference those elements in code. Do not use `innerHTML`, template literals that build tags, or string concatenation for markup. JSX gives type safety, auto-escaping (XSS safety), easier passing of server-side variables, syntax highlighting, and better tooling. Don't add new string-based markup.
 
+**When string-building is unavoidable** (e.g. rendering a calendar grid where the structure depends on runtime data), use **`data-*` attributes** for passing runtime values and **`onclick="handler(event)"`** for event binding. Read parameters from `event.target.dataset.*` or `event.target.closest('[data-x]').dataset.x`. Do not build inline JavaScript expressions in string attributes — complex escaping is error-prone and fragile.
+
+---
+
+**`Script()` block patterns**  
+Functions inside Script calls with template literals go at **top level** — never nest function definitions inside string-concatenated HTML attributes. Escaping issue: embedding `onclick="function(){...}"` requires converting quotes, braces, etc. to HTML entities — unnecessarily complex and error-prone. Instead, define the function in Script separately and use `onclick="handler(event)"` + `data-*` attributes for dynamic data.
+
+Use **`var`** instead of `let` nor `const` at **top level** — the script re-runs on every WebSocket page load (server render + WS connect + re-navigation), and `let` at top level would throw redeclaration errors. Variables inside functions can still use `let`.
+
 ---
 
 **Commit messages**  
