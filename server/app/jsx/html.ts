@@ -128,18 +128,7 @@ export function writeNode(
       node = componentFn(attrs, context)
       writeNode(stream, node, context)
     } catch (error) {
-      if (error === EarlyTerminate || error instanceof MessageException)
-        throw error
-      if (error instanceof ErrorNode) {
-        writeNode(stream, renderErrorNode(error, context), context)
-      } else {
-        console.error('Caught error from componentFn:', error)
-        if (context.type == 'ws') {
-          context.ws.send(showError(error))
-          throw EarlyTerminate
-        }
-        writeNode(stream, renderError(error, context), context)
-      }
+      writeError(stream, error, context)
     }
     return
   }
@@ -149,6 +138,20 @@ export function writeNode(
   }
 
   return writeElement(stream, node, context)
+}
+
+function writeError(stream: HTMLStream, error: unknown, context: Context) {
+  if (error === EarlyTerminate || error instanceof MessageException) throw error
+  if (error instanceof ErrorNode) {
+    writeNode(stream, renderErrorNode(error, context), context)
+  } else {
+    console.error('Caught error from componentFn:', error)
+    if (context.type == 'ws') {
+      context.ws.send(showError(error))
+      throw EarlyTerminate
+    }
+    writeNode(stream, renderError(error, context), context)
+  }
 }
 
 function writeNodeList(
@@ -224,6 +227,8 @@ function writeElement(
     if (children) {
       writeNodeList(stream, children, context)
     }
+  } catch (error) {
+    writeError(stream, error, context)
   } finally {
     stream.write(`</${tagName}>`)
   }
