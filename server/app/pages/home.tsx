@@ -151,52 +151,34 @@ let content = (
       />
     </p>
 
-    {Comment(
-      <Locale
-        en="using table to align 3 code blocks with the same width"
-        zh_hk="使用表格將三個程式碼塊對齊至相同寬度"
-        zh_cn="使用表格将三个代码块对齐至相同宽度"
-      />,
-    )}
+    <Comment
+      en="using fit-content wrapper to align the 3 blocks to equal width"
+      zh_hk="使用 fit-content 容器將三個區塊對齊至相同寬度"
+      zh_cn="使用 fit-content 容器将三个区块对齐至相同宽度"
+    />
 
-    <table>
-      <tbody>
-        <tr>
-          <td>
-            <fieldset>
-              <legend>
-                <Locale en="JSX Example" zh_hk="JSX 範例" zh_cn="JSX 示例" />
-              </legend>
-              <code class="inline-code">{`<a href='#'>hash link</a>`}</code>
-            </fieldset>
-          </td>
-        </tr>
+    <div style="width: fit-content">
+      <fieldset>
+        <legend>
+          <Locale en="JSX Example" zh_hk="JSX 範例" zh_cn="JSX 示例" />
+        </legend>
+        <code class="inline-code">{`<a href='#'>hash link</a>`}</code>
+      </fieldset>
 
-        <tr>
-          <td>
-            <fieldset>
-              <legend>
-                <Locale en="AST Example" zh_hk="AST 範例" zh_cn="AST 示例" />
-              </legend>
-              <code class="inline-code">
-                {`['a', { href: '#' }, ['hash link']]`}
-              </code>
-            </fieldset>
-          </td>
-        </tr>
+      <fieldset>
+        <legend>
+          <Locale en="AST Example" zh_hk="AST 範例" zh_cn="AST 示例" />
+        </legend>
+        <code class="inline-code">{`['a', { href: '#' }, ['hash link']]`}</code>
+      </fieldset>
 
-        <tr>
-          <td>
-            <fieldset>
-              <legend>
-                <Locale en="HTML output" zh_hk="HTML 輸出" zh_cn="HTML 输出" />
-              </legend>
-              <a href="#">hash link</a>
-            </fieldset>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <fieldset>
+        <legend>
+          <Locale en="HTML output" zh_hk="HTML 輸出" zh_cn="HTML 输出" />
+        </legend>
+        <a href="#">hash link</a>
+      </fieldset>
+    </div>
 
     <p>
       <Locale
