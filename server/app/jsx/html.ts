@@ -111,9 +111,6 @@ export function writeNode(
   }
 
   node = node as JSXFragment
-  if (!node[0] && !node[1]) {
-    return writeNodeList(stream, node[2], context)
-  }
 
   if (typeof node[0] === 'function') {
     node = node as Component
@@ -145,6 +142,10 @@ export function writeNode(
       }
     }
     return
+  }
+
+  if (!node[0] && !node[1]) {
+    return writeNodeList(stream, node[2], context)
   }
 
   return writeElement(stream, node, context)
