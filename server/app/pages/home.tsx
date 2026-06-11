@@ -7,6 +7,8 @@ import { ResolvedPageRoute, Routes } from '../routes.js'
 import { title } from '../../config.js'
 import Style from '../components/style.js'
 import { Locale, LocaleVariants } from '../components/locale.js'
+import { mapArray } from '../components/fragment.js'
+import { Fragment, Node, NodeList, Element } from '../jsx/types.js'
 
 // Calling <Component/> will transform the JSX into AST for each rendering.
 // You can reuse a pre-compute AST like `let component = <Component/>`.
@@ -217,6 +219,139 @@ let content = (
     <SourceCode page="home.tsx" />
   </div>
 )
+
+function Now() {
+  return <p>Now: {new Date().toISOString()}</p>
+}
+
+let callNow: Node = [Now]
+
+let list: NodeList = ['div', 'input', 'button']
+list = ['apple']
+// list = ['apple', 1]
+// list = ['apple', null]
+// list = ['apple', undefined]
+// list = ['textarea']
+// list = ['textarea', 'apple']
+// list = [1, 2, 3]
+let fragment: Fragment = [list]
+let element: Element = ['apple']
+// element=['apple',1]
+// element=['apple',null]
+// element = ['apple', undefined]
+
+class Animal {}
+
+class Cat extends Animal {}
+
+content = (
+  <>
+    {Style(`
+apple:before {
+ display: block;
+ content: '[apple element]';
+ color: red;
+}
+textarea:before {
+ display: block;
+ content: '[textarea element]';
+ color: red;
+}
+`)}
+    <h1>Test</h1>
+    {callNow}
+
+    <div style="width: fit-content">
+      {/* @ts-expect-error */}
+      <Test name="date" expr={() => new Date()} />
+      {/* @ts-expect-error */}
+      <Test name="map" expr={() => new Map()} />
+      {/* @ts-expect-error */}
+      <Test name="set" expr={() => new Set()} />
+      <Test
+        name="plain object"
+        // @ts-expect-error
+        expr={() => ({
+          id: 1,
+          username: 'admin',
+        })}
+      />
+      {/* @ts-expect-error */}
+      <Test name="class object" expr={() => new Object()} />
+      <Test name="empty object" expr={() => Object.create(null)} />
+      {/* @ts-expect-error */}
+      <Test name="function" expr={() => () => {}} />
+      {/* @ts-expect-error */}
+      <Test name="symbol" expr={() => Symbol.for('apple')} />
+      {/* @ts-expect-error */}
+      <Test name="animal" expr={() => new Animal()} />
+      {/* @ts-expect-error */}
+      <Test name="cat" expr={() => new Cat()} />
+
+      {/* fail, misinterpreted as Element */}
+      <Test name="nodeList" expr={() => list} />
+
+      {/* pass, Fragment is a valid Node */}
+      <Test name="fragment" expr={() => fragment} />
+
+      {/* pass, Element is a valid Node */}
+      <Test name="element" expr={() => element} />
+
+      {/* pass, detected as unwrapped NodeList */}
+      <Test name="4:[1, 2, 3, 4]" expr={() => [1, 2, 3, 4]} />
+      <Test name="3:[1, 2, 3]" expr={() => [1, 2, 3]} />
+      <Test name="2:[1, 2]" expr={() => [1, 2]} />
+      <Test name="1:[1]" expr={() => [1]} />
+      <Test name="0:[]" expr={() => []} />
+
+      {/* pass, mapArray returns Fragment, which is a valid Node */}
+      <Test
+        name="mapArray -> p"
+        expr={() => mapArray([1, 2, 3, 4, 5], item => <p>{item}</p>)}
+      />
+      <Test
+        name="mapArray -> `${item}`"
+        expr={() => mapArray([1, 2, 3, 4, 5], item => `${item}`)}
+      />
+      <Test
+        name="mapArray -> item"
+        expr={() => mapArray([1, 2, 3, 4, 5], item => item)}
+      />
+
+      {/* pass, detected as unwrapped NodeList */}
+      <Test
+        name="[].map -> p"
+        expr={() => [1, 2, 3, 4, 5].map(item => <p>{item}</p>)}
+      />
+      <Test
+        name="[].map -> fragment"
+        expr={() => [1, 2, 3, 4, 5].map(item => <>{item}</>)}
+      />
+      <Test
+        name="[].map -> `${item}`"
+        expr={() => [1, 2, 3, 4, 5].map(item => `${item}`)}
+      />
+      <Test
+        name="[].map -> item"
+        expr={() => [1, 2, 3, 4, 5].map(item => item)}
+      />
+    </div>
+  </>
+)
+
+function Test(attrs: {
+  name: string
+  expr: () => Node | Node[]
+  enable?: boolean
+  disable?: boolean
+}) {
+  return (
+    <section style="outline: 1px solid black; padding: 0.5rem;">
+      <h2 style="font-size: 1.5rem; margin: 0">{attrs.name}</h2>
+      {attrs.expr()}
+    </section>
+  )
+}
 
 let home = (
   <>
