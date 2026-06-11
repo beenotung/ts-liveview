@@ -103,6 +103,11 @@ export function writeNode(
     case 'number':
       return stream.write(String(node))
   }
+  if (!node.length) {
+    // node is an empty array, it should not happen
+    // unless using .map() without wrapped array and not using mapArray()
+    return
+  }
   if (node[0] === 'raw') {
     return stream.write((node as Raw)[1])
   }
