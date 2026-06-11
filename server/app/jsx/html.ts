@@ -220,10 +220,13 @@ function writeElement(
     case 'area':
       return
   }
-  if (children) {
-    writeNodeList(stream, children, context)
+  try {
+    if (children) {
+      writeNodeList(stream, children, context)
+    }
+  } finally {
+    stream.write(`</${tagName}>`)
   }
-  stream.write(`</${tagName}>`)
 }
 
 export function flagsToClassName(flags: Record<string, boolean>): string {
