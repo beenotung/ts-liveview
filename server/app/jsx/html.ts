@@ -90,6 +90,7 @@ export function writeNode(
   node: Node,
   context: Context,
 ): void {
+  // Literal
   switch (node) {
     case null:
     case undefined:
@@ -103,22 +104,50 @@ export function writeNode(
     case 'number':
       return stream.write(String(node))
   }
+
+  node satisfies Array<unknown>
+
+  // Non-Array (unexpected Node Type)
+  if (!Array.isArray(node)) {
+    node satisfies never
+    let type = Object.prototype.toString.call(node)
+    if (type === '[object Object]' && 'constructor' in node) {
+      type = '[object ' + (node as object).constructor.name + ']'
+    }
+    throw new TypeError('unexpected node type: ' + type)
+  }
+
+  // Empty NodeList (should not happen)
   if (!node.length) {
-    // node is an empty array, it should not happen
-    // unless using .map() without wrapped array and not using mapArray()
+    // Likely caused by using .map() without wrapping in tuple, or not using mapArray()
     return
   }
-  if (node[0] === 'raw') {
-    return stream.write((node as Raw)[1])
-  }
-  if (Array.isArray(node[0])) {
-    return writeNodeList(stream, (node as Fragment)[0], context)
+
+  // Element
+  if (
+    node.length <= 3 &&
+    typeof node[0] === 'string' &&
+    // typeof node[1] !== 'string'
+    (node[1] === undefined || (node[1] !== null && typeof node[1] === 'object'))
+  ) {
+    node satisfies Element
+    return writeElement(stream, node, context)
   }
 
-  node = node as JSXFragment
+  // JSXFragment
+  if (
+    node.length === 3 &&
+    node[0] === undefined &&
+    node[1] === null &&
+    Array.isArray(node[2])
+  ) {
+    node satisfies JSXFragment
+    return writeNodeList(stream, node[2], context)
+  }
 
-  if (typeof node[0] === 'function') {
-    node = node as Component
+  // Component
+  if (node.length <= 3 && typeof node[0] === 'function') {
+    node satisfies Component
     let componentFn = node[0]
     if (componentFn === Flush) {
       stream.flush()
@@ -138,11 +167,24 @@ export function writeNode(
     return
   }
 
-  if (!node[0] && !node[1]) {
-    return writeNodeList(stream, node[2], context)
+  // Raw
+  if (node.length === 2 && node[0] === 'raw' && typeof node[1] === 'string') {
+    node satisfies Raw
+    return stream.write(node[1])
   }
 
-  return writeElement(stream, node, context)
+  // Fragment
+  if (node.length === 1 && Array.isArray(node[0])) {
+    node as Fragment
+    return writeNodeList(stream, node[0], context)
+  }
+
+  // NodeList (fallback)
+  // NodeList is not designed as a member of Node type because it can be indistinguishable from Element expression.
+  // We try to resolve it in best-effort, in case the developer or ai agent don't know it should be wrapped in a tuple as Fragment.
+  // @ts-expect-error
+  node satisfies NodeList
+  return writeNodeList(stream, node as NodeList, context)
 }
 
 function writeError(stream: HTMLStream, error: unknown, context: Context) {
