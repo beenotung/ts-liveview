@@ -241,6 +241,7 @@ function writeElement(
   if (classList.length > 0) {
     html += ` class="${classList.join(' ')}"`
   }
+  // TODO support [name=value] syntax in selector
   if (attrs) {
     Object.entries(attrs).forEach(([name, value]) => {
       value = evalLocale(value, context)
