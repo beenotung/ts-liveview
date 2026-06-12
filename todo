@@ -1,0 +1,4 @@
+- [ ] remind in dev mode to use mapArray
+- [ ] check for selector syntax (e.g. no space, no special symbol (only .#[]"'))
+- [x] extract the manual test cases in home.tsx into mocha test cases
+- [ ] support [name="value"] selector
