@@ -45,7 +45,12 @@ export function classifyUserAgent(ua: string) {
     return { bot: 'BarkrowlerBot' }
   else if (ua.includes('http://webmeup-crawler.com/') || ua.includes('BLEXBot'))
     return { bot: 'BLEXBot' }
-  else if (ua.includes('Amazonbot')) return { bot: 'Amazonbot' }
+  else if (
+    ua.includes('Amazonbot') ||
+    ua.includes('AMZN-User') ||
+    ua.includes('amazon-Quick-on-behalf-of')
+  )
+    return { bot: 'Amazonbot' }
   else if (ua.includes('ClaudeBot')) return { bot: 'ClaudeBot' }
   else if (ua.includes('CCBot') || ua.includes('commoncrawl'))
     return { bot: 'CCBot' }
@@ -57,19 +62,31 @@ export function classifyUserAgent(ua: string) {
   else if (ua.includes('https://opensiteexplorer.org/dotbot'))
     return { bot: 'DotBot' }
   else if (ua.includes('http://ahrefs.com/robot/')) return { bot: 'AhrefsBot' }
+  else if (ua.includes('GoogleOther')) return { bot: 'GoogleOther' }
+  else if (ua.includes('Chrome Privacy Preserving Prefetch Proxy'))
+    return { bot: 'GooglePrefetchProxy' }
+  else if (ua.includes('Google-NotebookLM')) return { bot: 'GoogleNotebookLM' }
+  else if (ua.includes('FeedFetcher-Google'))
+    return { bot: 'FeedFetcher-Google' }
+  else if (ua.includes('FeedBurner')) return { bot: 'FeedBurner' }
+  else if (ua.includes('Google Web Preview')) return { bot: 'GoogleWebPreview' }
+  else if (ua.includes('GoogleProducer')) return { bot: 'GoogleProducer' }
+  else if (ua.includes('Googlebot-Image')) return { bot: 'Googlebot-Image' }
+  else if (ua.includes('Googlebot-News')) return { bot: 'Googlebot-News' }
+  else if (ua.includes('Googlebot-Video')) return { bot: 'Googlebot-Video' }
   else if (
     ua.includes('http://www.google.com/bot.html') ||
     ua.includes('http://www.googlebot.com/bot.html')
   )
     return { bot: 'GoogleBot' }
-  else if (ua.includes('Googlebot-Image')) return { bot: 'GoogleBot' }
-  else if (ua.includes('Googlebot-News')) return { bot: 'GoogleBot' }
-  else if (ua.includes('Googlebot-Video')) return { bot: 'GoogleBot' }
   else if (ua.includes('AdsBot-Google')) return { bot: 'AdsBot-Google' }
+  else if (ua.includes('Mediapartners-Google'))
+    return { bot: 'Mediapartners-Google' }
   else if (ua.includes('Google-Apps-Script')) return { bot: 'GoogleAppsScript' }
   else if (ua.includes('http://duckduckgo.com')) return { bot: 'DuckDuckGoBot' }
   else if (ua.includes('http://yandex.com/bots')) return { bot: 'YandexBot' }
-  else if (ua.includes('http://www.baidu.com')) return { bot: 'BaiduBot' }
+  else if (ua.includes('BaiduSpider') || ua.includes('http://www.baidu.com'))
+    return { bot: 'BaiduBot' }
   else if (ua.includes('https://www.mojeek.com/bot.html'))
     return { bot: 'MojeekBot' }
   else if (ua.includes('http://napoveda.seznam.cz') || ua.includes('SeznamBot'))
@@ -80,7 +97,8 @@ export function classifyUserAgent(ua: string) {
   else if (
     ua.includes('facebookexternalhit') ||
     ua.includes('developers.facebook.com/docs/sharing/webmasters/crawler') ||
-    ua.includes('meta-externalagent')
+    ua.includes('meta-externalagent') ||
+    ua.includes('facebookscraper')
   )
     return { bot: 'FacebookBot' }
   else if (ua.includes('Mastodon')) return { bot: 'MastodonBot' }
@@ -101,6 +119,12 @@ export function classifyUserAgent(ua: string) {
     return { bot: 'DataForSeoBot' }
   else if (ua.includes('VertexWP')) return { bot: 'VertexWP Bot' }
   else if (ua.includes('PerplexityBot')) return { bot: 'PerplexityBot' }
+  else if (
+    ua.includes('Perplexity-User') ||
+    ua.includes('perplexity.ai/perplexity-user') ||
+    ua.includes('perplexity.ai/perplexitybot-user')
+  )
+    return { bot: 'PerplexityUser' }
   else if (ua.includes('AliyunSecBot')) return { bot: 'AliyunSecBot' }
   else if (ua.includes('YisouSpider')) return { bot: 'YisouSpider' }
   else if (ua.includes('SafeDNSBot')) return { bot: 'SafeDNSBot' }
@@ -117,6 +141,28 @@ export function classifyUserAgent(ua: string) {
     return { bot: 'ZoomBot' }
   else if (ua.includes('Gulper Web Bot') || ua.includes('GulperBot'))
     return { bot: 'GulperBot' }
+  else if (ua.includes('TerraCotta') || ua.includes('Terra Cotta'))
+    return { bot: 'TerraCottaBot' }
+  else if (ua.includes('l9scan') || ua.includes('leakix.net'))
+    return { bot: 'LeakIXBot' }
+  else if (ua.includes('zgrab')) return { bot: 'ZgrabScanner' }
+  else if (ua.includes('ModatScanner')) return { bot: 'ModatScanner' }
+  else if (ua.includes('CriminalIP')) return { bot: 'CriminalIPBot' }
+  else if (ua.includes('RecordedFuture')) return { bot: 'RecordedFutureBot' }
+  else if (ua.includes('Screaming Frog SEO Spider'))
+    return { bot: 'ScreamingFrogBot' }
+  else if (ua.includes('trafilatura/')) return { bot: 'TrafilaturaBot' }
+  else if (ua.includes('newspaper/') || ua.includes('newspaperjs'))
+    return { bot: 'NewspaperBot' }
+  else if (ua.includes('heritrix')) return { bot: 'HeritrixBot' }
+  else if (ua.includes('Bytespider')) return { bot: 'BytespiderBot' }
+  else if (ua.includes('FlipboardProxy')) return { bot: 'FlipboardBot' }
+  else if (ua.includes('Embedly/')) return { bot: 'EmbedlyBot' }
+  else if (ua.includes('OpenGraph.io/')) return { bot: 'OpenGraphBot' }
+  else if (ua.includes('Bluesky Cardyb')) return { bot: 'BlueskyBot' }
+  else if (ua.includes('MicrosoftPreview/'))
+    return { bot: 'MicrosoftPreviewBot' }
+  else if (ua.includes('browse-crawler/')) return { bot: 'AnthropicBrowseBot' }
   else if (ua.includes('iPhone')) return { type: 'iPhone' }
   else if (ua.includes('iPad')) return { type: 'iPad' }
   else if (ua.includes('Macintosh')) return { type: 'MacOS' }
@@ -238,7 +284,7 @@ let resetStats = db.transaction(() => {
 })
 
 let versionFile = join(dataDir, 'user-agent-version.txt')
-let version = 5
+let version = 6
 function autoResetStats() {
   if (loadNumber(versionFile) == version) return
   resetStats()
