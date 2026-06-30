@@ -58,6 +58,25 @@ export const DefaultLocaleDateTimeFormatOptions: LocaleDateTimeFormatOptions = {
   minute: '2-digit',
 }
 
+let year_zero = new Date(0).getFullYear()
+let year_thousand = year_zero + 1000
+
+function autoFixTimestamp(time: number | Date): Date {
+  if (typeof time !== 'number') {
+    return time
+  }
+  let date = new Date(time)
+  let year = date.getFullYear()
+  if (year === year_zero) {
+    console.trace('auto fix timestamp by 1000x')
+    date.setTime(date.getTime() * 1000)
+  } else if (year > year_thousand) {
+    console.trace('auto fix timestamp by 1/1000x')
+    date.setTime(date.getTime() / 1000)
+  }
+  return date
+}
+
 export function toLocaleDateTimeString(
   time: number | Date,
   context: Context,
@@ -67,7 +86,7 @@ export function toLocaleDateTimeString(
   let timeZone: string | undefined = getContextTimezone(context)
   for (;;) {
     try {
-      let date = toDate(time)
+      let date = autoFixTimestamp(time)
       return date.toLocaleString(locales, {
         ...options,
         timeZone,
