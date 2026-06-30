@@ -29,6 +29,8 @@ export let config = {
   auto_open: !production && development && epoch === 1,
   client_target: 'es2020',
   layout_type: LayoutType.navbar,
+  default_timezone: 'Asia/Hong_Kong',
+  default_locale: 'en-US',
 }
 
 const titleSuffix = ' | ' + config.site_name

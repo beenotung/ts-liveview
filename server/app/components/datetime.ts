@@ -12,6 +12,8 @@ import {
   YEAR,
 } from '@beenotung/tslib/time.js'
 import type { ServerMessage } from '../../../client/types'
+import { db } from '../../../db/db.js'
+import { config } from '../../config.js'
 const { abs, floor } = Math
 
 let log = debugLog('datetime.ts')
@@ -58,6 +60,40 @@ export const DefaultLocaleDateTimeFormatOptions: LocaleDateTimeFormatOptions = {
   minute: '2-digit',
 }
 
+let select_most_popular_locale = db
+  .prepare<void[], string>(
+    /* sql */ `
+select language
+from request_session
+where language is not null
+group by language
+order by count(*) desc
+limit 1
+`,
+  )
+  .pluck()
+
+function getDefaultLocale(): string {
+  return select_most_popular_locale.get() || config.default_locale
+}
+
+let select_most_popular_timezone = db
+  .prepare<void[], string>(
+    /* sql */ `
+select timezone
+from request_session
+where timezone is not null
+group by timezone
+order by count(*) desc
+limit 1
+`,
+  )
+  .pluck()
+
+function getDefaultTimezone(): string {
+  return select_most_popular_timezone.get() || config.default_timezone
+}
+
 let year_zero = new Date(0).getFullYear()
 let year_thousand = year_zero + 1000
 
@@ -84,6 +120,8 @@ export function toLocaleDateTimeString(
 ): string {
   let locales: string | undefined = getContextLanguage(context)
   let timeZone: string | undefined = getContextTimezone(context)
+  let defaultLocale: string | undefined
+  let defaultTimeZone: string | undefined
   for (;;) {
     try {
       let date = autoFixTimestamp(time)
@@ -95,7 +133,12 @@ export function toLocaleDateTimeString(
       let errorMessage = String(error)
       if (errorMessage.includes('time zone')) {
         log('invalid timezone:', timeZone)
-        timeZone = undefined
+        defaultTimeZone ||= getDefaultTimezone()
+        if (timeZone === defaultTimeZone) {
+          timeZone = undefined
+        } else {
+          timeZone = defaultTimeZone
+        }
         continue
       }
       if (errorMessage.includes('locale')) {
@@ -105,7 +148,12 @@ export function toLocaleDateTimeString(
           continue
         }
         log('invalid locale:', locales)
-        locales = undefined
+        defaultLocale ||= getDefaultLocale()
+        if (locales === defaultLocale) {
+          locales = undefined
+        } else {
+          locales = defaultLocale
+        }
         continue
       }
       log('failed to format date', {
