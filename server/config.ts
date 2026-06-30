@@ -36,6 +36,11 @@ export let config = {
 const titleSuffix = ' | ' + config.site_name
 
 export function title(page: string) {
+  if (typeof page !== 'string') {
+    console.trace(
+      'title() should take string only, for <Locale> wrapped text, use <Title t={pageTitle} /> instead',
+    )
+  }
   return page + titleSuffix
 }
 
