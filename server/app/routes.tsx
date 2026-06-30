@@ -1,3 +1,4 @@
+import DemoTimeline from './pages/demo-timeline.js'
 import DemoPagination from './pages/demo-pagination.js'
 import DemoTypescriptPage from './pages/demo-typescript-page.js'
 import AppNotice from './pages/app-notice.js'
@@ -95,6 +96,7 @@ let routeDict = {
   ...Editor.routes,
   ...AutoCompleteDemo.routes,
   ...DemoPagination.routes,
+  ...DemoTimeline.routes,
   ...DemoForm.routes,
   ...DemoInputComponents.routes,
   ...UserList.routes,
