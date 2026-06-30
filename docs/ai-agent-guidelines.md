@@ -123,10 +123,13 @@ When building UI that gets inserted into the page, use **JSX markup with `id` or
 
 ---
 
-**`Script()` block patterns**  
-Functions inside Script calls with template literals go at **top level** — never nest function definitions inside string-concatenated HTML attributes. Escaping issue: embedding `onclick="function(){...}"` requires converting quotes, braces, etc. to HTML entities — unnecessarily complex and error-prone. Instead, define the function in Script separately and use `onclick="handler(event)"` + `data-*` attributes for dynamic data.
+**`Script()` block patterns**
 
-Use **`var`** instead of `let` nor `const` at **top level** — the script re-runs on every WebSocket page load (server render + WS connect + re-navigation), and `let` at top level would throw redeclaration errors. Variables inside functions can still use `let`.
+**Plain JavaScript only:** Code in ``Script(/* js */ `...`)`` must be **plain JavaScript** — no TypeScript syntax (`as`, type annotations, `as const`, etc.). The code in the string is minified with esbuild, so TypeScript syntax will cause runtime errors like `<stdin>:3:28: Expected ";" but found "as"`. Dev mode skips minify, so the bug may not appear until production. Use `/* js */` on the template literal as a reminder. `${...}` interpolation from the surrounding `.tsx` file is fine — it runs server-side before the script is sent to the client.
+
+**Use `var` at top level:** The script re-runs on every WebSocket page load (server render + WS connect + re-navigation), so use **`var`** instead of `const`/`let` at top level — `let`/`const` would throw redeclaration errors. Variables inside functions can still use `let`.
+
+**Top-level functions, not callback props:** Do not pass callback functions in markup — the UI is transformed to HTML or JSX objects over the wire, so no executable functions can be sent (unlike most frontend frameworks). Define named functions in `Script()` and reference them from plain attribute strings (`onclick="handler(event)"`). Never nest function definitions inside string-concatenated HTML attributes. Keep inline script blocks only for dynamic data initialization and simple calls; put logic in top-level functions. For event binding in string-built HTML, see the `data-*` + `onclick="handler(event)"` pattern above.
 
 ---
 
