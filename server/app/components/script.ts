@@ -4,6 +4,57 @@ import * as esbuild from 'esbuild'
 
 const cache = new Map<string, string>()
 
+function getScriptCallerLocation(): string | null {
+  let stack = new Error().stack
+  if (!stack) return null
+  for (let line of stack.split('\n')) {
+    if (
+      line.includes('script.ts') ||
+      line.includes('script.js') ||
+      line.includes('node:internal')
+    ) {
+      continue
+    }
+    let match = line.match(/\((.+:\d+:\d+)\)|at (.+:\d+:\d+)/)
+    if (match) {
+      return (match[1] ?? match[2]).trim()
+    }
+  }
+  return null
+}
+
+function enhanceScriptMinifyError(error: unknown): Error {
+  // check if the error is thrown by esbuild, like
+  if (!error || typeof error !== 'object' || !('errors' in error)) {
+    return error instanceof Error ? error : new Error(String(error))
+  }
+  let esbuildErrors = (
+    error as {
+      errors: Array<{
+        location?: { line?: number; column?: number; lineText?: string }
+        text: string
+      }>
+    }
+  ).errors
+  let first = esbuildErrors[0]
+  let loc = first?.location
+  let caller = getScriptCallerLocation()
+  let message = [
+    'Script() inline JS minify failed',
+    caller ? `called from ${caller}` : '',
+    loc?.line ? `at inline script line ${loc.line}, column ${loc.column}` : '',
+    loc?.lineText ? `  > ${loc.lineText.trim()}` : '',
+    first?.text ?? '',
+  ]
+    .filter(Boolean)
+    .join('\n')
+  let wrapped = new Error(message)
+  if (error instanceof Error) {
+    wrapped.cause = error
+  }
+  return wrapped
+}
+
 /**
  * @param js javascript code without script tag
  * @returns minified javascript code
@@ -14,11 +65,16 @@ function minify(js: string): string {
   if (typeof code === 'string') {
     return code
   }
-  code = esbuild.transformSync(js, {
-    minify: true,
-    loader: 'js',
-    target: config.client_target,
-  }).code
+  try {
+    code = esbuild.transformSync(js, {
+      minify: true,
+      loader: 'js',
+      target: config.client_target,
+      sourcefile: '<Script() inline JS>',
+    }).code
+  } catch (error) {
+    throw enhanceScriptMinifyError(error)
+  }
 
   cache.set(js, code)
   return code
