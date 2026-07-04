@@ -36,3 +36,7 @@ uploads/
 data/*.tmp.*
 data/*.sql
 data/*.zst
+
+# pm2 log files
+*-out.log
+*-error.log
