@@ -1,24 +1,6 @@
 import { randomUUID } from 'crypto'
-import { existsSync } from 'fs'
-import { populateEnv, saveEnv } from 'populate-env'
+import { populateEnv, saveEnv, getEnvFile } from 'populate-env'
 import { loadEnvFile } from 'process'
-
-function getEnvFile() {
-  if (process.env.ENV_FILE) {
-    return process.env.ENV_FILE
-  }
-  if (process.env.NODE_ENV && existsSync('.env.' + process.env.NODE_ENV)) {
-    return '.env.' + process.env.NODE_ENV
-  }
-  if (existsSync('.env')) {
-    return '.env'
-  }
-  return null
-}
-let envFile = getEnvFile()
-if (envFile) {
-  loadEnvFile(envFile)
-}
 
 export let env = {
   NODE_ENV: 'development' as 'development' | 'production',
@@ -30,6 +12,12 @@ export let env = {
   ORIGIN: '',
   FIND_IP_API_KEY: 'skip', // Optional: API key for findip.net geolocation service
 }
+
+let envFile = getEnvFile()
+if (envFile) {
+  loadEnvFile(envFile)
+}
+
 applyDefaultEnv()
 
 function applyDefaultEnv() {
