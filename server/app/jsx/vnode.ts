@@ -21,22 +21,18 @@ export function nodeToVElementOptimized(
   node: Element | Component,
   context: Context,
 ): VElement {
-  if (
-    !(
-      Array.isArray(node) &&
-      (typeof node[0] === 'string' || typeof node[0] === 'function')
-    )
-  ) {
+  if (!(
+    Array.isArray(node) &&
+    (typeof node[0] === 'string' || typeof node[0] === 'function')
+  )) {
     throw new TypeError('expect Element or Component, got Node')
   }
   while (typeof node[0] === 'function') {
     node = componentToVNode(node as Component, context) as Element | Component
-    if (
-      !(
-        Array.isArray(node) &&
-        (typeof node[0] === 'string' || typeof node[0] === 'function')
-      )
-    ) {
+    if (!(
+      Array.isArray(node) &&
+      (typeof node[0] === 'string' || typeof node[0] === 'function')
+    )) {
       throw new TypeError('expect Element or Component, got Node')
     }
   }
@@ -138,5 +134,8 @@ function elementToVElement(element: Element, context: Context): VElement {
 }
 
 function nodeListToVNodeList(nodeList: NodeList, context: Context): VNodeList {
+  if (!nodeList) {
+    return []
+  }
   return nodeList.map(node => nodeToVNode(node, context))
 }
