@@ -35,7 +35,12 @@ import { webAppStyle, ionicAppStyle } from './app-style.js'
 import { preIonicAppScript, postIonicAppScript } from './styles/mobile-style.js'
 import { renderWebTemplate } from '../../template/web.js'
 import { renderIonicTemplate } from '../../template/ionic.js'
-import { HTMLStream } from './jsx/stream.js'
+import {
+  expressResponseStream,
+  HTMLStream,
+  isWriteAfterEndError,
+  safeResEnd,
+} from './jsx/stream.js'
 import DemoUpload from './pages/demo-upload.js'
 import { getWsCookies } from './cookie.js'
 import Navbar from './components/navbar.js'
@@ -317,8 +322,7 @@ function responseHTML(
         : 'Unknown Error: ' + escapeHTMLTextContent(String(error))
   }
 
-  // deepcode ignore XSS: the dynamic content is html-escaped
-  res.end(html)
+  safeResEnd(res, html)
 }
 
 function streamHTML(
@@ -327,10 +331,11 @@ function streamHTML(
   route: PageRouteMatch,
 ) {
   try {
-    renderTemplate(res, context, route)
-    res.end()
+    let stream = expressResponseStream(res)
+    renderTemplate(stream, context, route)
+    safeResEnd(res)
   } catch (error) {
-    if (error === EarlyTerminate) {
+    if (error === EarlyTerminate || isWriteAfterEndError(error)) {
       return
     }
     console.error('Failed to render App:', error)
@@ -338,7 +343,8 @@ function streamHTML(
       res.status(500)
     }
     // deepcode ignore XSS: the dynamic content is html-escaped
-    res.end(
+    safeResEnd(
+      res,
       error instanceof Error
         ? 'Internal Error: ' + escapeHTMLTextContent(error.message)
         : 'Unknown Error: ' + escapeHTMLTextContent(String(error)),
