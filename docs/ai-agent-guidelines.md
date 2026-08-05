@@ -123,6 +123,16 @@ When building UI that gets inserted into the page, use **JSX markup with `id` or
 
 ---
 
+**import `o` for JSX/TSX**  
+Keep **`import { o } from '../jsx/jsx.js'`** in page files that use JSX/TSX; required for the runtime. Do not remove it as "unused."
+
+---
+
+**Use `.js` extension for imports**  
+Always use `.js` extension in import paths (e.g. `'./locale.js'`, `'../components/foo.js'`), even for `.tsx` files. Do not use `.jsx` or `.ts` extensions in imports.
+
+---
+
 **`Script()` block patterns**
 
 **Plain JavaScript only:** Code in ``Script(/* js */ `...`)`` must be **plain JavaScript** — no TypeScript syntax (`as`, type annotations, `as const`, etc.). The code in the string is minified with esbuild, so TypeScript syntax will cause runtime errors like `<stdin>:3:28: Expected ";" but found "as"`. Dev mode skips minify, so the bug may not appear until production. Use `/* js */` on the template literal as a reminder. `${...}` interpolation from the surrounding `.tsx` file is fine — it runs server-side before the script is sent to the client.
