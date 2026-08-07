@@ -179,3 +179,11 @@ Guidelines:
 - Case by case - use one tag for end-to-end flow, multiple tags only when commit spans independent areas
 - Always use a tag - no plain messages without tag
 - Bullets for sub-details under a tag
+
+---
+
+**Git staging**
+
+- **NEVER run `git add -A` or `git add .`** — always review changes before staging
+- Stage specific files: `git add path/to/file.ts`
+- Review with `git diff` or `git diff --cached` before committing
