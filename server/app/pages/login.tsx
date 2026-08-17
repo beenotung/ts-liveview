@@ -368,8 +368,8 @@ let routes = {
     description: (
       <Locale
         en={`Login to access exclusive content and features. Welcome back to our community on ${config.short_site_name}.`}
-        zh_hk={`登入以獲取獨家內容及功能。歡迎回到我們的社區，${config.short_site_name}。`}
-        zh_cn={`登录以获取独家内容和功能。欢迎回到我们的社区，${config.short_site_name}。`}
+        zh_hk={`登入以獲取專屬內容及功能。歡迎回到我們的社區，${config.short_site_name}。`}
+        zh_cn={`登录以获取专属内容和功能。欢迎回到我们的社区，${config.short_site_name}。`}
       />
     ),
     menuText: <Locale en="Login" zh_hk="登入" zh_cn="登录" />,

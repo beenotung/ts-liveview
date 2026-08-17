@@ -711,8 +711,8 @@ let routes = {
     description: (
       <Locale
         en={`Register to access exclusive content and functionality. Join our community on ${config.short_site_name}.`}
-        zh_hk={`註冊以獲取獨家內容及功能。加入我們的社區，${config.short_site_name}。`}
-        zh_cn={`注册以获取独家内容和功能。加入我们的社区，${config.short_site_name}。`}
+        zh_hk={`註冊以獲取專屬內容及功能。加入我們的社區，${config.short_site_name}。`}
+        zh_cn={`注册以获取专属内容和功能。加入我们的社区，${config.short_site_name}。`}
       />
     ),
     menuText: <Locale en="Register" zh_hk="註冊" zh_cn="注册" />,
