@@ -74,7 +74,7 @@
     "swiper": "^12.2.0",
     "timezone-date.ts": "^2.1.1",
     "token-bucket.ts": "^1.1.0",
-    "url-router.ts": "^1.2.1",
+    "url-router.ts": "^1.2.2",
     "ws": "^8.21.0"
   },
   "devDependencies": {
