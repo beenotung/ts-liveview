@@ -159,16 +159,68 @@ let verifyFormBody = (
   </>
 )
 
+function getLoginMethods() {
+  if (config.use_password_login && config.enable_email && config.enable_sms) {
+    return (
+      <Locale
+        en="Username, email, or phone number"
+        zh_hk="用戶名, 電郵地址, 或電話號碼"
+        zh_cn="用户名, 电子邮件地址, 或电话号码"
+      />
+    )
+  }
+  let methods_en: string[] = []
+  let methods_zh_hk: string[] = []
+  let methods_zh_cn: string[] = []
+  if (config.use_password_login) {
+    methods_en.push('Username')
+    methods_zh_hk.push('用戶名')
+    methods_zh_cn.push('用户名')
+  }
+  if (config.enable_email) {
+    methods_en.push('Email')
+    methods_zh_hk.push('電郵地址')
+    methods_zh_cn.push('电子邮件地址')
+  }
+  if (config.enable_sms) {
+    methods_en.push('Phone number')
+    methods_zh_hk.push('電話號碼')
+    methods_zh_cn.push('电话号码')
+  }
+  switch (methods_en.length) {
+    case 0:
+      throw new Error('no login methods enabled')
+    case 1:
+      return (
+        <Locale
+          en={methods_en[0]}
+          zh_hk={methods_zh_hk[0]}
+          zh_cn={methods_zh_cn[0]}
+        />
+      )
+    case 2:
+      return (
+        <Locale
+          en={methods_en[0] + ' or ' + methods_en[1]}
+          zh_hk={methods_zh_hk[0] + ' 或 ' + methods_zh_hk[1]}
+          zh_cn={methods_zh_cn[0] + ' 或 ' + methods_zh_cn[1]}
+        />
+      )
+    default:
+      return (
+        <Locale
+          en={methods_en.join(', ')}
+          zh_hk={methods_zh_hk.join('，')}
+          zh_cn={methods_zh_cn.join('，')}
+        />
+      )
+  }
+}
+
 let passwordFormBody = (
   <>
     <Field
-      label={
-        <Locale
-          en="Username, email, or phone number"
-          zh_hk="用戶名, 電郵地址, 或電話號碼"
-          zh_cn="用户名, 电子邮件地址, 或电话号码"
-        />
-      }
+      label={getLoginMethods()}
       name="loginId"
       msgId="loginIdMsg"
       autocomplete="username"
