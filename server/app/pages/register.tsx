@@ -360,7 +360,7 @@ function checkPassword (form) {
       <Locale
         en="Already have an account?"
         zh_hk="已經有帳號了嗎？"
-        zh_cn="已经有一个账号了吗？"
+        zh_cn="已经有账号了吗？"
       />
     </div>
     <div style="margin-bottom: 1rem">
