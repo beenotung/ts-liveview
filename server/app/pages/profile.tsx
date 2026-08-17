@@ -151,7 +151,7 @@ function renderProfile(user_id: number, context: DynamicContext) {
       <div>
         <label class="field">
           <span>
-            <Locale en="User ID: " zh_hk="用戶 ID: " zh_cn="用户 ID: " />
+            <Locale en="User ID: " zh_hk="用戶編號: " zh_cn="用户编号: " />
           </span>
           <span>{user_id}</span>
         </label>
@@ -278,10 +278,20 @@ function renderProfile(user_id: number, context: DynamicContext) {
           />
         </label>
         <div id="previewContainer" hidden>
-          <div id="previewMessage"></div>
+          <div
+            id="previewMessage"
+            data-preview-message={
+              <Locale en="Image Preview" zh_hk="圖片預覽" zh_cn="图片预览" />
+            }
+          ></div>
           <img id="previewImg" />
           <br />
-          <input type="submit" value="Upload Avatar" />
+          <input
+            type="submit"
+            value={
+              <Locale en="Upload Avatar" zh_hk="上傳頭像" zh_cn="上传头像" />
+            }
+          />
         </div>
         {error ? renderError(error, context) : null}
         {Raw(/* html */ `
@@ -292,7 +302,7 @@ async function previewAvatar(input) {
   if (!image) return
   previewImg.src = image.dataUrl
   let kb = Math.ceil(image.file.size / 1024)
-  previewMessage.textContent = 'Image Preview (' + kb + ' KB)'
+  previewMessage.textContent = previewMessage.dataset.previewMessage + ' (' + kb + ' KB)'
   let list = new DataTransfer()
   list.items.add(image.file)
   input.files = list.files
