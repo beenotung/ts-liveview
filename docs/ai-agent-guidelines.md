@@ -28,6 +28,9 @@ Change only what the task needs. Don't reformat, rewrap, or "fix" unrelated styl
 **Readability over brevity**  
 "Concise" and "minimal" refer to scope and avoiding redundancy, not compressing code. New or edited code (e.g. CSS, JS) should follow the file's existing formatting and stay readable (e.g. one CSS property per line for multi-property rules, clear line breaks). Do not sacrifice readability for fewer lines.
 
+**Avoid single-letter variable names**  
+Use descriptive names (e.g. `model`, `entry`, `item`) instead of single letters (`m`, `e`, `i`) except for very small scopes (e.g. loop index `i`, `j` in a few lines). When you need two related values in the same scope (e.g. a list entry and the thing it refers to), name both clearly (e.g. `modelInfo` and `model`, not `model` and `m`).
+
 ---
 
 **Edit before adding**  
