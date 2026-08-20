@@ -101,11 +101,31 @@ Define statements at **top level** (module or file scope), not inside request or
 
 ---
 
-**Navigation: use Link (SPA), not plain ion-button href or JS**  
-Use **`<Link href="...">`** or **`<Link tagName="ion-button" href="...">`** (or an IonButton component that uses Link) so the router does SPA navigation. Plain **`<ion-button href="...">`** or **`<a href="...">`** without Link causes a full page refresh. Do not use `onclick="location.href = ..."` for navigation. Use `Redirect` only for post-submit or conditional redirects.
+**Navigation: use Link/IonButton for SPA navigation, avoid full page refreshes**  
+Use **`<Link href="...">`**, **`<Link tagName="ion-button" href="...">`**, or **`<IonButton url="...">`** for SPA navigation. Avoid **`<a href>`**, **`<ion-button href>`**, **`onclick="location.href"`**, and **`onclick="goto()"`** - they cause full page refreshes or are less semantic/accessible. Use `Redirect` only for post-submit or conditional redirects. Use conditional rendering for complex navigation logic.
 
 **Link default tagName is `a`**  
 Do not write **`tagName="a"`** on `<Link>`; it is the default. Only specify **`tagName`** when you need a different element (e.g. `tagName="ion-button"`, `tagName="ion-item"`).
+
+❌ **AVOID:**
+
+```jsx
+<ion-button onclick='goto("/login")'>Login</ion-button>
+<ion-button onclick={user ? 'doAction()' : 'goto("/login")'}>Button</ion-button>
+```
+
+✅ **USE:**
+
+```jsx
+;<IonButton url="/login">Login</IonButton>
+{
+  user ? (
+    <ion-button onclick="doAction()">Action</ion-button>
+  ) : (
+    <IonButton url="/login">Login</IonButton>
+  )
+}
+```
 
 ---
 
