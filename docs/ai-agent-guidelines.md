@@ -64,6 +64,12 @@ When the project has auth and roles (e.g. admin, staff):
 **Document completed decisions in the right place**  
 This file is for general rules only. When work is done that future changes should respect (decisions, where things live, what not to redo), add or update `tasks/*.md` or other project docs. Don't put completed-task context here.
 
+**Keep `tasks/_index.md` in sync**  
+When creating a new task file in `tasks/`, add a corresponding entry to `tasks/_index.md` with a short description as the link text (e.g. `- [Pagination for image upload (6000+ images)](./pagination.md)`). Use `scripts/new-task.sh` to create the file and index entry.
+
+**Move completed tasks to `tasks/done/`**  
+When a task is completed, move its file to `tasks/done/` and remove its entry from `_index.md`.
+
 ---
 
 **Back / return URLs**  
