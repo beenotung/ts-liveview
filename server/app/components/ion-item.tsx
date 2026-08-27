@@ -5,6 +5,7 @@ import { Link } from './router.js'
 
 export function IonItem(
   attrs: {
+    id?: string
     url?: string
     class?: string
     style?: string

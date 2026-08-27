@@ -34,8 +34,9 @@ export let $styleName = Style(/* css */ \`
 \`)
 
 export function $Name(attrs: {
-  style?: string
+  id?: string
   class?: string
+  style?: string
 }) {
   let className = '$name'
   if (attrs.class) {
@@ -44,7 +45,7 @@ export function $Name(attrs: {
   return (
     <>
       {$styleName}
-      <div class={className} style={attrs.style}>
+      <div id={attrs.id} class={className} style={attrs.style}>
         $Title
       </div>
     </>
