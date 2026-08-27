@@ -145,6 +145,14 @@ export function classifyUserAgent(ua: string) {
     return { bot: 'TerraCottaBot' }
   else if (ua.includes('l9scan') || ua.includes('leakix.net'))
     return { bot: 'LeakIXBot' }
+  else if (ua.includes('leak.info') || ua.includes('fluid/0.0'))
+    return { bot: 'FluidBot' }
+  else if (
+    ua.includes('2ip.io') ||
+    ua.includes('2ip.ru') ||
+    ua.includes('2ip bot')
+  )
+    return { bot: '2ipBot' }
   else if (ua.includes('zgrab')) return { bot: 'ZgrabScanner' }
   else if (ua.includes('ModatScanner')) return { bot: 'ModatScanner' }
   else if (ua.includes('CriminalIP')) return { bot: 'CriminalIPBot' }
@@ -284,7 +292,7 @@ let resetStats = db.transaction(() => {
 })
 
 let versionFile = join(dataDir, 'user-agent-version.txt')
-let version = 6
+let version = 7
 function autoResetStats() {
   if (loadNumber(versionFile) == version) return
   resetStats()
