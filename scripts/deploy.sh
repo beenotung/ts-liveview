@@ -35,6 +35,7 @@ if [ "$MODE" == "upload" ]; then
     public \
     "$user@$host:$root_dir"
 elif [ "$MODE" == "quick" ]; then
+  npm run build
   rsync -SavLPz \
     server \
     client \
