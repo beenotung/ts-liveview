@@ -8,7 +8,7 @@ import Style from '../components/style.js'
 import { KB } from '@beenotung/tslib/size.js'
 import { format_byte, format_time_duration } from '@beenotung/tslib/format.js'
 import { mapArray } from '../components/fragment.js'
-import { readdirSync, statSync, unlink } from 'fs'
+import { mkdirSync, readdirSync, statSync, unlink } from 'fs'
 import { join } from 'path'
 import { SECOND } from '@beenotung/tslib/time.js'
 import { debugLog } from '../../debug.js'
@@ -49,6 +49,8 @@ let style = Style(/* css */ `
   color: red;
 }
 `)
+
+mkdirSync(env.UPLOAD_DIR, { recursive: true })
 
 function View() {
   let filenames = readdirSync(env.UPLOAD_DIR)
